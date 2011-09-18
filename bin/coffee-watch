@@ -1,0 +1,4 @@
+#!/bin/bash
+
+mkdir -p build/js
+coffee -o build/js -cw src/coffee

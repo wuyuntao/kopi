@@ -1,0 +1,9 @@
+// Since you've installed the xml file, you should set
+// $use-mozilla-ellipsis-binding to true before importing.
+$use-mozilla-ellipsis-binding: true;
+
+@import "compass/typography/text/ellipsis";
+
+.ellipsis {
+  @include ellipsis;
+}

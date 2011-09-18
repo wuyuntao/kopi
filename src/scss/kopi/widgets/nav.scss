@@ -1,0 +1,95 @@
+@import 'kopi/base';
+@import 'kopi/themes/default';
+
+/**
+  Nav arch
+
+  nav.kopi-nav
+    div.kopi-nav-left
+      a.kopi-nav-button
+        span.kopi-nav-button-sprite
+    div.kopi-nav-center
+      h1.kopi-nav-title
+    div.kopi-nav-right
+      a.kopi-nav-button
+        span.kopi-nav-button-text
+ */
+
+// Outer wrapper
+.kopi-nav {
+  @include clearfix;
+  @include opacity($kopi_nav_opacity);
+  @include box-shadow($kopi_nav_box_shadow);
+  height: $kopi_nav_height;
+  overflow: hidden;
+  text-align: center;
+  background-color: $kopi_nav_background_color;
+  border: $kopi_nav_border;
+}
+
+.kopi-nav-fixed {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+.kopi-nav-top-fixed {
+  @extend .kopi-nav;
+  @extend .kopi-nav-fixed;
+  top: 0;
+  border-width: 0 0 1px;
+}
+
+.kopi-nav-bottom-fixed {
+  @extend .kopi-nav;
+  @extend .kopi-nav-fixed;
+  bottom: 0;
+  border-width: 1px 0 0;
+}
+
+// Inner wrapper
+.kopi-nav-button-wrapper {
+  position: absolute;
+  top: 0;
+  height: $kopi_nav_height;
+}
+
+.kopi-nav-left {
+  @extend .kopi-nav-button-wrapper;
+  left: 0;
+  text-align: left;
+}
+
+.kopi-nav-right {
+  @extend .kopi-nav-button-wrapper;
+  right: 0;
+  text-align: right;
+}
+
+.kopi-nav-center {
+}
+
+// Title
+.kopi-nav-title {
+  @extend .ellipsis;
+  @include text-shadow($kopi_nav_title_shadow);
+  color: $kopi_nav_title_color;
+  font-size: $kopi_nav_title_font_size;
+  font-weight: bold;
+  height: $kopi_nav_height;
+  line-height: $kopi_nav_height;
+  margin: 0 $kopi_nav_title_margin;
+  text-align: center;
+  vertical-align: middle;
+}
+
+// Button
+.kopi-nav-button {
+
+}
+
+.kopi-nav-button-text {
+}
+
+.kopi-nav-button-sprite {
+}

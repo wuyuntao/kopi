@@ -1,0 +1,17 @@
+@import 'kopi/base';
+
+@mixin animation-duration($value) {
+  @include experimental("animation-duration", $value, -moz, -webkit, not -o, not -ms, not -khtml, official);
+}
+
+@mixin animation-iteration-count($value) {
+  @include experimental("animation-iteration-count", $value, -moz, -webkit, not -o, not -ms, not -khtml, official);
+}
+
+@mixin animation-timing-function($value) {
+  @include experimental("animation-timing-function", $value, -moz, -webkit, not -o, not -ms, not -khtml, official);
+}
+
+@mixin animation-name($value) {
+  @include experimental("animation-name", $value, -moz, -webkit, not -o, not -ms, not -khtml, official);
+}

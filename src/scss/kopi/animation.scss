@@ -1,0 +1,20 @@
+@import 'kopi/base';
+@import 'kopi/utils/animation';
+
+.kopi-animation-spin {
+  @include transform3d(rotate(360deg));
+	@include animation-name(spin);
+	@include animation-duration(1s);
+	@include animation-iteration-count(infinite);
+	@include animation-timing-function(linear);
+}
+
+@-webkit-keyframes spin {
+	from {-webkit-transform: rotate(0deg);}
+  	to {-webkit-transform: rotate(360deg);}
+}
+
+@-moz-keyframes spin {
+	from {-moz-transform: rotate(0deg);}
+  	to {-moz-transform: rotate(360deg);}
+}
