@@ -1,6 +1,6 @@
-@import 'kopi/base';
 @import 'kopi/utils/animation';
 
+// Some useful animation
 .kopi-animation-spin {
   @include transform3d(rotate(360deg));
 	@include animation-name(spin);

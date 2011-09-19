@@ -1,0 +1,231 @@
+@import 'kopi/base';
+
+/*
+  TODO Notifier arch
+ */
+
+// Variables
+$kopi_notifier_dialog_height: 200px !default;
+$kopi_notifier_dialog_width: 300px !default;
+$kopi_notifier_dialog_background_color: rgba(64, 64, 64, 0.6) !default;
+$kopi_notifier_dialog_color: white !default;
+$kopi_notifier_dialog_text_shadow:  #333 0 -1px 0 !default;
+$kopi_notifier_dialog_border_radius: 12px !default;
+$kopi_notifier_dialog_border: 2px solid rgba(255, 255, 255, 0.8) !default;
+$kopi_notifier_dialog_border_shadow: #000 0 0 3px !default;
+$kopi_notifier_dialog_box_shadow: #333 0 5px 30px !default;
+$kopi_notifier_dialog_header_height: 50px !default;
+$kopi_notifier_dialog_footer_height: 50px !default;
+$kopi_notifier_dialog_content_height: $kopi_notifier_dialog_height - $kopi_notifier_dialog_header_height - $kopi_notifier_dialog_footer_height !default;
+
+$kopi_notifier_dialog_title_font_size: 20px !default;
+$kopi_notifier_dialog_content_font_size: 16px !default;
+$kopi_notifier_dialog_button_font_size: 18px !default;
+$kopi_notifier_dialog_button_margin: 5px !default;
+$kopi_notifier_dialog_button_width: ($kopi_notifier_dialog_width - 4 * $kopi_notifier_dialog_button_margin) / 2 !default;
+$kopi_notifier_dialog_button_height: $kopi_notifier_dialog_footer_height - $kopi_notifier_dialog_button_margin * 1.5 !default;
+$kopi_notifier_dialog_button_border_radius: 5px !default;
+$kopi_notifier_dialog_button_border: 1px solid #555 !default;
+$kopi_notifier_dialog_button_background: rgba(255,255,255,0.5) !default;
+$kopi_notifier_dialog_button_hover_background: rgba(255,255,255,0.2) !default;
+$kopi_notifier_dialog_button_active_background: rgba(0,0,0,0.5) !default;
+$kopi_notifier_dialog_button_box_shadow: rgba(255,255,255,0.3) 0 1px 0 !default;
+
+$kopi_notifier_dialog_gloss_height: 25px !default;
+$kopi_notifier_dialog_gloss_border_top_radius: 9px !default;
+$kopi_notifier_dialog_gloss_border_bottom_radius: 120px 10px !default;
+$kopi_notifier_dialog_gloss_top_background: rgba(255,255,255,0.4) !default;
+$kopi_notifier_dialog_gloss_bottom_background: rgba(255,255,255,0.1) !default;
+
+$kopi_notifier_indicator_height: 48px !default;
+$kopi_notifier_indicator_width: 48px !default;
+
+$kopi_notifier_overlay_opacity: 0.5 !default;
+$kopi_notifier_overlay_background_color: #000 !default;
+
+// Style mixins
+@mixin kopi-notifier-dialog-background {
+  @include box-shadow($kopi_notifier_dialog_border_shadow, $kopi_notifier_dialog_box_shadow);
+  background-color: $kopi_notifier_dialog_background_color;
+  @include background(linear-gradient(top , $kopi_notifier_dialog_background_color 0, darken($kopi_notifier_dialog_background_color, 30%) $kopi_notifier_dialog_height));
+}
+
+@mixin kopi-notifier-dialog-gloss-background {
+  background-color: $kopi_notifier_dialog_gloss_top_background;
+  @include background(linear-gradient(top , $kopi_notifier_dialog_gloss_top_background 0, $kopi_notifier_dialog_gloss_bottom_background $kopi_notifier_dialog_gloss_height));
+}
+
+@mixin kopi-notifier-dialog-button-background {
+  background-color: $kopi_notifier_dialog_button_background;
+  @include transition(background 0.5s ease-out 0);
+  @include background(linear-gradient(top,
+      rgba(255,255,255,0.6) 0, rgba(255,255,255,0.2) 50%,
+      rgba(255,255,255,0) 50%, rgba(255,255,255,0.1) 100%));
+}
+
+@mixin kopi-notifier-dialog-button-hover-background {
+  background-color: $kopi_notifier_dialog_button_hover_background;;
+}
+
+@mixin kopi-notifier-dialog-button-active-background {
+  background-color: $kopi_notifier_dialog_button_active_background;
+}
+
+@mixin kopi-notifier-dialog-action-background {
+  @include background(linear-gradient(top,
+      rgba(255,255,255,0.8) 0, rgba(255,255,255,0.4) 50%,
+      rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.3) 100%));
+}
+
+@mixin kopi-notifier-dialog-close-background {
+}
+
+@mixin kopi-notifier-overlay-background {
+  background-color: $kopi_notifier_overlay_background_color;
+  // FIXME
+  // Webkit only supports pixels for the start and end stops
+  // for radial gradients?
+  // But works in chromium and firefox AFAIS
+  @include background(radial-gradient(center, white 0%, $kopi_notifier_overlay_background_color 100%));
+}
+
+// Widgets
+@mixin kopi-notifier-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: $kopi_notifier_dialog_width;
+  max-height: $kopi_notifier_dialog_height;
+  margin-left: - $kopi_notifier_dialog_width / 2;
+  margin-top: - $kopi_notifier_dialog_height / 2;
+  overflow: hidden;
+  text-align: center;
+  vertical-align: middle;
+
+  display: none;
+  z-index: 10001;
+
+  @include kopi-notifier-dialog-background;
+  @include border-radius($kopi_notifier_dialog_border_radius);
+  @include text-shadow($kopi_notifier_dialog_text_shadow);
+  color: $kopi_notifier_dialog_color;
+  border: $kopi_notifier_dialog_border;
+}
+
+@mixin kopi-notifier-dialog-header {
+}
+
+@mixin kopi-notifier-dialog-gloss {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: $kopi_notifier_dialog_gloss_height;;
+  @include border-top-left-radius($kopi_notifier_dialog_gloss_border_top_radius);
+  @include border-top-right-radius($kopi_notifier_dialog_gloss_border_top_radius);
+  @include border-bottom-left-radius($kopi_notifier_dialog_gloss_border_bottom_radius);
+  @include border-bottom-right-radius($kopi_notifier_dialog_gloss_border_bottom_radius);
+  @include kopi-notifier-dialog-gloss-background;
+}
+
+@mixin kopi-notifier-dialog-header {
+  height: $kopi_notifier_dialog_header_height;
+}
+
+@mixin kopi-notifier-dialog-title {
+  @include ellipsis;
+  font-size: $kopi_notifier_dialog_title_font_size;
+  height: $kopi_notifier_dialog_header_height;
+  line-height: $kopi_notifier_dialog_header_height;
+  margin: 0;
+  padding: 0 $kopi_notifier_dialog_border_radius * 2;
+}
+
+@mixin kopi-notifier-dialog-content {
+  font-size: $kopi_notifier_dialog_content_font_size;
+  max-height: $kopi_notifier_dialog_content_height;
+  overflow: hidden;
+
+  p {
+    margin: 0;
+    padding: 0 ($kopi_notifier_dialog_border_radius * 2) ($kopi_notifier_dialog_border_radius);
+  }
+}
+
+@mixin kopi-notifier-dialog-footer {
+  height: $kopi_notifier_dialog_footer_height;
+}
+
+@mixin kopi-notifier-dialog-button {
+  @include ellipsis;
+  @include box-shadow($kopi_notifier_dialog_button_box_shadow);
+  @include border-radius($kopi_notifier_dialog_button_border_radius);
+  @include kopi-notifier-dialog-button-background;
+  font-size: $kopi_notifier_dialog_button_font_size;
+  font-weight: bold;
+  position: absolute;
+  height: $kopi_notifier_dialog_button_height;
+  line-height: $kopi_notifier_dialog_button_height;
+  width: $kopi_notifier_dialog_button_width;
+  border: $kopi_notifier_dialog_button_border;
+  cursor: pointer;
+}
+
+@mixin kopi-notifier-dialog-button-hover {
+  @include kopi-notifier-dialog-button-hover-background;
+}
+
+@mixin kopi-notifier-dialog-button-active {
+  @include kopi-notifier-dialog-button-active-background;
+}
+
+@mixin kopi-notifier-dialog-action {
+  // @extend kopi-notifier-dialog-button;
+  @include kopi-notifier-dialog-action-background;
+  left: $kopi_notifier_dialog_button_margin;
+}
+
+@mixin kopi-notifier-dialog-close {
+  // @extend .kopi-notifier-dialog-button;
+  @include kopi-notifier-dialog-close-background;
+  right: $kopi_notifier_dialog_button_margin;
+}
+
+@mixin kopi-notifier-dialog-show {
+  display: block;
+}
+
+@mixin kopi-notifier-indicator {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  height: $kopi_notifier_indicator_height;
+  width: $kopi_notifier_indicator_width;
+  margin-top: - $kopi_notifier_indicator_height / 2;
+  margin-left: - $kopi_notifier_indicator_width / 2;
+  display: none;
+  z-index: 10002;
+}
+
+@mixin kopi-notifier-indicator-show {
+  display: block;
+}
+
+@mixin kopi-notifier-indicator-loading {
+}
+
+@mixin kopi-notifier-overlay {
+  @include opacity($kopi_notifier_overlay_opacity);
+  @include kopi-notifier-overlay-background;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  display: none;
+}
+
+@mixin kopi-notifier-overlay-show {
+  display: block;
+}

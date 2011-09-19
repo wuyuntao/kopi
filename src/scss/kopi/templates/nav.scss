@@ -1,0 +1,55 @@
+@import 'kopi/widgets/nav';
+
+.kopi-nav {
+  @include kopi-nav;
+}
+
+.kopi-nav-fixed {
+  @extend .kopi-nav;
+  @include kopi-nav-fixed;
+}
+
+.kopi-nav-top-fixed {
+  @extend .kopi-nav-fixed;
+  @include kopi-nav-top;
+}
+
+.kopi-nav-bottom-fixed {
+  @extend .kopi-nav-fixed;
+  @include kopi-nav-bottom;
+}
+
+.kopi-nav-button-wrapper {
+  @include kopi-nav-button-wrapper;
+}
+
+.kopi-nav-left {
+  @extend .kopi-nav-button-wrapper;
+  @include kopi-nav-left;
+}
+
+.kopi-nav-right {
+  @extend .kopi-nav-button-wrapper;
+  @include kopi-nav-right;
+}
+
+.kopi-nav-center {
+  @include kopi-nav-center;
+}
+
+.kopi-nav-title {
+  @include kopi-nav-title;
+}
+
+.kopi-nav-button {
+  @include kopi-nav-button;
+}
+
+.kopi-nav-button-text {
+  @include kopi-nav-button-text;
+}
+
+.kopi-nav-button-sprite {
+  @extend .kopi-nav-button-text;
+  @include kopi-nav-button-sprite;
+}

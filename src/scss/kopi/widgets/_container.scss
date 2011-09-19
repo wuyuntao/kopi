@@ -1,0 +1,28 @@
+@import 'kopi/base';
+@import 'kopi/widgets/nav';
+
+$kopi_container_background_color: #fff !default;
+
+@mixin kopi-container {
+  background-color: $kopi_container_background_color;
+}
+
+// Nav 是始终置顶的情况
+@mixin kopi-container-fixed {
+  position: absolute;
+  top: $kopi_nav_height;
+  bottom: $kopi_nav_height;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+}
+
+// Nav 包含在 Container 内部的情况
+@mixin kopi-container-fixed-2 {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+}

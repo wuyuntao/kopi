@@ -1,0 +1,15 @@
+@import 'kopi/widgets/container';
+
+.kopi-container {
+  @include kopi-container;
+}
+
+.kopi-container-fixed {
+  @extend .kopi-container;
+  @include kopi-container-fixed;
+}
+
+.kopi-container-fixed-2 {
+  @extend .kopi-container-fixed;
+  @include kopi-container-fixed-2;
+}
