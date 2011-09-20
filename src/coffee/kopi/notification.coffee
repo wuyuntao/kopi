@@ -6,10 +6,10 @@ kopi.module("kopi.notification")
     消息
     ###
     class Message
-      constructor: (@title=i18n.t("kopi.notification.message.title")
+      constructor: (@title=i18n.t("kopi.notification.messages.title")
         , @content
-        , @action=i18n.t("kopi.notification.message.action")
-        , @close=i18n.t("kopi.notification.message.close")
+        , @action=i18n.t("kopi.notification.messages.action")
+        , @close=i18n.t("kopi.notification.messages.close")
         , @data={}) ->
           throw new Error("Missing content of message") unless this.content
 

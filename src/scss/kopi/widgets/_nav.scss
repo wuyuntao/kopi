@@ -15,12 +15,12 @@
  */
 
 // Variables
-$kopi_nav_height: 32px !default;
+$kopi_nav_height: 36px !default;
 $kopi_nav_background_color: rgba(0,0,0,0.7) !default;
 $kopi_nav_opacity: 1 !default;
 $kopi_nav_box_shadow: #000 0 0 20px !default;
 $kopi_nav_border: 1px solid #333 !default;
-$kopi_nav_padding: 4px !default;
+$kopi_nav_padding: 6px !default;
 
 $kopi_nav_title_color: #fff !default;
 $kopi_nav_title_font_size: 20px !default;
@@ -123,6 +123,7 @@ $kopi_nav_button_border_radius: 5px !default;
   border: $kopi_nav_button_border;
   min-width: $kopi_nav_button_width;
   text-align: center;
+  padding: 0 $kopi_nav_button_padding;
 }
 
 @mixin kopi-nav-button-sprite {
