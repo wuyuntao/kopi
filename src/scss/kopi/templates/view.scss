@@ -1,0 +1,37 @@
+@import 'kopi/widgets/view';
+
+.kopi-view {
+  @include kopi-view;
+}
+
+.kopi-view-header {
+  @include kopi-view-header;
+}
+
+.kopi-view-content {
+  @include kopi-view-content;
+}
+
+.kopi-view-footer {
+  @include kopi-view-footer;
+}
+
+.kopi-view-fixed {
+  @extend .kopi-view;
+  @include kopi-view-fixed;
+}
+
+.kopi-view-header {
+  @extend .kopi-view-header;
+  @include kopi-view-header-fixed;
+}
+
+.kopi-view-content {
+  @extend .kopi-view-content;
+  @include kopi-view-content-fixed;
+}
+
+.kopi-view-footer {
+  @extend .kopi-view-footer;
+  @include kopi-view-footer-fixed;
+}

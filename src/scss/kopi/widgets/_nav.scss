@@ -53,6 +53,7 @@ $kopi_nav_button_border_radius: 5px !default;
   position: absolute;
   left: 0;
   right: 0;
+  z-index: 1;
 }
 
 @mixin kopi-nav-top {

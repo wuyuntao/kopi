@@ -15,6 +15,7 @@ $kopi_container_background_color: #fff !default;
   left: 0;
   right: 0;
   overflow: hidden;
+  z-index: 0;
 }
 
 // Nav 包含在 Container 内部的情况

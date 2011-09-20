@@ -1,0 +1,72 @@
+@import 'kopi/widgets/nav';
+
+/*
+ Page architecture:
+ div.kopi-view
+   header.kopi-view-header
+   div.kopi-view-content
+   footer.kopi-view-footer
+ */
+
+// Variables
+$kopi_view_background_color: #000 !default;
+
+$kopi_view_header_background_color: #000 !default;
+$kopi_view_header_height: $kopi_nav_height !default;
+
+$kopi_view_content_background_color: #fff2cc !default;
+
+$kopi_view_footer_background_color: #000 !default;
+$kopi_view_footer_height: $kopi_nav_height !default;
+
+// Mixins
+@mixin kopi-view {
+  background: $kopi_view_background_color;
+}
+
+@mixin kopi-view-header {
+  background: $kopi_view_header_background_color;
+  height: $kopi_view_header_height;
+}
+
+@mixin kopi-view-content {
+  background: $kopi_view_content_background_color;
+}
+
+@mixin kopi-view-footer {
+  background: $kopi_view_footer_background_color;
+  height: $kopi_view_footer_height;
+}
+
+@mixin kopi-view-fixed {
+  overflow: hidden;
+  z-index: 1000;
+}
+
+@mixin kopi-view-header-fixed {
+  // overflow: hidden;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 1003;
+}
+
+@mixin kopi-view-content-fixed  {
+  overflow: hidden;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: $kopi_view_header_height;
+  bottom: $kopi_view_footer_height;
+  z-index: 1001;
+}
+
+@mixin kopi-view-footer-fixed  {
+  // overflow: hidden;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1002;
+}
