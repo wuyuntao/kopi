@@ -15,12 +15,12 @@ $kopi_notifier_dialog_border: 2px solid rgba(255, 255, 255, 0.8) !default;
 $kopi_notifier_dialog_border_shadow: #000 0 0 3px !default;
 $kopi_notifier_dialog_box_shadow: #333 0 5px 30px !default;
 $kopi_notifier_dialog_header_height: 50px !default;
-$kopi_notifier_dialog_footer_height: 50px !default;
+$kopi_notifier_dialog_footer_height: 48px !default;
 $kopi_notifier_dialog_content_height: $kopi_notifier_dialog_height - $kopi_notifier_dialog_header_height - $kopi_notifier_dialog_footer_height !default;
 
 $kopi_notifier_dialog_title_font_size: 20px !default;
 $kopi_notifier_dialog_content_font_size: 16px !default;
-$kopi_notifier_dialog_button_font_size: 18px !default;
+$kopi_notifier_dialog_button_font_size: 16px !default;
 $kopi_notifier_dialog_button_margin: 5px !default;
 $kopi_notifier_dialog_button_width: ($kopi_notifier_dialog_width - 4 * $kopi_notifier_dialog_button_margin) / 2 !default;
 $kopi_notifier_dialog_button_height: $kopi_notifier_dialog_footer_height - $kopi_notifier_dialog_button_margin * 1.5 !default;

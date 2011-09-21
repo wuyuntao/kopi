@@ -92,23 +92,37 @@ kopi.module("kopi.notification")
 
       ###
       显示对话框
+
+      TODO Consider better API? May like
+        notifier.dialog()
+          .title('dialog title')
+          .content('dialog content')
+          .action('dialog action text')
+          .close('dialog action close')
+          .on('show',   (message) -> # Do something)
+          .on('action', (message) -> # Do something)
+          .on('close',  (message) -> # Do something)
+          .on('hide',   (message) -> # Do something)
+          .show()
       ###
       dialog: (options) ->
         message = new Message(options.title, options.content, options.action, options.close)
 
+        # TODO 合并 onAction 和 onClose 方法
+        # TODO 允许异步回调方法，如 onClose(message, callback) ->
         onAction = (e) ->
-          if $.isFunction(options.action)
-            return if options.action(message) is false
+          if $.isFunction(options.onAction)
+            return if options.onAction(message) is false
           hideDialog()
 
         onClose = (e) ->
-          if $.isFunction(options.close)
-            return if options.close(message) is false
+          if $.isFunction(options.onClose)
+            return if options.onClose(message) is false
           hideDialog()
 
         drawDialog(message)
-        dialog.action.bind('click', onAction)
-        dialog.close.bind('click', onClose)
+        dialog.action.unbind('click').bind('click', onAction)
+        dialog.close.unbind('click').bind('click', onClose)
         showOverylay()
         dialog.addClass('kopi-notifier-dialog-show')
         dialogShow = true
