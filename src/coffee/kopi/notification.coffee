@@ -106,10 +106,14 @@ kopi.module("kopi.notification")
           .show()
       ###
       dialog: (options) ->
+        self = this
         message = new Message(options.title, options.content, options.action, options.close)
 
-        # TODO 合并 onAction 和 onClose 方法
-        # TODO 允许异步回调方法，如 onClose(message, callback) ->
+        # TODO 合并 onAction 和 onClose 方法？
+        # TODO 允许异步回调方法，如 onClose(message, callback) -> ？
+        # TODO 用户点击按钮后，是否自动出现 Loader？
+        #
+        # 不要采用异步方法的一个理由，用户点击按钮后应该立刻有一个响应
         onAction = (e) ->
           if $.isFunction(options.onAction)
             return if options.onAction(message) is false
