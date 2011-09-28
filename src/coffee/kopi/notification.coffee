@@ -2,6 +2,20 @@ kopi.module("kopi.notification")
   .require("kopi.utils.i18n")
   .require("kopi.logging")
   .define (exports, i18n, logging) ->
+    # TODO Better API
+    # kopi.notification.loading()
+    #
+    # kopi.notification.dialog()
+    #     .title("xxx")
+    #     .content("xxx")
+    #     .on('action', (dialog, callback) ->)
+    #     .on('close', (dialog, callback) ->)
+    #     .show()
+    #
+    # kopi.notification.alert("text")
+    #     .on('close', (dialog, callback) ->)
+    #     .show()
+
     ###
     消息
     ###
@@ -93,17 +107,6 @@ kopi.module("kopi.notification")
       ###
       显示对话框
 
-      TODO Consider better API? May like
-        notifier.dialog()
-          .title('dialog title')
-          .content('dialog content')
-          .action('dialog action text')
-          .close('dialog action close')
-          .on('show',   (message) -> # Do something)
-          .on('action', (message) -> # Do something)
-          .on('close',  (message) -> # Do something)
-          .on('hide',   (message) -> # Do something)
-          .show()
       ###
       dialog: (options) ->
         self = this

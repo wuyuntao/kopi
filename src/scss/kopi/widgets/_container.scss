@@ -6,8 +6,8 @@ $kopi_container_bottom: 36px !default;
 
 @mixin kopi-container {
   background-color: $kopi_container_background_color;
-  padding-top: $kopi_container_top;
-  padding-bottom: $kopi_container_bottom;
+  margin-top: $kopi_container_top;
+  margin-bottom: $kopi_container_bottom;
 }
 
 // Nav 是始终置顶的情况

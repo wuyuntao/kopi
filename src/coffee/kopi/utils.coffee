@@ -24,15 +24,30 @@ kopi.module("kopi.utils")
       sum(array, lambda) / array.length
 
     ###
-    取范围值
+    Generate an integer Array containing an arithmetic progression. A port of
+    [the native Python **range** function]
+    (http://docs.python.org/library/functions.html#range).
 
-    @param  {Number}  value       数值
-    @param  {Number}  min         范围的最小值
-    @param  {Number}  max         范围的最大值
-    @return {Number}              在范围内的数值
+    @param  {Number}  start        最小值
+    @param  {Number}  stop         最大值
+    @param  {Number}  step         步阶
+    @return {Array}                范围数组
     ###
-    range = (value, min, max) ->
-      Math.max(Math.min(value, max), min)
+    range = (start, stop, step) ->
+      a = arguments
+      solo = a.length <= 1
+      i = start = if solo then 0 else a[0]
+      stop = if solo then a[0] else a[1]
+      step = a[2] or 1
+      len = Math.ceil((stop - start) / step)
+      return [] if len <= 0
+      range = new Array len
+      idx = 0
+      loop
+        return range if (if step > 0 then i - stop else stop - i) >= 0
+        range[idx] = i
+        idx++
+        i+= step
 
     ###
     用模块查找对象

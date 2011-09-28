@@ -1,5 +1,5 @@
 ###
-这个模块只提供 jQuery 插件格式的 Shortcuts
+这个模块提供 jQuery 插件格式的 Shortcuts
 
 ###
 kopi.module("kopi.utils.jquery")
