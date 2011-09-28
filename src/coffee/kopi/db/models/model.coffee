@@ -36,7 +36,8 @@ kopi.module("kopi.db.models")
       ###
       fromHTML: (element) ->
         element = $(element)
-        throw new Error("Can not find element") unless element.length
+        unless element.length
+          throw new Error("Can not find element")
         unless new RegExp("##{this.constructor.name}$").test(element.attr('itemtype'))
           throw new Error("Element does not have correct 'itemtype' attribute")
         this.update(html.scope(element))
