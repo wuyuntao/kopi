@@ -56,9 +56,16 @@ kopi.module("kopi.utils")
         string = string.replace(new RegExp("\{#{name}\}", 'gi'), value)
       string
 
+    ###
+    产生唯一 ID
+    ###
+    idCounter = 0
+    uniqueId = (prefix='') -> prefix + idCounter++
+
     $.extend exports,
       sum: sum
       average: average
       range: range
       search: search
       format: format
+      uniqueId: uniqueId

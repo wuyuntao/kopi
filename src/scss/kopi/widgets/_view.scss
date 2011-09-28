@@ -9,14 +9,14 @@
  */
 
 // Variables
-$kopi_view_background_color: #000 !default;
+$kopi_view_background_color: transparent !default;
 
-$kopi_view_header_background_color: #000 !default;
+$kopi_view_header_background_color: transparent !default;
 $kopi_view_header_height: $kopi_nav_height !default;
 
-$kopi_view_content_background_color: #fff2cc !default;
+$kopi_view_content_background_color: transparent !default;
 
-$kopi_view_footer_background_color: #000 !default;
+$kopi_view_footer_background_color: transparent !default;
 $kopi_view_footer_height: $kopi_nav_height !default;
 
 // Mixins
@@ -39,6 +39,11 @@ $kopi_view_footer_height: $kopi_nav_height !default;
 }
 
 @mixin kopi-view-fixed {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
   overflow: hidden;
   z-index: 1000;
 }
