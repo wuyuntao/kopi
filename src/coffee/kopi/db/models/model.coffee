@@ -7,12 +7,27 @@ kopi.module("kopi.db.models")
 
     ###
     class Model
+      cls = this
 
       ###
-      @param  {Hash}  attributes    模型属性
+      从 HTML5 定义 MicroData 格式中获取数据
 
+      @param  {String, jQuery Object, HTML Element} element   HTML 元素
+      ###
+      cls.fromHTML = (element, model) ->
+        (model or new this()).fromHTML(element)
+
+      ###
+      @param  {Hash}  attributes
       ###
       constructor: (attributes={}) ->
+
+      ###
+      @param  {Hash}  attributes
+      ###
+      update: (attributes={}) ->
+        for field, value of attributes
+          this[field] = value
 
       ###
       从 HTML5 定义 MicroData 格式中获取数据
@@ -20,21 +35,10 @@ kopi.module("kopi.db.models")
       @param  {String, jQuery Object, HTML Element} element   HTML 元素
       ###
       fromHTML: (element) ->
-        self = this
         element = $(element)
-
         throw new Error("Can not find element") unless element.length
-
-        if element.prop('itemscope')
-          throw new Error("Element does not have 'itemscope' attribute")
-
         unless new RegExp("##{this.constructor.name}$").test(element.attr('itemtype'))
           throw new Error("Element does not have correct 'itemtype' attribute")
-
-        $('[itemprop]', element).each ->
-          prop = $(this)
-          itemprop = prop.attr('itemprop')
-          if itemprop in self.constructor.fields.keys()
-            self[itemprop] = html.prop(prop)
+        this.update(html.scope(element))
 
     exports.Model = Model

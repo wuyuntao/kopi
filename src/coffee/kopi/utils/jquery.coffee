@@ -8,3 +8,7 @@ kopi.module("kopi.utils.jquery")
     $.fn.itemprop = ->
       return undefined unless this.length
       html.prop(this)
+
+    $.fn.itemscope = ->
+      return {} unless this.length
+      html.scope(this)

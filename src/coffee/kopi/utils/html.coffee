@@ -12,7 +12,7 @@ kopi.module("kopi.utils.html")
     ###
     prop = (element) ->
       element = $(element)
-      throw new Error("Must specify element") unless element.length
+      throw new Error("Can not find element") unless element.length
       return element[element.attr('itemattr')] if element.attr('itemattr')
 
       switch element.attr('tagName')
@@ -22,6 +22,20 @@ kopi.module("kopi.utils.html")
         when "object" then element.attr('data')
         when "time" then element.attr('datatime')
         when "input" then element.val()
-        else then element.html()
+        else element.html()
+
+    ###
+    从 HTML5 定义 MicroData 格式中获取数据
+    ###
+    scope = (element) ->
+      element = $(element)
+      throw new Error("Can not find element") unless element.length
+      if element.prop('itemscope')
+        throw new Error("Element does not have 'itemscope' attribute")
+      data = {}
+      $('[itemprop]', element).each ->
+        el = $(this)
+        data[el.attr('itemprop')] = prop(el)
 
     exports.prop = prop
+    exports.scope = scope
