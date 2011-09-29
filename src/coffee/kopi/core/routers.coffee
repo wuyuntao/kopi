@@ -1,4 +1,4 @@
-kopi.module("kopi.core")
+kopi.module("kopi.core.routers")
   .require("kopi.utils.url")
   .define (exports, url) ->
     ###

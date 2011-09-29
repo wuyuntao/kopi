@@ -7,7 +7,7 @@ kopi.module("kopi.utils.i18n")
     # @type {LocaleString}      当前应用使用的语言
     exports.locale = "en"
     # @type {Array}             所有的语言列表
-    locales = ["en", "zh-CN"]
+    locales = ["en", "zh_CN"]
     # @type {Hash}              所有的翻译表
     messages = {}
 

@@ -1,6 +1,7 @@
 kopi.module("kopi.core")
-  .require("kopi.core.router")
-  .define (exports, router) ->
+  .require("kopi.core.routers")
+  .define (exports, routers) ->
+    router = routers.router
     ###
     响应 URL 变化和管理视图切换的控制器
     ###
@@ -14,7 +15,7 @@ kopi.module("kopi.core")
         stateManager.one 'load', (state) ->
           match = router.matches(state.path)
           if match
-            currentView = new match.router.view(match.args...)
+            currentView = new match.route.view(match.args...)
             currentView.start (view) ->
 
               onChange = (state) ->
@@ -22,7 +23,7 @@ kopi.module("kopi.core")
                 stateManager.unbind 'change', onChange
                 match = router.matches(state.path)
                 if match
-                  view = new match.router.view(match.args...)
+                  view = new match.route.view(match.args...)
                   $.when(currentView.stop(view), view.start(currentView))
                     .done ->
                       currentView = view

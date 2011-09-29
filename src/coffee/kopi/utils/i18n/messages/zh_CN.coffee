@@ -1,5 +1,5 @@
-kopi.module("kopi.utils.i18n.messages.zh-CN")
+kopi.module("kopi.utils.i18n.messages.zh_CN")
   .require("kopi.utils.i18n")
   .define (exports, i18n) ->
-    i18n.define "zh-CN"
+    i18n.define "zh_CN"
       hello: "你好！"

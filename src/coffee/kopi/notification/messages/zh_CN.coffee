@@ -1,7 +1,7 @@
-kopi.module("kopi.notification.messages.zh-CN")
+kopi.module("kopi.notification.messages.zh_CN")
   .require("kopi.utils.i18n")
   .define (exports, i18n) ->
-    i18n.define "zh-CN"
+    i18n.define "zh_CN"
       kopi:
         notification:
           messages:

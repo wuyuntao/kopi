@@ -1,31 +1,40 @@
 ###
 模块
 
-TODO 每个模块直接用 Module 实例来表示，而不是用 Hash？
 TODO 用 window.exports 作为顶级模块？
 ###
 class Module
 
   # @type {RegExp}          模块名称的正则表达式
-  reModuleName = /^([\w\-_]+\.)*[\w\-_]+$/
+  reModuleName = /^([\w_]+\.)*[\w_]+$/
+
   ###
   生成模块对象
 
   @param  {String}  name    模块名称
+  @param  {Boolean} auto    是否自动创建模块
   @return {Object}          模块
   ###
-  build = (name) ->
+  this.build = (name, auto=true) ->
     module = window
-    module = module[item] or= {} for item in name.split('.')
+    for item in name.split('.')
+      if item of module
+        unless module[item] instanceof this
+          throw new Error("#{item} is not a module: #{name}")
+        module = module[item]
+      else if auto
+        module = module[item] = new this(name)
+      else
+        throw new Error("Module #{item} does not exist: #{name}")
     module
 
   ###
   @param  {String}  name    模块名称
   ###
   constructor: (name) ->
-    throw new Error("Invalid module name") unless reModuleName.test(name)
-    # @type {Object}        模块对象
-    this.exports = build(name)
+    throw new Error("#{name} is not a valid module name") unless reModuleName.test(name)
+    # @type   {String}      模块名称
+    this.name = name
     # @type {Array}         依赖关系
     this.requires = []
 
@@ -39,8 +48,8 @@ class Module
   @return {Module}              模块对象
   ###
   require: (name, assignment=true) ->
-    throw new Error("Invalid module name") unless reModuleName.test(name)
-    this.requires.push(build(name)) if assignment
+    throw new Error("#{name} is not a valid module name") unless reModuleName.test(name)
+    this.requires.push(this.constructor.build(name, false)) if assignment
     this
 
   ###
@@ -50,10 +59,13 @@ class Module
   @return {null}
   ###
   define: (func) ->
+    # 模块不能重复定义
+    delete this.require
+    delete this.define
     if $.isFunction(func)
-      func(this.exports, this.requires...)
+      func(this, this.requires...)
     else
-      $.extend this.exports, func
+      $.extend this, func
     return
 
 ###
@@ -62,7 +74,7 @@ class Module
 @param  {String}  name    模块名称
 @return {Module}          模块
 ###
-module = (name) -> new Module(name)
+module = (name) -> Module.build(name)
 
 ###
 定义 Kopi 模块
