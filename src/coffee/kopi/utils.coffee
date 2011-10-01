@@ -73,9 +73,20 @@ kopi.module("kopi.utils")
 
     ###
     产生唯一 ID
+
+    @param  {String}  prefix  前缀
     ###
     idCounter = 0
     uniqueId = (prefix='') -> prefix + idCounter++
+
+    ###
+    判断对象是否为 Promise 对象
+
+    @param  {Object}  obj
+    ###
+    isPromise = (obj) ->
+      !!(obj.then and obj.done and obj.fail and obj.pipe and
+        not obj.reject and not obj.resolve)
 
     $.extend exports,
       sum: sum
@@ -84,3 +95,4 @@ kopi.module("kopi.utils")
       search: search
       format: format
       uniqueId: uniqueId
+      isPromise: isPromise

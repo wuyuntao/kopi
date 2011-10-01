@@ -7,11 +7,21 @@ kopi.module("kopi.utils.ecma5")
   .require("kopi.utils")
   .define (exports, utils) ->
 
+    # Establish the object that gets thrown to break out of a loop iteration.
+    # `StopIteration` is SOP on Mozilla.
+    breaker = if typeof(StopIteration) is 'undefined' then '__break__' else StopIteration
+
     ArrayProto = Array.prototype
     ObjectProto = Object.prototype
 
     # All **ECMA5** native implementations we hope to use are declared here.
-    # ArrayProto.forEach
+    ArrayProto.forEach or= (iterator, context) ->
+      try
+        iterator.call context, this[i], i, this for i in [0...this.length]
+      catch e
+        throw e if e isnt breaker
+      this
+
     # ArrayProto.map
     # ArrayProto.reduce
     # ArrayProto.reduceRight

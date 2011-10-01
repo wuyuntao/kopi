@@ -1,13 +1,22 @@
 kopi.module("kopi.db.models")
   .require("kopi.utils.html")
-  .define (exports, html) ->
+  .require("kopi.events")
+  .require("kopi.db.collections")
+  .define (exports, html, events, collections) ->
 
     ###
     所有模型的基类
 
     ###
-    class Model
-      this.fields = {}
+    class Model extends events.EventEmitter
+      # @type {Hash}  字段的定义
+      this._fields = {}
+
+      ###
+      扩展字段的定义
+      ###
+      this.fields = (fields={}) ->
+        $.extend this._fields, fields
 
       ###
       从 HTML5 定义 MicroData 格式中获取数据
@@ -18,14 +27,24 @@ kopi.module("kopi.db.models")
       this.fromHTML = (element, model) ->
         $(element).map -> (model or new this()).fromHTML(this)
 
+      ###
+      ###
       this.create = (attributes={}, callback) ->
         model = new this(attributes)
         model.save(callback)
 
       ###
+      返回查询对象
+
+      @return   {Collection}  查询对象
+      ###
+      this.all = -> new collections.Collection(this)
+
+      ###
       @param  {Hash}  attributes
       ###
       constructor: (attributes={}) ->
+        super()
         this.update(attributes)
 
       ###
@@ -60,5 +79,13 @@ kopi.module("kopi.db.models")
         unless new RegExp("##{this.constructor.name}$").test(element.attr('itemtype'))
           throw new Error("Element does not have correct 'itemtype' attribute")
         this.update(html.scope(element))
+
+      ###
+      事件的模板方法
+      ###
+      # oncreate: -> true
+      # onsave: -> true
+      # onupdate: -> true
+      # ondestroy: -> true
 
     exports.Model = Model
