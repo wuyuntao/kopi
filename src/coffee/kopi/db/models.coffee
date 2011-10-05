@@ -1,8 +1,10 @@
 kopi.module("kopi.db.models")
+  .require("kopi.utils")
   .require("kopi.utils.html")
+  .require("kopi.utils.text")
   .require("kopi.events")
   .require("kopi.db.collections")
-  .define (exports, html, events, collections) ->
+  .define (exports, utils, html, text, events, collections) ->
 
     ###
     所有模型的基类
@@ -11,12 +13,36 @@ kopi.module("kopi.db.models")
     class Model extends events.EventEmitter
       # @type {Hash}  字段的定义
       this._fields = {}
+      this._belongsTo = {}
+      this._hasMany = {}
+      this._hasAndBelongsToMany = {}
 
       ###
       扩展字段的定义
       ###
       this.fields = (fields={}) ->
         $.extend this._fields, fields
+
+      ###
+      定义外键
+      ###
+      this.belongsTo = (model, options={}) ->
+        if typeof model is "string"
+          model = text.constantize(model)
+        options.name or= model.name
+        this._belongsTo[options.name] = model
+
+      this.hasMany = (model, options={}) ->
+        if typeof model is "string"
+          model = text.constantize(model)
+        options.name or= model.name
+        this._hasMany[options.name] = model
+
+      this.hasAndBelongsToMany = (model, options={}) ->
+        if typeof model is "string"
+          model = text.constantize(model)
+        options.name or= model.name
+        this._hasAndBelongsToMany[options.name] = model
 
       ###
       从 HTML5 定义 MicroData 格式中获取数据
@@ -45,6 +71,7 @@ kopi.module("kopi.db.models")
       ###
       constructor: (attributes={}) ->
         super()
+        this._id = utils.uniqueId(text.underscore(this.constructor.name))
         this.update(attributes)
 
       ###

@@ -34,13 +34,14 @@ class Module
   @param  {String}  name        模块名称
   @param  {Boolean} autoCreate  是否自动创建模块
   @param  {Boolean} autoLoad    是否自动加载模块
+  @param  {Boolean} moduleOnly  是否只允许加载模块
   @return {Object}              模块
   ###
-  this.build = (name, autoCreate=true, autoLoad=false) ->
+  this.build = (name, autoCreate=true, autoLoad=false, moduleOnly=true) ->
     module = window
     for item in name.split('.')
       if item of module
-        unless module[item] instanceof this
+        if moduleOnly and not module[item] instanceof this
           throw new Error("#{item} is not a module: #{name}")
         module = module[item]
       else if autoCreate
@@ -100,6 +101,18 @@ class Module
 module = (name) -> Module.build(name)
 
 ###
+获取对象
+
+NOTE
+不要直接使用这个方法
+可以调用 kopi.utils.text.constantize
+
+@param  {String}  name    模块名称
+@return {Module}          模块
+###
+build = (name) -> Module.build(name, false, false, false)
+
+###
 定义 Kopi 模块
 ###
-module("kopi").define module: module
+module("kopi").define module: module, _build: build
