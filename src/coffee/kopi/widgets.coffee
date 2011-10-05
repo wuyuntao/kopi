@@ -50,8 +50,8 @@ kopi.module("kopi.widgets")
       @param  {HTML Element}  element
       ###
       _updateOptionsFromDataAttributes: ->
-        for name of this._options
-          value = this._element.data("#{this._prefix)}-#{text.underscore(name)}")
+        for name, value of this._options
+          value = this._element.data("#{this._prefix}-#{text.underscore(name)}")
           this._options[name] = value if value isnt undefined
 
     exports.Widget = Widget
