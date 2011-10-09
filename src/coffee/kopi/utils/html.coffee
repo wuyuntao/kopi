@@ -4,10 +4,11 @@ kopi.module("kopi.utils.html")
     ###
     创建简单的 HTML Element
     ###
-    create = (tagName, attributes, content) ->
+    build = (tagName, attributes, content) ->
       element = $(document.createElement(tagName))
       element.attr(attributes) if attributes
       element.html(content) if content
+      element
 
     ###
     根据不同 HTML Element 类型，获取 MicroData 数据，参考
@@ -45,6 +46,6 @@ kopi.module("kopi.utils.html")
         el = $(this)
         data[el.attr('itemprop')] = prop(el)
 
-    exports.create = create
+    exports.build = build
     exports.prop = prop
     exports.scope = scope

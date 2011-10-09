@@ -9,15 +9,17 @@ kopi.module("kopi.exceptions")
         super("#{this.constructor.name}: #{message}")
 
     ###
-    数值错误
-    ###
-    class ValueError extends Exception
-
-    ###
     方法未实现
     ###
     class NotImplementedError extends Exception
       constructor: (message="Not implemented yet.") ->
         super
 
+    ###
+    数值错误
+    ###
+    class ValueError extends Exception
+
     exports.Exception = Exception
+    exports.NotImplementedError = NotImplementedError
+    exports.ValueError = ValueError

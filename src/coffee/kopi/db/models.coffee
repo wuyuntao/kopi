@@ -54,6 +54,11 @@ kopi.module("kopi.db.models")
         $(element).map -> (model or new this()).fromHTML(this)
 
       ###
+      向服务器请求数据
+      ###
+      this.fromServer = (callback) ->
+
+      ###
       ###
       this.create = (attributes={}, callback) ->
         model = new this(attributes)
@@ -70,8 +75,6 @@ kopi.module("kopi.db.models")
       @param  {Hash}  attributes
       ###
       constructor: (attributes={}) ->
-        super()
-        this._id = utils.uniqueId(text.underscore(this.constructor.name))
         this.update(attributes)
 
       ###

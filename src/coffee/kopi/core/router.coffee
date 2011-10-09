@@ -33,6 +33,8 @@ kopi.module("kopi.core.router")
           this.routes.push(route)
           compiled = false
 
+        this
+
       # Check if a route is already defined
       exists: (route) ->
         for exist in this.routes
@@ -53,7 +55,7 @@ kopi.module("kopi.core.router")
 
       # Check if route is static
       isStatic: (route) ->
-        this.route.tokens.length == 1
+        route.tokens.length == 1
 
       # Match a path and return a route object
       match: (path, scope=null) ->

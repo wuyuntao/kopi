@@ -3,6 +3,6 @@ kopi.module("kopi.settings")
     exports.kopi =
       debug: true
 
-      containerSelector: "#container"
+      viewContainerSelector: "#view-container"
 
       # cssPrefix: "kopi-"

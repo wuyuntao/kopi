@@ -39,12 +39,15 @@ kopi.module("kopi.core.manager")
 
       constructor: ->
         self = this
-        start()
+        self.start()
 
       ###
       开动 URL 变化监听
       ###
       start: ->
+        self = this
+        self.views = new views.ViewContainer()
+        ###
         self.emit 'start'
         if support.pushState
           $(window).bind 'popstate', (e) ->
@@ -57,6 +60,7 @@ kopi.module("kopi.core.manager")
                 self.emit 'change', [new State(url, view)]
         else
           throw new exceptions.NotImplementedError()
+        ###
 
       ###
       获取当前页面的 URL
@@ -64,14 +68,20 @@ kopi.module("kopi.core.manager")
       TODO 格式化 URL
       ###
       getCurrentURL: ->
-        location.href
+        location.pathname
 
       load: (url) ->
+        self = this
         url or= this.getCurrentURL()
-        # 在缓存中查找已经创建过的 View
-        if url of this.stateStack
-          state = this.stateStack[url]
-          view = state.view.start (view) ->
+        # # 在缓存中查找已经创建过的 View
+        # if url of this.stateStack
+        #   state = this.stateStack[url]
+        #   view = state.view.start (view) ->
+        match = router.match(url)
+        if match
+          view = new match.route.view(match.args...)
+          self.views.start(view)
+        self
 
         ###
         self = this
@@ -97,6 +107,7 @@ kopi.module("kopi.core.manager")
         ###
 
       onstart: (e) ->
+        ###
         url = location.href
         state = this.match(url)
         # if state
@@ -104,6 +115,7 @@ kopi.module("kopi.core.manager")
         if view
           view.create (view) ->
             view.start (view) ->
+        ###
 
       onchange: (e, state) ->
 
@@ -111,12 +123,12 @@ kopi.module("kopi.core.manager")
       match: (url) ->
 
     # Manager 单例
-    manager = null
+    manager = new Manager()
 
     start = ->
-      manager = new Manager() unless manager
+      manager or= new Manager()
 
-    load = ->
+    load = (url) ->
       throw new exceptions.ValueError("Start manager first.") unless manager
       manager.load(arguments...)
 

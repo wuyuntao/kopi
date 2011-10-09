@@ -1,23 +1,34 @@
 kopi.module("kopi.views")
   .require("kopi.settings")
+  .require("kopi.events")
   .require("kopi.utils")
   .require("kopi.utils.html")
+  .require("kopi.utils.text")
   .require("kopi.widgets")
-  .define (exports, settings, utils, html, widgets) ->
+  .define (exports, settings, events, utils, html, text, widgets) ->
 
     ###
     View 的容器
     ###
     class ViewContainer extends widgets.Widget
 
-      changeView: (view) ->
+      currentView = null
+
+      constructor: (element=settings.kopi.viewContainerSelector) ->
+        super(element)
+
+      start: (view) ->
+        self = this
+        if not view.created
+          view.create()
+          view.element.appendTo(self.element)
 
     ###
     View 的基类
 
     视图的载入应该越快越好，所以 AJAX 和数据库等 IO 操作不应该阻塞视图的显示
     ###
-    class View extends widgets.Widget
+    class View extends events.EventEmitter
 
       # type  #{Boolean}  created   视图是否已创建
       created: false
@@ -26,92 +37,64 @@ kopi.module("kopi.views")
       # type  #{Boolean}  started   视图是否允许操作
       locked: false
 
-      constructor: (path, args=[]) ->
-        throw new Error("Missing container") unless container?
-        throw new Error("Missing path") unless path?
-
-        this._id = utils.uniqueId(this.constructor.prefix)
-        this._container = container
-        this._path = path
-        this._args = args
-
-      
-    class AsyncView extends View
-
-      create: (callback) ->
+      constructor: (container, path, args=[]) ->
         self = this
-        failFn = -> throw new Error("Failed to create View: #{this.constructor.name}")
-        failFn() if this.created or this.started
-        doneFn = ->
-          self.created = true
-          callback(self)
-        this._handlePromise(this.oncreate(), doneFn, failFn)
-        this
+        self.container = container
+        self.constructor.prefix or= text.underscore(self.constructor.name)
+        self.id = utils.uniqueId(self.constructor.prefix)
+        self.path = path or location.pathname
+        self.args = args
 
-      start: (view, callback) ->
+      create: ->
         self = this
-        failFn = -> throw new Error("Failed to start View: #{this.constructor.name}")
-        failFn() if not this.created or this.started
-        doneFn = ->
-          self.started = true
-          callback(self)
-        this._handlePromise(this.onstart(), doneFn, failFn)
-        this
+        return self if self.created
+        self._createSkeleton()
+        self.created = true
+        self.emit('create')
 
-      update: (callback) ->
+      start: ->
         self = this
-        failFn = -> throw new Error("Failed to update View: #{this.constructor.name}")
-        failFn() if not this.created or not this.started
-        doneFn = ->
-          self.started = false
-          callback(self)
-        this._handlePromise(this.onupdate(), doneFn, failFn)
+        throw new ValueError("Must create view first.") if not self.created
+        return self if self.started
+        self.started = true
+        self.onstart()
 
-      ###
-      ###
-      stop: (view, callback) ->
+      update: ->
+        this.onupdate()
+
+      stop: ->
         self = this
-        failFn = -> throw new Error("Failed to stop View: #{this.constructor.name}")
-        failFn() if not this.created or not this.started
-        doneFn = ->
-          self.started = false
-          callback(self)
-        this._handlePromise(this.onstop(), doneFn, failFn)
+        throw new ValueError("Must create view first.") if not self.created
+        return self if not self.started
+        self.started = false
+        self.onstop()
 
-      destroy: (callback) ->
+      destroy: ->
         self = this
-        failFn = -> throw new Error("Failed to destroy View: #{this.constructor.name}")
-        failFn() if this.created or this.started
-        doneFn = ->
-          self.created = false
-          callback(self)
-        this._handlePromise(this.ondestroy(), doneFn, failFn)
+        throw new ValueError("Must stop view first.") if self.started
+        return self if not self.created
+        self.created = false
+        self.ondestroy()
 
+      # TODO 阻止 UI 操作
       lock: () ->
-        return if this.locked
-        # TODO 阻止 UI 操作
-        this.locked = true
-        this.onunlock()
+        self = this
+        return self if self.locked
+        self.locked = true
+        self.onunlock()
+        self
 
       unlock: () ->
-        return if not this.locked
-        this.locked = false
-        this.onlock()
+        self = this
+        return self unless self.locked
+        self.locked = false
+        self.onlock()
+        self
 
-      _handlePromise: (promise, doneFn, failFn) ->
-        # This a async promise
-        if utils.isPromise(promise)
-          promise.done(doneFn).fail(failFn)
-
-        # This a sync success result
-        else if promise
-          doneFn()
-
-        # This a sync fail result
-        else
-          failFn()
-
-        this
+      _createSkeleton: ->
+        this.element = html.build 'div',
+                          id: this.id,
+                          class: this.constructor.prefix
 
       ###
       事件的模板方法
@@ -127,4 +110,5 @@ kopi.module("kopi.views")
       onlock:    () -> true
       onunlock:  () -> true
 
+    exports.ViewContainer = ViewContainer
     exports.View = View

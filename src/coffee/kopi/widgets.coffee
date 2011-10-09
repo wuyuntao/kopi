@@ -20,21 +20,21 @@ kopi.module("kopi.widgets")
         $.extend(this._defaults, options)
 
       constructor: (element, options={}, data={}) ->
-        super()
+        self = this
         # @type {String}
-        this.constructor.prefix or= text.underscore(this.constructor.name)
+        self.constructor.prefix or= text.underscore(self.constructor.name)
         # @type {String}
-        this._id = utils.uniqueId(this.constructor.prefix)
+        self.id = utils.uniqueId(self.constructor.prefix)
         # @type {jQuery Element}
-        this._element = $(element)
-        unless this._element.length > 0
+        self.element = $(element)
+        unless self.element.length > 0
           throw new exceptions.ValueError("Element does not exist")
-        this._element.attr('id', this._id).addClass(this.constructor.prefix)
         # @type {Hash}              配置
-        this._options = $.extend({}, this.constructor._defaults, options)
-        this._updateOptionsFromDataAttributes()
+        self._options = $.extend({}, self.constructor._defaults, options)
+        self._updateOptions()
         # @type {Hash}              数据
-        this._data = data
+        self._data = data
+        self._createSkeleton()
 
       ###
       更新配置
@@ -50,13 +50,17 @@ kopi.module("kopi.widgets")
       搭建
       ###
       _createSkeleton: () ->
+        self = this
+        if not self.element.attr('id')
+          self.element.attr('id', self.id)
+        self.element.addClass(self.constructor.prefix)
 
       ###
       从 HTML Element 的 data 属性上读取配置
 
       @param  {HTML Element}  element
       ###
-      _updateOptionsFromDataAttributes: ->
+      _updateOptions: ->
         for name, value of this._options
           value = this._element.data("#{this._prefix}-#{text.underscore(name)}")
           this._options[name] = value if value isnt undefined
