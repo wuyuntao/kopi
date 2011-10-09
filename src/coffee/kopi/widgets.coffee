@@ -3,7 +3,8 @@ kopi.module("kopi.widgets")
   .require("kopi.utils.text")
   .require("kopi.events")
   .require("kopi.exceptions")
-  .define (exports, utils, text, events, exceptions) ->
+  .require("kopi.settings")
+  .define (exports, utils, text, events, exceptions, settings) ->
     ###
     UI 组件的基类
     ###
@@ -21,13 +22,14 @@ kopi.module("kopi.widgets")
       constructor: (element, options={}, data={}) ->
         super()
         # @type {String}
-        this._prefix = text.underscore(this.constructor.name)
+        this.constructor.prefix or= text.underscore(this.constructor.name)
         # @type {String}
-        this._id = utils.uniqueId(this._prefix)
+        this._id = utils.uniqueId(this.constructor.prefix)
         # @type {jQuery Element}
-        this._element = $(element).attr('id', this._id)
+        this._element = $(element)
         unless this._element.length > 0
           throw new exceptions.ValueError("Element does not exist")
+        this._element.attr('id', this._id).addClass(this.constructor.prefix)
         # @type {Hash}              配置
         this._options = $.extend({}, this.constructor._defaults, options)
         this._updateOptionsFromDataAttributes()
@@ -43,6 +45,11 @@ kopi.module("kopi.widgets")
       更新数据
       ###
       data: (data={}) -> $.extend(this._data, data)
+
+      ###
+      搭建
+      ###
+      _createSkeleton: () ->
 
       ###
       从 HTML Element 的 data 属性上读取配置

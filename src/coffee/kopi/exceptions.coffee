@@ -17,5 +17,7 @@ kopi.module("kopi.exceptions")
     方法未实现
     ###
     class NotImplementedError extends Exception
+      constructor: (message="Not implemented yet.") ->
+        super
 
     exports.Exception = Exception

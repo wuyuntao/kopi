@@ -2,6 +2,14 @@ kopi.module("kopi.utils.html")
   .define (exports) ->
 
     ###
+    创建简单的 HTML Element
+    ###
+    create = (tagName, attributes, content) ->
+      element = $(document.createElement(tagName))
+      element.attr(attributes) if attributes
+      element.html(content) if content
+
+    ###
     根据不同 HTML Element 类型，获取 MicroData 数据，参考
     http://diveintohtml5.org/extensibility.html#property-values
 
@@ -37,5 +45,6 @@ kopi.module("kopi.utils.html")
         el = $(this)
         data[el.attr('itemprop')] = prop(el)
 
+    exports.create = create
     exports.prop = prop
     exports.scope = scope

@@ -77,7 +77,7 @@ kopi.module("kopi.utils")
     @param  {String}  prefix  前缀
     ###
     idCounter = 0
-    uniqueId = (prefix='') -> prefix + idCounter++
+    uniqueId = (prefix='') -> prefix + '-' + idCounter++
 
     ###
     判断对象是否为 Promise 对象
@@ -88,6 +88,15 @@ kopi.module("kopi.utils")
       !!(obj.then and obj.done and obj.fail and obj.pipe and
         not obj.reject and not obj.resolve)
 
+    extend = (obj, mixins...) ->
+      for mixin in mixins
+        for name, method of mixin
+          obj[name] = method
+
+    include = (klass, mixins...) ->
+      for mixin in mixins
+        extend klass.prototype, mixin
+
     $.extend exports,
       sum: sum
       average: average
@@ -96,3 +105,5 @@ kopi.module("kopi.utils")
       format: format
       uniqueId: uniqueId
       isPromise: isPromise
+      extend: extend
+      include: include

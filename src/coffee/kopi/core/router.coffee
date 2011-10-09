@@ -1,6 +1,7 @@
-kopi.module("kopi.core.routers")
+kopi.module("kopi.core.router")
   .require("kopi.utils.url")
   .define (exports, url) ->
+
     ###
     URL 路由管理
     ###
@@ -9,6 +10,7 @@ kopi.module("kopi.core.routers")
         this.routes = []
         this.statics = {}
         this.dynamics = []
+        this.names = {}
         this.compiled = false
         # JavaScript does not support negative lookbehind assertion
         # this.syntax = /(?<!\\):([a-zA-Z_]+)?(?:#(.*?)#)?/i
@@ -54,16 +56,23 @@ kopi.module("kopi.core.routers")
         this.route.tokens.length == 1
 
       # Match a path and return a route object
-      match: (path) ->
+      match: (path, scope=null) ->
         request = url.parse(path)
         if request.path of this.statics
-          return route: this.statics[request.path], args: [request]
+          route = this.statics[request.path]
+          continue if scope and route.context.scoped and not scope instanceof route.view
+          return route: route, args: [request]
 
         for dynamic in this.dynamics
           matches = request.path.match(dynamics[i].regexp)
           if matches
+            route = dynamic.route
+            continue if scope and route.context.scoped and not scope instanceof route.view
             matches[0] = request
-            return route: dynamic.route, args: matches
+            return route: route, args: matches
+
+        if scope
+          return this.match(path, null)
 
         # Late check to reduce overhead on hits
         if not this.compiled
@@ -87,5 +96,13 @@ kopi.module("kopi.core.routers")
         this.compiled = false
         this.statics = {}
         this.dynamics = []
+        this.names = {}
 
-    exports.router = new Router()
+    router = new Router()
+
+    add = -> router.add(arguments...)
+
+    match = -> router.match(arguments...)
+
+    exports.add = add
+    exports.match = match

@@ -1,17 +1,79 @@
-kopi.module("kopi.core")
-  .require("kopi.core.routers")
-  .define (exports, routers) ->
-    router = routers.router
+kopi.module("kopi.core.manager")
+  .require("kopi.core.router")
+  .require("kopi.events")
+  .require("kopi.utils")
+  .require("kopi.utils.text")
+  .require("kopi.utils.support")
+  .require("kopi.exceptions")
+  .require("kopi.views")
+  .define (exports, router, events, utils, text, support, exceptions, views) ->
+
+    class State
+      this.fromJSON: (json={}) -> new this(json.url, json.view, json.context, json.id)
+
+      constructor: (url, view, context={}, id=null) ->
+        throw exceptions.ValueError("Must have URL") unless url
+        throw exceptions.ValueError("Must have View") unless view and view instanceof views.View
+
+        this.id = id or utils.uniqueId(this.constructor.name)
+        this.url = url
+        this.view = view
+        this.context = context
+
+      equals: (state) -> this.id == state.id
+
     ###
     响应 URL 变化和管理视图切换的控制器
     ###
-    class Manager
-      currentView = null
-      changeLock = false
+    class Manager extends events.EventEmitter
+
+      # @type {State}       当前状态
+      currentState: null
+
+      # @type {Boolean}     是否接受状态改变
+      stateLock: false
+
+      # @type {Hash<URL, State>}  
+      stateStack: {}
 
       constructor: ->
         self = this
-        # 第一次载入页面时，根据页面的 Path 找到 View
+        start()
+
+      ###
+      开动 URL 变化监听
+      ###
+      start: ->
+        self.emit 'start'
+        if support.pushState
+          $(window).bind 'popstate', (e) ->
+            if e.state.id
+              self.emit 'change', [State.fromJSON(e.state)]
+            else
+              url = location.href
+              view = router.match(url)
+              if view
+                self.emit 'change', [new State(url, view)]
+        else
+          throw new exceptions.NotImplementedError()
+
+      ###
+      获取当前页面的 URL
+
+      TODO 格式化 URL
+      ###
+      getCurrentURL: ->
+        location.href
+
+      load: (url) ->
+        url or= this.getCurrentURL()
+        # 在缓存中查找已经创建过的 View
+        if url of this.stateStack
+          state = this.stateStack[url]
+          view = state.view.start (view) ->
+
+        ###
+        self = this
         stateManager.one 'load', (state) ->
           match = router.matches(state.path)
           if match
@@ -31,5 +93,31 @@ kopi.module("kopi.core")
                       stateManager.bind 'change', onChange
 
               stateManager.bind 'change', onChange
+        ###
 
-    exports.manager = new Manager()
+      onstart: (e) ->
+        url = location.href
+        state = this.match(url)
+        if state
+        view = router.match(url)
+        if view
+          view.create (view) ->
+            view.start (view) ->
+
+      onchange: (e, state) ->
+
+      # 在缓存中寻找 View
+      match: (url) ->
+
+    # Manager 单例
+    manager = null
+
+    start = ->
+      manager = new Manager() unless manager
+
+    load = ->
+      throw new exceptions.ValueError("Start manager first.") unless manager
+      manager.load(arguments...)
+
+    exports.start = start
+    exports.load = load

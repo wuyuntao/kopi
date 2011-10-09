@@ -1,6 +1,7 @@
 kopi.module('kopi.logging')
   .require('kopi.utils')
-  .define (exports, utils) ->
+  .require('kopi.settings')
+  .define (exports, utils, settings) ->
 
     ###
     日志

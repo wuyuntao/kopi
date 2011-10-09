@@ -1,5 +1,8 @@
 kopi.module("kopi.settings")
   .define (exports) ->
     exports.kopi =
-      core:
-        debug: true
+      debug: true
+
+      containerSelector: "#container"
+
+      # cssPrefix: "kopi-"
