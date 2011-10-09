@@ -10,8 +10,8 @@ kopi.module("kopi.utils.support")
       # Does the browser support window.onhashchange? Note that IE8 running in
       # IE7 compatibility mode reports true for 'onhashchange' in window, even
       # though the event isn't supported, so also test document.documentMode.
-      hashChange: 'onhashchange' in win and (docMode === undefined or docMode > 7)
+      hashChange: 'onhashchange' of win and (docMode == undefined or docMode > 7)
 
-	    pushState: "pushState" in hist and "replaceState" in hist
+	    pushState: "pushState" of hist and "replaceState" of hist
 
       # pageShow: "onpageshow" in win and "onpagehide" in win

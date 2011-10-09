@@ -60,8 +60,8 @@ kopi.module("kopi.core.router")
         request = url.parse(path)
         if request.path of this.statics
           route = this.statics[request.path]
-          continue if scope and route.context.scoped and not scope instanceof route.view
-          return route: route, args: [request]
+          unless scope and route.context.scoped and not (scope instanceof route.view)
+            return route: route, args: [request]
 
         for dynamic in this.dynamics
           matches = request.path.match(dynamics[i].regexp)

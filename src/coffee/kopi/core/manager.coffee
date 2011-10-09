@@ -9,7 +9,8 @@ kopi.module("kopi.core.manager")
   .define (exports, router, events, utils, text, support, exceptions, views) ->
 
     class State
-      this.fromJSON: (json={}) -> new this(json.url, json.view, json.context, json.id)
+      this.fromJSON = (json={}) ->
+        new this(json.url, json.view, json.context, json.id)
 
       constructor: (url, view, context={}, id=null) ->
         throw exceptions.ValueError("Must have URL") unless url
@@ -33,7 +34,7 @@ kopi.module("kopi.core.manager")
       # @type {Boolean}     是否接受状态改变
       stateLock: false
 
-      # @type {Hash<URL, State>}  
+      # @type {Hash<URL, State>}
       stateStack: {}
 
       constructor: ->
@@ -98,7 +99,7 @@ kopi.module("kopi.core.manager")
       onstart: (e) ->
         url = location.href
         state = this.match(url)
-        if state
+        # if state
         view = router.match(url)
         if view
           view.create (view) ->
