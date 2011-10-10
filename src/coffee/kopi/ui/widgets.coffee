@@ -1,4 +1,4 @@
-kopi.module("kopi.widgets")
+kopi.module("kopi.ui.widgets")
   .require("kopi.utils")
   .require("kopi.utils.text")
   .require("kopi.events")
@@ -24,7 +24,7 @@ kopi.module("kopi.widgets")
         # @type {String}
         self.constructor.prefix or= text.underscore(self.constructor.name)
         # @type {String}
-        self.id = utils.uniqueId(self.constructor.prefix)
+        self.uid = utils.uniqueId(self.constructor.prefix)
         # @type {jQuery Element}
         self.element = $(element)
         unless self.element.length > 0
@@ -34,25 +34,42 @@ kopi.module("kopi.widgets")
         self._updateOptions()
         # @type {Hash}              数据
         self._data = data
-        self._createSkeleton()
+        # @type {Boolean}           是否允许用户交互
+        self.isLocked = false
+        self._skeleton()
 
       ###
       更新配置
       ###
-      options: (options={}) -> $.extend(this._options, options)
+      options: (options) -> if options then $.extend(this._options, options) else this._options
 
       ###
       更新数据
       ###
-      data: (data={}) -> $.extend(this._data, data)
+      data: (data) -> if data then $.extend(this._data, data) else this._data
+
+      ###
+      禁止用户用鼠标或手势进行交互
+      ###
+      lock: ->
+        # TODO 从 Event 层禁止，考虑如果子类也在 element 上绑定时间的情况
+        this.isLocked = true
+        this
+
+      ###
+      禁止用户用鼠标、键盘或手势进行交互
+      ###
+      unlock: ->
+        this.isLocked = false
+        this
 
       ###
       搭建
       ###
-      _createSkeleton: () ->
+      _skeleton: ->
         self = this
-        if not self.element.attr('id')
-          self.element.attr('id', self.id)
+        if not self.element.data('uid')
+          self.element.attr('data-uid', self.uid)
         self.element.addClass(self.constructor.prefix)
 
       ###

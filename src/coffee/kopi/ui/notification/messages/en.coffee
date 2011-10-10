@@ -1,4 +1,4 @@
-kopi.module("kopi.notification.messages.en")
+kopi.module("kopi.ui.notification.messages.en")
   .require("kopi.utils.i18n")
   .define (exports, i18n) ->
     i18n.define "en"

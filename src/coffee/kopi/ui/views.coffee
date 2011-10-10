@@ -1,27 +1,11 @@
-kopi.module("kopi.views")
+kopi.module("kopi.ui.views")
   .require("kopi.settings")
   .require("kopi.events")
   .require("kopi.utils")
   .require("kopi.utils.html")
   .require("kopi.utils.text")
-  .require("kopi.widgets")
+  .require("kopi.ui.widgets")
   .define (exports, settings, events, utils, html, text, widgets) ->
-
-    ###
-    View 的容器
-    ###
-    class ViewContainer extends widgets.Widget
-
-      currentView = null
-
-      constructor: (element=settings.kopi.viewContainerSelector) ->
-        super(element)
-
-      start: (view) ->
-        self = this
-        if not view.created
-          view.create()
-          view.element.appendTo(self.element)
 
     ###
     View 的基类
@@ -41,7 +25,7 @@ kopi.module("kopi.views")
         self = this
         self.container = container
         self.constructor.prefix or= text.underscore(self.constructor.name)
-        self.id = utils.uniqueId(self.constructor.prefix)
+        self.uid = utils.uniqueId(self.constructor.prefix)
         self.path = path or location.pathname
         self.args = args
 
@@ -93,7 +77,7 @@ kopi.module("kopi.views")
 
       _createSkeleton: ->
         this.element = html.build 'div',
-                          id: this.id,
+                          id: this.uid,
                           class: this.constructor.prefix
 
       ###

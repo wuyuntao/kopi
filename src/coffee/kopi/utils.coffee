@@ -97,6 +97,20 @@ kopi.module("kopi.utils")
       for mixin in mixins
         extend klass.prototype, mixin
 
+    # 把数组转换成循环链表
+    # link = (array, circular=true) ->
+    #   return array if array.length == 0
+
+    #   len = array.length
+    #   first = array[0]
+    #   last = array[len - 1]
+
+    #   for node, i in array
+    #     node.first = first
+    #     node.last = last
+    #     node.prev = if i-1 >= 0  then array[i-1] else if circular then last  else null
+    #     node.next = if i+1 < len then array[i+1] else if circular then first else null
+
     $.extend exports,
       sum: sum
       average: average
@@ -107,3 +121,4 @@ kopi.module("kopi.utils")
       isPromise: isPromise
       extend: extend
       include: include
+      link: link

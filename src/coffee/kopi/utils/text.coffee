@@ -22,6 +22,11 @@ kopi.module("kopi.utils.text")
     ###
     constantize = (name) -> kopi._build(name)
 
+    ###
+    是否为字符串
+    ###
+    # isString = (str) -> !!(str is '' or (str and str.charCodeAt and str.substr))
+
     reUpper = /([A-Z]+)([A-Z][a-z\d])/g
     reLower = /([a-z\d])([A-Z])/g
     reSymbol = /[-_\.]+/g

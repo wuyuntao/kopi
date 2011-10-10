@@ -1,4 +1,4 @@
-kopi.module("kopi.templates")
+kopi.module("kopi.ui.templates")
   .define (exports) ->
     ###
     模板基类

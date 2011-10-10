@@ -10,18 +10,18 @@ kopi.module("kopi.core.manager")
 
     class State
       this.fromJSON = (json={}) ->
-        new this(json.url, json.view, json.context, json.id)
+        new this(json.url, json.view, json.context, json.uid)
 
       constructor: (url, view, context={}, id=null) ->
         throw exceptions.ValueError("Must have URL") unless url
         throw exceptions.ValueError("Must have View") unless view and view instanceof views.View
 
-        this.id = id or utils.uniqueId(this.constructor.name)
+        this.uid = id or utils.uniqueId(this.constructor.name)
         this.url = url
         this.view = view
         this.context = context
 
-      equals: (state) -> this.id == state.id
+      equals: (state) -> this.uid == state.uid
 
     ###
     响应 URL 变化和管理视图切换的控制器

@@ -22,7 +22,12 @@ kopi.module("kopi.utils.ecma5")
         throw e if e isnt breaker
       this
 
-    # ArrayProto.map
+    ArrayProto.map or= (iterator, context) ->
+      results = []
+      this.forEach (value, index, list) ->
+        results.push iterator.call context, value, index, list
+      results
+
     # ArrayProto.reduce
     # ArrayProto.reduceRight
     # ArrayProto.filter

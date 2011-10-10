@@ -1,4 +1,4 @@
-kopi.module("kopi.notification")
+kopi.module("kopi.ui.notification")
   .require("kopi.utils.i18n")
   .require("kopi.logging")
   .define (exports, i18n, logging) ->
