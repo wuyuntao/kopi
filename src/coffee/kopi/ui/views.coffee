@@ -5,7 +5,10 @@ kopi.module("kopi.ui.views")
   .require("kopi.utils.html")
   .require("kopi.utils.text")
   .require("kopi.ui.widgets")
-  .define (exports, settings, events, utils, html, text, widgets) ->
+  .require("kopi.ui.containers")
+  .define (exports, settings, events, utils, html, text, widgets, containers) ->
+
+    class ViewContainer extends containers.Container
 
     ###
     View 的基类

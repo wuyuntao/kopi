@@ -1,6 +1,6 @@
 kopi.module("kopi.ui.navigation")
   .require("kopi.settings")
-  .require("kopi.ui.container")
+  .require("kopi.ui.containers")
   .require("kopi.ui.widgets")
   .define (exports, settings, container, widgets) ->
 

@@ -1,4 +1,4 @@
-kopi.module("kopi.ui.container")
+kopi.module("kopi.ui.containers")
   .require("kopi.settings")
   .require("kopi.exceptions")
   .require("kopi.utils")
@@ -94,3 +94,5 @@ kopi.module("kopi.ui.container")
       # Event templates
       ontransition:     -> true
       ontransitionend:  -> true
+
+    exports.Container = Container

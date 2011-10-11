@@ -1,0 +1,47 @@
+@import "kopi/base";
+
+$body-bg: #ffffff !default;
+$body-color: #333333 !default;
+$body-font-family: Helvetica,Arial,sans-serif !default;
+$body-font-size: 14px !default;
+
+$link-color: #333333 !default;
+$link-hover-color: #333333 !default;
+$link-active-color: #333333 !default;
+$link-visited-color: #333333 !default;
+
+body {
+  @include reset-html5;
+
+  background: $body-bg;
+  color: $body-color;
+  font-family: $body-font-family;
+  font-size: $body-font-size;
+}
+
+// Since mobile browsers don't support hover pseudo selector well
+// We render links as the same color, and use JS to render them later
+a {
+  color: $link-color;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+a:active, a.active {
+  @extend a;
+  color: $link-active-color;
+}
+
+a:hover, a.hover {
+  @extend a;
+  color: $link-hover-color;
+}
+
+a:visited, a.visited {
+  @extend a;
+  color: $link-visited-color;
+}
+
+img {
+  @include reset-image-anchor-border;
+}

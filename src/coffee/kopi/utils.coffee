@@ -121,4 +121,4 @@ kopi.module("kopi.utils")
       isPromise: isPromise
       extend: extend
       include: include
-      link: link
+      # link: link

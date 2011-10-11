@@ -15,62 +15,34 @@
  */
 
 // Variables
-$kopi_nav_height: 36px !default;
-$kopi_nav_background_color: rgba(0,0,0,0.7) !default;
-$kopi_nav_opacity: 1 !default;
-$kopi_nav_box_shadow: #000 0 0 20px !default;
-$kopi_nav_border: 1px solid #333 !default;
-$kopi_nav_padding: 6px !default;
+$kopi-nav-height: 36px !default;
+$kopi-nav-padding: 6px !default;
 
-$kopi_nav_title_color: #fff !default;
-$kopi_nav_title_font_size: 20px !default;
-$kopi_nav_title_margin: 60px !default;
-$kopi_nav_title_shadow: #333 0 -1px 0 !default;
+$kopi-nav-title-color: #fff !default;
+$kopi-nav-title-font-size: 20px !default;
+$kopi-nav-title-margin: 60px !default;
+$kopi-nav-title-shadow: #333 0 -1px 0 !default;
 
-$kopi_nav_button_height: $kopi_nav_height - 2 * $kopi_nav_padding !default;
-$kopi_nav_button_width: 60px !default;
-$kopi_nav_button_margin: 10px !default;
-$kopi_nav_button_padding: 10px !default;
-$kopi_nav_button_border: 1px solid #ccc !default;
-$kopi_nav_button_bg_color: #333 !default;
-$kopi_nav_button_color: #ccc !default;
-$kopi_nav_button_font_size: 14px !default;
-$kopi_nav_button_border_radius: 5px !default;
+$kopi-nav-button-height: $kopi-nav-height - 2 * $kopi-nav-padding !default;
+$kopi-nav-button-width: 60px !default;
+$kopi-nav-button-margin: 10px !default;
+$kopi-nav-button-padding: 10px !default;
+$kopi-nav-button-border: 1px solid #ccc !default;
+$kopi-nav-button-background: #333 !default;
+$kopi-nav-button-color: #ccc !default;
+$kopi-nav-button-font-size: 14px !default;
+$kopi-nav-button-border-radius: 5px !default;
 
 // Outer wrapper
 @mixin kopi-nav {
   @include clearfix;
-  @include opacity($kopi_nav_opacity);
-  @include box-shadow($kopi_nav_box_shadow);
-  height: $kopi_nav_height;
-  overflow: hidden;
-  text-align: center;
-  background-color: $kopi_nav_background_color;
-  border: $kopi_nav_border;
-}
-
-@mixin kopi-nav-fixed {
-  position: absolute;
-  left: 0;
-  right: 0;
-  z-index: 1;
-}
-
-@mixin kopi-nav-top {
-  top: 0;
-  border-width: 0 0 1px;
-}
-
-@mixin kopi-nav-bottom {
-  bottom: 0;
-  border-width: 1px 0 0;
 }
 
 // Inner wrapper
 @mixin kopi-nav-button-wrapper {
   position: absolute;
   top: 0;
-  height: $kopi_nav_height;
+  height: $kopi-nav-height;
 }
 
 @mixin kopi-nav-left {
@@ -90,13 +62,13 @@ $kopi_nav_button_border_radius: 5px !default;
 // Title
 @mixin kopi-nav-title {
   @include ellipsis;
-  @include text-shadow($kopi_nav_title_shadow);
-  color: $kopi_nav_title_color;
-  font-size: $kopi_nav_title_font_size;
+  @include text-shadow($kopi-nav-title-shadow);
+  color: $kopi-nav-title-color;
+  font-size: $kopi-nav-title-font-size;
   font-weight: bold;
-  height: $kopi_nav_height;
-  line-height: $kopi_nav_height;
-  margin: 0 $kopi_nav_title_margin;
+  height: $kopi-nav-height;
+  line-height: $kopi-nav-height;
+  margin: 0 $kopi-nav-title-margin;
   text-align: center;
   vertical-align: middle;
 }
@@ -105,25 +77,25 @@ $kopi_nav_button_border_radius: 5px !default;
 @mixin kopi-nav-button {
   @include inline-block;
   text-decoration: none;
-  height: $kopi_nav_height;
+  height: $kopi-nav-height;
   width: auto;
-  padding: $kopi_nav_padding;
+  padding: $kopi-nav-padding;
 }
 
 @mixin kopi-nav-button-text {
   @include inline-block;
-  @include border-radius($kopi_nav_button_border_radius);
+  @include border-radius($kopi-nav-button-border-radius);
 
-  background: $kopi_nav_button_bg_color;
-  color: $kopi_nav_button_color;
-  font-size: $kopi_nav_button_font_size;
-  height: $kopi_nav_button_height;
+  background: $kopi-nav-button-background;
+  color: $kopi-nav-button-color;
+  font-size: $kopi-nav-button-font-size;
+  height: $kopi-nav-button-height;
   width: auto;
-  line-height: $kopi_nav_button_height;
-  border: $kopi_nav_button_border;
-  min-width: $kopi_nav_button_width;
+  line-height: $kopi-nav-button-height;
+  border: $kopi-nav-button-border;
+  min-width: $kopi-nav-button-width;
   text-align: center;
-  padding: 0 $kopi_nav_button_padding;
+  padding: 0 $kopi-nav-button-padding;
 }
 
 @mixin kopi-nav-button-sprite {

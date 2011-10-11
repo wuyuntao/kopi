@@ -5,7 +5,7 @@ kopi.module("kopi.core.manager")
   .require("kopi.utils.text")
   .require("kopi.utils.support")
   .require("kopi.exceptions")
-  .require("kopi.views")
+  .require("kopi.ui.views")
   .define (exports, router, events, utils, text, support, exceptions, views) ->
 
     class State
@@ -46,7 +46,7 @@ kopi.module("kopi.core.manager")
       ###
       start: ->
         self = this
-        self.views = new views.ViewContainer()
+        # self.views = new views.ViewContainer()
         ###
         self.emit 'start'
         if support.pushState

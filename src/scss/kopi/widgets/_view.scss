@@ -9,33 +9,33 @@
  */
 
 // Variables
-$kopi_view_background_color: transparent !default;
+$kopi-view-background: transparent !default;
 
-$kopi_view_header_background_color: transparent !default;
-$kopi_view_header_height: $kopi_nav_height !default;
+$kopi-view-header-background: transparent !default;
+$kopi-view-header-height: $kopi-nav-height !default;
 
-$kopi_view_content_background_color: transparent !default;
+$kopi-view-content-background: transparent !default;
 
-$kopi_view_footer_background_color: transparent !default;
-$kopi_view_footer_height: $kopi_nav_height !default;
+$kopi-view-footer-background: transparent !default;
+$kopi-view-footer-height: $kopi-nav-height !default;
 
 // Mixins
 @mixin kopi-view {
-  background: $kopi_view_background_color;
+  background: $kopi-view-background;
 }
 
 @mixin kopi-view-header {
-  background: $kopi_view_header_background_color;
-  height: $kopi_view_header_height;
+  background: $kopi-view-header-background;
+  height: $kopi-view-header-height;
 }
 
 @mixin kopi-view-content {
-  background: $kopi_view_content_background_color;
+  background: $kopi-view-content-background;
 }
 
 @mixin kopi-view-footer {
-  background: $kopi_view_footer_background_color;
-  height: $kopi_view_footer_height;
+  background: $kopi-view-footer-background;
+  height: $kopi-view-footer-height;
 }
 
 @mixin kopi-view-fixed {
@@ -62,8 +62,8 @@ $kopi_view_footer_height: $kopi_nav_height !default;
   position: absolute;
   left: 0;
   right: 0;
-  top: $kopi_view_header_height;
-  bottom: $kopi_view_footer_height;
+  top: $kopi-view-header-height;
+  bottom: $kopi-view-footer-height;
   z-index: 1001;
 }
 

@@ -6,7 +6,8 @@ kopi.module("kopi.exceptions")
     ###
     class Exception extends Error
       constructor: (message="") ->
-        super("#{this.constructor.name}: #{message}")
+        this.name = this.constructor.name
+        this.message = message
 
     ###
     方法未实现

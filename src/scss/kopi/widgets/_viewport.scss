@@ -1,0 +1,23 @@
+/**
+  Viewport arch
+
+  .kopi-viewport (10)
+    .kopi-view-container (20)
+      .kopi-view
+    .kopi-navbar-bottom (30)
+      .kopi-nav
+    .kopi-navbar-top (40)
+      .kopi-nav
+ */
+
+@mixin kopi-viewport {
+  margin: 0;
+  padding:0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 10;
+}
