@@ -33,13 +33,13 @@ $kopi-navbar-border: 1px solid #333 !default;
   position: absolute;
   left: 0;
   right: 0;
-  z-index: 30;
+  z-index: 300;
 }
 
 @mixin kopi-navbar-top {
   top: 0;
   border-width: 0 0 1px;
-  z-index: 40;
+  z-index: 400;
 }
 
 @mixin kopi-navbar-bottom {

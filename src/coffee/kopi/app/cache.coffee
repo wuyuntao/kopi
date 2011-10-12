@@ -1,9 +1,9 @@
 kopi.module("kopi.app.cache")
-  .define("kopi.logging")
-  .define("kopi.settings")
-  .define("kopi.utils.i18n")
-  .define("kopi.utils.support")
-  .define("kopi.ui.notification")
+  .require("kopi.logging")
+  .require("kopi.settings")
+  .require("kopi.utils.i18n")
+  .require("kopi.utils.support")
+  .require("kopi.ui.notification")
   .define (exports, logging, settings, i18n, notification) ->
 
     ###

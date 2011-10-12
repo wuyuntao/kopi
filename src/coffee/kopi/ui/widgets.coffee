@@ -82,4 +82,10 @@ kopi.module("kopi.ui.widgets")
           value = this._element.data("#{this._prefix}-#{text.underscore(name)}")
           this._options[name] = value if value isnt undefined
 
+    ###
+    可响应视区事件的 Widget
+    ###
+    class ResizableWidget extends Widget
+
     exports.Widget = Widget
+    exports.ResizableWidget = ResizableWidget

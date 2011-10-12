@@ -1,11 +1,12 @@
 @import 'kopi/widgets/nav';
 
 /*
- Page architecture:
- div.kopi-view
-   header.kopi-view-header
-   div.kopi-view-content
-   footer.kopi-view-footer
+  Page architecture:
+  div.kopi-view
+    header.kopi-view-header
+    div.kopi-view-content
+    footer.kopi-view-footer
+
  */
 
 // Variables
@@ -18,6 +19,12 @@ $kopi-view-content-background: transparent !default;
 
 $kopi-view-footer-background: transparent !default;
 $kopi-view-footer-height: $kopi-nav-height !default;
+
+$kopi-view-indicator-height: 20px;
+$kopi-view-indicator-width: 120px;
+$kopi-view-indicator-color: #333 !default;
+$kopi-view-indicator-text-shadow: #ccc 0 1px 0 !default;
+$kopi-view-indicator-font-size: 16px;
 
 // Mixins
 @mixin kopi-view {
@@ -45,7 +52,7 @@ $kopi-view-footer-height: $kopi-nav-height !default;
   top: 0;
   bottom: 0;
   overflow: hidden;
-  z-index: 1000;
+  z-index: 210;
 }
 
 @mixin kopi-view-header-fixed {
@@ -54,7 +61,7 @@ $kopi-view-footer-height: $kopi-nav-height !default;
   left: 0;
   right: 0;
   top: 0;
-  z-index: 1003;
+  z-index: 240;
 }
 
 @mixin kopi-view-content-fixed  {
@@ -64,7 +71,7 @@ $kopi-view-footer-height: $kopi-nav-height !default;
   right: 0;
   top: $kopi-view-header-height;
   bottom: $kopi-view-footer-height;
-  z-index: 1001;
+  z-index: 220;
 }
 
 @mixin kopi-view-footer-fixed  {
@@ -73,5 +80,40 @@ $kopi-view-footer-height: $kopi-nav-height !default;
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 1002;
+  z-index: 230;
+}
+
+@mixin kopi-view-indicator {
+  @include text-shadow($kopi-view-indicator-text-shadow);
+  @include experimental("user-select", none,
+    -moz, -webkit, not -o, not -ms, not -khtml, official);
+
+  cursor: default;
+  height: $kopi-view-indicator-height;
+  line-height: $kopi-view-indicator-height;
+  width: $kopi-view-indicator-width;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: $kopi-view-indicator-height / -2;
+  margin-left: $kopi-view-indicator-width / -2;
+  display: none;
+
+  img {
+    width: $kopi-view-indicator-height;
+    height: $kopi-view-indicator-height;
+    vertical-align: middle;
+  }
+
+  span {
+    cursor: default;
+    color: $kopi-view-indicator-color;
+    font-size: $kopi-view-indicator-font-size;
+    margin-left: 4px;
+    vertical-align: middle;
+  }
+}
+
+@mixin kopi-view-indicator-show {
+  display: block;
 }

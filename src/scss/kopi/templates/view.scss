@@ -35,3 +35,11 @@
   @extend .kopi-view-footer;
   @include kopi-view-footer-fixed;
 }
+
+.kopi-view-indicator {
+  @include kopi-view-indicator;
+}
+
+.kopi-view-indicator-show {
+  @include kopi-view-indicator-show;
+}

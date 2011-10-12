@@ -103,7 +103,7 @@ $kopi-notifier-overlay-background-color: #000 !default;
   vertical-align: middle;
 
   display: none;
-  z-index: 10001;
+  z-index: 1000;
 
   @include kopi-notifier-dialog-background;
   @include border-radius($kopi-notifier-dialog-border-radius);
@@ -201,10 +201,10 @@ $kopi-notifier-overlay-background-color: #000 !default;
   left: 50%;
   height: $kopi-notifier-indicator-height;
   width: $kopi-notifier-indicator-width;
-  margin-top: - $kopi-notifier-indicator-height / 2;
-  margin-left: - $kopi-notifier-indicator-width / 2;
+  margin-top: $kopi-notifier-indicator-height / -2;
+  margin-left: $kopi-notifier-indicator-width / -2;
   display: none;
-  z-index: 10002;
+  z-index: 1200;
 }
 
 @mixin kopi-notifier-indicator-show {
@@ -222,7 +222,7 @@ $kopi-notifier-overlay-background-color: #000 !default;
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 10000;
+  z-index: 1000;
   display: none;
 }
 
