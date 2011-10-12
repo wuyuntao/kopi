@@ -60,18 +60,6 @@ kopi.module("kopi.utils")
       scope
 
     ###
-    格式化字符串
-
-    @param  {String}  string      待格式化的字符串
-    @param  {Hash}    params      格式化字符串的参数
-    ###
-    format = (string, params) ->
-      return string unless params
-      for name, value of params
-        string = string.replace(new RegExp("\{#{name}\}", 'gi'), value)
-      string
-
-    ###
     产生唯一 ID
 
     @param  {String}  prefix  前缀
@@ -116,7 +104,6 @@ kopi.module("kopi.utils")
       average: average
       range: range
       search: search
-      format: format
       uniqueId: uniqueId
       isPromise: isPromise
       extend: extend

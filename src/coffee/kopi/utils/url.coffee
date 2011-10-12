@@ -1,5 +1,34 @@
 kopi.module("kopi.utils.url")
-  .define (exports) ->
+  .require("kopi.exceptions")
+  .define (exports, exceptions) ->
+
+    loc = location
+
+    reHost = /^([^:\/#\?]+):\/\//
+    ###
+    生成类似 Rails Router 的路由
+
+    TODO 更好的 path 格式
+    ###
+    build = (path, options={}) ->
+      unless Array.isArray(path) and path.length >= 1
+        throw new exceptions.ValueError("Path must be an non-empty array")
+
+      path = path.concat ['.', options.format] if options.format?
+
+      if options.params?
+        if $.type(options.params) is 'object'
+          options.params = "?#{$.param(options.params)}"
+        path.push(options.params)
+
+      if options.host?
+        if options.host is true
+          options.host = "#{loc.protocol}//#{loc.host}"
+        else if not options.host.match(reHost)
+          options.host = "#{loc.protocol}//#{options.host}"
+        path.unshift(options.host)
+
+      path.join ""
 
     ###
     This scary looking regular expression parses an absolute URL or its relative
@@ -27,6 +56,11 @@ kopi.module("kopi.utils.url")
        [16]: #msg-content
     ###
     reURL = /^(((([^:\/#\?]+:)?(?:\/\/((?:(([^:@\/#\?]+)(?:\:([^:@\/#\?]+))?)@)?(([^:\/#\?]+)(?:\:([0-9]+))?))?)?)?((\/?(?:[^\/\?#]+\/+)*)([^\?#]*)))?(\?[^#]+)?)(#.*)?/
+    rePath = /^\//
+
+    # TODO 考虑 Base URL 等
+    setOrigin = (url) ->
+      if url.match(rePath) then "#{loc.protocol}//#{loc.host}#{url}" else url
 
     ###
     Parse a URL into a structure that allows easy access to
@@ -63,4 +97,6 @@ kopi.module("kopi.utils.url")
           hash:       matches[16] || ""
       results
 
+    exports.build = build
     exports.parse = parse
+    exports.setOrigin = setOrigin

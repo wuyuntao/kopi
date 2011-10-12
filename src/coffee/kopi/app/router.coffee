@@ -1,4 +1,4 @@
-kopi.module("kopi.core.router")
+kopi.module("kopi.app.router")
   .require("kopi.utils.url")
   .define (exports, url) ->
 

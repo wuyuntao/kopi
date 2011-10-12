@@ -1,15 +1,21 @@
 kopi.module("kopi.utils.i18n")
+  .require("kopi.exceptions")
+  .require("kopi.settings")
   .require("kopi.utils")
-  .define (exports, utils) ->
+  .require("kopi.utils.text")
+  .define (exports, exceptions, settings, utils, text) ->
 
-    # @type {LocaleString}      如果找不到翻译是的默认语言
-    exports.fallback = "en"
-    # @type {LocaleString}      当前应用使用的语言
-    exports.locale = "en"
     # @type {Array}             所有的语言列表
     locales = ["en", "zh_CN"]
     # @type {Hash}              所有的翻译表
     messages = {}
+
+    ###
+    翻译缺失
+    ###
+    class TranslationError extends exceptions.Exception
+      constructor: (name) ->
+        super("Missing #{name}, [#{settings.kopi.i18n.locale}, #{settings.kopi.i18n.fallback}]")
 
     ###
     翻译
@@ -19,12 +25,12 @@ kopi.module("kopi.utils.i18n")
     ###
     translate = (name, params) ->
       try
-        utils.format(utils.search(name, messages[exports.locale]), params)
+        text.format(utils.search(name, messages[settings.kopi.i18n.locale]), params)
       catch e
         try
-          utils.format(utils.search(name, messages[exports.fallback]), params)
+          text.format(utils.search(name, messages[settings.kopi.i18n.fallback]), params)
         catch e
-          throw new Error("Missing translation: '#{name}' [#{exports.locale}, #{exports.fallback}]")
+          throw new TranslationError(name)
 
     ###
     添加翻译文件
@@ -34,8 +40,9 @@ kopi.module("kopi.utils.i18n")
     ###
     define = (locale, translation) ->
       target = messages[locale] or= {}
-      $.extend target, translation
+      $.extend true, target, translation
       return
 
+    exports.TranslationError = TranslationError
     exports.translate = exports.t = translate
-    exports.define = define
+    exports.define = exports.d = define

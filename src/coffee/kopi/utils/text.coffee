@@ -23,9 +23,27 @@ kopi.module("kopi.utils.text")
     constantize = (name) -> kopi._build(name)
 
     ###
+    格式化字符串
+
+    @param  {String}  string      待格式化的字符串
+    @param  {Hash}    params      格式化字符串的参数
+    ###
+    format = (string, params) ->
+      return string unless params
+      for name, value of params
+        string = string.replace(new RegExp("\{#{name}\}", 'gi'), value)
+      string
+
+    ###
     是否为字符串
     ###
     # isString = (str) -> !!(str is '' or (str and str.charCodeAt and str.substr))
+
+    ###
+    限定字符串长度
+    ###
+    truncate = (text, length) ->
+      if text and text.length > length then text.substr(0, length - 3) + "..." else text
 
     reUpper = /([A-Z]+)([A-Z][a-z\d])/g
     reLower = /([a-z\d])([A-Z])/g
@@ -48,4 +66,5 @@ kopi.module("kopi.utils.text")
 
     exports.camelize = camelize
     exports.constantize = constantize
+    exports.truncate = truncate
     exports.underscore = underscore

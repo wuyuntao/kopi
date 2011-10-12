@@ -1,5 +1,5 @@
-kopi.module("kopi.core.manager")
-  .require("kopi.core.router")
+kopi.module("kopi.app.manager")
+  .require("kopi.app.router")
   .require("kopi.events")
   .require("kopi.utils")
   .require("kopi.utils.text")
