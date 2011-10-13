@@ -1,6 +1,7 @@
 kopi.module("kopi.ui.viewport")
+  .require("kopi.settings")
   .require("kopi.ui.widgets")
-  .define (exports) ->
+  .define (exports, settings, widgets) ->
 
     ###
     视区
@@ -16,5 +17,7 @@ kopi.module("kopi.ui.viewport")
 
     ###
     class Viewport extends widgets.Widget
+      constructor: ->
+        super(settings.viewport)
 
     exports.Viewport = Viewport

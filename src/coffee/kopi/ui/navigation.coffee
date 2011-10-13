@@ -2,11 +2,12 @@ kopi.module("kopi.ui.navigation")
   .require("kopi.settings")
   .require("kopi.ui.containers")
   .require("kopi.ui.widgets")
-  .define (exports, settings, container, widgets) ->
+  .define (exports, settings, containers, widgets) ->
 
     ###
     管理 导航栏 的容器
     ###
-    class NavContainer extends container.Container
+    class Navbar extends containers.Container
 
     class Nav extends widgets.Widget
+

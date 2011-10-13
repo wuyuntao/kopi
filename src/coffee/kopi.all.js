@@ -30,3 +30,4 @@
 //= require        kopi/app/cache
 //= require        kopi/app/router
 //= require        kopi/app/manager
+//= require        kopi/app

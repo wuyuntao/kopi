@@ -3,10 +3,6 @@ kopi.module("kopi.settings")
     exports.kopi =
       debug: true
 
-      containerSelector: "#view-container"
-
-      # cssPrefix: "kopi-"
-
       cache:
         # 是否自动绑定 applicationCache 事件
         enable: false
@@ -33,6 +29,12 @@ kopi.module("kopi.settings")
         # database: false
         # # 是否向远程服务器发送日志（暂不支持）
         # remote:   false
+
+      ui:
+        viewport: "body"
+        navbarTop: "#navbar-top"
+        navbarBottom: "#navbar-bottom"
+        viewContainer: "#view-container"
 
     exports.extend = ->
       # Deeply extend
