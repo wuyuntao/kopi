@@ -31,7 +31,7 @@ kopi.module('kopi.logging')
       ###
       send = (level, message, options={}) ->
         throw new Error("Invalid logger level") unless (level of levels)
-        options = $.extend {}, settings.logging, options
+        options = utils.extend {}, settings.kopi.logging, options
         return false if levels[level] < options.level
 
         seconds = Math.round(new Date() - start) / 1000

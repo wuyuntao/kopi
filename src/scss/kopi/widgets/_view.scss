@@ -1,7 +1,46 @@
-@import 'kopi/widgets/nav';
+@import 'kopi/base';
+
+/**
+  View container arch
+
+  div.kopi-container
+    div.kopi-view-previous
+      div.kopi-view
+    div.kopi-view-current
+      div.kopi-view
+    div.kopi-view-next
+      div.kopi-view
+ */
+
+$kopi-view-container-background: transparent !default;
+$kopi-view-container-margin-top: 36px !default;
+$kopi-view-container-margin-bottom: 36px !default;
+
+@mixin kopi-view-container {
+  background: $kopi-view-container-background;
+  min-height: 100px;
+}
+
+@mixin kopi-view-container-fixed {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  z-index: 20;
+}
+
+@mixin kopi-view-container-top {
+  margin-top: $kopi-view-container-margin-top;
+}
+
+@mixin kopi-view-container-bottom {
+  margin-bottom: $kopi-view-container-margin-bottom;
+}
 
 /*
-  Page architecture:
+  View arch:
   div.kopi-view
     header.kopi-view-header
     div.kopi-view-content
@@ -13,12 +52,12 @@
 $kopi-view-background: transparent !default;
 
 $kopi-view-header-background: transparent !default;
-$kopi-view-header-height: $kopi-nav-height !default;
+$kopi-view-header-height: 36px !default;
 
 $kopi-view-content-background: transparent !default;
 
 $kopi-view-footer-background: transparent !default;
-$kopi-view-footer-height: $kopi-nav-height !default;
+$kopi-view-footer-height: 36px !default;
 
 $kopi-view-indicator-height: 20px;
 $kopi-view-indicator-width: 120px;

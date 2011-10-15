@@ -76,10 +76,21 @@ kopi.module("kopi.utils")
       !!(obj.then and obj.done and obj.fail and obj.pipe and
         not obj.reject and not obj.resolve)
 
+    ###
+    A helper method to convert a sync method response to promise
+    ###
+    forcePromise = (obj) ->
+      return obj if isPromise(obj)
+
+      deferred = new $.Deferred()
+      if obj is false then deferred.reject() else deferred.resolve()
+      deferred.promise()
+
     extend = (obj, mixins...) ->
       for mixin in mixins
         for name, method of mixin
           obj[name] = method
+      obj
 
     include = (klass, mixins...) ->
       for mixin in mixins

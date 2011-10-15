@@ -1,40 +1,16 @@
 @import 'kopi/base';
 
-/**
-  View container arch
-
-  div.kopi-container
-    div.kopi-view-previous
-      div.kopi-view
-    div.kopi-view-current
-      div.kopi-view
-    div.kopi-view-next
-      div.kopi-view
- */
-
-$kopi-view-container-background: transparent !default;
-$kopi-view-container-margin-top: 36px !default;
-$kopi-view-container-margin-bottom: 36px !default;
-
-@mixin kopi-view-container {
-  background: $kopi-view-container-background;
-  min-height: 100px;
-}
-
-@mixin kopi-view-container-fixed {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+@mixin kopi-container {
   overflow: hidden;
-  z-index: 20;
 }
 
-@mixin kopi-view-container-top {
-  margin-top: $kopi-view-container-margin-top;
+@mixin kopi-container-content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: none;
 }
 
-@mixin kopi-view-container-bottom {
-  margin-bottom: $kopi-view-container-margin-bottom;
+@mixin kopi-container-content-show {
+  display: block;
 }

@@ -9,5 +9,7 @@ kopi.module("kopi.ui.navigation")
     ###
     class Navbar extends containers.Container
 
-    class Nav extends widgets.Widget
+    class Nav extends containers.Content
 
+    exports.Navbar = Navbar
+    exports.Nav = Nav

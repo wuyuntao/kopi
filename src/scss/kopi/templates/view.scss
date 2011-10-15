@@ -1,5 +1,28 @@
 @import 'kopi/widgets/view';
 
+.kopi-view-container {
+  @include kopi-view-container;
+}
+
+.kopi-view-container-fixed {
+  @extend .kopi-view-container;
+  @include kopi-view-container-fixed;
+}
+
+.kopi-view-container-top-fixed {
+  @extend .kopi-view-container-fixed;
+  @include kopi-view-container-top;
+}
+
+.kopi-view-container-bottom-fixed {
+  @extend .kopi-view-container-fixed;
+  @include kopi-view-container-bottom;
+}
+
+.kopi-view-container-top-bottom-fixed {
+  @extend .kopi-view-container-top-fixed;
+  @extend .kopi-view-container-bottom-fixed;
+}
 .kopi-view {
   @include kopi-view;
 }
@@ -38,6 +61,10 @@
 
 .kopi-view-indicator {
   @include kopi-view-indicator;
+}
+
+.kopi-view-indicator-loading {
+  @extend .kopi-view-indicator;
 }
 
 .kopi-view-indicator-show {

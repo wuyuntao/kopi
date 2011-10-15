@@ -1,25 +1,13 @@
 @import 'kopi/widgets/container';
 
-.kopi-view-container {
-  @include kopi-view-container;
+.kopi-container {
+  @include kopi-container;
 }
 
-.kopi-view-container-fixed {
-  @extend .kopi-view-container;
-  @include kopi-view-container-fixed;
+.kopi-container-content {
+  @include kopi-container-content;
 }
 
-.kopi-view-container-top-fixed {
-  @extend .kopi-view-container-fixed;
-  @include kopi-view-container-top;
-}
-
-.kopi-view-container-bottom-fixed {
-  @extend .kopi-view-container-fixed;
-  @include kopi-view-container-bottom;
-}
-
-.kopi-view-container-top-bottom-fixed {
-  @extend .kopi-view-container-top-fixed;
-  @extend .kopi-view-container-bottom-fixed;
+.kopi-container-content-show {
+  @include kopi-container-content-show;
 }

@@ -31,6 +31,7 @@ kopi.module("kopi.settings")
         # remote:   false
 
       ui:
+        prefix: "kopi"
         viewport: "body"
         navbarTop: "#navbar-top"
         navbarBottom: "#navbar-bottom"

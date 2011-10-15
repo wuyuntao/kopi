@@ -6,35 +6,66 @@ kopi.module("kopi.ui.containers")
   .require("kopi.utils.html")
   .require("kopi.utils.text")
   .require("kopi.ui.widgets")
-  .define (exports, settings, exceptions, logging,
-                    utils, html, text, widgets) ->
+  .define (exports, settings, exceptions, logging, utils, html, text, widgets) ->
+
+    PREVIOUS = "previous"
+    CURRENT = "current"
+    NEXT = "next"
+    STATES = [PREVIOUS, CURRENT, NEXT]
+
+    ###
+    视图 和 导航栏 的基类
+    ###
+    class Content extends widgets.Widget
+
+      this.defaults
+        tagName: "div"
+
+      # @type   {Hash}    A cache for css classes
+      # TODO Cache frequently used css classes
+      _cssClasses: {}
+
+      state: (state) ->
+        self = this
+        if not state
+          self.element
+            .removeAttr("data-state")
+            .removeClass((self.constructor.cssClass(name) for name in STATES).join(" "))
+
+          return
+
+        if state not in STATES
+          throw new exceptions.ValueError("Not a valid state name: #{state}")
+
+        self.element.attr("data-state", state)
+          .removeClass((self.constructor.cssClass(name) for name in STATES when name != state).join(" "))
+          .addClass(self.constructor.cssClass(state))
 
     ###
     管理 视图 和 导航栏 的容器基类
 
     div.container
-      div.container-content-previous
-      div.container-content-current
-      div.container-content-next
+      div.container-content
+      div.container-content[data-state=previous]
+      div.container-content[data-state=current]
+      div.container-content[data-state=next]
+      div.container-content
     ###
     class Container extends widgets.Widget
 
       this.defaults
-        containerClassName: "container"
-        contentWidget: widgets.Widget
-        contentClassNamePrefix: "container-content-"
-        contentNames: ["previous", "current", "next"]
-        contentTagName: "div"
+        contentClass: widgets.Widget
+        className: "kopi-container"
+        # @type   {Number}    Timeout for transition
+        timeout: 5000
 
-      # @type {String}  前一次显示的内容 uid
-      _previous: null
-      # @type {String}  当前显示的内容 uid
-      _current: null
-      # @type {String}  下一次显示的内容 uid
-      _next: null
 
-      # @type {Hash<UID, Content>}  内容缓存
-      # _cache: {}
+      # @type   {Hash<UID, Content>}  内容缓存
+      cache: {}
+      # @type   {Hash<UID, Content>}  内容缓存
+      contents: {}
+      # @type   {Number}              Timeout ID
+      _timeout: null
 
       # @type {Array<Content>}  曾经显示过的内容历史
       # _history: []
@@ -46,9 +77,9 @@ kopi.module("kopi.ui.containers")
       如果 reverse 为 false，把内容加到 next 容器中，并显示
       反之则加到 previous 容器中并显示
       ###
-      switch: (content, reverse=false, callback) ->
-        unless content instanceof this._options.contentWidget
-          throw new exceptions.ValueError("Content must be a #{this.options.contentWidget.name}.")
+      load: (content, reverse=false) ->
+        unless content instanceof Content
+          throw new exceptions.ValueError("Must be an instance of Content.")
 
         self = this
         # TODO 有锁的情况下把请求加入队列？
@@ -57,80 +88,70 @@ kopi.module("kopi.ui.containers")
           return self
 
         self.lock()
-        # self.emit('transition')
+        self.append(content, true)
+        self.element.addClass(self.constructor.cssClass("transition"))
+        self.emit('transit', [reverse])
+        onTimeout = -> self.emit('transitiontimeout')
+        # clearTimeout(self._timeout) if self._timeout
+        # self._timeout = setTimeout(onTimeout, self._options.timeout)
 
-        # 把内容加入下一次显示的容器
-        # self._cache[content.uid] = content
-        prefix = this._options.contentClassNamePrefix
-
-        # 如果是第一次显示的话直接插入 Current 容器
-        # if not self._current
-        #   self.contents.current.html(content.element).show()
-        #   self._current = content
-        #   self.emit('transitionend')
-        # else
-        #   self._transit content, reverse, () ->
-        #     self.emit('transitionend')
-        self._add(content, if reverse then 'previous' else 'next')
-        self[if reverse then 'back' else 'forward']()
-
-      ###
-      显示 next 容器中内容
-      ###
-      forward: (callback) ->
-        this._transit(false, callback)
+      append: (content, next=true) ->
+        self = this
+        if not self.contains(content)
+          self.element.append(content.element)
+          self.cache[content.uid] = content
+        if next
+          self.contents.next.state(null) if self.contents.next
+          content.state(NEXT)
+          self.contents.next = content
 
       ###
-      显示 previous 容器中内容
-      ###
-      back: (callback) ->
-        this._transit(true, callback)
+      Check if content is already appended to container
 
-      _add: (content, name) ->
-        self.contents[name].html(content.element)
-        self["_#{name}"] = content
+      @param  {Content}   content
+      ###
+      contains: (content) ->
+        content.uid of this.cache
 
       ###
       在子类中重写这个方法以实现切入动画，如 slide-in-out, slide-up-down, flip-in-out 等
       ###
-      _transit: (reverse=false, callback) ->
-        _rotate(reverse)
-        callback()
+      ontransit: (event, reverse) ->
+        if not this.contents.current
+          this.contents.next.element.show()
+        else
+          this.contents.current.element.fadeOut()
+          this.contents.next.element.fadeIn()
+        this.emit('transitioncomplete')
         return
 
       ###
       当 Transition 结束后，轮换 css class 名称
       ###
-      _rotate: (reverse=false) ->
+      ontransitioncomplete: (event, content, reverse) ->
         self = this
-        # TODO Rewrite
-        if reverse
-          # 把 current 放到 next
-          self._current = self._next
-          self.contents.next.html(self._current.element)
-          # 把 previous 放到 current
-          self._previous = self._current
-          self.contents.current.html(self._previous.element)
-        else
-          # 把 current 放到 previous
-          self._current = self._previous
-          self.contents.previous.html(self._current.element)
-          # 把 next 放到 current
-          self._next = self._current
-          self.contents.current.html(self._next.element)
+        self.element.removeClass(self.constructor.cssClass("transition"))
+        if self._timeout
+          clearTimeout(self._timeout)
+          self._timeout = null
 
-      _skeleton: ->
-        super
-        self = this
-        options = self._options
-        self.contents = {}
-        for name, i in options.contentNames
-          content = html.build(options.contentTagName, class: options.contentClassNamePrefix + name)
-          content.appendTo(self.element)
-          self.contents[name] = content
+        if self.contents.previous
+          self.contents.previous.state(null)
 
-      # Event templates
-      ontransition:     -> true
-      ontransitionend:  -> true
+        if self.contents.current
+          self.contents.current.state(PREVIOUS)
+          self.contents.previous = self.contents.current
+
+        if self.contents.next
+          self.contents.next.state(CURRENT)
+          self.contents.current = self.contents.next
+          self.contents.next = null
+
+        self.unlock()
+
+      ontransitiontimeout: (event, content, reverse) ->
+        this.emit('transitioncomplete')
+        return
 
     exports.Container = Container
+    exports.Content = Content

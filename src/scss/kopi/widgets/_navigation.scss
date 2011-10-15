@@ -1,7 +1,52 @@
 @import 'kopi/base';
 
-/**
-  Nav arch
+/** {{{ Navbar
+
+  nav.kopi-navbar
+    div.kopi-nav-previous
+      div.kopi-nav
+    div.kopi-nav-current
+      div.kopi-nav
+    div.kopi-nav-next
+      div.kopi-nav
+ */
+
+// Variables
+$kopi-navbar-height: 36px !default;
+$kopi-navbar-background: rgba(0,0,0,0.7) !default;
+$kopi-navbar-opacity: 1 !default;
+$kopi-navbar-box-shadow: #000 0 0 10px !default;
+$kopi-navbar-border: 1px solid #333 !default;
+
+@mixin kopi-navbar {
+  @include opacity($kopi-navbar-opacity);
+  @include box-shadow($kopi-navbar-box-shadow);
+  height: $kopi-navbar-height;
+  text-align: center;
+  background: $kopi-navbar-background;
+  border: $kopi-navbar-border;
+}
+
+@mixin kopi-navbar-fixed {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 300;
+}
+
+@mixin kopi-navbar-top {
+  top: 0;
+  border-width: 0 0 1px;
+  z-index: 400;
+}
+
+@mixin kopi-navbar-bottom {
+  bottom: 0;
+  border-width: 1px 0 0;
+}
+// }}}
+
+/** {{{ Nav
 
   nav.kopi-nav
     div.kopi-nav-left
@@ -100,3 +145,4 @@ $kopi-nav-button-border-radius: 5px !default;
 
 @mixin kopi-nav-button-sprite {
 }
+// }}}
