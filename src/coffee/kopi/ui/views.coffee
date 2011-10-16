@@ -15,7 +15,7 @@ kopi.module("kopi.ui.views")
 
     视图的载入应该越快越好，所以 AJAX 和数据库等 IO 操作不应该阻塞视图的显示
     ###
-    class View extends events.EventEmitter
+    class View extends containers.Content
 
       # type  #{Boolean}  created   视图是否已创建
       created: false

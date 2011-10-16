@@ -79,7 +79,7 @@ kopi.module('kopi.logging')
 
     exports.logger = logger = new Logger()
     exports.time = logger.time
-    exports.debug = logger.time
+    exports.debug = logger.debug
     exports.info = logger.info
     exports.warn = logger.warn
     exports.error = logger.error

@@ -33,9 +33,8 @@ kopi.module("kopi.settings")
       ui:
         prefix: "kopi"
         viewport: "body"
-        navbarTop: "#navbar-top"
-        navbarBottom: "#navbar-bottom"
-        viewContainer: "#view-container"
+        navbar: "#kopi-navbar"
+        viewContainer: "#kopi-container"
 
     exports.extend = ->
       # Deeply extend

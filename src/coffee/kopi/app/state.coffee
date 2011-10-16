@@ -1,4 +1,4 @@
-kopi.module("kopi.app.manager")
+kopi.module("kopi.app.state")
   .require("kopi.app.router")
   .require("kopi.events")
   .require("kopi.utils")
@@ -122,15 +122,4 @@ kopi.module("kopi.app.manager")
       # 在缓存中寻找 View
       match: (url) ->
 
-    # Manager 单例
-    manager = new Manager()
-
-    start = ->
-      manager or= new Manager()
-
-    load = (url) ->
-      throw new exceptions.ValueError("Start manager first.") unless manager
-      manager.load(arguments...)
-
-    exports.start = start
-    exports.load = load
+    exports.Manager = Manager
