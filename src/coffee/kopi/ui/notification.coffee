@@ -1,9 +1,11 @@
 kopi.module("kopi.ui.notification")
   .require("kopi.utils.i18n")
   .require("kopi.logging")
+  .require("kopi.ui.widgets")
   .define (exports, i18n, logging) ->
     # TODO Better API
     # kopi.notification.loading()
+    #     .done()
     #
     # kopi.notification.dialog()
     #     .title("xxx")
@@ -11,10 +13,12 @@ kopi.module("kopi.ui.notification")
     #     .on('action', (dialog, callback) ->)
     #     .on('close', (dialog, callback) ->)
     #     .show()
+    #     .hide()
     #
     # kopi.notification.alert("text")
     #     .on('close', (dialog, callback) ->)
     #     .show()
+    #     .hide()
 
     ###
     消息

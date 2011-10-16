@@ -1,24 +1,72 @@
 kopi.module("kopi.app")
   .require("kopi.exceptions")
   .require("kopi.settings")
-  .require("kopi.app.state")
+  .require("kopi.app.cache")
+  .require("kopi.app.router")
+  .require("kopi.utils.support")
   .require("kopi.ui.viewport")
-  .define (exports, exceptions, settings, state, viewport) ->
+  .require("kopi.ui.navigation")
+  .require("kopi.ui.views")
+  .define (exports, exceptions, settings, cache, router, support
+                  , viewport, navigation, views) ->
+
+    win = $(window)
 
     ###
     核心应用，负责管理应用的启动，设置
     ###
     class Application
 
-      constructor: ->
+      started: false
 
-        # Initialize state manager
-        this.manager = new state.Manager()
+      state: null
+
+      # @type {Boolean}       If able to change state
+      locked: false
+
+      # @type {Hash<URL, State>}
+      stack: {}
+
+      constructor: ->
+        self = this
+        self.cache = cache
+        self.router = router
 
         # Ensure layout elements
-        this.viewport = new viewport.Viewport(settings.kopi.ui.viewport)
+        $ ->
+          self.viewport = new viewport.Viewport(settings.kopi.ui.viewport)
+          self.navbar = new navigation.Navbar(settings.kopi.ui.navbar)
+          self.container = new views.ViewContainer(settings.kopi.ui.container)
 
-      start: ->
+      start: (options={}) ->
+        return this if this.started
+
+        if support.history
+          win.bind 'popstate', this.check
+        else if support.hash
+          throw new exceptions.NotImplementedError()
+          # win.bind 'hashchange', this.check
+        else
+          throw new exceptions.NotImplementedError()
+          # setInterval settings.kopi.app.interval, this.check
+
+      ###
+      See if state has been changed
+      ###
+      check: (e) ->
+        return false if this.locked
+        current = this.getCurrent()
+        return false if state == current
+        this.load(current)
+
+      load: (state) ->
+        match = this.router.matches(state)
+        if match
+          view = new match.route.view(match.args...)
+          self.container.load(view)
+
+      getCurrentState: ->
+        location.pathname
 
 
     app = null

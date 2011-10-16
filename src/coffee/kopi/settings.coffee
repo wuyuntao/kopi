@@ -3,6 +3,10 @@ kopi.module("kopi.settings")
     exports.kopi =
       debug: true
 
+      app:
+        # @type   {Number}          Interval to check state change
+        interval: 50
+
       cache:
         # 是否自动绑定 applicationCache 事件
         enable: false
@@ -34,7 +38,7 @@ kopi.module("kopi.settings")
         prefix: "kopi"
         viewport: "body"
         navbar: "#kopi-navbar"
-        viewContainer: "#kopi-container"
+        container: "#kopi-container"
 
     exports.extend = ->
       # Deeply extend

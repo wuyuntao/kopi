@@ -1,4 +1,5 @@
 kopi.module("kopi.ui.templates")
+  .require("kopi.exceptions")
   .define (exports) ->
     ###
     模板基类
