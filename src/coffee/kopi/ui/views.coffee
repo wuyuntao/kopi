@@ -1,12 +1,16 @@
 kopi.module("kopi.ui.views")
+  .require("kopi.exceptions")
   .require("kopi.settings")
   .require("kopi.events")
   .require("kopi.utils")
   .require("kopi.utils.html")
   .require("kopi.utils.text")
+  .require("kopi.ui.templates")
   .require("kopi.ui.widgets")
   .require("kopi.ui.containers")
-  .define (exports, settings, events, utils, html, text, widgets, containers) ->
+  .define (exports, exceptions, settings, events
+                  , utils, html, text
+                  , templates, widgets, containers) ->
 
     class ViewContainer extends containers.Container
 
@@ -24,9 +28,8 @@ kopi.module("kopi.ui.views")
       # type  #{Boolean}  started   视图是否允许操作
       locked: false
 
-      constructor: (container, path, args=[]) ->
+      constructor: (path, args=[]) ->
         self = this
-        self.container = container
         self.constructor.prefix or= text.underscore(self.constructor.name)
         self.uid = utils.uniqueId(self.constructor.prefix)
         self.path = path or location.pathname
@@ -41,7 +44,7 @@ kopi.module("kopi.ui.views")
 
       start: ->
         self = this
-        throw new ValueError("Must create view first.") if not self.created
+        throw new exceptions.ValueError("Must create view first.") if not self.created
         return self if self.started
         self.started = true
         self.onstart()
@@ -51,37 +54,17 @@ kopi.module("kopi.ui.views")
 
       stop: ->
         self = this
-        throw new ValueError("Must create view first.") if not self.created
+        throw new exceptions.ValueError("Must create view first.") if not self.created
         return self if not self.started
         self.started = false
         self.onstop()
 
       destroy: ->
         self = this
-        throw new ValueError("Must stop view first.") if self.started
+        throw new exceptions.ValueError("Must stop view first.") if self.started
         return self if not self.created
         self.created = false
         self.ondestroy()
-
-      # TODO 阻止 UI 操作
-      lock: () ->
-        self = this
-        return self if self.locked
-        self.locked = true
-        self.onunlock()
-        self
-
-      unlock: () ->
-        self = this
-        return self unless self.locked
-        self.locked = false
-        self.onlock()
-        self
-
-      _createSkeleton: ->
-        this.element = html.build 'div',
-                          id: this.uid,
-                          class: this.constructor.prefix
 
       ###
       事件的模板方法
@@ -89,13 +72,36 @@ kopi.module("kopi.ui.views")
       @param  {Function}    成功时的回调
       @return {Boolean|Promise}
       ###
-      oncreate:  () -> true
-      onstart:   () -> true
-      onupdate:  () -> true
-      onstop:    () -> true
-      ondestroy: () -> true
-      onlock:    () -> true
-      onunlock:  () -> true
+      oncreate:  -> true
+      onstart:   -> true
+      onupdate:  -> true
+      onstop:    -> true
+      ondestroy: -> true
+
+    ###
+    A generic view to build view from a template
+    ###
+    class TemplateView extends View
+
+      template: null
+
+      constructor: (path, args=[]) ->
+        super
+
+      _skeleton: ->
+        super
+
+        self = this
+        unless self.template instanceof templates.Template
+          throw new exceptions.ValueError("Template does not exists")
+        self.element.html(self.template.render(self.context()))
+
+      ###
+      A template method to provide context to render template
+      ###
+      context: ->
 
     exports.ViewContainer = ViewContainer
+
     exports.View = View
+    exports.TemplateView = TemplateView

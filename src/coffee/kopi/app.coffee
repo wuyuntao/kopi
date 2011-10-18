@@ -63,11 +63,18 @@ kopi.module("kopi.app")
         match = this.router.matches(state)
         if match
           view = new match.route.view(match.args...)
+          # Update navbar
+          # TODO Should be async methods
+          # TODO Generate nav on fly
+          if view.navbar
+            self.navbar.load(navbar)
+          else
+            self.navbar.hide()
+          # Update contaienr
           self.container.load(view)
 
       getCurrentState: ->
         location.pathname
-
 
     app = null
 

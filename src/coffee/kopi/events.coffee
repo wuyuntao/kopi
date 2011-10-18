@@ -6,8 +6,6 @@ kopi.module("kopi.events")
 
     ###
     class EventEmitter
-      constructor: ->
-        this._emitter = $(this)
 
       on: ->
         this._emitter or= $(this)

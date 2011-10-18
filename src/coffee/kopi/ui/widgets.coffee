@@ -69,18 +69,24 @@ kopi.module("kopi.ui.widgets")
       禁止用户用鼠标或手势进行交互
       ###
       lock: ->
+        self = this
+        return self if self.locked
         # TODO 从 Event 层禁止，考虑如果子类也在 element 上绑定时间的情况
-        this.isLocked = true
-        this.element.addClass(this.constructor.cssClass("lock"))
-        this
+        self.isLocked = true
+        self.element.addClass(self.constructor.cssClass("lock"))
+        self.onlock()
+        self
 
       ###
       禁止用户用鼠标、键盘或手势进行交互
       ###
       unlock: ->
-        this.isLocked = false
-        this.element.removeClass(this.constructor.cssClass("lock"))
-        this
+        self = this
+        return self unless self.locked
+        self.isLocked = false
+        self.element.removeClass(self.constructor.cssClass("lock"))
+        self.onunlock()
+        self
 
       ###
       Ensure elements are created and properly configured
@@ -109,6 +115,9 @@ kopi.module("kopi.ui.widgets")
         for name, value of this._options
           value = this.element.data(text.underscore(name))
           this._options[name] = value if value isnt undefined
+
+      onlock:    -> true
+      onunlock:  -> true
 
     ###
     可响应视区事件的 Widget

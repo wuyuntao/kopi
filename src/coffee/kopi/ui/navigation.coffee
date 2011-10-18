@@ -13,3 +13,5 @@ kopi.module("kopi.ui.navigation")
 
     exports.Navbar = Navbar
     exports.Nav = Nav
+
+    exports.nav = (options) ->
