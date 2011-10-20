@@ -37,6 +37,5 @@ kopi.module("kopi.utils.html")
         el = $(this)
         data[el.attr('itemprop')] = prop(el)
 
-    exports.build = build
     exports.prop = prop
     exports.scope = scope

@@ -1,21 +1,33 @@
 kopi.module("kopi.utils.uri")
   .require("kopi.exceptions")
-  .kopi.module("kopi.utils.text")
+  .require("kopi.utils.text")
   .define (exports, exceptions, text) ->
 
+    doc = document
     loc = location
 
     ###
     Convert a relative URL into an absolute URI
     ###
     absolute = (url) -> join(base(), url)
-      throw new exceptions.NotImplementedError()
 
     ###
     获取当前页面 baseURI
     ###
+    baseURI = null
     base = ->
-      throw new exceptions.NotImplementedError()
+      return baseURI if baseURI
+      if doc.baseURI
+        baseURI = parse(doc.baseURI)
+        return baseURI
+      tag = $('head > base')
+      if tag.length
+        baseURI = parse(join(loc.href, tag.attr("href")))
+        return baseURI
+      baseURI = document.href
+
+    # TODO Cache decoded strings for performance
+    decode = (value) -> if value then decodeURIComponent(value) else ''
 
     reHost = /^([^:\/#\?]+):\/\//
     ###
@@ -47,38 +59,76 @@ kopi.module("kopi.utils.uri")
     Resolves a relative URL string to base URI
     ###
     join = (base, url) ->
-      throw new exceptions.NotImplementedError()
-      # return base unless url
-      # return url unless base
-      # base = parse(base) if typeof base is 'string'
-      # url = parse(url) if typeof url is 'string'
-      # if url.scheme
+      return url unless base
+      return base unless url
+      base = parse(base) if typeof base is 'string'
+      url = parse(url) if typeof url is 'string'
+
+      overridden = url.scheme
+      if overridden
+        base.scheme = url.scheme
+      else
+        overridden = url.authority
+
+      if overridden
+        base.authority = url.authority
+      else
+        overridden = url.path
+
+      if overridden
+        path = url.path
+        # resolve path properly
+        if path.charAt(0) != '/'
+          # path is relative
+          if base.authority and not base.path
+            # console.log("case 1")
+            # RFC 3986, section 5.2.3, case 1
+            path = '/' + path
+          else
+            # RFC 3986, section 5.2.3, case 2
+            lastSlashIndex = base.path.lastIndexOf('/')
+            # console.log("case 2", lastSlashIndex)
+            if lastSlashIndex != -1
+              path = base.path.substr(0, lastSlashIndex + 1) + path
+        # console.log removeDotSegments(path)
+        base.path = removeDotSegments(path)
+      else
+        overridden = url.query
+
+      if overridden
+        base.query = url.query
+      else
+        overridden = url.fragment
+
+      if overridden
+        base.fragment = url.fragment
+
+      unparse(base)
 
     ###
     Removes dot segments in given path component, as described in
     RFC 3986, section 5.2.4.
     ###
     removeDotSegments = (path) ->
-      throw new exceptions.NotImplementedError()
-
-      # return '' if path == '..' or path == '.'
-      # # This optimization detects uris which do not contain dot-segments,
-      # # and as a consequence do not require any processing.
-      # return path unless './' in path or '/.' in path
-      # absolute = text.startsWith(path, '/')
-      # segments = path.split('/')
-      # length = segments.length
-      # results = []
-      # for segment, i in segments
-      #   if segment == '.'
-      #     results.push('') if absolute and i == length
-      #   else if segment == '..'
-      #     results.pop() if results.length > 1 or results.length == 1 && results[0] != ''
-      #     results.push('') if absolute and i == length
-      #   else
-      #     results.push(segment)
-      #     absolute = true
-      # results.join("/")
+      console.log(path)
+      return '' if path == '..' or path == '.'
+      # This optimization detects uris which do not contain dot-segments,
+      # and as a consequence do not require any processing.
+      return path unless './' in path or '/.' in path
+      absolute = text.startsWith(path, '/')
+      segments = path.split('/')
+      length = segments.length
+      results = []
+      for segment, i in segments
+        if segment == '.'
+          results.push('') if absolute and i == length
+        else if segment == '..'
+          results.pop() if results.length > 1 or results.length == 1 && results[0] != ''
+          results.push('') if absolute and i == length
+        else
+          results.push(segment)
+          absolute = true
+      results.join("/")
 
     ###
     This scary looking regular expression parses an absolute URL or its relative
@@ -108,10 +158,6 @@ kopi.module("kopi.utils.uri")
     reURL = /^(((([^:\/#\?]+:)?(?:\/\/((?:(([^:@\/#\?]+)(?:\:([^:@\/#\?]+))?)@)?(([^:\/#\?]+)(?:\:([0-9]+))?))?)?)?((\/?(?:[^\/\?#]+\/+)*)([^\?#]*)))?(\?[^#]+)?)(#.*)?/
     rePath = /^\//
 
-    # TODO 考虑 Base URL 等
-    setOrigin = (url) ->
-      if url.match(rePath) then "#{loc.protocol}//#{loc.host}#{url}" else url
-
     ###
     Parse a URL into a structure that allows easy access to
     all of the URL components by name.
@@ -122,29 +168,29 @@ kopi.module("kopi.utils.uri")
       return url if typeof url is "object"
 
       results = {}
-      matches = reURL.exec(url)
-      if matches
-        # Create an object that allows the caller to access the sub-matches
-        # by name. Note that IE returns an empty string instead of undefined,
-        # like all other browsers do, so we normalize everything so its consistent
-        # no matter what browser we're running on.
-        results =
-          url:        matches[0] || ""
-          urlNoHash:  matches[1] || ""
-          urlNoQuery: matches[2] || ""
-          domain:     matches[3] || ""
-          protocol:   matches[4] || ""
-          authority:  matches[5] || ""
-          username:   matches[7] || ""
-          password:   matches[8] || ""
-          host:       matches[9] || ""
-          hostname:   matches[10] || ""
-          port:       matches[11] || ""
-          path:       matches[12] || ""
-          directory:  matches[13] || ""
-          filename:   matches[14] || ""
-          query:      matches[15] || ""
-          hash:       matches[16] || ""
+      matches = reURL.exec(url or "") or []
+      # Create an object that allows the caller to access the sub-matches
+      # by name. Note that IE returns an empty string instead of undefined,
+      # like all other browsers do, so we normalize everything so its consistent
+      # no matter what browser we're running on.
+      results =
+        url:          matches[0] || ""
+        urlNoHash:    matches[1] || ""
+        urlNoQuery:   matches[2] || ""
+        domain:       matches[3] || ""
+        scheme:       matches[4] || ""
+        authority:    matches[5] || ""
+        user:         matches[6] || ""
+        username:     matches[7] || ""
+        password:     matches[8] || ""
+        host:         matches[9] || ""
+        hostname:     matches[10] || ""
+        port:         matches[11] || ""
+        path:         matches[12] || ""
+        directory:    matches[13] || ""
+        filename:     matches[14] || ""
+        query:        matches[15] || ""
+        fragment:     matches[16] || ""
       results
 
     unparse = (obj) ->
@@ -153,11 +199,12 @@ kopi.module("kopi.utils.uri")
       url += "//" + obj.authority if obj.authority
       url += obj.path if obj.path
       url += obj.query if obj.query
-      url += obj.hash if obj.hash
+      url += obj.fragment if obj.fragment
       url
 
+    exports.absolute = absolute
+    exports.base = base
     exports.build = build
     exports.join = join
     exports.parse = parse
     exports.unparse = unparse
-    exports.setOrigin = setOrigin
