@@ -1,8 +1,21 @@
-kopi.module("kopi.utils.url")
+kopi.module("kopi.utils.uri")
   .require("kopi.exceptions")
-  .define (exports, exceptions) ->
+  .kopi.module("kopi.utils.text")
+  .define (exports, exceptions, text) ->
 
     loc = location
+
+    ###
+    Convert a relative URL into an absolute URI
+    ###
+    absolute = (url) -> join(base(), url)
+      throw new exceptions.NotImplementedError()
+
+    ###
+    获取当前页面 baseURI
+    ###
+    base = ->
+      throw new exceptions.NotImplementedError()
 
     reHost = /^([^:\/#\?]+):\/\//
     ###
@@ -29,6 +42,43 @@ kopi.module("kopi.utils.url")
         path.unshift(options.host)
 
       path.join ""
+
+    ###
+    Resolves a relative URL string to base URI
+    ###
+    join = (base, url) ->
+      throw new exceptions.NotImplementedError()
+      # return base unless url
+      # return url unless base
+      # base = parse(base) if typeof base is 'string'
+      # url = parse(url) if typeof url is 'string'
+      # if url.scheme
+
+    ###
+    Removes dot segments in given path component, as described in
+    RFC 3986, section 5.2.4.
+    ###
+    removeDotSegments = (path) ->
+      throw new exceptions.NotImplementedError()
+
+      # return '' if path == '..' or path == '.'
+      # # This optimization detects uris which do not contain dot-segments,
+      # # and as a consequence do not require any processing.
+      # return path unless './' in path or '/.' in path
+      # absolute = text.startsWith(path, '/')
+      # segments = path.split('/')
+      # length = segments.length
+      # results = []
+      # for segment, i in segments
+      #   if segment == '.'
+      #     results.push('') if absolute and i == length
+      #   else if segment == '..'
+      #     results.pop() if results.length > 1 or results.length == 1 && results[0] != ''
+      #     results.push('') if absolute and i == length
+      #   else
+      #     results.push(segment)
+      #     absolute = true
+      # results.join("/")
 
     ###
     This scary looking regular expression parses an absolute URL or its relative
@@ -97,6 +147,17 @@ kopi.module("kopi.utils.url")
           hash:       matches[16] || ""
       results
 
+    unparse = (obj) ->
+      url = ""
+      url += obj.scheme if obj.scheme
+      url += "//" + obj.authority if obj.authority
+      url += obj.path if obj.path
+      url += obj.query if obj.query
+      url += obj.hash if obj.hash
+      url
+
     exports.build = build
+    exports.join = join
     exports.parse = parse
+    exports.unparse = unparse
     exports.setOrigin = setOrigin

@@ -2,15 +2,6 @@ kopi.module("kopi.utils.html")
   .define (exports) ->
 
     ###
-    创建简单的 HTML Element
-    ###
-    build = (tagName, attributes, content) ->
-      element = $(document.createElement(tagName))
-      element.attr(attributes) if attributes
-      element.html(content) if content
-      element
-
-    ###
     根据不同 HTML Element 类型，获取 MicroData 数据，参考
     http://diveintohtml5.org/extensibility.html#property-values
 

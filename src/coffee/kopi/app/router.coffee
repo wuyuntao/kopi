@@ -1,6 +1,6 @@
 kopi.module("kopi.app.router")
-  .require("kopi.utils.url")
-  .define (exports, url) ->
+  .require("kopi.utils.uri")
+  .define (exports, uri) ->
 
     ###
     URL 路由管理
@@ -59,7 +59,7 @@ kopi.module("kopi.app.router")
 
       # Match a path and return a route object
       match: (path, scope=null) ->
-        request = url.parse(path)
+        request = uri.parse(path)
         if request.path of this.statics
           route = this.statics[request.path]
           unless scope and route.context.scoped and not (scope instanceof route.view)

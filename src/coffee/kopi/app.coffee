@@ -4,11 +4,13 @@ kopi.module("kopi.app")
   .require("kopi.app.cache")
   .require("kopi.app.router")
   .require("kopi.utils.support")
+  .require("kopi.utils.uri")
   .require("kopi.ui.viewport")
   .require("kopi.ui.navigation")
   .require("kopi.ui.views")
-  .define (exports, exceptions, settings, cache, router, support
-                  , viewport, navigation, views) ->
+  .require("kopi.ui.notification")
+  .define (exports, exceptions, settings, cache, router, support, uri
+                  , viewport, navigation, views, notification) ->
 
     win = $(window)
 
@@ -31,30 +33,33 @@ kopi.module("kopi.app")
         self = this
         self.cache = cache
         self.router = router
+        self.notification = notification
 
         # Ensure layout elements
-        $ ->
-          self.viewport = new viewport.Viewport(settings.kopi.ui.viewport)
-          self.navbar = new navigation.Navbar(settings.kopi.ui.navbar)
-          self.container = new views.ViewContainer(settings.kopi.ui.container)
+        # TODO Make sure DOM is ready
+        self.viewport = new viewport.Viewport(settings.kopi.ui.viewport)
+        self.navbar = new navigation.Navbar(settings.kopi.ui.navbar)
+        self.container = new views.ViewContainer(settings.kopi.ui.container)
 
       start: (options={}) ->
         return this if this.started
 
-        if support.history
-          win.bind 'popstate', this.check
-        else if support.hash
-          throw new exceptions.NotImplementedError()
-          # win.bind 'hashchange', this.check
-        else
-          throw new exceptions.NotImplementedError()
-          # setInterval settings.kopi.app.interval, this.check
+        # if support.history
+        #   win.bind 'popstate', this.onpopstate
+        # else if support.hash
+        #   throw new exceptions.NotImplementedError()
+        #   # win.bind 'hashchange', this.check
+        # else
+        #   throw new exceptions.NotImplementedError()
+        #   # setInterval settings.kopi.app.interval, this.check
 
       ###
       See if state has been changed
       ###
       check: (e) ->
+        # TODO Add to queue if locked
         return false if this.locked
+
         current = this.getCurrent()
         return false if state == current
         this.load(current)
@@ -63,6 +68,7 @@ kopi.module("kopi.app")
         match = this.router.matches(state)
         if match
           view = new match.route.view(match.args...)
+
           # Update navbar
           # TODO Should be async methods
           # TODO Generate nav on fly
@@ -70,6 +76,7 @@ kopi.module("kopi.app")
             self.navbar.load(navbar)
           else
             self.navbar.hide()
+
           # Update contaienr
           self.container.load(view)
 

@@ -16,12 +16,13 @@ kopi.module("kopi.db.models")
       this._belongsTo = {}
       this._hasMany = {}
       this._hasAndBelongsToMany = {}
+      this._collection = collections.Collection
 
       ###
       扩展字段的定义
       ###
       this.fields = (fields={}) ->
-        $.extend this._fields, fields
+        utils.extend this._fields, fields
 
       ###
       定义外键

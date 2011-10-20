@@ -91,7 +91,7 @@ kopi.module("kopi.ui.containers")
         self.append(content, true)
         self.element.addClass(self.constructor.cssClass("transition"))
         self.emit('transit', [reverse])
-        onTimeout = -> self.emit('transitiontimeout')
+        # onTimeout = -> self.emit('transitiontimeout')
         # clearTimeout(self._timeout) if self._timeout
         # self._timeout = setTimeout(onTimeout, self._options.timeout)
 
@@ -131,9 +131,9 @@ kopi.module("kopi.ui.containers")
       ontransitioncomplete: (event, content, reverse) ->
         self = this
         self.element.removeClass(self.constructor.cssClass("transition"))
-        if self._timeout
-          clearTimeout(self._timeout)
-          self._timeout = null
+        # if self._timeout
+        #   clearTimeout(self._timeout)
+        #   self._timeout = null
 
         if self.contents.previous
           self.contents.previous.state(null)

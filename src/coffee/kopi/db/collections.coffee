@@ -6,7 +6,7 @@ kopi.module("kopi.db.collections")
     ###
     class Collection
       constructor: (model) ->
-        this.model = model
+        this.model = model if model
 
       create: ->
 

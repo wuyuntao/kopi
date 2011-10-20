@@ -35,6 +35,19 @@ kopi.module("kopi.utils.text")
       string
 
     ###
+    Prefix checker
+    ###
+    startsWith = (string, prefix) ->
+      str.lastIndexOf(prefix, 0) == 0
+
+    ###
+    Suffix checker
+    ###
+    endsWith = (string, suffix) ->
+      len = string.length - suffix.length
+      len >= 0 and string.indexOf(suffix, len) == len
+
+    ###
     是否为字符串
     ###
     # isString = (str) -> !!(str is '' or (str and str.charCodeAt and str.substr))

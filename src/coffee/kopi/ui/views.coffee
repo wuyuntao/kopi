@@ -12,6 +12,9 @@ kopi.module("kopi.ui.views")
                   , utils, html, text
                   , templates, widgets, containers) ->
 
+    ###
+    Manage activities of views
+    ###
     class ViewContainer extends containers.Container
 
     ###
