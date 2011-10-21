@@ -40,6 +40,16 @@ kopi.module("kopi.settings")
         navbar: "#kopi-navbar"
         container: "#kopi-container"
 
+        notification:
+          bubble: '#kopi-notification-bubble'
+          dialog: '#kopi-notification-dialog'
+          dialogTitle: '#kopi-notification-dialog-title'
+          dialogContent: '#kopi-notification-dialog-content p'
+          dialogAction: '#kopi-notification-dialog-action'
+          dialogClose: '#kopi-notification-dialog-close'
+          indicator: '#kopi-notification-indicator'
+          overlay: '#kopi-notification-overlay'
+
     exports.extend = ->
       # Deeply extend
       $.extend true, exports, arguments...

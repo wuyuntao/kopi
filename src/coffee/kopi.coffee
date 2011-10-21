@@ -1,5 +1,8 @@
 ###
 模块
+
+TODO 加入子模块和父模块的引用，从而实现递归导入
+TODO 如果遇到循环依赖，需要报错
 ###
 class Module
 
@@ -61,6 +64,12 @@ class Module
     this.name = name
     # @type {Array}         依赖关系
     this.requires = []
+
+  ###
+  TODO 对于没有模块的脚本，可以直接 load
+  ###
+  load: (script) ->
+    this
 
   ###
   声明引入的模块

@@ -39,7 +39,7 @@ kopi.module("kopi.ui.viewport")
         return unless width > 0 and height > 0 and self.changed(width, height)
 
         logging.debug("Resize viewport to #{width}x#{height}")
-        notification.notifier.loading()
+        notification.loading()
         self.lock()
         self.element.width(width).height(height)
         self.width = width
@@ -47,7 +47,7 @@ kopi.module("kopi.ui.viewport")
         # TODO Notify widgets to resize and keep lock until
         # all widgets have finished resizing
         self.unlock()
-        notification.notifier.hide()
+        notification.loaded()
 
       ###
       Check if size is different from last time

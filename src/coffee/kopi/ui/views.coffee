@@ -24,10 +24,15 @@ kopi.module("kopi.ui.views")
     ###
     class View extends containers.Content
 
+      this.defaults
+        eventTimeout: 60 * 1000     # 60 seconds
+
       # type  #{Boolean}  created   视图是否已创建
       created: false
       # type  #{Boolean}  started   视图是否已启动
       started: false
+      # type  #{Boolean}  created   视图是否已初始化
+      initialized: false
       # type  #{Boolean}  started   视图是否允许操作
       locked: false
 
@@ -41,33 +46,32 @@ kopi.module("kopi.ui.views")
       create: ->
         self = this
         return self if self.created
-        self._createSkeleton()
-        self.created = true
-        self.emit('create')
+        self.lock()
+        self.emit 'create'
 
       start: ->
         self = this
         throw new exceptions.ValueError("Must create view first.") if not self.created
         return self if self.started
-        self.started = true
-        self.onstart()
+        self.lock()
+        self.emit 'start'
 
       update: ->
-        this.onupdate()
+        this.emit('update')
 
       stop: ->
         self = this
         throw new exceptions.ValueError("Must create view first.") if not self.created
         return self if not self.started
-        self.started = false
-        self.onstop()
+        self.lock()
+        self.emit 'stop'
 
       destroy: ->
         self = this
         throw new exceptions.ValueError("Must stop view first.") if self.started
         return self if not self.created
-        self.created = false
-        self.ondestroy()
+        self.lock()
+        self.emit 'destroy'
 
       ###
       事件的模板方法
@@ -75,11 +79,39 @@ kopi.module("kopi.ui.views")
       @param  {Function}    成功时的回调
       @return {Boolean|Promise}
       ###
-      oncreate:  -> true
-      onstart:   -> true
-      onupdate:  -> true
-      onstop:    -> true
-      ondestroy: -> true
+      oncreate: (e) ->
+        self = this
+        self._skeleton()
+        self.created = true
+        self.unlock()
+        self.emit 'created'
+
+      onstart: (e) ->
+        self = this
+        self.started = true
+        self.unlock()
+        self.emit 'initialize' if not self.initialized
+        self.emit 'started'
+
+      oninitialize: (e) ->
+        self = this
+        self.initialized = true
+        self.emit 'initialized'
+
+      onupdate: (e) ->
+        this.emit 'updated'
+
+      onstop: (e) ->
+        self = this
+        self.started = false
+        self.unlock()
+        self.emit 'stopped'
+
+      ondestroy: (e) ->
+        self = this
+        self.created = false
+        self.unlock()
+        self.emit 'destroyed'
 
     ###
     A generic view to build view from a template

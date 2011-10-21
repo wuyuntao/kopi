@@ -1,0 +1,83 @@
+@import 'kopi/widgets/notification';
+
+.kopi-notification-dialog {
+  @include kopi-notification-dialog;
+}
+
+.kopi-notification-dialog-header {
+  @include kopi-notification-dialog-header;
+}
+
+.kopi-notification-dialog-gloss {
+  @include kopi-notification-dialog-gloss;
+}
+
+.kopi-notification-dialog-header {
+  @include kopi-notification-dialog-header;
+}
+
+.kopi-notification-dialog-title {
+  @include kopi-notification-dialog-title;
+}
+
+.kopi-notification-dialog-content {
+  @include kopi-notification-dialog-content;
+}
+
+.kopi-notification-dialog-footer {
+  @include kopi-notification-dialog-footer;
+}
+
+.kopi-notification-dialog-button {
+  @include kopi-notification-dialog-button;
+}
+
+.kopi-notification-dialog-button:hover, .kopi-notification-dialog-button-hover {
+  @include kopi-notification-dialog-button-hover;
+}
+
+.kopi-notification-dialog-button:active, .kopi-notification-dialog-button-active {
+  @include kopi-notification-dialog-button-active;
+}
+
+.kopi-notification-dialog-action {
+  @extend .kopi-notification-dialog-button;
+  @include kopi-notification-dialog-action;
+}
+
+.kopi-notification-dialog-close {
+  @extend .kopi-notification-dialog-button;
+  @include kopi-notification-dialog-close;
+}
+
+.kopi-notification-dialog-show {
+  @include kopi-notification-dialog-show;
+}
+
+.kopi-notification-indicator {
+  @include kopi-notification-indicator;
+}
+
+.kopi-notification-indicator-show {
+  @include kopi-notification-indicator-show;
+}
+
+.kopi-notification-indicator-loading {
+  @include kopi-notification-indicator-loading;
+}
+
+.kopi-notification-overlay {
+  @include kopi-notification-overlay;
+}
+
+.kopi-notification-overlay-show {
+  @include kopi-notification-overlay-show;
+}
+
+.kopi-notification-bubble {
+  @include kopi-notification-bubble;
+}
+
+.kopi-notification-bubble-show {
+  @include kopi-notification-bubble-show;
+}

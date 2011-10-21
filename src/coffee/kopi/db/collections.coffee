@@ -34,3 +34,5 @@ kopi.module("kopi.db.collections")
 
       limit: (n) ->
         this
+
+    exports.Collection = Collection

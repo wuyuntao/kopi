@@ -28,9 +28,10 @@ kopi.module("kopi.ui.widgets")
       ###
       CSS class name should be added to widget element
       ###
-      this.cssClass = (action) ->
+      this.cssClass = (action, prefix=null) ->
         this.prefix or= text.underscore(this.name)
         name = this.prefix
+        name = prefix + "-" + name if prefix
         name = settings.kopi.ui.prefix + "-" + name if settings.kopi.ui.prefix
         name = name + "-" + action if action
         name

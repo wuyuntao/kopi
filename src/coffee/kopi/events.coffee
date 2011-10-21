@@ -4,6 +4,7 @@ kopi.module("kopi.events")
     ###
     用 jQuery Events API 实现的类 NodeJS 事件机制
 
+    TODO Use EventEmitter of NodeJS?
     ###
     class EventEmitter
 
