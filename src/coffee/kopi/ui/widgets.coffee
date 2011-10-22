@@ -51,7 +51,10 @@ kopi.module("kopi.ui.widgets")
         self.element = $(element)
         if self.element.length == 0 and not self._options.autoCreate
           throw new exceptions.ValueError("Element does not exist: #{element}")
-        self._updateOptions()
+        try
+          self._updateOptions()
+        catch e
+          console.log(self)
         self._skeleton()
 
         # @type {Hash}              数据

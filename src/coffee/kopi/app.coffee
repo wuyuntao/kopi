@@ -8,9 +8,10 @@ kopi.module("kopi.app")
   .require("kopi.ui.viewport")
   .require("kopi.ui.navigation")
   .require("kopi.ui.views")
+  .require("kopi.ui.layouts")
   .require("kopi.ui.notification")
   .define (exports, exceptions, settings, cache, router, support, uri
-                  , viewport, navigation, views, notification) ->
+                  , viewport, navigation, views, layouts, notification) ->
 
     win = $(window)
 
@@ -27,31 +28,27 @@ kopi.module("kopi.app")
       locked: false
 
       # @type {Hash<URL, State>}
-      stack: {}
+      _stack: {}
 
-      constructor: ->
-        self = this
-        self.cache = cache
-        self.router = router
-        self.notification = notification
-
-        # Ensure layout elements
-        # TODO Make sure DOM is ready
-        self.viewport = new viewport.Viewport(settings.kopi.ui.viewport)
-        self.navbar = new navigation.Navbar(settings.kopi.ui.navbar)
-        self.container = new views.ViewContainer(settings.kopi.ui.container)
-
-      start: (options={}) ->
+      start: (layout) ->
         return this if this.started
+        self = this
+        $ ->
+          # Ensure layout elements
+          self.viewport = new viewport.Viewport(settings.kopi.ui.viewport)
+          # Build layout
+          self.layout = layout or layouts.default
+          # Load current URL
+          self.load uri.current()
 
-        # if support.history
-        #   win.bind 'popstate', this.onpopstate
-        # else if support.hash
-        #   throw new exceptions.NotImplementedError()
-        #   # win.bind 'hashchange', this.check
-        # else
-        #   throw new exceptions.NotImplementedError()
-        #   # setInterval settings.kopi.app.interval, this.check
+          # if support.history
+          #   win.bind 'popstate', this.onpopstate
+          # else if support.hash
+          #   throw new exceptions.NotImplementedError()
+          #   # win.bind 'hashchange', this.check
+          # else
+          #   throw new exceptions.NotImplementedError()
+          #   # setInterval settings.kopi.app.interval, this.check
 
       ###
       See if state has been changed
@@ -64,21 +61,23 @@ kopi.module("kopi.app")
         return false if state == current
         this.load(current)
 
-      load: (state) ->
-        match = this.router.matches(state)
-        if match
-          view = new match.route.view(match.args...)
+      load: (url) ->
+        # Find started view
+        view = this.match(url)
+        unless view
+          # Find view matches
+          match = router.match(url)
+          unless match
+            return uri.goto url
+          view = new match.route.view(url, match.args)
+        this.layout.load(view)
 
-          # Update navbar
-          # TODO Should be async methods
-          # TODO Generate nav on fly
-          if view.navbar
-            self.navbar.load(navbar)
-          else
-            self.navbar.hide()
-
-          # Update contaienr
-          self.container.load(view)
+      ###
+      Find existing view in stack
+      ###
+      match: (url) ->
+        view = this._stack[url]
+        return view if view and view.created
 
       getCurrentState: ->
         location.pathname

@@ -24,7 +24,12 @@ kopi.module("kopi.utils.uri")
       if tag.length
         baseURI = parse(join(loc.href, tag.attr("href")))
         return baseURI
-      baseURI = document.href
+      baseURI = parse loc.href
+
+    ###
+    Get current URL
+    ###
+    current = -> loc.href
 
     # TODO Cache decoded strings for performance
     decode = (value) -> if value then decodeURIComponent(value) else ''
@@ -54,6 +59,8 @@ kopi.module("kopi.utils.uri")
         path.unshift(options.host)
 
       path.join ""
+
+    goto = (url) -> loc.href = url
 
     ###
     Resolves a relative URL string to base URI
@@ -204,6 +211,7 @@ kopi.module("kopi.utils.uri")
 
     exports.absolute = absolute
     exports.base = base
+    exports.current = current
     exports.build = build
     exports.join = join
     exports.parse = parse

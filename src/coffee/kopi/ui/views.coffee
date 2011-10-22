@@ -42,6 +42,7 @@ kopi.module("kopi.ui.views")
         self.uid = utils.uniqueId(self.constructor.prefix)
         self.path = path or location.pathname
         self.args = args
+        super
 
       create: ->
         self = this

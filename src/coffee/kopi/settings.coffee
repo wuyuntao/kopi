@@ -37,8 +37,10 @@ kopi.module("kopi.settings")
       ui:
         prefix: "kopi"
         viewport: "body"
-        navbar: "#kopi-navbar"
-        container: "#kopi-container"
+
+        layout:
+          navbar: "#kopi-navbar"
+          container: "#kopi-container"
 
         notification:
           bubble: '#kopi-notification-bubble'
