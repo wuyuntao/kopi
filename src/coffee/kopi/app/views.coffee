@@ -1,28 +1,31 @@
-kopi.module("kopi.ui.views")
+kopi.module("kopi.app.views")
   .require("kopi.exceptions")
   .require("kopi.settings")
   .require("kopi.events")
   .require("kopi.utils")
   .require("kopi.utils.html")
   .require("kopi.utils.text")
-  .require("kopi.ui.templates")
-  .require("kopi.ui.widgets")
-  .require("kopi.ui.containers")
+  .require("kopi.ui.contents")
   .define (exports, exceptions, settings, events
-                  , utils, html, text
-                  , templates, widgets, containers) ->
-
-    ###
-    Manage activities of views
-    ###
-    class ViewContainer extends containers.Container
+                  , utils, html, text, contents) ->
 
     ###
     View 的基类
 
     视图的载入应该越快越好，所以 AJAX 和数据库等 IO 操作不应该阻塞视图的显示
     ###
-    class View extends containers.Content
+    class View extends events.EventEmitter
+
+      ###
+      @type {Hash <String, Content>}
+      ###
+      this._contents = {}
+
+      ###
+      Extend contents
+      ###
+      this.contents = (contents={}) ->
+        utils.extend this._contents, contents
 
       this.defaults
         eventTimeout: 60 * 1000     # 60 seconds
@@ -36,13 +39,16 @@ kopi.module("kopi.ui.views")
       # type  #{Boolean}  started   视图是否允许操作
       locked: false
 
-      constructor: (path, args=[]) ->
+      constructor: (app, args=[]) ->
+        if not app
+          throw new exceptions.ValueError("app must be instance of Application")
         self = this
         self.constructor.prefix or= text.underscore(self.constructor.name)
         self.uid = utils.uniqueId(self.constructor.prefix)
-        self.path = path or location.pathname
-        self.args = args
-        super
+        self.app = app
+        self.contents = {}
+        self.containers = app.layout.containers
+        self.request, self.args... = args
 
       create: ->
         self = this
@@ -82,13 +88,25 @@ kopi.module("kopi.ui.views")
       ###
       oncreate: (e) ->
         self = this
-        self._skeleton()
+        # create contents and append them to container asynchronously
+        for name, container of self.containers
+          if name of self.constructor._contents
+            content = self.contents[name] = new content(self)
+            self.containers.append(content)
+
         self.created = true
         self.unlock()
         self.emit 'created'
 
       onstart: (e) ->
         self = this
+        # Show contents asynchronously
+        for name, container of self.containers
+          if name of self.contents
+            self.containers.load(self.contents[name])
+          else
+            self.containers.hide()
+
         self.started = true
         self.unlock()
         self.emit 'initialize' if not self.initialized
@@ -96,6 +114,11 @@ kopi.module("kopi.ui.views")
 
       oninitialize: (e) ->
         self = this
+        # Initialize contents asynchronously
+        for name, container of self.containers
+          if name of self.contents
+            self.contents[name].initialize()
+
         self.initialized = true
         self.emit 'initialized'
 
@@ -114,30 +137,4 @@ kopi.module("kopi.ui.views")
         self.unlock()
         self.emit 'destroyed'
 
-    ###
-    A generic view to build view from a template
-    ###
-    class TemplateView extends View
-
-      template: null
-
-      constructor: (path, args=[]) ->
-        super
-
-      _skeleton: ->
-        super
-
-        self = this
-        unless self.template instanceof templates.Template
-          throw new exceptions.ValueError("Template does not exists")
-        self.element.html(self.template.render(self.context()))
-
-      ###
-      A template method to provide context to render template
-      ###
-      context: ->
-
-    exports.ViewContainer = ViewContainer
-
     exports.View = View
-    exports.TemplateView = TemplateView

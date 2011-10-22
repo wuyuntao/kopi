@@ -10,6 +10,14 @@ kopi.module("kopi.exceptions")
         this.message = message
 
     ###
+    Can not find element
+    ###
+    class NoSuchElementError extends Exception
+      constructor: (element) ->
+        message = "Can not find element: #{element}"
+        super(message)
+
+    ###
     方法未实现
     ###
     class NotImplementedError extends Exception
@@ -22,5 +30,6 @@ kopi.module("kopi.exceptions")
     class ValueError extends Exception
 
     exports.Exception = Exception
+    exports.NoSuchElementError = NoSuchElementError
     exports.NotImplementedError = NotImplementedError
     exports.ValueError = ValueError

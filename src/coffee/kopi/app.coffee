@@ -3,15 +3,15 @@ kopi.module("kopi.app")
   .require("kopi.settings")
   .require("kopi.app.cache")
   .require("kopi.app.router")
+  .require("kopi.app.views")
   .require("kopi.utils.support")
   .require("kopi.utils.uri")
   .require("kopi.ui.viewport")
   .require("kopi.ui.navigation")
-  .require("kopi.ui.views")
   .require("kopi.ui.layouts")
   .require("kopi.ui.notification")
-  .define (exports, exceptions, settings, cache, router, support, uri
-                  , viewport, navigation, views, layouts, notification) ->
+  .define (exports, exceptions, settings, cache, router, views, support, uri
+                  , viewport, navigation, layouts, notification) ->
 
     win = $(window)
 
@@ -30,14 +30,14 @@ kopi.module("kopi.app")
       # @type {Hash<URL, State>}
       _stack: {}
 
-      start: (layout) ->
+      start: () ->
         return this if this.started
         self = this
         $ ->
           # Ensure layout elements
           self.viewport = new viewport.Viewport(settings.kopi.ui.viewport)
           # Build layout
-          self.layout = layout or layouts.default
+          self.layout or= layouts.default()
           # Load current URL
           self.load uri.current()
 
@@ -62,14 +62,15 @@ kopi.module("kopi.app")
         this.load(current)
 
       load: (url) ->
+        path = uri.parse(url).path
         # Find started view
-        view = this.match(url)
+        view = this.match(path)
         unless view
           # Find view matches
-          match = router.match(url)
+          match = router.match(path)
           unless match
             return uri.goto url
-          view = new match.route.view(url, match.args)
+          view = new match.route.view(this, match.args)
         this.layout.load(view)
 
       ###
@@ -78,9 +79,6 @@ kopi.module("kopi.app")
       match: (url) ->
         view = this._stack[url]
         return view if view and view.created
-
-      getCurrentState: ->
-        location.pathname
 
     app = null
 

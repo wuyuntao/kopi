@@ -28,13 +28,27 @@ kopi.module("kopi.ui.widgets")
       ###
       CSS class name should be added to widget element
       ###
-      this.cssClass = (action, prefix=null) ->
+      this._cssClassCache = {}
+      this.cssClass = (action, prefix="") ->
+        cache = "#{action},#{prefix}"
+        return this._cssClassCache[cache] if cache of this._cssClassCache
+
         this.prefix or= text.underscore(this.name)
         name = this.prefix
         name = prefix + "-" + name if prefix
         name = settings.kopi.ui.prefix + "-" + name if settings.kopi.ui.prefix
         name = name + "-" + action if action
-        name
+        this._cssClassCache[cache] = name
+
+      ###
+      CSS class regular expression to toggle states
+      ###
+      this._stateRegExpCache = {}
+      this.stateRegExp = (prefix="") ->
+        return this._stateRegExpCache[prefix] if prefix of this._stateRegExpCache
+
+        regExp = new RegExp(this.cssClass("[^\s]+\s*", prefix), 'g')
+        this._stateRegExpCache[prefix] = regExp
 
       constructor: (element, options={}) ->
         self = this
@@ -51,10 +65,8 @@ kopi.module("kopi.ui.widgets")
         self.element = $(element)
         if self.element.length == 0 and not self._options.autoCreate
           throw new exceptions.ValueError("Element does not exist: #{element}")
-        try
-          self._updateOptions()
-        catch e
-          console.log(self)
+
+        self._updateOptions()
         self._skeleton()
 
         # @type {Hash}              数据
@@ -108,6 +120,20 @@ kopi.module("kopi.ui.widgets")
         if not self.element.hasClass(cssClass)
           self.element.addClass(cssClass)
 
+      _state: (name, value) ->
+        if value == null
+          this.element.attr("data-#{name}")
+        else
+          this.element
+            .attr("data-#{name}", value)
+            .replaceClass(this.constructor.stateRegExp(name),
+              this.constructor.cssClass(value, name))
+
+      _removeState: (name) ->
+        this.element
+          .removeAttr("data-#{name}")
+          .replaceClass(this.constructor.stateRegExp(name), "")
+
       ###
       从 HTML Element 的 data 属性上读取配置
 
@@ -123,10 +149,4 @@ kopi.module("kopi.ui.widgets")
       onlock:    -> true
       onunlock:  -> true
 
-    ###
-    可响应视区事件的 Widget
-    ###
-    class ResizableWidget extends Widget
-
     exports.Widget = Widget
-    exports.ResizableWidget = ResizableWidget

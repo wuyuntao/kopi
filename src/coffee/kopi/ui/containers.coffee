@@ -8,39 +8,6 @@ kopi.module("kopi.ui.containers")
   .require("kopi.ui.widgets")
   .define (exports, settings, exceptions, logging, utils, html, text, widgets) ->
 
-    PREVIOUS = "previous"
-    CURRENT = "current"
-    NEXT = "next"
-    STATES = [PREVIOUS, CURRENT, NEXT]
-
-    ###
-    视图 和 导航栏 的基类
-    ###
-    class Content extends widgets.Widget
-
-      this.defaults
-        tagName: "div"
-
-      # @type   {Hash}    A cache for css classes
-      # TODO Cache frequently used css classes
-      _cssClasses: {}
-
-      state: (state) ->
-        self = this
-        if not state
-          self.element
-            .removeAttr("data-state")
-            .removeClass((self.constructor.cssClass(name) for name in STATES).join(" "))
-
-          return
-
-        if state not in STATES
-          throw new exceptions.ValueError("Not a valid state name: #{state}")
-
-        self.element.attr("data-state", state)
-          .removeClass((self.constructor.cssClass(name) for name in STATES when name != state).join(" "))
-          .addClass(self.constructor.cssClass(state))
-
     ###
     管理 视图 和 导航栏 的容器基类
 
@@ -54,16 +21,14 @@ kopi.module("kopi.ui.containers")
     class Container extends widgets.Widget
 
       this.defaults
-        contentClass: widgets.Widget
-        className: "kopi-container"
         # @type   {Number}    Timeout for transition
-        timeout: 5000
+        # timeout: 5000
 
 
       # @type   {Hash<UID, Content>}  内容缓存
-      cache: {}
+      _cache: {}
       # @type   {Hash<UID, Content>}  内容缓存
-      contents: {}
+      _contents: {}
       # @type   {Number}              Timeout ID
       _timeout: null
 
@@ -99,11 +64,11 @@ kopi.module("kopi.ui.containers")
         self = this
         if not self.contains(content)
           self.element.append(content.element)
-          self.cache[content.uid] = content
+          self._cache[content.uid] = content
         if next
-          self.contents.next.state(null) if self.contents.next
-          content.state(NEXT)
-          self.contents.next = content
+          self._contents.next.background() if self._contents.next
+          content.next()
+          self._contents.next = content
 
       ###
       Check if content is already appended to container
@@ -111,17 +76,17 @@ kopi.module("kopi.ui.containers")
       @param  {Content}   content
       ###
       contains: (content) ->
-        content.uid of this.cache
+        content.uid of this._cache
 
       ###
       在子类中重写这个方法以实现切入动画，如 slide-in-out, slide-up-down, flip-in-out 等
       ###
       ontransit: (event, reverse) ->
-        if not this.contents.current
-          this.contents.next.element.show()
+        if not this._contents.current
+          this._contents.next.element.show()
         else
-          this.contents.current.element.fadeOut()
-          this.contents.next.element.fadeIn()
+          this._contents.current.element.fadeOut()
+          this._contents.next.element.fadeIn()
         this.emit('transitioncomplete')
         return
 
@@ -135,17 +100,17 @@ kopi.module("kopi.ui.containers")
         #   clearTimeout(self._timeout)
         #   self._timeout = null
 
-        if self.contents.previous
-          self.contents.previous.state(null)
+        if self._contents.previous
+          self._contents.previous.background()
 
-        if self.contents.current
-          self.contents.current.state(PREVIOUS)
-          self.contents.previous = self.contents.current
+        if self._contents.current
+          self._contents.current.previous()
+          self._contents.previous = self._contents.current
 
-        if self.contents.next
-          self.contents.next.state(CURRENT)
-          self.contents.current = self.contents.next
-          self.contents.next = null
+        if self._contents.next
+          self._contents.next.current()
+          self._contents.current = self._contents.next
+          self._contents.next = null
 
         self.unlock()
 
@@ -154,4 +119,3 @@ kopi.module("kopi.ui.containers")
         return
 
     exports.Container = Container
-    exports.Content = Content

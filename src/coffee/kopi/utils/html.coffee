@@ -1,5 +1,6 @@
 kopi.module("kopi.utils.html")
-  .define (exports) ->
+  .require("kopi.exceptions")
+  .define (exports, exceptions) ->
 
     ###
     根据不同 HTML Element 类型，获取 MicroData 数据，参考
@@ -12,7 +13,7 @@ kopi.module("kopi.utils.html")
     ###
     prop = (element) ->
       element = $(element)
-      throw new Error("Can not find element") unless element.length
+      throw new exceptions.NoSuchElementError(element) unless element.length
       return element[element.attr('itemattr')] if element.attr('itemattr')
 
       switch element.attr('tagName')
@@ -29,7 +30,7 @@ kopi.module("kopi.utils.html")
     ###
     scope = (element) ->
       element = $(element)
-      throw new Error("Can not find element") unless element.length
+      throw new exceptions.NoSuchElementError(element) unless element.length
       if element.prop('itemscope')
         throw new Error("Element does not have 'itemscope' attribute")
       data = {}
@@ -37,5 +38,18 @@ kopi.module("kopi.utils.html")
         el = $(this)
         data[el.attr('itemprop')] = prop(el)
 
+    replaceClass = (element, regexp, replacement) ->
+      element = $(element)
+      throw new exceptions.NoSuchElementError(element) unless element.length
+      for elem in element
+        if elem.nodeType == 1
+          elem.className = elem.className.replace(regexp, replacement)
+      return
+
+    removeClass = (element, regexp) ->
+      replaceClass(element, regexp, "")
+
     exports.prop = prop
     exports.scope = scope
+    exports.replaceClass = replaceClass
+    exports.removeClass = removeClass

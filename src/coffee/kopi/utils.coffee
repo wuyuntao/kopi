@@ -110,7 +110,10 @@ kopi.module("kopi.utils")
     #     node.prev = if i-1 >= 0  then array[i-1] else if circular then last  else null
     #     node.next = if i+1 < len then array[i+1] else if circular then first else null
 
-    $.extend exports,
+    # Is the given value a regular expression?
+    isRegExp    = (obj) -> !!(obj and obj.exec and (obj.ignoreCase or obj.ignoreCase is false))
+
+    extend exports,
       sum: sum
       average: average
       range: range
@@ -120,3 +123,4 @@ kopi.module("kopi.utils")
       extend: extend
       include: include
       # link: link
+      isRegExp: isRegExp

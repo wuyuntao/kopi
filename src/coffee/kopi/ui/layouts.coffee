@@ -1,30 +1,32 @@
 kopi.module("kopi.ui.layouts")
+  .require("kopi.exceptions")
   .require("kopi.settings")
+  .require("kopi.ui.containers")
   .require("kopi.ui.navigation")
-  .require("kopi.ui.views")
-  .define (exports, settings, navigation, views) ->
+  .define (exports, exceptions, settings, containers, navigation) ->
 
     class Layout
 
-      constructor: (components={}) ->
-        this._components = components
+      constructor: (containers={}) ->
+        this.containers = containers
 
-      add: (component) ->
-        this._components.push(component)
+      add: (name, container) ->
+        unless container instanceof containers.Container
+          throw new exceptions.ValueError("Only container can be added to layout")
+        this.containers[name] = container
         this
 
-      load: ->
-        for name, component of components
-          component.load(arguments...)
+      remove: (name) ->
+        this.containers[name] = undefined
+        this
 
     # A factory method to create layout
-    layout = (components=[]) -> new Layout(components)
+    layout = (containers=[]) -> new Layout(containers)
+    defaultLayout = ->
+      new Layout
+        navbar: new navigation.Navbar(settings.kopi.ui.layout.navbar)
+        container: new containers.Container(settings.kopi.ui.layout.container)
 
     exports.Layout = Layout
     exports.layout = layout
-
-    $ ->
-      # Default layout
-      exports.default = new Layout
-        navbar: new navigation.Navbar(settings.kopi.ui.layout.navbar)
-        container: new views.ViewContainer(settings.kopi.ui.layout.container)
+    exports.default = defaultLayout
