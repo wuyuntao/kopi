@@ -6,7 +6,8 @@ kopi.module("kopi.ui.containers")
   .require("kopi.utils.html")
   .require("kopi.utils.text")
   .require("kopi.ui.widgets")
-  .define (exports, settings, exceptions, logging, utils, html, text, widgets) ->
+  .require("kopi.ui.contents")
+  .define (exports, settings, exceptions, logging, utils, html, text, widgets, contents) ->
 
     ###
     管理 视图 和 导航栏 的容器基类
@@ -21,9 +22,9 @@ kopi.module("kopi.ui.containers")
     class Container extends widgets.Widget
 
       this.defaults
+        autoSkeleton: true
         # @type   {Number}    Timeout for transition
         # timeout: 5000
-
 
       # @type   {Hash<UID, Content>}  内容缓存
       _cache: {}
@@ -43,7 +44,7 @@ kopi.module("kopi.ui.containers")
       反之则加到 previous 容器中并显示
       ###
       load: (content, reverse=false) ->
-        unless content instanceof Content
+        unless content instanceof contents.Content
           throw new exceptions.ValueError("Must be an instance of Content.")
 
         self = this
@@ -59,6 +60,8 @@ kopi.module("kopi.ui.containers")
         # onTimeout = -> self.emit('transitiontimeout')
         # clearTimeout(self._timeout) if self._timeout
         # self._timeout = setTimeout(onTimeout, self._options.timeout)
+
+      hide: ->
 
       append: (content, next=true) ->
         self = this

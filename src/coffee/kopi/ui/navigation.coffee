@@ -14,4 +14,6 @@ kopi.module("kopi.ui.navigation")
     exports.Navbar = Navbar
     exports.Nav = Nav
 
+    # A factory method to build typical navigation content
     exports.nav = (options) ->
+      new Nav()

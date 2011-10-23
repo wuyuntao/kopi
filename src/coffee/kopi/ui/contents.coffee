@@ -10,7 +10,9 @@ kopi.module("kopi.ui.contents")
     ###
     class Content extends widgets.Widget
 
-      this.defaults autoCreate: true
+      this.defaults
+        autoSkeleton: true
+        autoCreate: true
 
       initialized: false
 
@@ -20,13 +22,13 @@ kopi.module("kopi.ui.contents")
 
         # @type {View}
         this.context = context
-        super
+        super()
 
       initialize: ->
 
       # Helpers to update container-related states
       for state in ["previous", "current", "next"]
-        ((s) -> this.prototype[s] = -> this._state("state", s))(state)
-      background: -> this._state("state", null)
+        ((s) => this.prototype[s] = -> this.state("state", s))(state)
+      background: -> this.state("state", null)
 
     exports.Content = Content

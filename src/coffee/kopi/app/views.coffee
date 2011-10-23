@@ -27,8 +27,8 @@ kopi.module("kopi.app.views")
       this.contents = (contents={}) ->
         utils.extend this._contents, contents
 
-      this.defaults
-        eventTimeout: 60 * 1000     # 60 seconds
+      # this.defaults
+      #   eventTimeout: 60 * 1000     # 60 seconds
 
       # type  #{Boolean}  created   视图是否已创建
       created: false
@@ -46,39 +46,76 @@ kopi.module("kopi.app.views")
         self.constructor.prefix or= text.underscore(self.constructor.name)
         self.uid = utils.uniqueId(self.constructor.prefix)
         self.app = app
+        self.args = args
         self.contents = {}
         self.containers = app.layout.containers
-        self.request, self.args... = args
 
-      create: ->
+      ###
+      Initialize UI components skeleton and append them to DOM Tree
+      ###
+      create: (fn) ->
         self = this
         return self if self.created
         self.lock()
-        self.emit 'create'
+        self.on('created', (e) -> fn(false, self)) if $.isFunction(fn)
+        self.emit('create')
 
-      start: ->
+      ###
+      Display UI components and then render them with data
+      ###
+      start: (fn) ->
         self = this
         throw new exceptions.ValueError("Must create view first.") if not self.created
         return self if self.started
         self.lock()
-        self.emit 'start'
+        self.on('started', (e) -> fn(false, self)) if $.isFunction(fn)
+        self.emit('start')
 
-      update: ->
-        this.emit('update')
+      ###
+      Update UI components when URL changes
+      ###
+      update: (fn) ->
+        this
+        self.on('updated', (e) -> fn(false, this)) if $.isFunction(fn)
+        self.emit('update')
 
-      stop: ->
+      ###
+      Hide UI components
+      ###
+      stop: (fn) ->
         self = this
         throw new exceptions.ValueError("Must create view first.") if not self.created
         return self if not self.started
         self.lock()
-        self.emit 'stop'
+        self.on('stopped', (e) -> fn(false, self)) if $.isFunction(fn)
+        self.emit('stop')
 
-      destroy: ->
+      ###
+      Remove UI components from DOM Tree
+      ###
+      destroy: (fn) ->
         self = this
         throw new exceptions.ValueError("Must stop view first.") if self.started
         return self if not self.created
         self.lock()
-        self.emit 'destroy'
+        self.on('destroyed', (e) -> fn(false, self)) if $.isFunction(fn)
+        self.emit('destroy')
+
+      lock: (fn) ->
+        self = this
+        return self if self.locked
+        self.isLocked = true
+        self.emit 'lock'
+        fn(false, self) if $.isFunction(fn)
+        self
+
+      unlock: (fn) ->
+        self = this
+        return self unless self.locked
+        self.isLocked = false
+        self.emit 'unlock'
+        fn(false, self) if $.isFunction(fn)
+        self
 
       ###
       事件的模板方法
@@ -91,8 +128,8 @@ kopi.module("kopi.app.views")
         # create contents and append them to container asynchronously
         for name, container of self.containers
           if name of self.constructor._contents
-            content = self.contents[name] = new content(self)
-            self.containers.append(content)
+            content = self.contents[name] = new self.constructor._contents[name](self)
+            container.append(content)
 
         self.created = true
         self.unlock()
@@ -103,9 +140,9 @@ kopi.module("kopi.app.views")
         # Show contents asynchronously
         for name, container of self.containers
           if name of self.contents
-            self.containers.load(self.contents[name])
+            container.load(self.contents[name])
           else
-            self.containers.hide()
+            container.hide()
 
         self.started = true
         self.unlock()

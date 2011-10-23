@@ -11,13 +11,18 @@ kopi.module("kopi.ui.widgets")
     class Widget extends events.EventEmitter
 
       # @type {Hash}    默认配置
-      this._defaults = {
+      this._defaults =
         # @type {String}    tag name of element to create
         tagName: "div"
 
-        # @type {Boolean}   Build skeleton if element does not exist
+        # @type {Boolean}   Build skeleton when initializing widget
+        autoSkeleton: false
+
+        # @type {Boolean}   Create element if element does not exist
         autoCreate: false
-      }
+
+        # @type {Boolean}   Render widget with remote data when initializing widget
+        autoRender: false
 
       ###
       更新默认配置
@@ -50,6 +55,7 @@ kopi.module("kopi.ui.widgets")
         regExp = new RegExp(this.cssClass("[^\s]+\s*", prefix), 'g')
         this._stateRegExpCache[prefix] = regExp
 
+
       constructor: (element, options={}) ->
         self = this
         # @type {String}
@@ -62,18 +68,18 @@ kopi.module("kopi.ui.widgets")
         self._options = $.extend({}, self.constructor._defaults, options)
 
         # @type {jQuery Element}
-        self.element = $(element)
-        if self.element.length == 0 and not self._options.autoCreate
-          throw new exceptions.ValueError("Element does not exist: #{element}")
-
-        self._updateOptions()
-        self._skeleton()
+        self.element = element
 
         # @type {Hash}              数据
         self._data = {}
 
         # @type {Boolean}           是否允许用户交互
         self.isLocked = false
+
+        if self._options.autoSkeleton
+          self.skeleton()
+          if self._options.autoRender
+            self.render()
 
       ###
       更新配置
@@ -107,11 +113,16 @@ kopi.module("kopi.ui.widgets")
       ###
       Ensure elements are created and properly configured
       ###
-      _skeleton: ->
+      skeleton: (element) ->
         self = this
 
+        element or= self.element
+        self.element = $(element)
         unless self.element.length
-          self.element = $(document.createElement(self._options.tagName))
+          if self._options.autoCreate
+            self.element = $(document.createElement(self._options.tagName))
+          else
+            throw new exceptions.NoSuchElementError(element)
 
         if not self.element.data('uid')
           self.element.attr('data-uid', self.uid)
@@ -120,7 +131,11 @@ kopi.module("kopi.ui.widgets")
         if not self.element.hasClass(cssClass)
           self.element.addClass(cssClass)
 
-      _state: (name, value) ->
+        self.updateOptions()
+
+      render: (data) ->
+
+      state: (name, value) ->
         if value == null
           this.element.attr("data-#{name}")
         else
@@ -129,7 +144,7 @@ kopi.module("kopi.ui.widgets")
             .replaceClass(this.constructor.stateRegExp(name),
               this.constructor.cssClass(value, name))
 
-      _removeState: (name) ->
+      removeState: (name) ->
         this.element
           .removeAttr("data-#{name}")
           .replaceClass(this.constructor.stateRegExp(name), "")
@@ -139,7 +154,7 @@ kopi.module("kopi.ui.widgets")
 
       @param  {HTML Element}  element
       ###
-      _updateOptions: ->
+      updateOptions: ->
         return unless this.element.length > 0
 
         for name, value of this._options

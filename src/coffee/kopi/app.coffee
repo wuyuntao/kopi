@@ -22,7 +22,7 @@ kopi.module("kopi.app")
 
       started: false
 
-      state: null
+      current: null
 
       # @type {Boolean}       If able to change state
       locked: false
@@ -62,16 +62,24 @@ kopi.module("kopi.app")
         this.load(current)
 
       load: (url) ->
+        self = this
         path = uri.parse(url).path
         # Find started view
-        view = this.match(path)
+        view = self.match(path)
         unless view
           # Find view matches
           match = router.match(path)
           unless match
             return uri.goto url
-          view = new match.route.view(this, match.args)
-        this.layout.load(view)
+          view = new match.route.view(self, match.args)
+
+        # Stop current view
+        if self.current and self.current.started
+          self.current.stop()
+        # Start view
+        if not view.created
+          view.create()
+        view.start()
 
       ###
       Find existing view in stack

@@ -6,6 +6,9 @@ kopi.module("kopi.ui.notification.widgets")
 
     class Widget extends widgets.Widget
 
+      this.defaults
+        autoSkeleton: true
+
       actions = ["show", "hide", "transparent"]
 
       for action in actions

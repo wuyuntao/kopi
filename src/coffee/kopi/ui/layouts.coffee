@@ -22,6 +22,8 @@ kopi.module("kopi.ui.layouts")
 
     # A factory method to create layout
     layout = (containers=[]) -> new Layout(containers)
+
+    # Default layout with a top navbar and content container
     defaultLayout = ->
       new Layout
         navbar: new navigation.Navbar(settings.kopi.ui.layout.navbar)
