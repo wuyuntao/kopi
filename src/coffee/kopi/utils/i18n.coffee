@@ -15,7 +15,7 @@ kopi.module("kopi.utils.i18n")
     ###
     class TranslationError extends exceptions.Exception
       constructor: (name) ->
-        super("Missing #{name}, [#{settings.kopi.i18n.locale}, #{settings.kopi.i18n.fallback}]")
+        super("Missing translation \"#{name}\", [#{settings.kopi.i18n.locale}, #{settings.kopi.i18n.fallback}]")
 
     ###
     翻译

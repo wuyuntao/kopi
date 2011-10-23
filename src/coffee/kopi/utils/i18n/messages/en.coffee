@@ -3,3 +3,4 @@ kopi.module("kopi.utils.i18n.messages.en")
   .define (exports, i18n) ->
     i18n.define "en"
       hello: "Hello!"
+      loading: "Loading..."

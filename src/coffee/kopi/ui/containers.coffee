@@ -49,7 +49,7 @@ kopi.module("kopi.ui.containers")
 
         self = this
         # TODO 有锁的情况下把请求加入队列？
-        if self.isLocked
+        if self.locked
           logging.warn("Container is locked and will not handle this action.")
           return self
 

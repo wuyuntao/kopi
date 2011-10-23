@@ -1,0 +1,72 @@
+@import 'kopi/widgets/content';
+
+.kopi-container {
+  @include kopi-container;
+}
+
+.kopi-container-fixed {
+  @extend .kopi-container;
+  @include kopi-container-fixed;
+}
+
+.kopi-container-top-fixed {
+  @extend .kopi-container-fixed;
+  @include kopi-container-top;
+}
+
+.kopi-container-bottom-fixed {
+  @extend .kopi-container-fixed;
+  @include kopi-container-bottom;
+}
+
+.kopi-container-top-bottom-fixed {
+  @extend .kopi-container-top-fixed;
+  @extend .kopi-container-bottom-fixed;
+}
+.kopi-content {
+  @include kopi-content;
+}
+
+.kopi-content-header {
+  @include kopi-content-header;
+}
+
+.kopi-content-content {
+  @include kopi-content-content;
+}
+
+.kopi-content-footer {
+  @include kopi-content-footer;
+}
+
+.kopi-content-fixed {
+  @extend .kopi-content;
+  @include kopi-content-fixed;
+}
+
+.kopi-content-header {
+  @extend .kopi-content-header;
+  @include kopi-content-header-fixed;
+}
+
+.kopi-content-content {
+  @extend .kopi-content-content;
+  @include kopi-content-content-fixed;
+}
+
+.kopi-content-footer {
+  @extend .kopi-content-footer;
+  @include kopi-content-footer-fixed;
+}
+
+.kopi-content-indicator {
+  @include kopi-content-indicator;
+}
+
+.kopi-content-indicator-loading {
+  @extend .kopi-content-indicator;
+}
+
+.kopi-content-indicator-show {
+  @include kopi-content-indicator-show;
+}

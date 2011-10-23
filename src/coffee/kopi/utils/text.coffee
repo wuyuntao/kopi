@@ -78,6 +78,7 @@ kopi.module("kopi.utils.text")
         .toLowerCase()
 
     exports.camelize = camelize
+    exports.format = format
     exports.constantize = constantize
     exports.truncate = truncate
     exports.underscore = underscore

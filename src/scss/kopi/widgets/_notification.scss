@@ -112,7 +112,7 @@ $kopi-notification-bubble-height: 100px !default;
   vertical-align: middle;
 
   display: none;
-  z-index: 1000;
+  z-index: 1100;
 
   @include kopi-notification-dialog-background;
   @include border-radius($kopi-notification-dialog-border-radius);

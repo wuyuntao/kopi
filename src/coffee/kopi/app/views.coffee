@@ -2,11 +2,12 @@ kopi.module("kopi.app.views")
   .require("kopi.exceptions")
   .require("kopi.settings")
   .require("kopi.events")
+  .require("kopi.logging")
   .require("kopi.utils")
   .require("kopi.utils.html")
   .require("kopi.utils.text")
   .require("kopi.ui.contents")
-  .define (exports, exceptions, settings, events
+  .define (exports, exceptions, settings, events, logging
                   , utils, html, text, contents) ->
 
     ###
@@ -56,6 +57,7 @@ kopi.module("kopi.app.views")
       create: (fn) ->
         self = this
         return self if self.created
+        logging.debug("Create view. #{self.uid}")
         self.lock()
         self.on('created', (e) -> fn(false, self)) if $.isFunction(fn)
         self.emit('create')
@@ -67,6 +69,7 @@ kopi.module("kopi.app.views")
         self = this
         throw new exceptions.ValueError("Must create view first.") if not self.created
         return self if self.started
+        logging.debug("Start view. #{self.uid}")
         self.lock()
         self.on('started', (e) -> fn(false, self)) if $.isFunction(fn)
         self.emit('start')
@@ -75,7 +78,8 @@ kopi.module("kopi.app.views")
       Update UI components when URL changes
       ###
       update: (fn) ->
-        this
+        self = this
+        logging.debug("Update view. #{self.uid}")
         self.on('updated', (e) -> fn(false, this)) if $.isFunction(fn)
         self.emit('update')
 
@@ -86,6 +90,7 @@ kopi.module("kopi.app.views")
         self = this
         throw new exceptions.ValueError("Must create view first.") if not self.created
         return self if not self.started
+        logging.debug("Stop view. #{self.uid}")
         self.lock()
         self.on('stopped', (e) -> fn(false, self)) if $.isFunction(fn)
         self.emit('stop')
@@ -97,6 +102,7 @@ kopi.module("kopi.app.views")
         self = this
         throw new exceptions.ValueError("Must stop view first.") if self.started
         return self if not self.created
+        logging.debug("Destroy view. #{self.uid}")
         self.lock()
         self.on('destroyed', (e) -> fn(false, self)) if $.isFunction(fn)
         self.emit('destroy')
@@ -104,7 +110,8 @@ kopi.module("kopi.app.views")
       lock: (fn) ->
         self = this
         return self if self.locked
-        self.isLocked = true
+        logging.debug("Lock view. #{self.uid}")
+        self.locked = true
         self.emit 'lock'
         fn(false, self) if $.isFunction(fn)
         self
@@ -112,7 +119,8 @@ kopi.module("kopi.app.views")
       unlock: (fn) ->
         self = this
         return self unless self.locked
-        self.isLocked = false
+        logging.debug("Unlock view. #{self.uid}")
+        self.locked = false
         self.emit 'unlock'
         fn(false, self) if $.isFunction(fn)
         self
@@ -133,6 +141,7 @@ kopi.module("kopi.app.views")
 
         self.created = true
         self.unlock()
+        logging.debug("View created. #{self.uid}")
         self.emit 'created'
 
       onstart: (e) ->
@@ -146,7 +155,10 @@ kopi.module("kopi.app.views")
 
         self.started = true
         self.unlock()
-        self.emit 'initialize' if not self.initialized
+        if not self.initialized
+          logging.debug("Initialize view. #{self.uid}")
+          self.emit 'initialize'
+        logging.debug("View started. #{self.uid}")
         self.emit 'started'
 
       oninitialize: (e) ->
@@ -157,21 +169,25 @@ kopi.module("kopi.app.views")
             self.contents[name].initialize()
 
         self.initialized = true
+        logging.debug("View initialized. #{self.uid}")
         self.emit 'initialized'
 
       onupdate: (e) ->
+        logging.debug("View updated. #{self.uid}")
         this.emit 'updated'
 
       onstop: (e) ->
         self = this
         self.started = false
         self.unlock()
+        logging.debug("View stopped. #{self.uid}")
         self.emit 'stopped'
 
       ondestroy: (e) ->
         self = this
         self.created = false
         self.unlock()
+        logging.debug("View destroyed. #{self.uid}")
         self.emit 'destroyed'
 
     exports.View = View

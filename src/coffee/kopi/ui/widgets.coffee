@@ -74,7 +74,7 @@ kopi.module("kopi.ui.widgets")
         self._data = {}
 
         # @type {Boolean}           是否允许用户交互
-        self.isLocked = false
+        self.locked = false
 
         if self._options.autoSkeleton
           self.skeleton()
@@ -94,7 +94,7 @@ kopi.module("kopi.ui.widgets")
         self = this
         return self if self.locked
         # TODO 从 Event 层禁止，考虑如果子类也在 element 上绑定时间的情况
-        self.isLocked = true
+        self.locked = true
         self.element.addClass(self.constructor.cssClass("lock"))
         self.onlock()
         self
@@ -105,7 +105,7 @@ kopi.module("kopi.ui.widgets")
       unlock: ->
         self = this
         return self unless self.locked
-        self.isLocked = false
+        self.locked = false
         self.element.removeClass(self.constructor.cssClass("lock"))
         self.onunlock()
         self
@@ -160,6 +160,9 @@ kopi.module("kopi.ui.widgets")
         for name, value of this._options
           value = this.element.data(text.underscore(name))
           this._options[name] = value if value isnt undefined
+
+      toString: ->
+        "[#{this.constructor.name} #{this.uid}]"
 
       onlock:    -> true
       onunlock:  -> true

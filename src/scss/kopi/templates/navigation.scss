@@ -1,10 +1,11 @@
 @import 'kopi/widgets/navigation';
-@import 'kopi/templates/container';
+@import 'kopi/templates/content';
 
 // {{{ Navbar
 .kopi-navbar {
   @extend .kopi-container;
   @include kopi-navbar;
+  min-height: 0;
 }
 
 .kopi-navbar-top {

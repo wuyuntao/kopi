@@ -15,7 +15,7 @@ kopi.module("kopi.ui.notification.widgets")
         ((a) => this["#{a}Class"] = ->)(action)
 
       # 是否在前台显示
-      active: true
+      active: false
 
       constructor: (element, options) ->
         unless element
