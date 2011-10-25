@@ -10,12 +10,6 @@ kopi.module("kopi.ui.contents")
     ###
     class Content extends widgets.Widget
 
-      this.defaults
-        autoSkeleton: true
-        autoCreate: true
-
-      initialized: false
-
       constructor: (context) ->
         if not context
           throw new exceptions.ValueError("Must have context")
@@ -24,9 +18,7 @@ kopi.module("kopi.ui.contents")
         this.context = context
         super()
 
-      initialize: ->
-
-      # Helpers to update container-related states
+      # Helpers to update panel-related states
       for state in ["previous", "current", "next"]
         ((s) => this.prototype[s] = -> this.state("state", s))(state)
       background: -> this.state("state", null)

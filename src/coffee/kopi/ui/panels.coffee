@@ -1,4 +1,4 @@
-kopi.module("kopi.ui.containers")
+kopi.module("kopi.ui.panels")
   .require("kopi.settings")
   .require("kopi.exceptions")
   .require("kopi.logging")
@@ -12,16 +12,16 @@ kopi.module("kopi.ui.containers")
     ###
     管理 视图 和 导航栏 的容器基类
 
-    div.container
-      div.container-content
-      div.container-content[data-state=previous]
-      div.container-content[data-state=current]
-      div.container-content[data-state=next]
-      div.container-content
+    div.panel
+      div.panel-content
+      div.panel-content[data-state=previous]
+      div.panel-content[data-state=current]
+      div.panel-content[data-state=next]
+      div.panel-content
     ###
-    class Container extends widgets.Widget
+    class Panel extends widgets.Widget
 
-      this.defaults
+      utils.configure this
         autoSkeleton: true
         # @type   {Number}    Timeout for transition
         # timeout: 5000
@@ -50,7 +50,7 @@ kopi.module("kopi.ui.containers")
         self = this
         # TODO 有锁的情况下把请求加入队列？
         if self.locked
-          logging.warn("Container is locked and will not handle this action.")
+          logging.warn("Panel is locked and will not handle this action.")
           return self
 
         self.lock()
@@ -74,7 +74,7 @@ kopi.module("kopi.ui.containers")
           self._contents.next = content
 
       ###
-      Check if content is already appended to container
+      Check if content is already appended to panel
 
       @param  {Content}   content
       ###
@@ -121,4 +121,4 @@ kopi.module("kopi.ui.containers")
         this.emit('transitioncomplete')
         return
 
-    exports.Container = Container
+    exports.Panel = Panel

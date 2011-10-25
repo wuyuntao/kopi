@@ -40,7 +40,7 @@ kopi.module("kopi.settings")
 
         layout:
           navbar: "#kopi-navbar"
-          container: "#kopi-container"
+          panel: "#kopi-content-panel"
 
         notification:
           bubble: '#kopi-notification-bubble'

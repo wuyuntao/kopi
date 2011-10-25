@@ -87,17 +87,25 @@ kopi.module("kopi.utils")
       deferred.promise()
 
     extend = (obj, mixins...) ->
-      for mixin in mixins
+      for mixin in mixins when mixin
         for name, method of mixin
           obj[name] = method
       obj
 
     include = (klass, mixins...) ->
-      for mixin in mixins
+      for mixin in mixins when mixin
         extend klass.prototype, mixin
 
     # Is the given value a regular expression?
     isRegExp    = (obj) -> !!(obj and obj.exec and (obj.ignoreCase or obj.ignoreCase is false))
+
+    send = (fn, context, args...) ->
+      return fn unless $.isFunction(fn)
+      fn.apply(context, args)
+
+    configure = (obj, options...) ->
+      obj.options or= {}
+      extend obj.options, options...
 
     extend exports,
       sum: sum
@@ -109,3 +117,5 @@ kopi.module("kopi.utils")
       extend: extend
       include: include
       isRegExp: isRegExp
+      send: send
+      configure: configure

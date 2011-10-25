@@ -10,7 +10,7 @@
 //= require        kopi/utils/html
 //= require        kopi/utils/support
 //= require        kopi/utils/text
-//= require        kopi/utils/url
+//= require        kopi/utils/uri
 //= require        kopi/utils/jquery
 //
 //= require        kopi/events
@@ -18,16 +18,24 @@
 //
 //= require        kopi/db/collections
 //= require        kopi/db/models
+//= require        kopi/db/sync
 //
 //= require        kopi/ui/templates
 //= require        kopi/ui/widgets
-//= require        kopi/ui/containers
-//= require        kopi/ui/views
-//= require        kopi/ui/navigation
-//= require        kopi/ui/notification
 //= require_tree ./kopi/ui/notification/messages
+//= require        kopi/ui/notification/widgets
+//= require        kopi/ui/notification/overlays
+//= require        kopi/ui/notification/bubbles
+//= require        kopi/ui/notification/dialogs
+//= require        kopi/ui/notification/indicators
+//= require        kopi/ui/notification
+//= require        kopi/ui/viewport
+//= require        kopi/ui/contents
+//= require        kopi/ui/panels
+//= require        kopi/ui/navigation
+//= require        kopi/ui/layouts
 //
 //= require        kopi/app/cache
 //= require        kopi/app/router
-//= require        kopi/app/manager
+//= require        kopi/app/views
 //= require        kopi/app

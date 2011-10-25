@@ -1,14 +1,15 @@
 kopi.module("kopi.ui.navigation")
   .require("kopi.settings")
-  .require("kopi.ui.containers")
+  .require("kopi.ui.panels")
   .require("kopi.ui.contents")
+  .require("kopi.utils")
   .require("kopi.utils.i18n")
-  .define (exports, settings, containers, contents, i18n) ->
+  .define (exports, settings, panels, contents, utils, i18n) ->
 
     ###
     管理 导航栏 的容器
     ###
-    class Navbar extends containers.Container
+    class Navbar extends panels.Panel
 
       skeleton: (element) ->
         super
@@ -19,10 +20,11 @@ kopi.module("kopi.ui.navigation")
         this.nav = nav title: i18n.t("loading")
 
     class Nav extends contents.Content
+      utils.configure this, {}
 
       parts = ["left", "center", "right"]
 
-      skeleton: (element) ->
+      skeleton: ->
         super
         # Ensure element
         self = this
@@ -39,10 +41,5 @@ kopi.module("kopi.ui.navigation")
           self.title = $("<h1></h1>", class: "kopi-nav-title")
             .appendTo(self.center)
 
-    # A factory method to build typical navigation content
-    nav = (element, options) ->
-      new Nav(element, options)
-
     exports.Navbar = Navbar
     exports.Nav = Nav
-    exports.nav = nav

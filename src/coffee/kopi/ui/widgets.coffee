@@ -5,90 +5,88 @@ kopi.module("kopi.ui.widgets")
   .require("kopi.exceptions")
   .require("kopi.settings")
   .define (exports, utils, text, events, exceptions, settings) ->
+
     ###
     UI 组件的基类
     ###
     class Widget extends events.EventEmitter
 
-      # @type {Hash}    默认配置
-      this._defaults =
+      # {{{ Class configuration
+      utils.configure this
         # @type {String}    tag name of element to create
         tagName: "div"
+      # }}}
 
-        # @type {Boolean}   Build skeleton when initializing widget
-        autoSkeleton: false
-
-        # @type {Boolean}   Create element if element does not exist
-        autoCreate: false
-
-        # @type {Boolean}   Render widget with remote data when initializing widget
-        autoRender: false
-
+      # {{{ Class methods
       ###
-      更新默认配置
+      A helper method to generate CSS class names added to widget element
       ###
-      this.defaults = (options={}) ->
-        $.extend(this._defaults, options)
-
-      ###
-      CSS class name should be added to widget element
-      ###
-      this._cssClassCache = {}
       this.cssClass = (action, prefix="") ->
-        cache = "#{action},#{prefix}"
-        return this._cssClassCache[cache] if cache of this._cssClassCache
+        this._cssClasses or= {}
+        return this._cssClasses[cache] if cache of this._cssClasses
 
         this.prefix or= text.underscore(this.name)
         name = this.prefix
         name = prefix + "-" + name if prefix
         name = settings.kopi.ui.prefix + "-" + name if settings.kopi.ui.prefix
         name = name + "-" + action if action
-        this._cssClassCache[cache] = name
+        this._cssClasses[cache] = name
 
       ###
-      CSS class regular expression to toggle states
+      A helper method to generate CSS class names regexps for states
       ###
-      this._stateRegExpCache = {}
       this.stateRegExp = (prefix="") ->
-        return this._stateRegExpCache[prefix] if prefix of this._stateRegExpCache
+        this._stateRegExps or= {}
+        return this._stateRegExps[prefix] if prefix of this._stateRegExps
 
         regExp = new RegExp(this.cssClass("[^\s]+\s*", prefix), 'g')
-        this._stateRegExpCache[prefix] = regExp
+        this._stateRegExps[prefix] = regExp
+      # }}}
 
+      # {{{ State properties
+      # If skeleton has been built
+      initialized: false
 
+      # If widget is rendered with data
+      rendered: false
+
+      # If widget is disabled
+      locked: false
+      # }}}
+
+      # {{{ Lifecycle methods
       constructor: (element, options={}) ->
         self = this
         # @type {String}
         self.constructor.prefix or= text.underscore(self.constructor.name)
-
         # @type {String}
         self.uid = utils.uniqueId(self.constructor.prefix)
-
-        # @type {Hash}              配置
-        self._options = $.extend({}, self.constructor._defaults, options)
-
         # @type {jQuery Element}
-        self.element = element
-
+        self.element = element if element
         # @type {Hash}              数据
-        self._data = {}
-
-        # @type {Boolean}           是否允许用户交互
-        self.locked = false
-
-        if self._options.autoSkeleton
-          self.skeleton()
-          if self._options.autoRender
-            self.render()
+        self.data = {}
+        # Copy class configurations to instance
+        utils.configure self, self.constructor.options, options
 
       ###
-      更新配置
+      Ensure basic skeleton of widget usually with a loader
       ###
-      options: (options) ->
-        if options then $.extend(this._options, options) else this._options
+      skeleton: (element) ->
+        self = this
+        self.element = self._getElement(element or self.element)
+        self.element.attr('id', self.uid)
+        cssClass = self.constructor.cssClass()
+        if not self.element.hasClass(cssClass)
+          self.element.addClass(cssClass)
+        self.configure()
 
       ###
-      禁止用户用鼠标或手势进行交互
+      Render widget when data is ready
+      ###
+      render: ->
+
+      ###
+      Disable events
       ###
       lock: ->
         self = this
@@ -96,45 +94,43 @@ kopi.module("kopi.ui.widgets")
         # TODO 从 Event 层禁止，考虑如果子类也在 element 上绑定时间的情况
         self.locked = true
         self.element.addClass(self.constructor.cssClass("lock"))
-        self.onlock()
-        self
+        self.emit('lock')
 
       ###
-      禁止用户用鼠标、键盘或手势进行交互
+      Enable events
       ###
       unlock: ->
         self = this
         return self unless self.locked
         self.locked = false
         self.element.removeClass(self.constructor.cssClass("lock"))
-        self.onunlock()
-        self
+        self.emit('unlock')
 
       ###
-      Ensure elements are created and properly configured
+      Unregister event listeners, remove elements and so on
       ###
-      skeleton: (element) ->
-        self = this
+      destroy: ->
+      # }}}
 
-        element or= self.element
-        self.element = $(element)
-        unless self.element.length
-          if self._options.autoCreate
-            self.element = $(document.createElement(self._options.tagName))
-          else
-            throw new exceptions.NoSuchElementError(element)
+      # {{{ Event template methods
+      # }}}
 
-        if not self.element.data('uid')
-          self.element.attr('data-uid', self.uid)
+      # {{{ Helper methods
+      ###
+      Update options from data attributes of element
+      ###
+      configure: (options={}) ->
+        return unless this.element.length > 0
+        for name, value of this.options
+          value = this.element.data(text.underscore(name))
+          this.options[name] = value if value isnt undefined
 
-        cssClass = self.constructor.cssClass()
-        if not self.element.hasClass(cssClass)
-          self.element.addClass(cssClass)
+      toString: ->
+        "[#{this.constructor.name} #{this.uid}]"
 
-        self.updateOptions()
-
-      render: (data) ->
-
+      ###
+      Add or update state class and data attribute to element
+      ###
       state: (name, value) ->
         if value == null
           this.element.attr("data-#{name}")
@@ -144,27 +140,27 @@ kopi.module("kopi.ui.widgets")
             .replaceClass(this.constructor.stateRegExp(name),
               this.constructor.cssClass(value, name))
 
+      ###
+      Remove state class and data attribute from element
+      ###
       removeState: (name) ->
         this.element
           .removeAttr("data-#{name}")
           .replaceClass(this.constructor.stateRegExp(name), "")
+      # }}}
 
+      # {{{ Private methods
       ###
-      从 HTML Element 的 data 属性上读取配置
-
-      @param  {HTML Element}  element
+      Get or create element
       ###
-      updateOptions: ->
-        return unless this.element.length > 0
-
-        for name, value of this._options
-          value = this.element.data(text.underscore(name))
-          this._options[name] = value if value isnt undefined
-
-      toString: ->
-        "[#{this.constructor.name} #{this.uid}]"
-
-      onlock:    -> true
-      onunlock:  -> true
+      _getElement: (element) ->
+        self = this
+        return $(element) if element
+        if self.options.element
+          return $(self.options.element)
+        if self.options.template
+          return $(self.options.template).tmpl(self.data)
+        $(document.createElement(self.options.tagName))
+      # }}}
 
     exports.Widget = Widget
