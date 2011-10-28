@@ -1,9 +1,9 @@
 @import 'kopi/base';
 
 /**
-  View container arch
+  Content panel arch
 
-  div.kopi-container
+  div.kopi-panel
     div.kopi-content-previous
       div.kopi-content
     div.kopi-content-current
@@ -12,18 +12,18 @@
       div.kopi-content
  */
 
-$kopi-container-background: transparent !default;
-$kopi-container-margin-top: 36px !default;
-$kopi-container-margin-bottom: 36px !default;
+$kopi-panel-background: transparent !default;
+$kopi-panel-margin-top: 36px !default;
+$kopi-panel-margin-bottom: 36px !default;
 
-@mixin kopi-container {
-  background: $kopi-container-background;
+@mixin kopi-panel {
+  background: $kopi-panel-background;
   min-height: 100px;
   overflow-x: hidden;
 }
 
-@mixin kopi-container-fixed {
-  position: absolute;
+@mixin kopi-panel-fixed {
+  position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
@@ -32,16 +32,16 @@ $kopi-container-margin-bottom: 36px !default;
   z-index: 20;
 }
 
-@mixin kopi-container-top {
-  margin-top: $kopi-container-margin-top;
+@mixin kopi-panel-top {
+  margin-top: $kopi-panel-margin-top;
 }
 
-@mixin kopi-container-bottom {
-  margin-bottom: $kopi-container-margin-bottom;
+@mixin kopi-panel-bottom {
+  margin-bottom: $kopi-panel-margin-bottom;
 }
 
 /*
-  View arch:
+  Content arch:
   div.kopi-content
     header.kopi-content-header
     div.kopi-content-content
@@ -87,7 +87,7 @@ $kopi-content-indicator-font-size: 16px;
 }
 
 @mixin kopi-content-fixed {
-  position: absolute;
+  position: fixed;
   left: 0;
   right: 0;
   top: 0;
@@ -98,7 +98,7 @@ $kopi-content-indicator-font-size: 16px;
 
 @mixin kopi-content-header-fixed {
   // overflow: hidden;
-  position: absolute;
+  position: fixed;
   left: 0;
   right: 0;
   top: 0;
@@ -107,7 +107,7 @@ $kopi-content-indicator-font-size: 16px;
 
 @mixin kopi-content-content-fixed  {
   overflow: hidden;
-  position: absolute;
+  position: fixed;
   left: 0;
   right: 0;
   top: $kopi-content-header-height;
@@ -117,7 +117,7 @@ $kopi-content-indicator-font-size: 16px;
 
 @mixin kopi-content-footer-fixed  {
   // overflow: hidden;
-  position: absolute;
+  position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
@@ -133,7 +133,7 @@ $kopi-content-indicator-font-size: 16px;
   height: $kopi-content-indicator-height;
   line-height: $kopi-content-indicator-height;
   width: $kopi-content-indicator-width;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   margin-top: $kopi-content-indicator-height / -2;

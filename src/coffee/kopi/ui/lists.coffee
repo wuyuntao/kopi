@@ -1,4 +1,4 @@
-kopi.module("kopi.ui.list")
+kopi.module("kopi.ui.lists")
   .require("kopi.ui.widgets")
   .define (exports, widgets) ->
 

@@ -28,7 +28,7 @@ $kopi-navbar-border: 1px solid #333 !default;
 }
 
 @mixin kopi-navbar-fixed {
-  position: absolute;
+  position: fixed;
   left: 0;
   right: 0;
   z-index: 300;
