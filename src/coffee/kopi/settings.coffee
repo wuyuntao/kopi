@@ -1,5 +1,6 @@
 kopi.module("kopi.settings")
-  .define (exports) ->
+  .require("kopi.exceptions")
+  .define (exports, exceptions) ->
     exports.kopi =
       debug: true
 
@@ -51,6 +52,14 @@ kopi.module("kopi.settings")
           dialogClose: '#kopi-notification-dialog-close'
           indicator: '#kopi-notification-indicator'
           overlay: '#kopi-notification-overlay'
+
+    # Read settings from localStorage
+    load = ->
+      throw new exceptions.NotImplementedError()
+
+    # Save settings to localStorage
+    commit = ->
+      throw new exceptions.NotImplementedError()
 
     exports.extend = ->
       # Deeply extend

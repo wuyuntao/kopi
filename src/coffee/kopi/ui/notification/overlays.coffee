@@ -12,24 +12,21 @@ kopi.module("kopi.ui.notification.overlays")
 
       show: (transparent=false) ->
         self = this
-        this._showClass or= this.constructor.cssClass("show", "notification")
-        this._hideClass or= this.constructor.cssClass("hide", "notification")
-        this._transparentClass or= this.constructor.cssClass("transparent", "notification")
-        this.element
-          .removeClass(this._hideClass)
-          .addClass(this._showClass)
-        this.element.addClass(this._transparentClass) if transparent
-        this
+        cls = self.constructor
+        self.element
+          .removeClass(cls.hideClass())
+          .addClass(cls.showClass())
+        if transparent
+          self.element.addClass(cls.transparentClass())
+        self
 
       hide: ->
-        this._showClass or= this.constructor.cssClass("show", "notification")
-        this._hideClass or= this.constructor.cssClass("hide", "notification")
-        this._transparentClass or= this.constructor.cssClass("transparent", "notification")
-        this.element
-          .addClass(this._hideClass)
-          .removeClass(this._showClass)
-          .removeClass(this._transparentClass)
-        this
+        self = this
+        cls = self.constructor
+        self.element
+          .addClass(cls.hideClass())
+          .removeClass("#{cls.showClass()} #{cls.transparentClass()}")
+        self
 
     # Singleton
     $ -> exports.overlay = new Overlay()

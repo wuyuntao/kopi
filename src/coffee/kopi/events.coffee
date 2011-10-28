@@ -29,5 +29,6 @@ kopi.module("kopi.events")
       once: ->
         this._emitter or= $(this)
         this._emitter.one(arguments...)
+        this
 
     exports.EventEmitter = EventEmitter

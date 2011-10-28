@@ -22,20 +22,20 @@ kopi.module("kopi.ui.notification.dialogs")
         close: i18n.t("kopi.notification.messages.close")
 
       title: (title) ->
-        this._title.text(title)
+        this.element.title.text(title)
         this
 
       content: (content) ->
-        this._content.html(content)
+        this.element.content.html(content)
         this
 
       action: (text, fn) ->
-        this._action.text(text) if text
+        this.element.action.text(text) if text
         this.on('action', fn) if $.isFunction(fn)
         this
 
       close: (text, fn) ->
-        this._close.text(text) if text
+        this.element.close.text(text) if text
         this.on('close', fn) if $.isFunction(fn)
         this
 
@@ -49,7 +49,7 @@ kopi.module("kopi.ui.notification.dialogs")
         self
 
       show: ->
-        if not this._content.html().length
+        if not this.element.content.html().length
           throw new exceptions.ValueError("Missing content of dialog")
 
         this.active = true
@@ -80,12 +80,12 @@ kopi.module("kopi.ui.notification.dialogs")
       skeleton: ->
         super
         self = this
-        self._title = $('.kopi-notification-dialog-title', self.element)
-        self._content = $('.kopi-notification-dialog-content p', self.element)
-        self._action = $('.kopi-notification-dialog-action', self.element)
-        self._close = $('.kopi-notification-dialog-close', self.element)
-        self._action.click (e) -> self.emit('action', [self])
-        self._close.click (e) -> self.emit('close', [self])
+        self.element.title = $('.kopi-notification-dialog-title', self.element)
+        self.element.content = $('.kopi-notification-dialog-content p', self.element)
+        self.element.action = $('.kopi-notification-dialog-action', self.element)
+        self.element.close = $('.kopi-notification-dialog-close', self.element)
+        self.element.action.click (e) -> self.emit('action', [self])
+        self.element.close.click (e) -> self.emit('close', [self])
         self.reset()
 
       onaction: ->

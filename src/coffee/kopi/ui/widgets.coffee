@@ -23,6 +23,7 @@ kopi.module("kopi.ui.widgets")
       ###
       this.cssClass = (action, prefix="") ->
         this._cssClasses or= {}
+        cache = "#{action},#{prefix}"
         return this._cssClasses[cache] if cache of this._cssClasses
 
         this.prefix or= text.underscore(this.name)

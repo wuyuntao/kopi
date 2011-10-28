@@ -75,6 +75,7 @@ class Module
   声明引入的模块
 
   TODO 动态加载依赖对象的脚本？
+  TODO Accept multiple names as arguments
 
   @param  {String}  name        需要引入的模块名称
   @param  {Boolean} assignment  该模块是否需要被赋值

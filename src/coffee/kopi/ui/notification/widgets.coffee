@@ -6,13 +6,23 @@ kopi.module("kopi.ui.notification.widgets")
 
     class Widget extends widgets.Widget
 
+      cls = this
+
+      cls.SHOW = "show"
+      cls.HIDE = "hide"
+      cls.TRANSPARENT = "transparent"
+      cls.NOTIFICATION = "notification"
+
       this.defaults
         autoSkeleton: true
 
-      actions = ["show", "hide", "transparent"]
+      actions = [SHOW, HIDE, TRANSPARENT]
 
       for action in actions
-        ((a) => this["#{a}Class"] = ->)(action)
+        ((a) =>
+          this["#{a}Class"] = ->
+            this["_#{a}Class"] or= this.cssClass(a, this.NOTIFICATION)
+        )(action)
 
       # 是否在前台显示
       active: false
