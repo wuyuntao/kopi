@@ -4,6 +4,21 @@ kopi.module("kopi.app.router")
 
     ###
     URL 路由管理
+
+    Usage
+
+    router
+      .view(BookListView)
+        .route("/book", name: "book-list")
+        .route("/book/search", name: "book-search")
+        .route("/book/:category, name: "book-category")
+        .end()
+      .view(BookDetailView)
+        .route("/book/:id", name: "book-detail")
+        .route("/book/:id/chapter", name: "chapter-list")
+        .route("/book/:id/chapter/:chid", name: "chapter-detail")
+        .end()
+      ...
     ###
     class Router
       constructor: ->
