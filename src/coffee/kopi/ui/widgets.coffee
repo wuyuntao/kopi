@@ -56,7 +56,7 @@ kopi.module("kopi.ui.widgets")
       # }}}
 
       # {{{ Lifecycle methods
-      constructor: (element, options={}) ->
+      constructor: (element, options={}, data={}) ->
         self = this
         # @type {String}
         self.constructor.prefix or= text.underscore(self.constructor.name)
@@ -65,26 +65,39 @@ kopi.module("kopi.ui.widgets")
         # @type {jQuery Element}
         self.element = element if element
         # @type {Hash}              数据
-        self.data = {}
+        self.data = data
         # Copy class configurations to instance
         utils.configure self, self.constructor.options, options
 
       ###
       Ensure basic skeleton of widget usually with a loader
       ###
-      skeleton: (element) ->
+      skeleton: (element, data) ->
         self = this
+        return self if self.initialized or self.locked
         self.element = self._getElement(element or self.element)
         self.element.attr('id', self.uid)
         cssClass = self.constructor.cssClass()
         if not self.element.hasClass(cssClass)
           self.element.addClass(cssClass)
+        utils.extend self.data, data or {}
         self.configure()
+        self.emit("initialize")
 
       ###
       Render widget when data is ready
       ###
-      render: ->
+      render: (data) ->
+        self = this
+        return self if self.rendered or self.locked
+        utils.extend self.data, data or {}
+        self.emit("render")
+
+      update: (data) ->
+        self = this
+        return self if self.locked
+        utils.extend self.data, data or {}
+        self.emit("update")
 
       ###
       Disable events
@@ -111,6 +124,11 @@ kopi.module("kopi.ui.widgets")
       Unregister event listeners, remove elements and so on
       ###
       destroy: ->
+        self = this
+        return self if self.locked
+        self.element.remove()
+        self.off()
+        self.emit('destroy')
       # }}}
 
       # {{{ Event template methods
