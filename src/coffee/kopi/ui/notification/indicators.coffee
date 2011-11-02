@@ -6,18 +6,19 @@ kopi.module("kopi.ui.notification.indicators")
 
     class Indicator extends widgets.Widget
 
+      constructor: ->
+        super(settings.kopi.ui.notification.indicator)
+
       show: ->
+        cls = this.constructor
         overlays.overlay.show()
-        this.element
-          .removeClass('kopi-notification-indicator-hide')
-          .addClass('kopi-notification-indicator-show')
+        this.element.removeClass(cls.hideClass()).addClass(cls.showClass())
         this
 
       hide: ->
+        cls = this.constructor
         overlays.overlay.hide()
-        this.element
-          .addClass('kopi-notification-indicator-hide')
-          .removeClass('kopi-notification-indicator-show')
+        this.element.addClass(cls.hideClass()).removeClass(cls.showClass())
         this
 
     # Singleton

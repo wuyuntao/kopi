@@ -52,18 +52,20 @@ kopi.module("kopi.ui.notification.dialogs")
         if not this.element.content.html().length
           throw new exceptions.ValueError("Missing content of dialog")
 
+        cls = this.constructor
         this.active = true
         overlays.overlay.show()
         this.element
-          .removeClass('kopi-notification-indicator-hide')
-          .addClass('kopi-notification-indicator-show')
+          .removeClass(cls.hideClass())
+          .addClass(cls.showClass())
         this
 
       hide: ->
+        cls = this.constructor
         overlays.overlay.hide()
         this.element
-          .addClass('kopi-notification-indicator-hide')
-          .removeClass('kopi-notification-indicator-show')
+          .addClass(cls.hideClass())
+          .removeClass(cls.showClass())
         this.reset()
         this
 

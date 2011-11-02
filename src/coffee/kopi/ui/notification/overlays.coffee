@@ -13,11 +13,8 @@ kopi.module("kopi.ui.notification.overlays")
       show: (transparent=false) ->
         self = this
         cls = self.constructor
-        self.element
-          .removeClass(cls.hideClass())
-          .addClass(cls.showClass())
-        if transparent
-          self.element.addClass(cls.transparentClass())
+        self.element.removeClass(cls.hideClass()).addClass(cls.showClass())
+        self.element.addClass(cls.transparentClass()) if transparent
         self
 
       hide: ->
