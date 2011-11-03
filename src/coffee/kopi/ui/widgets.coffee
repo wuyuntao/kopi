@@ -1,10 +1,11 @@
 kopi.module("kopi.ui.widgets")
   .require("kopi.utils")
+  .require("kopi.utils.klass")
   .require("kopi.utils.text")
   .require("kopi.events")
   .require("kopi.exceptions")
   .require("kopi.settings")
-  .define (exports, utils, text, events, exceptions, settings) ->
+  .define (exports, utils, klass, text, events, exceptions, settings) ->
 
     ###
     UI 组件的基类
@@ -12,7 +13,7 @@ kopi.module("kopi.ui.widgets")
     class Widget extends events.EventEmitter
 
       # {{{ Class configuration
-      utils.configure this
+      klass.configure this
         # @type {String}    tag name of element to create
         tagName: "div"
       # }}}
@@ -67,7 +68,7 @@ kopi.module("kopi.ui.widgets")
         # @type {Hash}              数据
         self.data = data
         # Copy class configurations to instance
-        utils.configure self, self.constructor.options, options
+        self._options = utils.extend {}, self.constructor._options, options
 
       ###
       Ensure basic skeleton of widget usually with a loader
@@ -140,9 +141,9 @@ kopi.module("kopi.ui.widgets")
       ###
       configure: (options={}) ->
         return unless this.element.length > 0
-        for name, value of this.options
+        for name, value of this._options
           value = this.element.data(text.underscore(name))
-          this.options[name] = value if value isnt undefined
+          this._options[name] = value if value isnt undefined
 
       toString: ->
         "[#{this.constructor.name} #{this.uid}]"
@@ -175,10 +176,10 @@ kopi.module("kopi.ui.widgets")
       _getElement: (element) ->
         self = this
         return $(element) if element
-        if self.options.element
-          return $(self.options.element)
-        if self.options.template
-          return $(self.options.template).tmpl(self.data)
+        if self._options.element
+          return $(self._options.element)
+        if self._options.template
+          return $(self._options.template).tmpl(self.data)
         $(document.createElement(self.options.tagName))
       # }}}
 

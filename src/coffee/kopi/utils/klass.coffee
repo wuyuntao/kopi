@@ -6,29 +6,29 @@ kopi.module("kopi.utils.klass")
     extend = (klass, mixin) ->
       for name, method of mixin
         klass[name] = method
-      klass
+      return
 
     include = (klass, mixin) ->
       for name, method of mixin.prototype
         klass.prototype[name] = method
-      klass
+      return
 
     configure = (klass, options) ->
       klass._options or= {}
       utils.extend klass._options, options
+      accessor klass, "options"
+      accessor klass.prototype, "options"
+      return
 
-      klass.prototype._options or= {}
-      klass.prototype.options = (name, value) ->
-        accessor(this._options, name, value)
-
-    accessor = (klass, methodName, variableName) ->
-      variableName or= "_#{methodName}"
-      klass.prototype[methodName] = (name, value) ->
-        obj = this[variableName]
+    accessor = (klass, method, property) ->
+      property = "_#{method}"
+      klass[method] = (name, value) ->
+        obj = this[property] or= {}
         switch arguments.length
           when 0 then return obj
           when 1 then return obj[name]
           else return obj[name] = value
+      return
 
     exports.extend = extend
     exports.include = include
