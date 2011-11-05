@@ -17,7 +17,7 @@ kopi.module("kopi.ui.navigation")
         # this.nav = $('.kopi-nav', this.element)
         # if not this.nav.length
         #   this.nav = nav title: i18n.t("loading")
-        this.nav = nav title: i18n.t("loading")
+        # this.nav = nav title: i18n.t("loading")
 
     class Nav extends contents.Content
       utils.configure this, {}

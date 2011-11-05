@@ -11,7 +11,11 @@
 //= require        kopi/utils/support
 //= require        kopi/utils/text
 //= require        kopi/utils/uri
+//= require        kopi/utils/array
+//= require        kopi/utils/object
 //= require        kopi/utils/jquery
+//= require        kopi/utils/structs
+//= require        kopi/utils/structs/weakmap
 //
 //= require        kopi/events
 //= require        kopi/logging
@@ -30,8 +34,7 @@
 //= require        kopi/ui/notification/indicators
 //= require        kopi/ui/notification
 //= require        kopi/ui/viewport
-//= require        kopi/ui/contents
-//= require        kopi/ui/panels
+//= require        kopi/ui/groups
 //= require        kopi/ui/navigation
 //= require        kopi/ui/layouts
 //

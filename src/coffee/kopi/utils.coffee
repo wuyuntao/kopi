@@ -64,8 +64,8 @@ kopi.module("kopi.utils")
 
     @param  {String}  prefix  前缀
     ###
-    idCounter = 0
-    uniqueId = (prefix='') -> prefix + '-' + idCounter++
+    counter = 0
+    guid = (prefix='kopi') -> prefix + '-' + counter++
 
     ###
     判断对象是否为 Promise 对象
@@ -112,7 +112,7 @@ kopi.module("kopi.utils")
       average: average
       range: range
       search: search
-      uniqueId: uniqueId
+      guid: guid
       isPromise: isPromise
       extend: extend
       include: include

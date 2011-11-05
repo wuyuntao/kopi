@@ -12,7 +12,4 @@ kopi.module("kopi.ui.lists")
 
       skeleton: (item) ->
 
-    class ListItem extends widgets.Widget
-
     exports.List = List
-    exports.ListItem = ListItem

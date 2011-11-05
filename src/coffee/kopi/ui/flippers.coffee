@@ -1,7 +1,7 @@
-kopi.module("kopi.ui.flipper")
-  .require("kopi.ui.widgets")
-  .define (exports, widgets) ->
+kopi.module("kopi.ui.flippers")
+  .require("kopi.ui.groups")
+  .define (exports, groups) ->
 
-    class Flipper extends widgets.Widget
+    class Flipper extends groups.Group
 
     exports.Flipper = Flipper

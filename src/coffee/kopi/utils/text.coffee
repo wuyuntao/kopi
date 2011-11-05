@@ -34,6 +34,10 @@ kopi.module("kopi.utils.text")
         string = string.replace(new RegExp("\{#{name}\}", 'gi'), value)
       string
 
+    # Is the given value a string?
+    isString = (string) ->
+      !!(string is '' or (string and string.charCodeAt and string.substr))
+
     ###
     Prefix checker
     ###
@@ -78,7 +82,8 @@ kopi.module("kopi.utils.text")
         .toLowerCase()
 
     exports.camelize = camelize
-    exports.format = format
     exports.constantize = constantize
+    exports.format = format
+    exports.isString = isString
     exports.truncate = truncate
     exports.underscore = underscore

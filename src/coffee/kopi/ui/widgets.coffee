@@ -45,28 +45,28 @@ kopi.module("kopi.ui.widgets")
         this._stateRegExps[prefix] = regExp
       # }}}
 
-      # {{{ State properties
-      # If skeleton has been built
-      initialized: false
-
-      # If widget is rendered with data
-      rendered: false
-
-      # If widget is disabled
-      locked: false
-      # }}}
-
       # {{{ Lifecycle methods
       constructor: (element, options={}, data={}) ->
+        if arguments.length < 3
+          [element, options, data] = [null, element, options]
+
         self = this
         # @type {String}
         self.constructor.prefix or= text.underscore(self.constructor.name)
         # @type {String}
-        self.uid = utils.uniqueId(self.constructor.prefix)
+        self.uid = utils.guid(self.constructor.prefix)
         # @type {jQuery Element}
         self.element = element if element
-        # @type {Hash}              数据
+        # @type {Object} Context data
         self.data = data
+        # @type {Object} State properties
+        self.state =
+          # If skeleton has been built
+          initialized: false
+          # If widget is rendered with data
+          rendered: false
+          # If widget is disabled
+          locked: false
         # Copy class configurations to instance
         self._options = utils.extend {}, self.constructor._options, options
 
@@ -75,8 +75,8 @@ kopi.module("kopi.ui.widgets")
       ###
       skeleton: (element, data) ->
         self = this
-        return self if self.initialized or self.locked
-        self.element = self._getElement(element or self.element)
+        return self if self.state.initialized or self.state.locked
+        self.element = self._element(element or self.element)
         self.element.attr('id', self.uid)
         cssClass = self.constructor.cssClass()
         if not self.element.hasClass(cssClass)
@@ -90,13 +90,13 @@ kopi.module("kopi.ui.widgets")
       ###
       render: (data) ->
         self = this
-        return self if self.rendered or self.locked
+        return self if self.state.rendered or self.state.locked
         utils.extend self.data, data or {}
         self.emit("render")
 
       update: (data) ->
         self = this
-        return self if self.locked
+        return self if self.state.locked
         utils.extend self.data, data or {}
         self.emit("update")
 
@@ -105,9 +105,9 @@ kopi.module("kopi.ui.widgets")
       ###
       lock: ->
         self = this
-        return self if self.locked
+        return self if self.state.locked
         # TODO 从 Event 层禁止，考虑如果子类也在 element 上绑定时间的情况
-        self.locked = true
+        self.state.locked = true
         self.element.addClass(self.constructor.cssClass("lock"))
         self.emit('lock')
 
@@ -116,8 +116,8 @@ kopi.module("kopi.ui.widgets")
       ###
       unlock: ->
         self = this
-        return self unless self.locked
-        self.locked = false
+        return self unless self.state.locked
+        self.state.locked = false
         self.element.removeClass(self.constructor.cssClass("lock"))
         self.emit('unlock')
 
@@ -126,7 +126,7 @@ kopi.module("kopi.ui.widgets")
       ###
       destroy: ->
         self = this
-        return self if self.locked
+        return self if self.state.locked
         self.element.remove()
         self.off()
         self.emit('destroy')
@@ -173,7 +173,7 @@ kopi.module("kopi.ui.widgets")
       ###
       Get or create element
       ###
-      _getElement: (element) ->
+      _element: (element) ->
         self = this
         return $(element) if element
         if self._options.element

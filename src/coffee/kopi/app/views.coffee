@@ -46,7 +46,7 @@ kopi.module("kopi.app.views")
           throw new exceptions.ValueError("app must be instance of Application")
         self = this
         self.constructor.prefix or= text.underscore(self.constructor.name)
-        self.uid = utils.uniqueId(self.constructor.prefix)
+        self.uid = utils.guid(self.constructor.prefix)
         self.app = app
         self.args = args
         self.panels = app.layout.panels
