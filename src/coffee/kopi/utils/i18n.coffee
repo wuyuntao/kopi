@@ -25,10 +25,10 @@ kopi.module("kopi.utils.i18n")
     ###
     translate = (name, params) ->
       try
-        text.format(utils.search(name, messages[settings.kopi.i18n.locale]), params)
+        text.format(text.constantize(name, messages[settings.kopi.i18n.locale]), params)
       catch e
         try
-          text.format(utils.search(name, messages[settings.kopi.i18n.fallback]), params)
+          text.format(text.constantize(name, messages[settings.kopi.i18n.fallback]), params)
         catch e
           throw new TranslationError(name)
 

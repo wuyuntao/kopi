@@ -4,7 +4,6 @@
 //= require        kopi/settings
 //= require        kopi/exceptions
 //= require        kopi/utils
-//= require        kopi/utils/ecma5
 //= require        kopi/utils/i18n
 //= require_tree ./kopi/utils/i18n/messages
 //= require        kopi/utils/html
@@ -12,6 +11,7 @@
 //= require        kopi/utils/text
 //= require        kopi/utils/uri
 //= require        kopi/utils/array
+//= require        kopi/utils/number
 //= require        kopi/utils/object
 //= require        kopi/utils/jquery
 //= require        kopi/utils/structs
@@ -37,6 +37,12 @@
 //= require        kopi/ui/groups
 //= require        kopi/ui/navigation
 //= require        kopi/ui/layouts
+//= require        kopi/ui/lists
+//= require        kopi/ui/lists/items
+//= require        kopi/ui/lists/paginations
+//= require        kopi/ui/tabs
+//= require        kopi/ui/text
+//= require        kopi/ui/toolbars
 //
 //= require        kopi/app/cache
 //= require        kopi/app/router

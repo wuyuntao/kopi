@@ -46,7 +46,7 @@ kopi.module("kopi.app.views")
           throw new exceptions.ValueError("app must be instance of Application")
         self = this
         self.constructor.prefix or= text.underscore(self.constructor.name)
-        self.uid = utils.guid(self.constructor.prefix)
+        self.guid = utils.guid(self.constructor.prefix)
         self.app = app
         self.args = args
         self.panels = app.layout.panels
@@ -57,7 +57,7 @@ kopi.module("kopi.app.views")
       create: (fn) ->
         self = this
         return self if self.created
-        logging.debug("Create view. #{self.uid}")
+        logging.debug("Create view. #{self.guid}")
         self.lock()
         self.on('created', (e) -> fn(false, self)) if $.isFunction(fn)
         self.emit('create')
@@ -69,7 +69,7 @@ kopi.module("kopi.app.views")
         self = this
         throw new exceptions.ValueError("Must create view first.") if not self.created
         return self if self.started
-        logging.debug("Start view. #{self.uid}")
+        logging.debug("Start view. #{self.guid}")
         self.lock()
         self.on('started', (e) -> fn(false, self)) if $.isFunction(fn)
         self.emit('start')
@@ -79,7 +79,7 @@ kopi.module("kopi.app.views")
       ###
       update: (fn) ->
         self = this
-        logging.debug("Update view. #{self.uid}")
+        logging.debug("Update view. #{self.guid}")
         self.on('updated', (e) -> fn(false, this)) if $.isFunction(fn)
         self.emit('update')
 
@@ -90,7 +90,7 @@ kopi.module("kopi.app.views")
         self = this
         throw new exceptions.ValueError("Must create view first.") if not self.created
         return self if not self.started
-        logging.debug("Stop view. #{self.uid}")
+        logging.debug("Stop view. #{self.guid}")
         self.lock()
         self.on('stopped', (e) -> fn(false, self)) if $.isFunction(fn)
         self.emit('stop')
@@ -102,7 +102,7 @@ kopi.module("kopi.app.views")
         self = this
         throw new exceptions.ValueError("Must stop view first.") if self.started
         return self if not self.created
-        logging.debug("Destroy view. #{self.uid}")
+        logging.debug("Destroy view. #{self.guid}")
         self.lock()
         self.on('destroyed', (e) -> fn(false, self)) if $.isFunction(fn)
         self.emit('destroy')
@@ -110,7 +110,7 @@ kopi.module("kopi.app.views")
       lock: (fn) ->
         self = this
         return self if self.locked
-        logging.debug("Lock view. #{self.uid}")
+        logging.debug("Lock view. #{self.guid}")
         self.locked = true
         self.emit 'lock'
         fn(false, self) if $.isFunction(fn)
@@ -119,7 +119,7 @@ kopi.module("kopi.app.views")
       unlock: (fn) ->
         self = this
         return self unless self.locked
-        logging.debug("Unlock view. #{self.uid}")
+        logging.debug("Unlock view. #{self.guid}")
         self.locked = false
         self.emit 'unlock'
         fn(false, self) if $.isFunction(fn)
@@ -139,7 +139,7 @@ kopi.module("kopi.app.views")
 
         self.created = true
         self.unlock()
-        logging.debug("View created. #{self.uid}")
+        logging.debug("View created. #{self.guid}")
         self.emit 'created'
 
       onstart: (e) ->
@@ -153,9 +153,9 @@ kopi.module("kopi.app.views")
         self.started = true
         self.unlock()
         if not self.initialized
-          logging.debug("Initialize view. #{self.uid}")
+          logging.debug("Initialize view. #{self.guid}")
           self.emit 'initialize'
-        logging.debug("View started. #{self.uid}")
+        logging.debug("View started. #{self.guid}")
         self.emit 'started'
 
       oninitialize: (e) ->
@@ -166,11 +166,11 @@ kopi.module("kopi.app.views")
           panel.render() if panel and not panel.rendered
 
         self.initialized = true
-        logging.debug("View initialized. #{self.uid}")
+        logging.debug("View initialized. #{self.guid}")
         self.emit 'initialized'
 
       onupdate: (e) ->
-        logging.debug("View updated. #{self.uid}")
+        logging.debug("View updated. #{self.guid}")
         this.emit 'updated'
 
       onstop: (e) ->
@@ -181,7 +181,7 @@ kopi.module("kopi.app.views")
         self = this
         self.started = false
         self.unlock()
-        logging.debug("View stopped. #{self.uid}")
+        logging.debug("View stopped. #{self.guid}")
         self.emit 'stopped'
 
       ondestroy: (e) ->
@@ -194,7 +194,7 @@ kopi.module("kopi.app.views")
         self = this
         self.created = false
         self.unlock()
-        logging.debug("View destroyed. #{self.uid}")
+        logging.debug("View destroyed. #{self.guid}")
         self.emit 'destroyed'
 
       ###

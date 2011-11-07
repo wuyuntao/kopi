@@ -19,8 +19,13 @@ kopi.module("kopi.utils.text")
 
     ###
     将字符串转换成对象
+
+    @param  {String}  name
+    @param  {Object}  scope
     ###
-    constantize = (name) -> kopi._build(name)
+    constantize = (name, scope=window) ->
+      scope = scope[item] for item in name.split '.'
+      scope
 
     ###
     格式化字符串

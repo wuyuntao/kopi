@@ -15,14 +15,16 @@ kopi.module("kopi.utils.klass")
 
     configure = (klass, options) ->
       klass._options or= {}
+      klass.configure or= (options) ->
+        configure klass, options
       utils.extend klass._options, options
       accessor klass, "options"
       accessor klass.prototype, "options"
       return
 
     accessor = (klass, method, property) ->
-      property = "_#{method}"
-      klass[method] = (name, value) ->
+      property or= "_#{method}"
+      klass[method] or= (name, value) ->
         obj = this[property] or= {}
         switch arguments.length
           when 0 then return obj

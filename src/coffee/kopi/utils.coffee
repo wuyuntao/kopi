@@ -50,16 +50,6 @@ kopi.module("kopi.utils")
         i+= step
 
     ###
-    用模块查找对象
-
-    @param  {String}  name
-    @param  {Object}  scope
-    ###
-    search = (name, scope=window) ->
-      scope = scope[item] for item in name.split '.'
-      scope
-
-    ###
     产生唯一 ID
 
     @param  {String}  prefix  前缀

@@ -4,13 +4,14 @@ kopi.module("kopi.app")
   .require("kopi.app.cache")
   .require("kopi.app.router")
   .require("kopi.app.views")
+  .require("kopi.tasks")
   .require("kopi.utils.support")
   .require("kopi.utils.uri")
   .require("kopi.ui.viewport")
   .require("kopi.ui.navigation")
   .require("kopi.ui.layouts")
   .require("kopi.ui.notification")
-  .define (exports, exceptions, settings, cache, router, views, support, uri
+  .define (exports, exceptions, settings, cache, router, views, tasks, support, uri
                   , viewport, navigation, layouts, notification) ->
 
     win = $(window)
@@ -20,19 +21,18 @@ kopi.module("kopi.app")
     ###
     class Application
 
-      started: false
-
-      current: null
-
-      # @type {Boolean}       If able to change state
-      locked: false
-
-      # @type {Hash<URL, State>}
-      _stack: {}
+      constructor: ->
+        this.started = false
+        this.locked = false
+        this.currentView = null
+        # @type {Hash<URL, State>}
+        this._viewStack = {}
 
       start: () ->
         return this if this.started
         self = this
+        self.taskQueue = new tasks.Queue()
+        self.taskWorker = new tasks.Worker(self.taskQueue)
         $ ->
           # Ensure layout elements
           self.viewport = new viewport.Viewport(settings.kopi.ui.viewport)

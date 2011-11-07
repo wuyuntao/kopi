@@ -46,58 +46,55 @@ kopi.module("kopi.ui.widgets")
       # }}}
 
       # {{{ Lifecycle methods
-      constructor: (element, options={}, data={}) ->
-        if arguments.length < 3
-          [element, options, data] = [null, element, options]
+      constructor: (element, options={}) ->
+        if arguments.length < 2
+          [element, options] = [null, element]
 
         self = this
         # @type {String}
         self.constructor.prefix or= text.underscore(self.constructor.name)
         # @type {String}
-        self.uid = utils.guid(self.constructor.prefix)
+        self.guid = utils.guid(self.constructor.prefix)
         # @type {jQuery Element}
         self.element = element if element
-        # @type {Object} Context data
-        self.data = data
-        # @type {Object} State properties
-        self.state =
-          # If skeleton has been built
-          initialized: false
-          # If widget is rendered with data
-          rendered: false
-          # If widget is disabled
-          locked: false
+
+        # {{{ State properties
+        # If skeleton has been built
+        self.initialized = false
+        # If widget is rendered with data
+        self.rendered = false
+        # If widget is disabled
+        self.locked = false
+        # }}}
+
         # Copy class configurations to instance
         self._options = utils.extend {}, self.constructor._options, options
 
       ###
       Ensure basic skeleton of widget usually with a loader
       ###
-      skeleton: (element, data) ->
+      skeleton: (element) ->
         self = this
         return self if self.state.initialized or self.state.locked
-        self.element = self._element(element or self.element)
-        self.element.attr('id', self.uid)
+        self.element = self._ensureElement(element or self.element)
+        self.element.attr('id', self.guid)
         cssClass = self.constructor.cssClass()
         if not self.element.hasClass(cssClass)
           self.element.addClass(cssClass)
-        utils.extend self.data, data or {}
-        self.configure()
-        self.emit("initialize")
+        self._updateOptions()
+        self.emit("skeleton")
 
       ###
       Render widget when data is ready
       ###
-      render: (data) ->
+      render: () ->
         self = this
         return self if self.state.rendered or self.state.locked
-        utils.extend self.data, data or {}
         self.emit("render")
 
-      update: (data) ->
+      update: () ->
         self = this
         return self if self.state.locked
-        utils.extend self.data, data or {}
         self.emit("update")
 
       ###
@@ -132,21 +129,12 @@ kopi.module("kopi.ui.widgets")
         self.emit('destroy')
       # }}}
 
-      # {{{ Event template methods
-      # }}}
-
       # {{{ Helper methods
       ###
-      Update options from data attributes of element
+      Human readable widget name
       ###
-      configure: (options={}) ->
-        return unless this.element.length > 0
-        for name, value of this._options
-          value = this.element.data(text.underscore(name))
-          this._options[name] = value if value isnt undefined
-
       toString: ->
-        "[#{this.constructor.name} #{this.uid}]"
+        "[#{this.constructor.name} #{this.guid}]"
 
       ###
       Add or update state class and data attribute to element
@@ -173,14 +161,24 @@ kopi.module("kopi.ui.widgets")
       ###
       Get or create element
       ###
-      _element: (element) ->
+      _ensureElement: (element) ->
         self = this
         return $(element) if element
         if self._options.element
           return $(self._options.element)
         if self._options.template
-          return $(self._options.template).tmpl(self.data)
+          return $(self._options.template).tmpl(self)
         $(document.createElement(self.options.tagName))
+
+      ###
+      Update options from data attributes of element
+      ###
+      _updateOptions: ->
+        return this unless this.element.length > 0
+        for name, value of this._options
+          value = this.element.data(text.underscore(name))
+          this._options[name] = value if value isnt undefined
+        this
       # }}}
 
     exports.Widget = Widget
