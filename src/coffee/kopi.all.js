@@ -15,6 +15,7 @@
 //= require        kopi/utils/object
 //= require        kopi/utils/jquery
 //= require        kopi/utils/structs
+//= require        kopi/utils/structs/map
 //= require        kopi/utils/structs/weakmap
 //
 //= require        kopi/events

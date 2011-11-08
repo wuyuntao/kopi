@@ -10,8 +10,8 @@ kopi.module("kopi.utils.array")
 
     count = (array, iterator, context) ->
       n = 0
-      for a, i in array
-        n += 1 if iterator.call context, a, i
+      for v, i in array
+        n += 1 if iterator.call context, v, i
       n
 
     forEach = (array, iterator, context) ->
@@ -20,6 +20,15 @@ kopi.module("kopi.utils.array")
       catch e
         throw e if e isnt breaker
       array
+
+    if ArrayProto.indexOf
+      indexOf = (array, obj) ->
+        ArrayProto.indexOf.call(array, obj)
+    else
+      indexOf = (array, obj) ->
+        for v, i in [0...array.length]
+          return i if v == obj
+        -1
 
     isArray = Array.isArray or= (array) ->
       !!(array and array.concat and array.unshift and not array.callee)
@@ -31,6 +40,13 @@ kopi.module("kopi.utils.array")
       forEach array, (v, i) ->
         array[i] = iteration.call(context, v, i, array)
       results
+
+    remove = (array, obj) ->
+      i = indexOf(array, obj)
+      if i > 0 then removeAt(array, obj) else false
+
+    removeAt = (array, i) ->
+      ArrayProto.splice.call(array, i, 1).length == 1
 
     # rotate = (array, reverse=false) ->
     #   if reverse
@@ -44,6 +60,10 @@ kopi.module("kopi.utils.array")
     exports.ArrayProto = ArrayProto
     exports.count = count
     exports.forEach = forEach
+    exports.indexOf = indexOf
     exports.isArray = isArray
+    exports.isEmpty = isEmpty
     exports.map = map
+    exports.remove = remove
+    exports.removeAt = removeAt
     # exports.rotate = rotate
