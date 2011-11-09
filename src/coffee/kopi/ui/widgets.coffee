@@ -75,13 +75,13 @@ kopi.module("kopi.ui.widgets")
       ###
       skeleton: (element) ->
         self = this
-        return self if self.state.initialized or self.state.locked
+        return self if self.initialized or self.locked
         self.element = self._ensureElement(element or self.element)
         self.element.attr('id', self.guid)
         cssClass = self.constructor.cssClass()
         if not self.element.hasClass(cssClass)
           self.element.addClass(cssClass)
-        self._updateOptions()
+        self._readOptions()
         self.emit("skeleton")
 
       ###
@@ -89,12 +89,12 @@ kopi.module("kopi.ui.widgets")
       ###
       render: () ->
         self = this
-        return self if self.state.rendered or self.state.locked
+        return self if self.rendered or self.locked
         self.emit("render")
 
       update: () ->
         self = this
-        return self if self.state.locked
+        return self if self.locked
         self.emit("update")
 
       ###
@@ -102,10 +102,10 @@ kopi.module("kopi.ui.widgets")
       ###
       lock: ->
         self = this
-        return self if self.state.locked
+        return self if self.locked
         # TODO 从 Event 层禁止，考虑如果子类也在 element 上绑定时间的情况
-        self.state.locked = true
         self.element.addClass(self.constructor.cssClass("lock"))
+        self.locked = true
         self.emit('lock')
 
       ###
@@ -113,9 +113,9 @@ kopi.module("kopi.ui.widgets")
       ###
       unlock: ->
         self = this
-        return self unless self.state.locked
-        self.state.locked = false
+        return self unless self.locked
         self.element.removeClass(self.constructor.cssClass("lock"))
+        self.locked = false
         self.emit('unlock')
 
       ###
@@ -123,10 +123,30 @@ kopi.module("kopi.ui.widgets")
       ###
       destroy: ->
         self = this
-        return self if self.state.locked
+        return self if self.locked
         self.element.remove()
         self.off()
         self.emit('destroy')
+      # }}}
+
+      # {{{ Event template methods
+      onskeleton: ->
+        self = this
+        self.initialized = true
+
+      onrender: ->
+        self.rendered = true
+
+      onupdate: ->
+
+      ondestroy: ->
+
+      onsizechange: ->
+
+      onlock: ->
+
+      onunlock: ->
+
       # }}}
 
       # {{{ Helper methods
@@ -168,12 +188,12 @@ kopi.module("kopi.ui.widgets")
           return $(self._options.element)
         if self._options.template
           return $(self._options.template).tmpl(self)
-        $(document.createElement(self.options.tagName))
+        $(document.createElement(self._options.tagName))
 
       ###
       Update options from data attributes of element
       ###
-      _updateOptions: ->
+      _readOptions: ->
         return this unless this.element.length > 0
         for name, value of this._options
           value = this.element.data(text.underscore(name))

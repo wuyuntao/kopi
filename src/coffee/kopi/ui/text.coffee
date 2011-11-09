@@ -73,14 +73,15 @@ kopi.module("kopi.ui.text")
         this.render() if render
 
       _fill: ->
-        this.element.text(this.data.text)
+        this.element.text(this._text)
 
       _truncate: ->
         cls = this.constructor
         self = this
         element = this.element
         min = 0
-        max = self.text.length - 1
+        max = self._text.length - 1
+        text = self._text
         # 用二分法加速计算过程
         for i in [0..self._options.maxTries]
           break if max < min
@@ -104,15 +105,16 @@ kopi.module("kopi.ui.text")
               break if min is middle
               min = middle
 
+      _margin: ->
+        self = this
         # 填补 margin
         margin = self._maxHeight - element.height()
         if margin > 0
-          marginBottom = element.marginBottom()
           switch self._options.valign
             when cls.VALIGN_TOP
-              element.css("marginTop", margin + element.css("marginTop"))
-            when cls.VALIGN_BOTTOM
               element.css("marginBottom", margin + element.css("marginBottom"))
+            when cls.VALIGN_BOTTOM
+              element.css("marginTop", margin + element.css("marginTop"))
             when cls.VALIGN_MIDDLE
               margin /= 2
               element.css

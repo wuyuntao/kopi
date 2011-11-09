@@ -197,6 +197,10 @@ kopi.module("kopi.app.views")
         logging.debug("View destroyed. #{self.guid}")
         self.emit 'destroyed'
 
+      onlock: (e) ->
+
+      onunlock: (e) ->
+
       ###
       Get panel if exists or create panel from template class or function
       ###

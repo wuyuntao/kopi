@@ -4,6 +4,7 @@ kopi.module("kopi.db.models")
   .require("kopi.utils.text")
   .require("kopi.events")
   .require("kopi.db.collections")
+  # .require("kopi.db.indexes")
   .define (exports, utils, html, text, events, collections) ->
 
     ###
@@ -17,6 +18,7 @@ kopi.module("kopi.db.models")
       this._hasMany = {}
       this._hasAndBelongsToMany = {}
       this._collection = collections.Collection
+      # this._indexes = {}
 
       ###
       扩展字段的定义
@@ -44,6 +46,9 @@ kopi.module("kopi.db.models")
           model = text.constantize(model)
         options.name or= model.name
         this._hasAndBelongsToMany[options.name] = model
+
+      # this.index = (field) ->
+      #   this._indexes[field] or= new Index(this, field)
 
       ###
       从 HTML5 定义 MicroData 格式中获取数据
@@ -95,7 +100,7 @@ kopi.module("kopi.db.models")
       ###
       update: (attributes={}) ->
         fields = Object.keys(this.constructor.fields)
-        for field, value of attributes when field in fields
+        for own field, value of attributes when field in fields
           this[field] = value
 
       ###

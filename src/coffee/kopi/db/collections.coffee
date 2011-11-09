@@ -33,14 +33,18 @@ kopi.module("kopi.db.collections")
       create: (model) ->
 
       update: (attr) ->
+        for model in this._collection
+          model.update(attr)
+        this
 
-      get: (callback) ->
+      get: () ->
 
-      find: (callback) ->
+      find: () ->
 
       fetch: ->
 
       count: ->
+        this._collection.length
 
       where: ->
         this

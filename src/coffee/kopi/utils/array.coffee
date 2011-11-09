@@ -26,7 +26,7 @@ kopi.module("kopi.utils.array")
         ArrayProto.indexOf.call(array, obj)
     else
       indexOf = (array, obj) ->
-        for v, i in [0...array.length]
+        for v, i in array
           return i if v == obj
         -1
 
