@@ -1,7 +1,8 @@
 kopi.module('kopi.logging')
-  .require('kopi.utils')
+  .require('kopi.array')
+  .require('kopi.object')
   .require('kopi.settings')
-  .define (exports, utils, settings) ->
+  .define (exports, array, object, settings) ->
 
     ###
     日志
@@ -31,7 +32,7 @@ kopi.module('kopi.logging')
       ###
       send = (level, message, options={}) ->
         throw new Error("Invalid logger level") unless (level of levels)
-        options = utils.extend {}, settings.kopi.logging, options
+        options = object.extend {}, settings.kopi.logging, options
         return false if levels[level] < options.level
 
         seconds = Math.round(new Date() - start) / 1000
@@ -60,7 +61,7 @@ kopi.module('kopi.logging')
           message = "#{name} stoped. spent #{time}ms."
           if options.accumulate
             accumulators[name].push(time)
-            message += " total #{utils.sum(accumulators[name])}ms. average #{utils.average(accumulators[name])}ms."
+            message += " total #{array.sum(accumulators[name])}ms. average #{array.average(accumulators[name])}ms."
           send("debug", message)
           timers[name] = null
 

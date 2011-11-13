@@ -60,6 +60,27 @@ kopi.module("kopi.db.collections")
 
       limit: (n) ->
         this
+
+      getOrCreateBy: (filter, fn) ->
+        cls = this
+        created = false
+        saveDoneFn = (chapter) ->
+          fn(null, chapter, created) if fn
+        saveFailFn = (error) ->
+          fn(error) if fn
+        saveThenFn = (error, chapter) ->
+          if error then saveFailFn(error) else saveDoneFn(chapter)
+        queryDoneFn = (chapter) ->
+          if not chapter
+            chapter = new cls.model(filter)
+            created = true
+          chapter.save saveThenFn
+        queryFailFn = (error) ->
+          fn(error) if fn
+        queryThenFn = (error, chapter) ->
+          if error then queryFailFn(error) else queryDoneFn(chapter)
+        cls.where(filter).one queryThenFn
+
       # }}}
 
       # {{{ Private methods

@@ -17,6 +17,9 @@ kopi.module("kopi.tasks.workers")
           data = JSON.stringify(data)
         super([task, data])
 
+    class Task
+      this.perform = (data, fn) ->
+        throw new exceptions.NotImplementedError()
 
     class Worker extends events.EventEmitter
 

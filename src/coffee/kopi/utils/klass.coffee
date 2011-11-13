@@ -1,7 +1,6 @@
 kopi.module("kopi.utils.klass")
   .require("kopi.exceptions")
-  .require("kopi.utils")
-  .define (exports, exceptions, utils) ->
+  .define (exports, exceptions) ->
 
     extend = (klass, mixin) ->
       for name, method of mixin
@@ -17,7 +16,7 @@ kopi.module("kopi.utils.klass")
       klass._options or= {}
       klass.configure or= (options) ->
         configure klass, options
-      utils.extend klass._options, options
+      extend klass._options, options
       accessor klass, "options"
       accessor klass.prototype, "options"
       return

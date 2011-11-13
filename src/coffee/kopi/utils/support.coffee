@@ -1,6 +1,6 @@
 kopi.module("kopi.utils.support")
-  .require("kopi.utils")
-  .define (exports, utils) ->
+  .require("kopi.utils.object")
+  .define (exports, object) ->
     # Caches for global variables
     win = window
     hist = window.history
@@ -19,7 +19,7 @@ kopi.module("kopi.utils.support")
             return true if fbCSS[value] isnt undefined
         false
 
-    utils.extend exports, $.support,
+    object.extend exports, $.support,
       # Does the browser support window.onhashchange? Note that IE8 running in
       # IE7 compatibility mode reports true for "onhashchange" in window, even
       # though the event isn"t supported, so also test document.documentMode.

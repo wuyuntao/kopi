@@ -13,7 +13,7 @@ kopi.module("kopi.ui.groups")
 
     class Group extends widgets.Widget
 
-      klass.configure this
+      this.configure
         childClass: GroupChild
 
       constructor: (element, options, data) ->

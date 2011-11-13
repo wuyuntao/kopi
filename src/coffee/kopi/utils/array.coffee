@@ -57,6 +57,29 @@ kopi.module("kopi.utils.array")
     #     array.unshift(obj)
     #   obj
 
+    ###
+    求和
+
+    @param  {Array}     array     数组
+    @param  {Function}  iterator    求和函数
+    @return {Object}              求和结果
+    ###
+    sum = (array, iterator, conext) ->
+      s = 0
+      for item, i in array
+        s += if iterator? then iterator.call(context, item, i) else item
+      s
+
+    ###
+    求平均
+
+    @param  {Array}     array     数组
+    @param  {Function}  iterator    求平均函数
+    @return {Object}              求平均结果
+    ###
+    average = (array, iterator, context) ->
+      sum(array, iterator, context) / array.length
+
     exports.ArrayProto = ArrayProto
     exports.count = count
     exports.forEach = forEach
@@ -67,3 +90,5 @@ kopi.module("kopi.utils.array")
     exports.remove = remove
     exports.removeAt = removeAt
     # exports.rotate = rotate
+    exports.sum = sum
+    exports.average = average

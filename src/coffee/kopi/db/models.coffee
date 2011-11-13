@@ -1,11 +1,11 @@
 kopi.module("kopi.db.models")
-  .require("kopi.utils")
   .require("kopi.utils.html")
+  .require("kopi.utils.object")
   .require("kopi.utils.text")
   .require("kopi.events")
   .require("kopi.db.collections")
   # .require("kopi.db.indexes")
-  .define (exports, utils, html, text, events, collections) ->
+  .define (exports, html, object, text, events, collections) ->
 
     ###
     所有模型的基类
@@ -24,7 +24,7 @@ kopi.module("kopi.db.models")
       扩展字段的定义
       ###
       this.fields = (fields={}) ->
-        utils.extend this._fields, fields
+        object.extend this._fields, fields
 
       ###
       定义外键
@@ -102,6 +102,7 @@ kopi.module("kopi.db.models")
         fields = Object.keys(this.constructor.fields)
         for own field, value of attributes when field in fields
           this[field] = value
+        this
 
       ###
       从 HTML5 定义 MicroData 格式中获取数据

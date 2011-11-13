@@ -1,11 +1,12 @@
 kopi.module("kopi.ui.widgets")
   .require("kopi.utils")
   .require("kopi.utils.klass")
+  .require("kopi.utils.object")
   .require("kopi.utils.text")
   .require("kopi.events")
   .require("kopi.exceptions")
   .require("kopi.settings")
-  .define (exports, utils, klass, text, events, exceptions, settings) ->
+  .define (exports, utils, klass, object, text, events, exceptions, settings) ->
 
     ###
     UI 组件的基类
@@ -68,7 +69,7 @@ kopi.module("kopi.ui.widgets")
         # }}}
 
         # Copy class configurations to instance
-        self._options = utils.extend {}, self.constructor._options, options
+        self._options = object.extend {}, self.constructor._options, options
 
       ###
       Ensure basic skeleton of widget usually with a loader

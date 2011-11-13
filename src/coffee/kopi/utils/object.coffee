@@ -1,13 +1,21 @@
 kopi.module("kopi.utils.object")
   .require("kopi.utils.array")
   .require("kopi.utils.number")
-  .define (exports, utils) ->
+  .define (exports, array) ->
 
     ObjectProto = Object.prototype
 
-    keys = Object.keys or= (object) ->
-      return number.range(0, object.length) if array.isArray(obj)
-      key for key, val of obj
+    # Extend a given object with all of the properties in a source object.
+    extend = (obj, mixins...) ->
+      for mixin in mixins when mixin
+        for name, method of mixin
+          obj[name] = method
+      obj
+
+    keys = Object.keys or= (obj) ->
+      return number.range(0, obj.length) if array.isArray(obj)
+      key for own key, val of obj
 
     exports.ObjectProto = ObjectProto
+    exports.extend = extend
     exports.keys = keys

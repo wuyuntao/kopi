@@ -20,7 +20,7 @@ kopi.module("kopi.ui.navigation")
         # this.nav = nav title: i18n.t("loading")
 
     class Nav extends contents.Content
-      utils.configure this, {}
+      this.configure {}
 
       parts = ["left", "center", "right"]
 
