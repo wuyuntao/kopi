@@ -1,4 +1,5 @@
 kopi.module("kopi.utils.array")
+  .require("kopi.exceptions")
   .require("kopi.utils")
   .define (exports, utils) ->
 
@@ -20,6 +21,12 @@ kopi.module("kopi.utils.array")
       catch e
         throw e if e isnt breaker
       array
+
+    asyncForEach = (array, iterator, fn, context) ->
+      throw new exceptions.NotImplementedError()
+
+    asyncParForEach = (array, iterator, fn, context) ->
+      throw new exceptions.NotImplementedError()
 
     if ArrayProto.indexOf
       indexOf = (array, obj) ->
@@ -83,6 +90,8 @@ kopi.module("kopi.utils.array")
     exports.ArrayProto = ArrayProto
     exports.count = count
     exports.forEach = forEach
+    exports.asyncForEach = asyncForEach
+    exports.asyncParForEach = asyncParForEach
     exports.indexOf = indexOf
     exports.isArray = isArray
     exports.isEmpty = isEmpty

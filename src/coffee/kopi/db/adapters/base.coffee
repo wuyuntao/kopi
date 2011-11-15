@@ -3,3 +3,12 @@ kopi.module("kopi.db.adapters.base")
 
     class BaseAdapter
 
+      connect: (database, doneFn, failFn) ->
+
+      create: ->
+
+      retrieve: ->
+
+      update: ->
+
+      destroy: ->
