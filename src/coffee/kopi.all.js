@@ -21,6 +21,7 @@
 //= require        kopi/events
 //= require        kopi/logging
 //
+//= require        kopi/db/errors
 //= require        kopi/db/collections
 //= require        kopi/db/models
 //= require        kopi/db/sync

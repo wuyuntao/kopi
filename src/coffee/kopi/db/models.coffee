@@ -7,31 +7,77 @@ kopi.module("kopi.db.models")
   .require("kopi.utils.object")
   .require("kopi.utils.text")
   .require("kopi.db.collections")
+  .require("kopi.db.exceptions")
   # .require("kopi.db.indexes")
   .define (exports, exceptions, events
                   , utils, func, html, object, text
-                  , collections) ->
+                  , collections, errors) ->
 
     ###
     所有模型的基类
+
+    Usage
+
+    class Blog extends Model
+      cls = this
+      cls.adapters
+        server:
+          [RESTfulAdapter]
+        client:
+          [IndexDBAdapter, WebSQLAdapter, localStorageAdapter, MemoryAdapter]
+
+      cls.fields
+        id:
+          type: Model.INTEGER
+          primary: true
+        title:
+          type: Model.STRING
+
+      cls.belongsTo Author
+      cls.hasMany Entry
+      cls.hasAndBelongsToMany Tag
 
     ###
     class Model extends events.EventEmitter
       cls = this
       # @type {Hash}  字段的定义
       cls._fields = {}
+      cls._fieldNames = []
+      cls._pkName = null
       cls._belongsTo = {}
       cls._hasMany = {}
       cls._hasAndBelongsToMany = {}
       cls._collection = collections.Collection
-      cls._adapters = []
+      cls._adapters = {}
       # cls._indexes = {}
+
+      ###
+      Define data adapters for model
+      ###
+      cls.adapters = (adapters={}) ->
+        cls = this
+        for type, adapter of adapters
+          unless array.isArray(adapter)
+            adapter = [adapter]
+          cls._adapters[type] = adapter
 
       ###
       扩展字段的定义
       ###
       cls.fields = (fields={}) ->
-        object.extend this._fields, fields
+        cls = this
+        for name, field of fields
+          # Setup primary key field
+          if fields.primary
+            throw new errors.DuplicatePkField(cls._pkName) if cls._pkName
+            cls._pkName = name
+          # Convert string to field object
+          if text.isString(field)
+            field =
+              type: field
+          cls._fields[name] = field
+        # Update field names
+        cls._fieldNames = object.keys(cls.fields)
 
       ###
       定义外键
@@ -56,11 +102,6 @@ kopi.module("kopi.db.models")
 
       # cls.index = (field) ->
       #   this._indexes[field] or= new Index(this, field)
-
-      cls.adapters = (adapters) ->
-        unless array.isArray(adapters)
-          adapters = [adapters]
-        this._adapters.concat adapters
 
       ###
       从 HTML5 定义 MicroData 格式中获取数据
@@ -90,6 +131,20 @@ kopi.module("kopi.db.models")
       cls.all = -> new collections.Collection(this)
 
       ###
+      Model events
+      ###
+      cls.BEFORE_FETCH_EVENT = "beforefetch"
+      cls.AFTER_FETCH_EVENT = "afterfetch"
+      cls.BEFORE_SAVE_EVENT = "beforesave"
+      cls.AFTER_SAVE_EVENT = "aftersave"
+      cls.BEFORE_CREATE_EVENT = "beforecreate"
+      cls.AFTER_CREATE_EVENT = "aftercreate"
+      cls.BEFORE_UPDATE_EVENT = "beforeupdate"
+      cls.AFTER_UPDATE_EVENT = "afterupdate"
+      cls.BEFORE_DESTROY_EVENT = "beforedestroy"
+      cls.AFTER_DESTROY_EVENT = "afterdestroy"
+
+      ###
       @param  {Hash}  attributes
       ###
       constructor: (attributes={}) ->
@@ -105,14 +160,14 @@ kopi.module("kopi.db.models")
         self._adapters = {}
 
         fieldDefineProp = (field) ->
-          fieldGetterFn = -> self[field]
+          fieldGetterFn = ->
+            self._data[field]
           fieldSetterFn = (value) ->
             oldValue = self[field]
             unless self._valueEquals(value, oldValue)
-              self[field] = value
+              self._data[field] = value
               self._dirtyProperties[field] = oldValue
               self.emit "set change", [self, field, value]
-
           object.defineProperty self, field,
             get: fieldGetterFn,
             set: fieldSetterFn
@@ -128,34 +183,99 @@ kopi.module("kopi.db.models")
 
         self.update(attributes)
 
+      pk: ->
+        this[this.constructor._pkName]
+
+      ###
+      @return {Hash}  A clone of data
+      ###
+      data: ->
+        object.clone(this._data)
+
       equals: (model) ->
         self.guid == model.guid
 
       ###
-      @return {Boolean} 是否保存成功
+      Fetch model data from server
+
+      @return {Model}
       ###
-      save: (callback) ->
-        callback(this) if func.isFunction(callback)
+      fetch: ->
 
       ###
-      @return {Boolean} 是否删除成功
+      Store model data to client
+
+      @return {Model}
       ###
-      destroy: (callback) ->
-        callback(this) if func.isFunction(callback)
+      save: (fn) ->
+        cls = this.constructor
+        self = this
+        pkName = cls._pkName
+        data = self.data()
+        pk = data[pkName]
+        create = false
+        thenFn = (error) ->
+          self.emit if create then cls.AFTER_CREATE_EVENT else cls.AFTER_UPDATE_EVENT
+          self.emit cls.AFTER_SAVE_EVENT
+          if error
+            # TODO logging or emitting
+          else
+            # TODO logging or emitting
+          fn(error, self) if func.isFunction(fn)
+        self.emit cls.BEFORE_SAVE_EVENT
+        if pk
+          criteria = {}
+          criteria[pkName] = pk
+          delete data[pkName]
+          # TODO Check which fields need to be updated?
+          self.emit cls.BEFORE_UPDATE_EVENT
+          cls.update criteria, data, thenFn
+        else
+          self.emit cls.BEFORE_CREATE_EVENT
+          cls.create data, thenFn
+          create = true
+        self
+
+      ###
+      Remove model data from client
+
+      @return {Model}
+      ###
+      destroy: (fn) ->
+        cls = this.constructor
+        self = this
+        criteria = {}
+        criteria[pkName] = pk
+        thenFn = (error) ->
+          self.emit cls.AFTER_DESTROY_EVENT
+          if error
+            # TODO logging or emitting
+          else
+            # TODO logging or emitting
+          fn(error, self) if func.isFunction(fn)
+        self.emit cls.BEFORE_DESTROY_EVENT
+        cls.destroy(criteria, thenFn)
+        self
+
+      attr: (name, value) ->
+        if field of this.constructor._fieldNames
+          this[name] = value
+        this
 
       ###
       @param  {Hash}  attributes
       ###
-      update: (attributes={}) ->
-        fields = Object.keys(this.constructor.fields)
-        for own field, value of attributes when field in fields
-          this[field] = value
+      attrs: (data={}) ->
+        for own name, value of data when field of this.constructor._fieldNames
+          this[name] = value
         this
 
       ###
       从 HTML5 定义 MicroData 格式中获取数据
 
       @param  {String, jQuery Object, HTML Element} element   HTML 元素
+
+      # TODO Move to HTML adapter/proxy
       ###
       fromHTML: (element) ->
         cls = this.constructor
@@ -168,18 +288,13 @@ kopi.module("kopi.db.models")
           throw new exceptions.NoSuchElementError("Element does not have correct 'itemtype' attribute")
         this.update(html.scope(element))
 
+      ###
+      # TODO Move to HTML adapter/proxy
+      ###
       toJSON: ->
         throw new exceptions.NotImplementedError()
 
       fromJSON: ->
         throw new exceptions.NotImplementedError()
-
-      ###
-      事件的模板方法
-      ###
-      # oncreate: -> true
-      # onsave: -> true
-      # onupdate: -> true
-      # ondestroy: -> true
 
     exports.Model = Model
