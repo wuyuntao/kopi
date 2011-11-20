@@ -22,7 +22,7 @@ kopi.module("kopi.db.models")
       cls = this
       cls.adapters
         server:
-          [RESTfulAdapter]
+          RESTfulAdapter
         client:
           [IndexDBAdapter, WebSQLAdapter, localStorageAdapter, MemoryAdapter]
 
@@ -52,14 +52,19 @@ kopi.module("kopi.db.models")
       # cls._indexes = {}
 
       ###
-      Define data adapters for model
+      Define accessor of adapters for model
       ###
-      cls.adapters = (adapters={}) ->
+      cls.adapters = (typeOrAdapters) ->
         cls = this
-        for type, adapter of adapters
-          unless array.isArray(adapter)
-            adapter = [adapter]
-          cls._adapters[type] = adapter
+        return cls._adapters if not typeOrAdapters
+        return cls._adapters[typeOrAdapters] if text.isString(typeOrAdapters)
+        for type, adapters of adapters
+          unless array.isArray(adapters)
+            cls._adapters[type] = new adapters(cls) if adapters.support(cls)
+            continue
+          for adapter in adapters
+            cls._adapters[type] = new adapters(cls) if adapters.support(cls)
+            continue
 
       ###
       扩展字段的定义
@@ -157,7 +162,6 @@ kopi.module("kopi.db.models")
         self._type = cls.name
         self._dirtyProperties = {}
         self._data = {}
-        self._adapters = {}
 
         fieldDefineProp = (field) ->
           fieldGetterFn = ->

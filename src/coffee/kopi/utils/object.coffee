@@ -1,10 +1,11 @@
 kopi.module("kopi.utils.object")
-  .require("kopi.utils.array")
   .require("kopi.utils.func")
   .require("kopi.utils.number")
-  .define (exports, array, func, number) ->
+  .define (exports, func, number) ->
 
     ObjectProto = Object.prototype
+
+    clone = (obj) -> extend {}, obj
 
     defineProperty = Object.defineProperty or= (obj, field, property={}) ->
       if func.isFunction(property.get)
@@ -19,11 +20,16 @@ kopi.module("kopi.utils.object")
           obj[name] = method
       obj
 
+    isObject = (obj) ->
+      type = typeof obj
+      type == "object"
+
     keys = Object.keys or= (obj) ->
-      return number.range(0, obj.length) if array.isArray(obj)
       key for own key, val of obj
 
     exports.ObjectProto = ObjectProto
+    exports.clone = clone
     exports.defineProperty = defineProperty
     exports.extend = extend
+    exports.isObject = isObject
     exports.keys = keys

@@ -69,7 +69,7 @@ kopi.module("kopi.ui.widgets")
         # }}}
 
         # Copy class configurations to instance
-        self._options = object.extend {}, self.constructor._options, options
+        self.configure(options)
 
       ###
       Ensure basic skeleton of widget usually with a loader

@@ -87,6 +87,23 @@ kopi.module("kopi.utils.array")
     average = (array, iterator, context) ->
       sum(array, iterator, context) / array.length
 
+    ###
+    Removes duplicates from an array
+
+    @param  {Array}     array
+    @param  {Function}  comparer decides how items are considered duplicate
+    ###
+    simpleKeyFn = (item) -> (typeof item).charAt(0) + (item.guid or item)
+    unique = (array, keyFn=simpleKeyFn) ->
+      set = []
+      hash = {}
+      for item, i in array
+        key = keyFn(item)
+        unless key of hash
+          hash[key] = true
+          set.push(item)
+      set
+
     exports.ArrayProto = ArrayProto
     exports.count = count
     exports.forEach = forEach
@@ -101,3 +118,4 @@ kopi.module("kopi.utils.array")
     # exports.rotate = rotate
     exports.sum = sum
     exports.average = average
+    exports.unique = unique

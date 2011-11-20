@@ -1,6 +1,6 @@
 kopi.module("kopi.utils.klass")
-  .require("kopi.exceptions")
-  .define (exports, exceptions) ->
+  .require("kopi.utils.object")
+  .define (exports, object) ->
 
     extend = (klass, mixin) ->
       for name, method of mixin
@@ -16,9 +16,12 @@ kopi.module("kopi.utils.klass")
       klass._options or= {}
       klass.configure or= (options) ->
         configure klass, options
-      extend klass._options, options
+      extend klass._options, options if options
       accessor klass, "options"
       accessor klass.prototype, "options"
+      klass.prototype.configure = (options={}) ->
+        this._options or= object.clone(this.constructor._options)
+        object.extend this._options, options
       return
 
     accessor = (klass, method, property) ->
