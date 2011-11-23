@@ -34,12 +34,12 @@ kopi.module("kopi.db.adapters.server")
 
       # Build URL for query
       _url: (query) ->
-        url = this._options["#{query.method}URL"]
-        throw new exceptions.ValueError("#{query.method} URL is not defined.") if not url
+        url = this._options["#{query.action()}URL"]
+        throw new exceptions.ValueError("#{query.action()} URL is not defined.") if not url
         url
 
       _method: (query) ->
-        method = this._options["#{query.method}Method"]
+        method = this._options["#{query.action()}Method"]
         method
 
       # Build request params

@@ -23,7 +23,7 @@ kopi.module("kopi.events")
 
       emit: ->
         this._emitter or= $(this)
-        this._emitter.trigger(arguments...)
+        this._emitter.triggerHandler(arguments...)
         this
 
       once: ->
