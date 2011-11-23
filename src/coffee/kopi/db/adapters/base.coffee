@@ -13,7 +13,7 @@ kopi.module("kopi.db.adapters.base")
       cls.RETRIEVE = "retrieve"
       cls.UPDATE = "update"
       cls.DESTROY = "destroy"
-      cls.METHODS = [cls.CREATE, cls.RETRIEVE, cls.UPDATE, cls.DESTROY]
+      cls.ACTIONS = [cls.CREATE, cls.RETRIEVE, cls.UPDATE, cls.DESTROY]
 
       constructor: (options={}) ->
         this.configure(options)
@@ -24,7 +24,7 @@ kopi.module("kopi.db.adapters.base")
       support: (model) -> true
 
       # Define template methods of CRUD actions
-      notImplementedFn = (query, fn) -> throw new exceptions.NotImplementedError()
-      cls.prototype[method] = notImplementedFn for method in cls.METHODS
+      notImplementedFn = -> throw new exceptions.NotImplementedError()
+      cls.prototype[action] = notImplementedFn for action in cls.ACTIONS
 
     exports.BaseAdapter = BaseAdapter
