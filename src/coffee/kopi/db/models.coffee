@@ -24,7 +24,7 @@ kopi.module("kopi.db.models")
         server:
           RESTfulAdapter
         client:
-          [IndexDBAdapter, WebSQLAdapter, localStorageAdapter, MemoryAdapter]
+          [IndexDBAdapter, WebSQLAdapter, LocalStorageAdapter, MemoryAdapter]
 
       cls.fields
         id:
@@ -65,6 +65,7 @@ kopi.module("kopi.db.models")
           for adapter in adapters
             cls._adapters[type] = new adapters(cls) if adapters.support(cls)
             continue
+        cls
 
       ###
       扩展字段的定义
@@ -83,6 +84,7 @@ kopi.module("kopi.db.models")
           cls._fields[name] = field
         # Update field names
         cls._fieldNames = object.keys(cls.fields)
+        cls
 
       ###
       定义外键
@@ -92,18 +94,21 @@ kopi.module("kopi.db.models")
           model = text.constantize(model)
         options.name or= model.name
         this._belongsTo[options.name] = model
+        this
 
       cls.hasMany = (model, options={}) ->
         if typeof model is "string"
           model = text.constantize(model)
         options.name or= model.name
         this._hasMany[options.name] = model
+        this
 
       cls.hasAndBelongsToMany = (model, options={}) ->
         if typeof model is "string"
           model = text.constantize(model)
         options.name or= model.name
         this._hasAndBelongsToMany[options.name] = model
+        this
 
       # cls.index = (field) ->
       #   this._indexes[field] or= new Index(this, field)

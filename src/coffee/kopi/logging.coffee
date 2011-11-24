@@ -2,7 +2,10 @@ kopi.module('kopi.logging')
   .require('kopi.array')
   .require('kopi.object')
   .require('kopi.settings')
-  .define (exports, array, object, settings) ->
+  .require('kopi.exceptions')
+  .define (exports, array, object, settings, exceptions) ->
+
+    class LoggerError extends exceptions.ValueError
 
     ###
     日志
@@ -26,12 +29,13 @@ kopi.module('kopi.logging')
       ###
       记录日志
 
+      @param  {String}  name      name of logger
       @param  {String}  level     日志级别
       @param  {String}  message   日志内容
       @param  {Hash}    options   为单条日志做的特殊设置
       ###
-      send = (level, message, options={}) ->
-        throw new Error("Invalid logger level") unless (level of levels)
+      send = (name, level, message, options={}) ->
+        throw new LoggerError("Invalid logger level") unless (level of levels)
         options = object.extend {}, settings.kopi.logging, options
         return false if levels[level] < options.level
 
@@ -41,10 +45,25 @@ kopi.module('kopi.logging')
           # MSIE 不支持 console.debug() 方法，所以替换成 console.log()
           action = if level of console then level else "log"
           if options.raw
-            console[action]("[#{seconds}s]")
+            console[action]("[#{seconds}s] [#{name}]")
             console[action](message)
           else
-            console[action]("[#{seconds}s] #{message}")
+            console[action]("[#{seconds}s] [#{name}] #{message}")
+
+      constructor: (name) ->
+        throw new LoggerError("Logger must have a name") unless name
+        this._name = name
+        this._disabled = false
+
+      name: -> this._name
+
+      enable: ->
+        this._disabled = false
+        this
+
+      disable: ->
+        this._disabled = true
+        this
 
       ###
       计算花费的时间
@@ -54,33 +73,39 @@ kopi.module('kopi.logging')
 
       ###
       time: (name, options={}) ->
-        timer = timers[name]
+        return this if this._disabled
+        key = "#{this._name}:#{name}"
+        timer = timers[key]
         if timer
           # stop timer
           time = new Date() - timer
           message = "#{name} stoped. spent #{time}ms."
           if options.accumulate
-            accumulators[name].push(time)
-            message += " total #{array.sum(accumulators[name])}ms. average #{array.average(accumulators[name])}ms."
+            accumulators[key].push(time)
+            message += " total #{array.sum(accumulators[key])}ms. average #{array.average(accumulators[key])}ms."
           send("debug", message)
-          timers[name] = null
+          timers[key] = null
 
         else
           # start timer
           send("debug", "#{name} started.")
-          timers[name] = new Date()
-          accumulators[name] or= [] if options.accumulate
-        return
+          timers[key] = new Date()
+          accumulators[key] or= [] if options.accumulate
+        this
 
       # 定义 debug, info, warn & error 方法
-      for level of levels
-        ((l) =>
-          this.prototype[l] = (message, options) -> send(l, message, options)
-        )(level)
+      proto = this.prototype
+      defineMethod = (level) ->
+        proto[level] = (message, options) ->
+          return this if this._disabled
+          send(this._name, message, options)
+          this
+      defineMethod(levels) for level of levels
 
-    exports.logger = logger = new Logger()
+    logger = new Logger("kopi")
     exports.time = logger.time
     exports.debug = logger.debug
     exports.info = logger.info
     exports.warn = logger.warn
     exports.error = logger.error
+    exports.logger = (name) -> new Logger(name)
