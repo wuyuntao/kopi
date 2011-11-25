@@ -7,6 +7,9 @@ kopi.module('kopi.logging')
 
     class LoggerError extends exceptions.ValueError
 
+    # Store all loggers with their names
+    loggers = {}
+
     ###
     日志
     ###
@@ -19,10 +22,11 @@ kopi.module('kopi.logging')
       accumulators = {}
       # @type {Hash}    日志级别
       levels =
-        debug:  0
-        info:   1
-        warn:   2
-        error:  3
+        log:    0
+        debug:  1
+        info:   2
+        warn:   3
+        error:  4
       # @type {Console} 日志对象
       console = window.console
 
@@ -54,6 +58,7 @@ kopi.module('kopi.logging')
         throw new LoggerError("Logger must have a name") unless name
         this._name = name
         this._disabled = false
+        loggers[name] = this
 
       name: -> this._name
 
@@ -83,12 +88,12 @@ kopi.module('kopi.logging')
           if options.accumulate
             accumulators[key].push(time)
             message += " total #{array.sum(accumulators[key])}ms. average #{array.average(accumulators[key])}ms."
-          send("debug", message)
+          send(this._name, "debug", message)
           timers[key] = null
 
         else
           # start timer
-          send("debug", "#{name} started.")
+          send(this._name, "debug", "#{name} started.")
           timers[key] = new Date()
           accumulators[key] or= [] if options.accumulate
         this
@@ -102,10 +107,14 @@ kopi.module('kopi.logging')
           this
       defineMethod(levels) for level of levels
 
+    # Default logger
     logger = new Logger("kopi")
     exports.time = logger.time
     exports.debug = logger.debug
     exports.info = logger.info
     exports.warn = logger.warn
     exports.error = logger.error
-    exports.logger = (name) -> new Logger(name)
+
+    # Factory method for loggers
+    exports.logger = (name) ->
+      if name then loggers[name] or new Logger(name) else logger
