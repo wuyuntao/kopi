@@ -1,9 +1,11 @@
 kopi.module("kopi.utils.support")
   .require("kopi.utils.object")
-  .define (exports, object) ->
+  .require("kopi.utils.browser")
+  .define (exports, object, browser) ->
+
     # Caches for global variables
     win = window
-    hist = window.history
+    hist = win.history
     doc = document
     docMode = doc.documentMode
 
@@ -31,13 +33,13 @@ kopi.module("kopi.utils.support")
       # pageShow: "onpageshow" in win and "onpagehide" in win
 
       # 是否支持 本地 Key/Value 存储
-      storage: "localStorage" of window
+      storage: "localStorage" of win
 
       # 是否支持 HTML5 离线缓存
-      cache: "applicationCache" of window
+      cache: "applicationCache" of win
 
       # 是否支持 HTML5 WebSQL 数据库
-      websql: "openDatabase" of window
+      websql: "openDatabase" of win
 
       # 在某些设备（如 HTC Desire）上，orientationchange 事件工作不正常，
       # 事件被触发时，window 的大小还没有改变
@@ -45,11 +47,15 @@ kopi.module("kopi.utils.support")
       # https://github.com/jquery/jquery-mobile/issues/793
       orientation: false
 
+      cssMatrix: "WebKitCSSMatrix" of win and "m11" of new WebKitCSSMatrix()
+
       # 是否支持原生触摸事件
-      touch: "ontouchend" of document
+      touch: "ontouchend" of doc
+
+      cssTransform: browser.vendor + "Transform" of doc.documentElement.style
 
       # 是否支持 CSS 动画
       # TODO 加入 Firefox 和 Opera 的判断
-      cssTransitions: "WebKitTransitionEvent" of window
+      cssTransition: "WebKitTransitionEvent" of win
 
     fakeBody.remove()

@@ -57,8 +57,7 @@ kopi.module("kopi.db.queries")
     ###
     class BaseQuery
 
-      cls = this
-      cls.METHODS = []
+      this.METHODS = []
 
       constructor: (model, criteria) ->
         cls = this.constructor
@@ -106,9 +105,9 @@ kopi.module("kopi.db.queries")
 
     class BaseRetriveQuery extends BaseQuery
 
-      cls = this
-      cls.METHODS = [WHERE, SKIP, LIMIT]
-      cls.OPERATIONS = [LT, LTE, GT, GTE, EQ, NE, IN, IS, LIKE, ILIKE]
+      kls = this
+      kls.METHODS = [WHERE, SKIP, LIMIT]
+      kls.OPERATIONS = [LT, LTE, GT, GTE, EQ, NE, IN, IS, LIKE, ILIKE]
 
       constructor: (model, criteria) ->
         self = this

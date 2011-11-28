@@ -1,6 +1,7 @@
 kopi.module("kopi.db.adapters.kv")
+  .require("kopi.utils.text")
   .require("kopi.db.adapters.client")
-  .define (exports, module) ->
+  .define (exports, text, client) ->
 
     ###
     Adapter for Key/Value Databases like local storage, memcached, redis, etc.
@@ -33,6 +34,10 @@ kopi.module("kopi.db.adapters.kv")
     ###
     class KeyValueAdapter extends client.ClientAdapter
 
+      this.configure
+        keyPrefix: "kopi"
+        keyDelimiter: ":"
+
       create: (query, fn) ->
 
       retrieve: (query, fn) ->
@@ -40,5 +45,39 @@ kopi.module("kopi.db.adapters.kv")
       update: (query, fn) ->
 
       destroy: (query, fn) ->
+
+      ###
+      Build key for model instance
+      ###
+      _modelKey: (model, pk) ->
+        self = this
+        unless self._modelKeyTmpl
+          prefix = self._options.keyPrefix
+          delimiter = self._options.delimiter
+          self._modelKeyTmpl = "#{prefix}#{delimiter}{model}#{delimiter}#{pk}"
+        text.format(self._modelKeyTmpl, model: model, pk: pk)
+
+      ###
+      Build key for model index
+      ###
+      _indexKey: (model, index="pk") ->
+        self = this
+        unless self._indexKeyTmpl
+          prefix = self._options.keyPrefix
+          delimiter = self._options.delimiter
+          self._indexKeyTmpl = "#{prefix}#{delimiter}{model}#{delimiter}index#{delimiter}{index}"
+        text.format(self._modelKeyTmpl, model: model, index: index)
+
+      ###
+      Get value from db. Implement in subclasses
+      ###
+      _get: (key, value) ->
+        throw new exceptions.NotImplementedError()
+
+      ###
+      Set value to db. Implement in subclasses
+      ###
+      _set: (key, value) ->
+        throw new exceptions.NotImplementedError()
 
     exports.KeyValueAdapter = KeyValueAdapter

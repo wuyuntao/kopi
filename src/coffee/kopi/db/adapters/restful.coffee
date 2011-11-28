@@ -66,8 +66,7 @@ kopi.module("kopi.db.adapters.restful")
     ###
     class RESTfulAdapter extends server.ServerAdapter
 
-      cls = this
-      cls.configure
+      this.configure
         # collectionURL: "/api/users/"
         # memberURL: "/api/user/:pk/"
 

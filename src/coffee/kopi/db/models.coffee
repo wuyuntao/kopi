@@ -39,22 +39,22 @@ kopi.module("kopi.db.models")
 
     ###
     class Model extends events.EventEmitter
-      cls = this
+      kls = this
       # @type {Hash}  字段的定义
-      cls._fields = {}
-      cls._fieldNames = []
-      cls._pkName = null
-      cls._belongsTo = {}
-      cls._hasMany = {}
-      cls._hasAndBelongsToMany = {}
-      cls._collection = collections.Collection
-      cls._adapters = {}
-      # cls._indexes = {}
+      kls._fields = {}
+      kls._fieldNames = []
+      kls._pkName = null
+      kls._belongsTo = {}
+      kls._hasMany = {}
+      kls._hasAndBelongsToMany = {}
+      kls._collection = collections.Collection
+      kls._adapters = {}
+      # kls._indexes = {}
 
       ###
       Define accessor of adapters for model
       ###
-      cls.adapters = (typeOrAdapters) ->
+      kls.adapters = (typeOrAdapters) ->
         cls = this
         return cls._adapters if not typeOrAdapters
         return cls._adapters[typeOrAdapters] if text.isString(typeOrAdapters)
@@ -70,7 +70,7 @@ kopi.module("kopi.db.models")
       ###
       扩展字段的定义
       ###
-      cls.fields = (fields={}) ->
+      kls.fields = (fields={}) ->
         cls = this
         for name, field of fields
           # Setup primary key field
@@ -89,28 +89,28 @@ kopi.module("kopi.db.models")
       ###
       定义外键
       ###
-      cls.belongsTo = (model, options={}) ->
+      kls.belongsTo = (model, options={}) ->
         if typeof model is "string"
           model = text.constantize(model)
         options.name or= model.name
         this._belongsTo[options.name] = model
         this
 
-      cls.hasMany = (model, options={}) ->
+      kls.hasMany = (model, options={}) ->
         if typeof model is "string"
           model = text.constantize(model)
         options.name or= model.name
         this._hasMany[options.name] = model
         this
 
-      cls.hasAndBelongsToMany = (model, options={}) ->
+      kls.hasAndBelongsToMany = (model, options={}) ->
         if typeof model is "string"
           model = text.constantize(model)
         options.name or= model.name
         this._hasAndBelongsToMany[options.name] = model
         this
 
-      # cls.index = (field) ->
+      # kls.index = (field) ->
       #   this._indexes[field] or= new Index(this, field)
 
       ###
@@ -119,17 +119,17 @@ kopi.module("kopi.db.models")
       @param  {String, jQuery Object, HTML Element} element   HTML 元素
       @return {Array}                               模型列表
       ###
-      cls.fromHTML = (element, model) ->
+      kls.fromHTML = (element, model) ->
         $(element).map -> (model or new this()).fromHTML(this)
 
       ###
       向服务器请求数据
       ###
-      cls.fromServer = (callback) ->
+      kls.fromServer = (callback) ->
 
       ###
       ###
-      cls.create = (attributes={}, callback) ->
+      kls.create = (attributes={}, callback) ->
         model = new this(attributes)
         model.save(callback)
 
@@ -138,21 +138,21 @@ kopi.module("kopi.db.models")
 
       @return   {Collection}  查询对象
       ###
-      cls.all = -> new collections.Collection(this)
+      kls.all = -> new collections.Collection(this)
 
       ###
       Model events
       ###
-      cls.BEFORE_FETCH_EVENT = "beforefetch"
-      cls.AFTER_FETCH_EVENT = "afterfetch"
-      cls.BEFORE_SAVE_EVENT = "beforesave"
-      cls.AFTER_SAVE_EVENT = "aftersave"
-      cls.BEFORE_CREATE_EVENT = "beforecreate"
-      cls.AFTER_CREATE_EVENT = "aftercreate"
-      cls.BEFORE_UPDATE_EVENT = "beforeupdate"
-      cls.AFTER_UPDATE_EVENT = "afterupdate"
-      cls.BEFORE_DESTROY_EVENT = "beforedestroy"
-      cls.AFTER_DESTROY_EVENT = "afterdestroy"
+      kls.BEFORE_FETCH_EVENT = "beforefetch"
+      kls.AFTER_FETCH_EVENT = "afterfetch"
+      kls.BEFORE_SAVE_EVENT = "beforesave"
+      kls.AFTER_SAVE_EVENT = "aftersave"
+      kls.BEFORE_CREATE_EVENT = "beforecreate"
+      kls.AFTER_CREATE_EVENT = "aftercreate"
+      kls.BEFORE_UPDATE_EVENT = "beforeupdate"
+      kls.AFTER_UPDATE_EVENT = "afterupdate"
+      kls.BEFORE_DESTROY_EVENT = "beforedestroy"
+      kls.AFTER_DESTROY_EVENT = "afterdestroy"
 
       ###
       @param  {Hash}  attributes

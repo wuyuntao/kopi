@@ -6,14 +6,14 @@ kopi.module("kopi.db.adapters.base")
 
     class BaseAdapter
 
-      cls = this
-      klass.configure cls
+      kls = this
+      klass.configure kls
 
-      cls.CREATE = "create"
-      cls.RETRIEVE = "retrieve"
-      cls.UPDATE = "update"
-      cls.DESTROY = "destroy"
-      cls.ACTIONS = [cls.CREATE, cls.RETRIEVE, cls.UPDATE, cls.DESTROY]
+      kls.CREATE = "create"
+      kls.RETRIEVE = "retrieve"
+      kls.UPDATE = "update"
+      kls.DESTROY = "destroy"
+      kls.ACTIONS = [kls.CREATE, kls.RETRIEVE, kls.UPDATE, kls.DESTROY]
 
       constructor: (options={}) ->
         this.configure(options)
@@ -24,7 +24,8 @@ kopi.module("kopi.db.adapters.base")
       support: (model) -> true
 
       # Define template methods of CRUD actions
+      proto = kls.prototype
       notImplementedFn = -> throw new exceptions.NotImplementedError()
-      cls.prototype[action] = notImplementedFn for action in cls.ACTIONS
+      proto[action] = notImplementedFn for action in kls.ACTIONS
 
     exports.BaseAdapter = BaseAdapter

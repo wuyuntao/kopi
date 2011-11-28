@@ -5,8 +5,8 @@ kopi.module("kopi.db.adapters.server")
 
     class ServerAdapter extends base.BaseAdapter
 
-      cls = this
-      cls.configure
+      kls = this
+      kls.configure
         # createURL: "/api/users/create/"
         # retrieveURL: "/api/users/retrieve/"
         # updateURL: "/api/users/update/"
@@ -30,7 +30,8 @@ kopi.module("kopi.db.adapters.server")
         timeout: 30000
 
       requestFn = -> this._request(arguments...)
-      cls.prototype[action] = requestFn for action in cls.ACTIONS
+      proto = kls.prototype
+      proto[action] = requestFn for action in kls.ACTIONS
 
       # Build URL for query
       _url: (query) ->

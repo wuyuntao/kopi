@@ -6,14 +6,14 @@ kopi.module("kopi.ui.notification.widgets")
 
     class Widget extends widgets.Widget
 
-      cls = this
+      kls = this
 
-      cls.SHOW = "show"
-      cls.HIDE = "hide"
-      cls.TRANSPARENT = "transparent"
-      cls.NOTIFICATION = "notification"
+      kls.SHOW = "show"
+      kls.HIDE = "hide"
+      kls.TRANSPARENT = "transparent"
+      kls.NOTIFICATION = "notification"
 
-      this.defaults
+      kls.configure
         autoSkeleton: true
 
       actions = [SHOW, HIDE, TRANSPARENT]
