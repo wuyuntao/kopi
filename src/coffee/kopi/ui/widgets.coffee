@@ -10,6 +10,63 @@ kopi.module("kopi.ui.widgets")
 
     ###
     UI 组件的基类
+
+    Life-cycle of a widget
+
+                      +--------+
+                      | Create |
+                      +---++---+
+                          ||
+          +-------------->+|
+          |               ||
+          |               \/
+          |          +----++----+
+          |          | Skeleton |
+     +----+----+     +----++----+
+     | Recycle |          ||
+     +----+----+          \/
+          ^          +----++----+
+          |          | Delegate |
+          |          +----++----+
+          |               ||
+          |               \/
+          |           +---++---+
+          |           | Render |
+          |           +---++---+
+          |               ||         +--------+
+          |               |+-------->+  Lock  |
+    +-----+------+        ||         +---++---+
+    | Inactivate +<-------+|             ||
+    +-----+------+        ||             \/
+          |               ||         +---++---+
+          |               |+<--------+ Unlock |
+          V               ||         +--------+
+     +----+-----+         ||
+     | Activate +-------->||
+     +----------+         ||
+                          \/
+                      +---++----+
+                      | Destroy |
+                      +---++----+
+
+    1. Create
+
+    2. Skeleton
+
+    3. Render
+
+    4. Destroy
+
+    5. Lock
+
+    6. Unlock
+
+    7. Activate
+
+    8. Inactivate
+
+    9. Recycle
+
     ###
     class Widget extends events.EventEmitter
 
@@ -66,6 +123,8 @@ kopi.module("kopi.ui.widgets")
         self.rendered = false
         # If widget is disabled
         self.locked = false
+        # If widget is active
+        self.active = true
         # }}}
 
         # Copy class configurations to instance
@@ -85,6 +144,9 @@ kopi.module("kopi.ui.widgets")
         self._readOptions()
         self.emit("skeleton")
 
+      delegate: ->
+        this.emit("delegate")
+
       ###
       Render widget when data is ready
       ###
@@ -99,6 +161,16 @@ kopi.module("kopi.ui.widgets")
         self.emit("update")
 
       ###
+      Unregister event listeners, remove elements and so on
+      ###
+      destroy: ->
+        self = this
+        return self if self.locked
+        self.element.remove()
+        self.off()
+        self.emit('destroy')
+
+      ###
       Disable events
       ###
       lock: ->
@@ -106,7 +178,6 @@ kopi.module("kopi.ui.widgets")
         return self if self.locked
         # TODO 从 Event 层禁止，考虑如果子类也在 element 上绑定时间的情况
         self.element.addClass(self.constructor.cssClass("lock"))
-        self.locked = true
         self.emit('lock')
 
       ###
@@ -116,37 +187,48 @@ kopi.module("kopi.ui.widgets")
         self = this
         return self unless self.locked
         self.element.removeClass(self.constructor.cssClass("lock"))
-        self.locked = false
         self.emit('unlock')
 
-      ###
-      Unregister event listeners, remove elements and so on
-      ###
-      destroy: ->
-        self = this
-        return self if self.locked
-        self.element.remove()
-        self.off()
-        self.emit('destroy')
+      inactivate: ->
+        this.emit("inactivate")
+
+      activate: ->
+        this.emit("activate")
       # }}}
 
       # {{{ Event template methods
       onskeleton: ->
-        self = this
-        self.initialized = true
+        this.delegate()
+        this.initialized = true
+
+      ondelegate: ->
 
       onrender: ->
-        self.rendered = true
+        this.rendered = true
 
       onupdate: ->
 
       ondestroy: ->
+        this.initialized = false
+        this.rendered = false
 
       onsizechange: ->
 
       onlock: ->
+        this.locked = true
 
       onunlock: ->
+        this.locked = false
+
+      onactivate: ->
+        this.active = true
+
+      oninactivate: ->
+        this.active = false
+
+      onrecycle: ->
+        this.initialized = false
+        this.rendered = false
 
       # }}}
 

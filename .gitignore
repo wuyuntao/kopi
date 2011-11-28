@@ -10,4 +10,5 @@
 .sass-cache
 .todo*
 .rvmrc
+build
 tmp

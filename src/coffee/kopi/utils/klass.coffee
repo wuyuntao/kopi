@@ -15,13 +15,15 @@ kopi.module("kopi.utils.klass")
     configure = (klass, options) ->
       klass._options or= {}
       klass.configure or= (options) ->
-        configure klass, options
+        configure this, options
+        this
       extend klass._options, options if options
       accessor klass, "options"
       accessor klass.prototype, "options"
-      klass.prototype.configure = (options={}) ->
+      klass.prototype.configure = (options) ->
         this._options or= object.clone(this.constructor._options)
-        object.extend this._options, options
+        object.extend this._options, options if options
+        this
       return
 
     accessor = (klass, method, property) ->

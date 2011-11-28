@@ -50,7 +50,7 @@ kopi.module("kopi.utils.array")
 
     remove = (array, obj) ->
       i = indexOf(array, obj)
-      if i > 0 then removeAt(array, obj) else false
+      if i >= 0 then removeAt(array, obj) else false
 
     removeAt = (array, i) ->
       ArrayProto.splice.call(array, i, 1).length == 1
