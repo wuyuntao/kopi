@@ -8,7 +8,7 @@ kopi.module("kopi.ui.touchable")
     ###
     class Touchable extends widgets.Widget
 
-      utils.configure
+      this.configure
         preventDefault: true
         stopPropagation: true
         multiTouch: false

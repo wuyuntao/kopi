@@ -1,6 +1,6 @@
 kopi.module('kopi.logging')
-  .require('kopi.array')
-  .require('kopi.object')
+  .require('kopi.utils.array')
+  .require('kopi.utils.object')
   .require('kopi.settings')
   .require('kopi.exceptions')
   .define (exports, array, object, settings, exceptions) ->

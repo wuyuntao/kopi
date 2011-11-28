@@ -66,7 +66,7 @@ kopi.module("kopi.db.queries")
           throw new exceptions.ValueError("Model must be a subclass of kopi.db.models.Model")
 
         # Set default values
-        self._model = model
+        self.model = model
 
         if criteria
           for method in cls.METHODS
@@ -101,7 +101,7 @@ kopi.module("kopi.db.queries")
 
       params: -> {attrs: JSON.stringify(this._attrs)}
 
-      clone: -> new this.constructor(this._model, this._attrs)
+      clone: -> new this.constructor(this.model, this._attrs)
 
     class BaseRetriveQuery extends BaseQuery
 
@@ -144,7 +144,7 @@ kopi.module("kopi.db.queries")
       clone: ->
         cls = this.constructor
         self = this
-        new cls(self._model, self.criteria())
+        new cls(self.model, self.criteria())
 
     class RetrieveQuery extends BaseRetriveQuery
 
@@ -186,7 +186,7 @@ kopi.module("kopi.db.queries")
       clone: ->
         cls = this.constructor
         self = this
-        new cls(self._model, self.criteria(), self._attrs)
+        new cls(self.model, self.criteria(), self._attrs)
 
     class DestroyQuery extends BaseRetriveQuery
 

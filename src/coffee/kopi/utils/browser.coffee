@@ -1,5 +1,6 @@
 kopi.module("kopi.utils.browser")
-  .define (exports) ->
+  .require("kopi.utils.object")
+  .define (exports, object) ->
 
     nav = navigator
     av = nav.appVersion
@@ -7,6 +8,6 @@ kopi.module("kopi.utils.browser")
 
     object.extend exports, $.browser,
       android:  (/android/gi).test(av)
-      iphone:   (/ipod|iphone)/gi).test(av)
+      iphone:   (/ipod|iphone/gi).test(av)
       ipad:     (/ipad/gi).test(av)
       idevice:  (/ipod|iphone|ipad/gi).test(av)

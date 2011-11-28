@@ -25,7 +25,7 @@ kopi.module("kopi.ui.scrollable")
       #   top: "{y}px"
       #   left: "{x}px"
 
-      this.configure
+      kls.configure
         # @param  {Integer} start position x
         startX: 0
         # @param  {Integer} start position y
@@ -40,12 +40,13 @@ kopi.module("kopi.ui.scrollable")
         cls = this.constructor
         self = this
         # Set default styles to element
-        self.element.css
-          cls.TRANSITION_PROPERTY_NAME: cls.TRANSITION_PROPERTY_STYLE
-          cls.TRANSITION_DURATION_NAME: text.format(cls.TRANSITION_DURATION_STYLE, ms: 0)
-          cls.TRANSITION_TIMING_FUNCTION_NAME: cls.TRANSITION_TIMING_FUNCTION_STYLE
-          cls.TRANSFORM_ORIGIN_NAME: cls.TRANSFORM_ORIGIN_STYLE
-          cls.TRANSFORM_NAME: text.format(cls.TRANSFORM_STYLE, x: 0, y: 0)
+        css = {}
+        css[cls.TRANSITION_PROPERTY_NAME] = cls.TRANSITION_PROPERTY_STYLE
+        css[cls.TRANSITION_DURATION_NAME] = text.format(cls.TRANSITION_DURATION_STYLE, ms: 0)
+        css[cls.TRANSITION_TIMING_FUNCTION_NAME] = cls.TRANSITION_TIMING_FUNCTION_STYLE
+        css[cls.TRANSFORM_ORIGIN_NAME] = cls.TRANSFORM_ORIGIN_STYLE
+        css[cls.TRANSFORM_NAME] = text.format(cls.TRANSFORM_STYLE, x: 0, y: 0)
+        self.element.css css
         super
 
       ontouchstart: (e, point) ->

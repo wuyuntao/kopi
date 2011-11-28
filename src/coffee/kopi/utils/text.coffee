@@ -1,6 +1,5 @@
 kopi.module("kopi.utils.text")
-  .require("kopi")
-  .define (exports, kopi) ->
+  .define (exports) ->
 
     reUnderscore = /(?:^|[_-])(.)/
     reFirstLetter = /^(.)/

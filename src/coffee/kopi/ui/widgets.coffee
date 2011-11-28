@@ -71,7 +71,7 @@ kopi.module("kopi.ui.widgets")
     class Widget extends events.EventEmitter
 
       # {{{ Class configuration
-      klass.configure this
+      klass.configure this,
         # @type {String}    tag name of element to create
         tagName: "div"
       # }}}

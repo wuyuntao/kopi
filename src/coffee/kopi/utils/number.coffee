@@ -1,5 +1,5 @@
 kopi.module("kopi.utils.number")
-  .define(exports) ->
+  .define (exports) ->
 
     isNumber = (number) ->
       (obj is +obj) or Object.toString.call(obj) is '[object Number]'

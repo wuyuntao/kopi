@@ -1,6 +1,7 @@
 kopi.module("kopi.tests.utils.uri")
+  .require("kopi.tests.base")
   .require("kopi.utils.uri")
-  .define (exports, uri) ->
+  .define (exports, base, uri) ->
 
     $ ->
 
