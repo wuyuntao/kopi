@@ -21,6 +21,9 @@ kopi.module("kopi.ui.scrollable")
     COMMA = ','
     BLANK = ''
 
+    ###
+    TODO Support legacy animation
+    ###
     class Scrollable extends touchable.Touchable
 
       kls = this
@@ -179,12 +182,13 @@ kopi.module("kopi.ui.scrollable")
               dist: 0
               time: 0
 
-        # if momentumX.dist or momentumY.dist
-        duration = math.max(momentumX.time, momentumY.time, 10)
-        self.scrollTo(math.round(newX), math.round(newY), duration)
-        return
+        if momentumX.dist or momentumY.dist
+          duration = math.max(momentumX.time, momentumY.time, 10)
+          self.scrollTo(math.round(newX), math.round(newY), duration)
+          return
 
         self._reset(200)
+        return
 
       ontouchcancel: ->
         this.ontouchend(arguments...)
