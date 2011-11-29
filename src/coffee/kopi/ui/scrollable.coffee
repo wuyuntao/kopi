@@ -26,7 +26,7 @@ kopi.module("kopi.ui.scrollable")
       kls = this
       kls.TRANSITION_PROPERTY_STYLE = css.experimental("transform")
       # kls.LEGACY_TRANSITION_PROPERTY_STYLE = "top left"
-      kls.TRANSITION_DURATION_STYLE = "{ms}ms"
+      kls.TRANSITION_DURATION_STYLE = "0ms"
       kls.TRANSITION_TIMING_FUNCTION_STYLE = "cubic-bezier(0.33,0.66,0.66,1)"
       kls.TRANSFORM_ORIGIN_STYLE = "0 0"
       kls.TRANSFORM_STYLE = "#{css.TRANSLATE_OPEN}{x}px,{y}px#{css.TRANSLATE_CLOSE}"
@@ -70,7 +70,7 @@ kopi.module("kopi.ui.scrollable")
         self._scrollerElement = self.element.children().first()
         styles = {}
         styles[TRANSITION_PROPERTY] = cls.TRANSITION_PROPERTY_STYLE
-        styles[TRANSITION_DURATION] = text.format(cls.TRANSITION_DURATION_STYLE, ms: 0)
+        styles[TRANSITION_DURATION] = cls.TRANSITION_DURATION_STYLE
         styles[TRANSITION_TIMING_FUNCTION] = cls.TRANSITION_TIMING_FUNCTION_STYLE
         styles[TRANSFORM_ORIGIN] = cls.TRANSFORM_ORIGIN_STYLE
         styles[TRANSFORM] = text.format(cls.TRANSFORM_STYLE, x: 0, y: 0)
@@ -91,6 +91,7 @@ kopi.module("kopi.ui.scrollable")
         self._pointX = point.pageX
         self._pointY = point.pageY
         self._startTime = point.timeStamp or new Date().getTime()
+        self._duration(0)
 
         if self._options.momentum
           matrix = this._scrollerElement.css(TRANSFORM).replace(RE_MATRIX, BLANK).split(COMMA)
@@ -100,8 +101,6 @@ kopi.module("kopi.ui.scrollable")
             self._scrollerElement.unbind(events.WEBKIT_TRANSITION_END_EVENT)
             self._steps = []
             self._position(x, y)
-
-        super
 
       ontouchmove: (e, point) ->
         self = this
@@ -114,6 +113,7 @@ kopi.module("kopi.ui.scrollable")
 
         self._pointX = point.pageX
         self._pointY = point.pageY
+        super
 
         # Slow down If outside of the boundaries
         if self._minScrollX < newX or newX < self._maxScrollX
@@ -208,7 +208,7 @@ kopi.module("kopi.ui.scrollable")
         self._scrollX = self._options.scrollX and self._maxScrollX < self._minScrollY
         self._scrollY = self._options.scrollY and self._maxScrollY < self._minScrollY
 
-        self._scrollerElement.css TRANSITION_DURATION, '0'
+        self._duration(0)
 
       ontransitionend: (e, event) ->
         self = this
@@ -235,6 +235,7 @@ kopi.module("kopi.ui.scrollable")
         self._scrollerElement.css TRANSFORM, text.format(cls.TRANSFORM_STYLE, x: x, y: y)
         self._x = x
         self._y = y
+        self
 
       _animate: ->
         cls = this.constructor
@@ -242,7 +243,7 @@ kopi.module("kopi.ui.scrollable")
         return if self._animating
         if not self._steps.length
           self._reset(400)
-          return
+          return self
 
         startX = self._x
         startY = self._y
@@ -251,8 +252,7 @@ kopi.module("kopi.ui.scrollable")
         step.duration = 0 if step.x == startX and step.y == startY
         self._animating = true
         self._moved = true
-        self._scrollerElement.css TRANSITION_DURATION, step.duration + "ms"
-        self._position(step.x, step.y)
+        self._duration(step.duration)._position(step.x, step.y)
         self._animating = false
         if step.duration
           transitionEndFn = (e) ->
@@ -262,12 +262,13 @@ kopi.module("kopi.ui.scrollable")
           self._scrollerElement.bind events.WEBKIT_TRANSITION_END_EVENT, transitionEndFn
         else
           self._reset(0)
-        return
+        return self
 
       _stopAnimation: ->
         this._steps = []
         this._moved = false
         this._animating = false
+        this
 
       # Thx iScroll
       _momentum: (dist, time, maxDistUpper, maxDistLower, size) ->
@@ -293,5 +294,10 @@ kopi.module("kopi.ui.scrollable")
         newTime = speed / deceleration
 
         return { dist: newDist, time: math.round(newTime) }
+
+      # Set transition duration for scroller
+      _duration: (duration) ->
+        this._scrollerElement.css TRANSITION_DURATION, duration + 'ms'
+        this
 
     exports.Scrollable = Scrollable
