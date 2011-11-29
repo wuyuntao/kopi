@@ -34,7 +34,7 @@ kopi.module("kopi.utils.text")
     ###
     format = (string, params) ->
       return string unless params
-      for own name, value of params
+      for name, value of params
         string = string.replace(new RegExp("\{#{name}\}", 'gi'), value)
       string
 

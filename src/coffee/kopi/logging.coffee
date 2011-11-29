@@ -39,7 +39,7 @@ kopi.module('kopi.logging')
       @param  {Hash}    options   为单条日志做的特殊设置
       ###
       send = (name, level, message, options={}) ->
-        throw new LoggerError("Invalid logger level") unless (level of levels)
+        throw new LoggerError("Invalid logger level: #{level}") unless (level of levels)
         options = object.extend {}, settings.kopi.logging, options
         return false if levels[level] < options.level
 
@@ -103,17 +103,17 @@ kopi.module('kopi.logging')
       defineMethod = (level) ->
         proto[level] = (message, options) ->
           return this if this._disabled
-          send(this._name, message, options)
+          send(this._name, level, message, options)
           this
-      defineMethod(levels) for level of levels
+      defineMethod(level) for level of levels
 
     # Default logger
     logger = new Logger("kopi")
-    exports.time = logger.time
-    exports.debug = logger.debug
-    exports.info = logger.info
-    exports.warn = logger.warn
-    exports.error = logger.error
+    exports.time = -> logger.time(arguments...)
+    exports.debug = -> logger.debug(arguments...)
+    exports.info = -> logger.info(arguments...)
+    exports.warn = -> logger.warn(arguments...)
+    exports.error = -> logger.error(arguments...)
 
     # Factory method for loggers
     exports.logger = (name) ->

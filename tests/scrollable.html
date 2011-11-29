@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
+    <title>Scrollable</title>
+    <style type="text/css" media="screen">
+      body {
+        background: black;
+        -webkit-user-select: none;
+      }
+
+      .scrollable {
+        background: gray;
+        margin: 20px;
+        width: 320px;
+        height: 480px;
+        overflow: hidden;
+        -webkit-user-select: none;
+      }
+
+      .content {
+        width: 320px;
+        height: 640px;
+        -webkit-user-select: none;
+        background: -webkit-linear-gradient(#cff, #330);
+      }
+    </style>
+    <script type="text/javascript" src="../lib/js/jquery.js"></script>
+    <script type="text/javascript" src="../build/js/kopi.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/exceptions.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/settings.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/text.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/func.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/number.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/object.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/browser.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/support.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/events.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/css.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/klass.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/events.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/ui/widgets.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/ui/touchable.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/array.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/logging.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/ui/scrollable.js"></script>
+    <script type="text/javascript">
+      $(function() {
+        var scrollable = new kopi.ui.scrollable.Scrollable(".scrollable", {
+          scrollX: false,
+          damping: 0.5
+        });
+        scrollable.skeleton().render();
+      });
+    </script>
+  </head>
+  <body>
+    <div id="scrollable" class="scrollable">
+      <div id="content" class="content">
+      </div>
+    </div>
+  </body>
+</html>

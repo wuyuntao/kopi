@@ -3,34 +3,29 @@ kopi.module("kopi.utils.events")
   .require("kopi.utils.support")
   .define (exports, settings, support) ->
 
-    ###
-    Extend jQuery events for mobile devices
-    ###
-    ORIENTATION_CHANGE_EVENT = "orientationchange"
-    THROTTLED_RESIZE_EVENT = "throttledresize"
+    exports.MOUSE_DOWN_EVENT = "mousedown"
+    exports.MOUSE_MOVE_EVENT = "mousemove"
+    exports.MOUSE_UP_EVENT = "mouseup"
+    exports.MOUSE_OUT_EVENT = "mouseout"
+
+    exports.ORIENTATION_CHANGE_EVENT = "orientationchange"
+    exports.THROTTLED_RESIZE_EVENT = "throttledresize"
 
     if support.touch
-      TOUCH_START_EVENT = "touchstart"
-      TOUCH_MOVE_EVENT = "touchmove"
-      TOUCH_END_EVENT = "touchend"
+      exports.TOUCH_START_EVENT = "touchstart"
+      exports.TOUCH_MOVE_EVENT = "touchmove"
+      exports.TOUCH_END_EVENT = "touchend"
+      exports.TOUCH_CANCEL_EVENT = "touchcancel"
     else
-      TOUCH_START_EVENT = "mousedown"
-      TOUCH_MOVE_EVENT = "mousemove"
-      TOUCH_END_EVENT = "mouseup"
+      exports.TOUCH_START_EVENT = exports.MOUSE_DOWN_EVENT
+      exports.TOUCH_MOVE_EVENT = exports.MOUSE_MOVE_EVENT
+      exports.TOUCH_END_EVENT = exports.MOUSE_UP_EVENT
+      exports.TOUCH_CANCEL_EVENT = exports.MOUSE_OUT_EVENT
 
-    TAP_EVENT = "tap"
-    TAP_HOLD_EVENT = "taphold"
-    SWIPE_EVENT = "swipe"
-    SWIPE_LEFT_EVENT = "swipeleft"
-    SWIPE_RIGHT_EVENT = "swiperight"
+    exports.WEBKIT_TRANSITION_END_EVENT = "webkitTransitionEnd"
 
-    exports.ORIENTATION_CHANGE_EVENT = ORIENTATION_CHANGE_EVENT
-    exports.THROTTLED_RESIZE_EVENT = THROTTLED_RESIZE_EVENT
-    exports.TOUCH_START_EVENT = TOUCH_START_EVENT
-    exports.TOUCH_MOVE_EVENT = TOUCH_MOVE_EVENT
-    exports.TOUCH_END_EVENT = TOUCH_END_EVENT
-    exports.TAP_EVENT = TAP_EVENT
-    exports.TAP_HOLD_EVENT = TAP_HOLD_EVENT
-    exports.SWIPE_EVENT = SWIPE_EVENT
-    exports.SWIPE_LEFT_EVENT = SWIPE_LEFT_EVENT
-    exports.SWIPE_RIGHT_EVENT = SWIPE_RIGHT_EVENT
+    # exports.TAP_EVENT = "tap"
+    # exports.TAP_HOLD_EVENT = "taphold"
+    # exports.SWIPE_EVENT = "swipe"
+    # exports.SWIPE_LEFT_EVENT = "swipeleft"
+    # exports.SWIPE_RIGHT_EVENT = "swiperight"

@@ -147,6 +147,9 @@ kopi.module("kopi.ui.widgets")
       delegate: ->
         this.emit("delegate")
 
+      resize: ->
+        this.emit("resize")
+
       ###
       Render widget when data is ready
       ###
@@ -204,6 +207,7 @@ kopi.module("kopi.ui.widgets")
       ondelegate: ->
 
       onrender: ->
+        this.resize()
         this.rendered = true
 
       onupdate: ->

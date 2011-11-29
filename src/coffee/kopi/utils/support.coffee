@@ -15,11 +15,11 @@ kopi.module("kopi.utils.support")
 
     # thx Modernizr
     propExists = (prop) ->
-        ucProp = prop.charAt(0).toUpperCase() + prop.substr(1)
-        props = (prop + " " + vendors.join(ucProp + " ") + ucProp).split(" ")
-        for value of props
-            return true if fbCSS[value] isnt undefined
-        false
+      ucProp = prop.charAt(0).toUpperCase() + prop.substr(1)
+      props = (prop + " " + vendors.join(ucProp + " ") + ucProp).split(" ")
+      for value of props
+        return true if fbCSS[value] isnt undefined
+      false
 
     object.extend exports, $.support,
       # Does the browser support window.onhashchange? Note that IE8 running in
@@ -47,12 +47,13 @@ kopi.module("kopi.utils.support")
       # https://github.com/jquery/jquery-mobile/issues/793
       orientation: false
 
-      cssMatrix: "WebKitCSSMatrix" of win and "m11" of new WebKitCSSMatrix()
-
       # 是否支持原生触摸事件
       touch: "ontouchend" of doc
 
-      cssTransform: browser.vendor + "Transform" of doc.documentElement.style
+      cssMatrix: "WebKitCSSMatrix" of win and "m11" of new WebKitCSSMatrix()
+
+      # TODO 加入 Firefox 和 Opera 的判断
+      cssTransform: "webkitTransform" of doc.documentElement.style
 
       # 是否支持 CSS 动画
       # TODO 加入 Firefox 和 Opera 的判断
