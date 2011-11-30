@@ -5,6 +5,20 @@ kopi.module("kopi.utils.object")
 
     ObjectProto = Object.prototype
 
+    ###
+    Define jQuery-esque hash accessor
+
+    ###
+    accessor = (klass, method, property) ->
+      property or= "_#{method}"
+      klass[method] or= (name, value) ->
+        obj = this[property] or= {}
+        switch arguments.length
+          when 0 then return obj
+          when 1 then return obj[name]
+          else return obj[name] = value
+      return
+
     clone = (obj) -> extend {}, obj
 
     defineProperty = Object.defineProperty or= (obj, field, property={}) ->
@@ -28,6 +42,7 @@ kopi.module("kopi.utils.object")
       key for own key, val of obj
 
     exports.ObjectProto = ObjectProto
+    exports.accessor = accessor
     exports.clone = clone
     exports.defineProperty = defineProperty
     exports.extend = extend

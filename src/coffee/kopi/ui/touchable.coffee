@@ -16,7 +16,7 @@ kopi.module("kopi.ui.touchable")
       kls.TOUCH_CANCEL_EVENT = "touchcancel"
       kls.TRANSITION_END_EVENT = "transitionend"
 
-      this.configure
+      kls.configure
         preventDefault: true
         stopPropagation: true
         multiTouch: false

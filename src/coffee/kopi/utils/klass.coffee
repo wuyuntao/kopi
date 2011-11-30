@@ -18,23 +18,33 @@ kopi.module("kopi.utils.klass")
         configure this, options
         this
       extend klass._options, options if options
-      accessor klass, "options"
-      accessor klass.prototype, "options"
+      object.accessor klass, "options"
+      object.accessor klass.prototype, "options"
       klass.prototype.configure = (options) ->
         this._options or= object.clone(this.constructor._options)
         object.extend this._options, options if options
         this
       return
 
-    accessor = (klass, method, property) ->
-      property or= "_#{method}"
-      klass[method] or= (name, value) ->
-        obj = this[property] or= {}
-        switch arguments.length
-          when 0 then return obj
-          when 1 then return obj[name]
-          else return obj[name] = value
-      return
+    ###
+    Define jQuery-esque property accessor
+
+    @param  {Object}  klass     class owns the accessor
+    @param  {String}  method    name of accessor
+    @param  {Object}  property  defines default Value, property name, getter and setter.
+    ###
+    accessor = (klass, method, property={}) ->
+      name = property.name or "_#{method}"
+      property.get or= ->
+        klass[name] or= property.value
+      property.set or= (value) ->
+        klass[name] = value
+        klass
+      klass[method] or= ->
+        if arguments.length == 0
+          property.get.call(this)
+        else
+          property.set.apply(this, arguments)
 
     exports.extend = extend
     exports.include = include

@@ -46,7 +46,6 @@ kopi.module("kopi.ui.scrollable")
         scrollX: true
         scrollY: true
         bounce: true
-        bounceLock: true
         momentum: true
         damping: 0.5
         deceleration: 0.0006
