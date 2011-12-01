@@ -1,21 +1,46 @@
-kopi.module("kopi.ui.templates")
-  .require("kopi.exceptions")
-  .define (exports) ->
+kopi.module("kopi.templates")
+  .require("kopi.utils.text")
+  .define (exports, text) ->
+
     ###
-    模板基类
-
-    定义新的模板
-
-    class HelloTemplate extends Template
-      render: (data) ->
-        "Hello, #{data.username}"
-
-    # TODO 增加工厂方法来方便模板的定义？
-    # TODO 支持其它 Template engine，如 ejs, jQuery or Mustache？
+    Interface for all template engines
     ###
     class Template
 
+      constructor: ->
+
+      render: (data) ->
+
+    ###
+    Simple template engine
+    ###
+    class SimpleTemplate
+
+      constructor: (template="") ->
+        this._template = template
+
       render: (data={}) ->
-        ""
+        text.render(this._template, data)
 
     exports.Template = Template
+    exports.SimpleTemplate = SimpleTemplate
+
+    # Render function
+    simple = (template, data) -> new SimpleTemplate(template).render(data)
+    exports.simple = simple
+
+    if $.fn.tmpl
+      ###
+      Template engine for jQuery Templates Plugin
+      ###
+      class JQueryTemplate
+        constructor: (template) ->
+          this._template = $(template)
+
+        render: (data={}) ->
+          this._template.tmpl(data)
+
+      jquery = (template, data) -> new jQuery(template).render(data)
+
+      exports.JQueryTemplate = JQueryTemplate
+      exports.jquery = jquery
