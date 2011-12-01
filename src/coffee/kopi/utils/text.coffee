@@ -3,6 +3,8 @@ kopi.module("kopi.utils.text")
 
     reUnderscore = /(?:^|[_-])(.)/
     reFirstLetter = /^(.)/
+    upperCaseFn = (c) -> c.toUpperCase(c)
+    lowerCaseFn = (c) -> c.toLowerCase(c)
     ###
     把字符串转换成类名格式，参考 Rails 同名方法
 
@@ -11,9 +13,9 @@ kopi.module("kopi.utils.text")
     @return   {String}
     ###
     camelize = (word, upperCase=true) ->
-      word = ("" + word).replace(reUnderscore, (c) -> c.toUpperCase())
+      word = ("" + word).replace(reUnderscore, upperCaseFn)
       unless upperCase
-        word = word.replace(reFirstLetter, (c) -> c.toLowerCase())
+        word = word.replace(reFirstLetter, lowerCaseFn)
       word
 
     ###

@@ -36,10 +36,10 @@ kopi.module("kopi.utils.klass")
     accessor = (klass, method, property={}) ->
       name = property.name or "_#{method}"
       property.get or= ->
-        klass[name] or= property.value
+        this[name] or= property.value
       property.set or= (value) ->
-        klass[name] = value
-        klass
+        this[name] = value
+        this
       klass[method] or= ->
         if arguments.length == 0
           property.get.call(this)

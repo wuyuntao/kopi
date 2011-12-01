@@ -1,12 +1,20 @@
 kopi.module("kopi.ui.text")
+  .require("kopi.utils.klass")
   .require("kopi.ui.widgets")
-  .define (exports, widgets) ->
+  .define (exports, klass, widgets) ->
 
     class Text extends widgets.Widget
 
-      this.configure
+      kls = this
+      kls.configure
         tagName: 'p'
 
+      proto = kls.prototype
+      klass.accessor proto, "text",
+        set: (text, update=false) ->
+          this._text = text
+          this.update() if update
+          this
 
     ###
     A text view support truncate multi-line text
@@ -46,8 +54,6 @@ kopi.module("kopi.ui.text")
         this._fullHeight = null
 
       onskeleton: (element) ->
-        super
-
         self = this
         options = self._options
         self._maxHeight = options.lineHeight * options.lines
@@ -56,21 +62,17 @@ kopi.module("kopi.ui.text")
           lineHeight: options.lineHeight
           maxHeight: self._.maxHeight
         self.element.css(css)
-
-      onrender: ->
         super
 
+      onrender: ->
+        this.update(arguments...)
+        super
+
+      onupdate: ->
         self = this
         self._fill()
         self._truncate()
-
-      onupdate: ->
         super
-        this.render(arguments...)
-
-      text: (text, render=false) ->
-        this._text = text
-        this.render() if render
 
       _fill: ->
         this.element.text(this._text)

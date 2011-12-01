@@ -3,6 +3,7 @@ kopi.module("kopi.utils.events")
   .require("kopi.utils.support")
   .define (exports, settings, support) ->
 
+    exports.MOUSE_OVER_EVENT = "mouseover"
     exports.MOUSE_DOWN_EVENT = "mousedown"
     exports.MOUSE_MOVE_EVENT = "mousemove"
     exports.MOUSE_UP_EVENT = "mouseup"
@@ -23,9 +24,3 @@ kopi.module("kopi.utils.events")
       exports.TOUCH_CANCEL_EVENT = exports.MOUSE_OUT_EVENT
 
     exports.WEBKIT_TRANSITION_END_EVENT = "webkitTransitionEnd"
-
-    # exports.TAP_EVENT = "tap"
-    # exports.TAP_HOLD_EVENT = "taphold"
-    # exports.SWIPE_EVENT = "swipe"
-    # exports.SWIPE_LEFT_EVENT = "swipeleft"
-    # exports.SWIPE_RIGHT_EVENT = "swiperight"

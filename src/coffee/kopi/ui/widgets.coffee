@@ -8,6 +8,8 @@ kopi.module("kopi.ui.widgets")
   .require("kopi.settings")
   .define (exports, utils, klass, object, text, events, exceptions, settings) ->
 
+    ON = "on"
+
     ###
     UI 组件的基类
 
@@ -40,10 +42,11 @@ kopi.module("kopi.ui.widgets")
     +-----+------+        ||             \/
           |               ||         +---++---+
           |               |+<--------+ Unlock |
-          V               ||         +--------+
-     +----+-----+         ||
-     | Activate +-------->||
-     +----------+         ||
+          |               ||         +--------+
+          V               ||
+     +----+-----+         ||         +--------+
+     | Activate +-------->++<------->+ Update |
+     +----------+         ||         +--------+
                           \/
                       +---++----+
                       | Destroy |
@@ -82,15 +85,25 @@ kopi.module("kopi.ui.widgets")
       ###
       this.cssClass = (action, prefix="") ->
         this._cssClasses or= {}
-        cache = "#{action},#{prefix}"
-        return this._cssClasses[cache] if cache of this._cssClasses
+        key = "#{action},#{prefix}"
+        value = this._cssClasses[key]
+        if not value
+          this.prefix or= text.underscore(this.name)
+          value = this.prefix
+          value = prefix + "-" + value if prefix
+          value = settings.kopi.ui.prefix + "-" + value if settings.kopi.ui.prefix
+          value = value + "-" + action if action
+          this._cssClasses[key] = value
+        value
 
-        this.prefix or= text.underscore(this.name)
-        name = this.prefix
-        name = prefix + "-" + name if prefix
-        name = settings.kopi.ui.prefix + "-" + name if settings.kopi.ui.prefix
-        name = name + "-" + action if action
-        this._cssClasses[cache] = name
+      this.eventName = (name) ->
+        this._eventNames or= {}
+        value = this._eventNames[name]
+        if not value
+          this.namespace or= "." + this.name.toLowerCase()
+          value = name + this.namespace
+          this._eventNames[name] = value
+        value
 
       ###
       A helper method to generate CSS class names regexps for states
@@ -286,6 +299,15 @@ kopi.module("kopi.ui.widgets")
           value = this.element.data(text.underscore(name))
           this._options[name] = value if value isnt undefined
         this
+
+      ###
+      execute callback function defined in options
+      ###
+      _callback: (event, args) ->
+        fn = this._options[ON + event]
+        fn(args...) if fn
+        this
+
       # }}}
 
     exports.Widget = Widget

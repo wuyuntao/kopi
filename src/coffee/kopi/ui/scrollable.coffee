@@ -27,6 +27,8 @@ kopi.module("kopi.ui.scrollable")
     class Scrollable extends touchable.Touchable
 
       kls = this
+      kls.RESIZE_EVENT = "resize"
+      kls.TRANSITION_END_EVENT = "transitionend"
       kls.TRANSITION_PROPERTY_STYLE = css.experimental("transform")
       # kls.LEGACY_TRANSITION_PROPERTY_STYLE = "top left"
       kls.TRANSITION_DURATION_STYLE = "0ms"
@@ -49,6 +51,8 @@ kopi.module("kopi.ui.scrollable")
         momentum: true
         damping: 0.5
         deceleration: 0.0006
+        ontransitionend: null
+        onresize: null
 
       constructor: ->
         super
@@ -79,7 +83,7 @@ kopi.module("kopi.ui.scrollable")
         self._scrollerElement.css(styles)
         super
 
-      ontouchstart: (e, point) ->
+      ontouchstart: (e, event) ->
         cls = this.constructor
         self = this
         self._moved = false
@@ -90,6 +94,7 @@ kopi.module("kopi.ui.scrollable")
         self._y or= self._options.startY
         self._startX = self._x
         self._startY = self._y
+        point = self._points(event)
         self._pointX = point.pageX
         self._pointY = point.pageY
         self._startTime = point.timeStamp or new Date().getTime()
@@ -103,10 +108,12 @@ kopi.module("kopi.ui.scrollable")
             self._scrollerElement.unbind(events.WEBKIT_TRANSITION_END_EVENT)
             self._steps = []
             self._position(x, y)
+        super
 
-      ontouchmove: (e, point) ->
+      ontouchmove: (e, event) ->
         self = this
         options = self._options
+        point = self._points(event)
         deltaX = point.pageX - self._pointX
         deltaY = point.pageY - self._pointY
         newX = self._x + deltaX
@@ -115,7 +122,6 @@ kopi.module("kopi.ui.scrollable")
 
         self._pointX = point.pageX
         self._pointY = point.pageY
-        super
 
         # Slow down If outside of the boundaries
         if self._minScrollX < newX or newX < self._maxScrollX
@@ -141,10 +147,12 @@ kopi.module("kopi.ui.scrollable")
           self._startTime = timestamp
           self._startX = self._x
           self._startY = self._y
+        super
 
-      ontouchend: (e, point) ->
-        return if support.touch and point isnt null
+      ontouchend: (e, event) ->
         self = this
+        point = self._points(event)
+        return if support.touch and point isnt null
         momentumX =
           dist: 0
           time: 0
@@ -186,13 +194,15 @@ kopi.module("kopi.ui.scrollable")
           self.scrollTo(math.round(newX), math.round(newY), duration)
           return
 
-        self._reset(200)
-        return
+        self._resetPosition(200)
+        super
 
       ontouchcancel: ->
         this.ontouchend(arguments...)
+        super
 
       onresize: ->
+        cls = this.constructor
         self = this
         self._elementWidth = self.element.innerWidth()
         self._elementHeight = self.element.innerHeight()
@@ -212,13 +222,16 @@ kopi.module("kopi.ui.scrollable")
         self._scrollY = self._options.scrollY and self._maxScrollY < self._minScrollY
 
         self._duration(0)
+        self._callback(cls.RESIZE_EVENT, arguments)
 
       ontransitionend: (e, event) ->
+        cls = this.constructor
         self = this
         self._scrollerElement.unbind(events.WEBKIT_TRANSITION_END_EVENT)
         self._animate()
+        self._callback(cls.TRANSITION_END_EVENT, arguments)
 
-      _reset: (duration=0) ->
+      _resetPosition: (duration=0) ->
         self = this
         resetX = number.threshold(self._x, self._maxScrollX, self._minScrollX)
         resetY = number.threshold(self._y, self._maxScrollY, self._minScrollY)
@@ -245,7 +258,7 @@ kopi.module("kopi.ui.scrollable")
         self = this
         return if self._animating
         if not self._steps.length
-          self._reset(400)
+          self._resetPosition(400)
           return self
 
         startX = self._x
@@ -264,7 +277,7 @@ kopi.module("kopi.ui.scrollable")
             self.emit cls.TRANSITION_END_EVENT
           self._scrollerElement.bind events.WEBKIT_TRANSITION_END_EVENT, transitionEndFn
         else
-          self._reset(0)
+          self._resetPosition(0)
         return self
 
       _stopAnimation: ->
@@ -293,8 +306,11 @@ kopi.module("kopi.ui.scrollable")
           speed = speed * maxDistLower / newDist
           newDist = maxDistLower
 
+        speed = math.min(1, speed)
+        newDist = math.min(200, newDist)
         newDist = newDist * (if dist < 0 then -1 else 1)
-        newTime = speed / deceleration
+        newTime = math.min(speed / deceleration, 1000)
+        logger.debug("dist: #{newDist}, speed: #{speed}, time: #{newTime}")
 
         return { dist: newDist, time: math.round(newTime) }
 
