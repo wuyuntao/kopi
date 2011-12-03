@@ -58,11 +58,12 @@ class DepTree(object):
                     return os.path.join(self._path, *modules)
         raise ValueError("Module not found. %s" % module)
 
-    def output(self, file, format):
+    def output(self, file, format, extra_scripts=""):
+        extra_scripts = extra_scripts.split(",")
         if format == 'sprockets':
-            self.output_sprockets_manifest(file)
+            self.output_sprockets_manifest(file, extra_scripts)
         elif format == "html":
-            self.output_html_scripts(file)
+            self.output_html_scripts(file, extra_scripts)
         else:
             raise ValueError("Unknown output format: %s" % format)
 
@@ -84,8 +85,8 @@ class DepTree(object):
             except ValueError:
                 mod_list.append(uri)
 
-    def output_sprockets_manifest(self, output_file):
-        mod_list = []
+    def output_sprockets_manifest(self, output_file, extra_scripts):
+        mod_list = extra_scripts
         self.module_list(mod_list)
         lines = [self.SPROCKETS_REQUIRE % line for line in mod_list]
         output_file = open(output_file, "w")
@@ -94,8 +95,8 @@ class DepTree(object):
         output_file.close()
         print("manifest:\n%s" % ("\n".join(mod_list),))
 
-    def output_html_scripts(self, output_file):
-        mod_list = []
+    def output_html_scripts(self, output_file, extra_scripts):
+        mod_list = extra_scripts
         self.module_list(mod_list)
         lines = [self.HTML_SCRIPT_TAG % line for line in mod_list]
         output_file = open(output_file, "w")
@@ -110,6 +111,7 @@ if __name__ == '__main__':
     p.add_option('--output-format', '-o', default='sprockets')
     p.add_option('--output-file', '-O')
     p.add_option('--ext-names', '-e', default='js,coffee')
+    p.add_option('--extra-scripts', '-E', default='jquery,qunit,kopi')
     opts, args = p.parse_args()
 
     kwargs = {
@@ -122,4 +124,4 @@ if __name__ == '__main__':
         tree = DepTree(script, **kwargs)
         tree.build()
         root.requires.append(tree)
-    root.output(opts.output_file, opts.output_format)
+    root.output(opts.output_file, opts.output_format, opts.extra_scripts)
