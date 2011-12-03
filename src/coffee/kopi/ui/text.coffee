@@ -7,7 +7,7 @@ kopi.module("kopi.ui.text")
 
       kls = this
       kls.configure
-        tagName: 'p'
+        tagName: 'span'
 
       proto = kls.prototype
       klass.accessor proto, "text",
@@ -28,6 +28,7 @@ kopi.module("kopi.ui.text")
       this.VALIGN_MIDDLE = 3  # 居中对齐
 
       this.configure
+        tagName: 'p'
         ###
         单行高度
         ###

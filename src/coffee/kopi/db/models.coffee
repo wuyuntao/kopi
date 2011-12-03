@@ -2,6 +2,7 @@ kopi.module("kopi.db.models")
   .require("kopi.exceptions")
   .require("kopi.events")
   .require("kopi.utils")
+  .require("kopi.utils.klass")
   .require("kopi.utils.func")
   .require("kopi.utils.html")
   .require("kopi.utils.object")
@@ -10,7 +11,7 @@ kopi.module("kopi.db.models")
   .require("kopi.db.exceptions")
   # .require("kopi.db.indexes")
   .define (exports, exceptions, events
-                  , utils, func, html, object, text
+                  , utils, klass, func, html, object, text
                   , collections, errors) ->
 
     ###
@@ -24,7 +25,7 @@ kopi.module("kopi.db.models")
         server:
           RESTfulAdapter
         client:
-          [IndexDBAdapter, WebSQLAdapter, LocalStorageAdapter, MemoryAdapter]
+          [IndexDBAdapter, WebSQLAdapter, StorageAdapter, MemoryAdapter]
 
       cls.fields
         id:
@@ -50,6 +51,9 @@ kopi.module("kopi.db.models")
       kls._collection = collections.Collection
       kls._adapters = {}
       # kls._indexes = {}
+
+      # Define accessors
+      klass.accessor "pkName"
 
       ###
       Define accessor of adapters for model

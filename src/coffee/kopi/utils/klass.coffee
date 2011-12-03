@@ -14,13 +14,15 @@ kopi.module("kopi.utils.klass")
 
     configure = (klass, options) ->
       klass._options or= {}
+      klass._options = extend {}, klass._options, options if options
+      # Provide hash accessors
+      object.accessor klass, "options"
+      object.accessor klass.prototype, "options"
+      # Provide shortcut functions
       klass.configure or= (options) ->
         configure this, options
         this
-      extend klass._options, options if options
-      object.accessor klass, "options"
-      object.accessor klass.prototype, "options"
-      klass.prototype.configure = (options) ->
+      klass.prototype.configure or= (options) ->
         this._options or= object.clone(this.constructor._options)
         object.extend this._options, options if options
         this
@@ -34,7 +36,9 @@ kopi.module("kopi.utils.klass")
     @param  {Object}  property  defines default Value, property name, getter and setter.
     ###
     accessor = (klass, method, property={}) ->
+      return if method of klass
       name = property.name or "_#{method}"
+      # Set default getter and setter for property
       property.get or= ->
         this[name] or= property.value
       property.set or= (value) ->
@@ -45,6 +49,7 @@ kopi.module("kopi.utils.klass")
           property.get.call(this)
         else
           property.set.apply(this, arguments)
+      return
 
     exports.extend = extend
     exports.include = include

@@ -1,4 +1,4 @@
-kopi.module("kopi.app.views")
+kopi.module("kopi.views")
   .require("kopi.exceptions")
   .require("kopi.settings")
   .require("kopi.events")

@@ -146,6 +146,19 @@ kopi.module("kopi.db.queries")
         self = this
         new cls(self.model, self.criteria())
 
+      pk: ->
+        self = this
+        model = self.model
+        criteria = self.criteria()
+        try
+          pk = criteria.pk.eq
+        catch e
+          try
+            pk = criteria[model.pkName()].eq
+          catch e
+            pk = null
+        pk
+
     class RetrieveQuery extends BaseRetriveQuery
 
       this.METHODS = [ONLY, WHERE, SORT, SKIP, LIMIT, COUNT]
