@@ -38,19 +38,24 @@ kopi.module("kopi.ui.tabs")
         super(options)
         this._tabBar = tabBar
         this._key = key
+        this._selected = false
 
       end: -> this._tabBar
 
       select: ->
         cls = this.constructor
         self = this
+        return self if self._selected
         self.element.addClass(cls.cssClass("selected"))
+        self._selected = true
         self.emit("select")
 
       unselect: ->
         cls = this.constructor
         self = this
+        return self if not self._selected
         self.element.removeClass(cls.cssClass("selected"))
+        self.selected = false
         self.emit("unselect")
 
       onclick: ->
@@ -74,6 +79,7 @@ kopi.module("kopi.ui.tabs")
         super
         this._tabs = []
         this._keys = []
+        this._selectedIndex = -1
 
       add: (key, options) ->
         self = this
@@ -108,6 +114,7 @@ kopi.module("kopi.ui.tabs")
       select: (key) ->
         self = this
         index = array.indexOf(self._keys, key)
+        self._selectedIndex = index
         for tab, i in self._tabs
           if i == index then tab.select() else tab.unselect()
         self.emit("select", [key])
