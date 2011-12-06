@@ -253,6 +253,9 @@ kopi.module("kopi.ui.widgets")
       ###
       Human readable widget name
       ###
+      widget: ->
+        this.element
+
       toString: ->
         "[#{this.constructor.name} #{this.guid}]"
 
