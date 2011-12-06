@@ -53,6 +53,6 @@ kopi.module("kopi.ui.images")
       # TODO Do not subtitute image when page is scrolling
       _draw: ->
         self = this
-        self._image.attr SRC, self._options.src
+        self._image.attr SRC, self._src
 
     exports.Image = Image

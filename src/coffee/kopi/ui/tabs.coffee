@@ -22,10 +22,17 @@ kopi.module("kopi.ui.tabs")
       constructor: (index) ->
           super("Tab is not found in tab bar: #{index}")
 
+    ###
+    Tab
+    ###
     class Tab extends buttons.Button
 
-      this.configure
+      kls = this
+
+      kls.configure
         iconPos: this.ICON_POS_TOP
+
+      klass.accessor kls, "key"
 
       constructor: (tabBar, key, options) ->
         super(options)
@@ -34,6 +41,24 @@ kopi.module("kopi.ui.tabs")
 
       end: -> this._tabBar
 
+      select: ->
+        cls = this.constructor
+        self = this
+        self.element.addClass(cls.cssClass("selected"))
+        self.emit("select")
+
+      unselect: ->
+        cls = this.constructor
+        self = this
+        self.element.removeClass(cls.cssClass("selected"))
+        self.emit("unselect")
+
+      onclick: ->
+        this._tabBar.select(this._key)
+
+    ###
+    Tab bar contains multiple tabs
+    ###
     class TabBar extends widgets.Widget
 
       this.configure
@@ -50,12 +75,12 @@ kopi.module("kopi.ui.tabs")
         this._tabs = []
         this._keys = []
 
-      add: (key) ->
+      add: (key, options) ->
         self = this
         # Check if tab key is already used in tab bar
         throw new DuplicateTabKeyError(key) if key in self._keys
 
-        tab = new self._options.tabClass(self, key).skeleton()
+        tab = new self._options.tabClass(self, key, options).skeleton()
         tab.element.appendTo(self.element)
         self._tabs.push(tab)
         self._keys.push(key)
@@ -80,7 +105,12 @@ kopi.module("kopi.ui.tabs")
       Select a tab as if clicked.
 
       ###
-      select: () ->
+      select: (key) ->
+        self = this
+        index = array.indexOf(self._keys, key)
+        for tab, i in self._tabs
+          if i == index then tab.select() else tab.unselect()
+        self.emit("select", [key])
 
       onskeleton: ->
         self = this
