@@ -1,26 +1,45 @@
 kopi.module("kopi.ui.tabs")
+  .require("kopi.exceptions")
+  .require("kopi.utils.array")
   .require("kopi.utils.klass")
   .require("kopi.ui.buttons")
   .require("kopi.ui.groups")
   .require("kopi.ui.widgets")
   .require("kopi.ui.scrollable")
-  .define (exports, klass, buttons, groups, widgets, scrollable) ->
+  .define (exports, exceptions, array, klass
+                  , buttons, groups, widgets, scrollable) ->
+
+    ###
+    Tab errors
+    ###
+    class DuplicateTabKeyError extends exceptions.ValueError
+
+      constructor: (key) ->
+        super("Key has already used in tab bar: '#{key}'")
+
+    class TabIndexError extends exceptions.ValueError
+
+      constructor: (index) ->
+          super("Tab is not found in tab bar: #{index}")
 
     class Tab extends buttons.Button
 
-      constructor: (tabBar, options) ->
+      this.configure
+        iconPos: this.ICON_POS_TOP
+
+      constructor: (tabBar, key, options) ->
         super(options)
         this._tabBar = tabBar
+        this._key = key
 
-    class Panel extends widgets.Widget
-
-      constructor: (tabBar, options) ->
-        super(options)
-        this._tabBar = tabBar
+      end: -> this._tabBar
 
     class TabBar extends widgets.Widget
 
-      klass.accessor "tabs"
+      this.configure
+        tabClass: Tab
+
+      klass.accessor this, "tabs"
 
       ###
       @param  {Array}   tabs    Array of name/value pair
@@ -29,10 +48,33 @@ kopi.module("kopi.ui.tabs")
       constructor: ->
         super
         this._tabs = []
+        this._keys = []
 
-      add: ->
+      add: (key) ->
+        self = this
+        # Check if tab key is already used in tab bar
+        throw new DuplicateTabKeyError(key) if key in self._keys
 
-      remove: ->
+        tab = new self._options.tabClass(self, key).skeleton()
+        tab.element.appendTo(self.element)
+        self._tabs.push(tab)
+        self._keys.push(key)
+        tab
+
+      remove: (key) ->
+        self = this
+        index = array.indexOf(self._keys, key)
+        throw new TabIndexError(index) if index == -1
+        self.removeAt(index)
+
+      removeAt: (index) ->
+        self = this
+        tab = self._tabs[index]
+        throw new TabIndexError(index) if not tab
+        tab.destroy()
+        array.removeAt(self._tabs, index)
+        array.removeAt(self._keys, index)
+        self
 
       ###
       Select a tab as if clicked.
@@ -41,7 +83,15 @@ kopi.module("kopi.ui.tabs")
       select: () ->
 
       onskeleton: ->
-        # TODO Append tabs to element
+        self = this
+        for tab in self._tabs
+          tab.skeleton().element.appendTo(self.element)
+        super
+
+      onrender: ->
+        self = this
+        for tab in self._tabs
+          tab.render()
         super
 
     class ScrollableTabBar extends TabBar

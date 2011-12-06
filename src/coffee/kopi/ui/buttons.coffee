@@ -23,7 +23,7 @@ kopi.module("kopi.ui.buttons")
         # @type   {Boolean}   hasText   if show text
         hasText: true
         # @type   {Integer}   iconPos   where to put icon
-        iconPos: kls.ICON_LEFT
+        iconPos: kls.ICON_POS_LEFT
         # @type   {String}    cssClass  extra css class added to button
         cssClass: ""
         iconClass: images.Image
@@ -53,8 +53,13 @@ kopi.module("kopi.ui.buttons")
       onskeleton: ->
         self = this
         options = self._options
-        self._icon.skeleton() if options.hasIcon
-        self._text.skeleton() if options.hasText
+        if options.hasIcon
+          self._icon.skeleton()
+          self._icon.element.appendTo(self.element)
+        if options.hasText
+          self._text.skeleton()
+          self._text.element.appendTo(self.element)
+        self.state("icon-pos", self._options.iconPos)
         super
 
       onrender: ->

@@ -13,8 +13,16 @@ kopi.module("kopi.ui.text")
       klass.accessor proto, "text",
         set: (text, update=false) ->
           this._text = text
-          this.update() if update
+          this.update() if update and this.rendered
           this
+
+      onrender: ->
+        this._draw()
+        super
+
+      _draw: ->
+        self = this
+        self.element.text(self._text) if self._text
 
     ###
     A text view support truncate multi-line text

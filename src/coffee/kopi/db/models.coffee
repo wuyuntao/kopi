@@ -53,7 +53,9 @@ kopi.module("kopi.db.models")
       # kls._indexes = {}
 
       # Define accessors
-      klass.accessor "pkName"
+      klass.accessor kls, "pkName"
+      klass.accessor kls, "tableName",
+        get: -> this._tableName or= this.name
 
       ###
       Define accessor of adapters for model

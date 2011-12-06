@@ -14,7 +14,7 @@ kopi.module("kopi.utils.klass")
 
     configure = (klass, options) ->
       klass._options or= {}
-      klass._options = extend {}, klass._options, options if options
+      klass._options = object.extend {}, klass._options, options if options
       # Provide hash accessors
       object.accessor klass, "options"
       object.accessor klass.prototype, "options"

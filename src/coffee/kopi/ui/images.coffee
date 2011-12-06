@@ -18,6 +18,16 @@ kopi.module("kopi.ui.images")
         loaderSrc: ""
         fallbackSrc: ""
 
+      constructor: ->
+        super
+        this._src = this._options.src
+
+      image: (src) ->
+        self = this
+        self._src = src
+        self.update() if self.rendered
+        self
+
       onskeleton: ->
         self = this
         options = self._options

@@ -1,12 +1,13 @@
 kopi.module("kopi.ui.widgets")
   .require("kopi.utils")
+  .require("kopi.utils.jquery")
   .require("kopi.utils.klass")
   .require("kopi.utils.object")
   .require("kopi.utils.text")
   .require("kopi.events")
   .require("kopi.exceptions")
   .require("kopi.settings")
-  .define (exports, utils, klass, object, text, events, exceptions, settings) ->
+  .define (exports, utils, jquery, klass, object, text, events, exceptions, settings) ->
 
     ON = "on"
 
@@ -90,7 +91,7 @@ kopi.module("kopi.ui.widgets")
         if not value
           this.prefix or= text.underscore(this.name)
           value = this.prefix
-          value = prefix + "-" + value if prefix
+          value = value + "-" + prefix if prefix
           value = settings.kopi.ui.prefix + "-" + value if settings.kopi.ui.prefix
           value = value + "-" + action if action
           this._cssClasses[key] = value
@@ -266,10 +267,11 @@ kopi.module("kopi.ui.widgets")
         if value == null
           this.element.attr("data-#{name}")
         else
+          cls = this.constructor
           this.element
             .attr("data-#{name}", value)
-            .replaceClass(this.constructor.stateRegExp(name),
-              this.constructor.cssClass(value, name))
+            .replaceClass(cls.stateRegExp(name), "")
+            .addClass(cls.cssClass(value, name))
 
       ###
       Remove state class and data attribute from element
