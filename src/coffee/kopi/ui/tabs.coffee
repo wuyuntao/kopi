@@ -58,7 +58,7 @@ kopi.module("kopi.ui.tabs")
         self = this
         return self if not self._selected
         self.element.removeClass(cls.cssClass("selected"))
-        self.selected = false
+        self._selected = false
         self.emit(cls.UNSELECT_EVENT)
 
       onclick: ->
@@ -70,14 +70,33 @@ kopi.module("kopi.ui.tabs")
     class TabBar extends widgets.Widget
 
       kls = this
-      kls.configure
-        tabClass: Tab
+
+      # {{{ Constant variables
+      kls.LAYOUT_HORIZONTAL = "horizontal"
+      kls.LAYOUT_VERTICAL = "vertical"
+
+      # All tabs has one fixed width
+      kls.STYLE_FIXED = "fixed"
+      # The width of tabs decides by itself
+      kls.STYLE_FLEX = "flex"
+      # all tabs fills the tab bar
+      kls.STYLE_EVEN = "even"
 
       kls.SELECT_EVENT = "select"
       kls.ADD_EVENT = "add"
       kls.REMOVE_EVENT = "remove"
+      # }}}
 
+      # {{{ Configuration
+      kls.configure
+        tabClass: Tab
+        layout: kls.LAYOUT_VERTICAL
+        tabStyle: kls.STYLE_EVEN
+      # }}}
+
+      # {{{ Accessors
       klass.accessor this, "tabs"
+      # }}}
 
       ###
       @param  {Array}   tabs    Array of name/value pair
@@ -136,9 +155,18 @@ kopi.module("kopi.ui.tabs")
         self.emit(self.constructor.SELECT_EVENT, [key])
 
       onskeleton: ->
+        cls = this.constructor
         self = this
+        options = self._options
+        tabBarWidth = self.element.innerWidth()
+        tabsCount = self._tabs.length
         for tab in self._tabs
-          tab.skeleton().element.appendTo(self.element)
+          element = tab.skeleton().element.appendTo(self.element)
+          style = if options.layout == cls.LAYOUT_VERTICAL then "height" else "width"
+          switch options.tabStyle
+            when cls.STYLE_EVEN
+              element.css(style, "#{100 / tabsCount}%")
+              # TODO Consider other styles
         super
 
       onrender: ->

@@ -11,6 +11,7 @@
       }
 
       .container {
+        position: relative;
         display: inline-block;
         background: gray;
         margin: 20px;
@@ -18,6 +19,62 @@
         height: 480px;
         overflow: hidden;
         -webkit-user-select: none;
+      }
+
+      .tabbar {
+        background: white;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+
+      .tabbar .kopi-tab {
+        -webkit-transition: all 0.5s ease-out 0s;
+        background: yellow;
+        display: inline-block;
+        height: 45px;
+        padding: 5px 0;
+      }
+
+      .tabbar .kopi-tab-hover {
+        background: red;
+      }
+
+      .tabbar .kopi-tab-active {
+        background: green;
+      }
+
+      .tabbar .kopi-tab-selected {
+        background: blue;
+      }
+
+      .tabbar .kopi-tab .kopi-tab-icon {
+        display: block;
+        /* width: 24px; */
+        height: 24px;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+      }
+
+      .tabbar .kopi-tab .kopi-tab-icon img {
+        width: 24px;
+        height: 24px;
+        border-width: 0;
+      }
+
+      .tabbar .kopi-tab .kopi-tab-text {
+        margin-top: 5px;
+        display: block;
+        font-size: 12px;
+        line-height: 16px;
+        height: 16px;
+        text-align: center;
+      }
+
+      .stabbar {
+        background: white;
       }
 
     </style>
@@ -52,10 +109,8 @@
     <script type="text/javascript">
       $(function() {
         var tabBar = new kopi.ui.tabs.TabBar(".tabbar", {
-        });
-
-        tabBar
-          .add("tab1")
+          layout: kopi.ui.tabs.TabBar.LAYOUT_HORIZONTAL
+        }).add("tab1")
             .text("Tab #1")
             .icon("images/icon1.png")
             .on("select", function() { console.log(0) })
@@ -84,10 +139,7 @@
           .render();
 
         var stabBar = new kopi.ui.tabs.ScrollableTabBar(".stabbar", {
-        });
-
-        stabBar
-          .tabBar()
+        }).tabBar()
             .add("tab1")
               .text("Tab #1")
               .icon("images/icon1.png")

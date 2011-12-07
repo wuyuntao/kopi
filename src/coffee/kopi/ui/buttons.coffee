@@ -45,10 +45,17 @@ kopi.module("kopi.ui.buttons")
 
       constructor: (element, options) ->
         super
+        cls = this.constructor
         self = this
         options = self._options
-        self._icon = new options.iconClass(options.iconOptions) if options.hasIcon
-        self._text = new options.textClass(options.textOptions) if options.hasText
+        if options.hasIcon
+          options.iconOptions.extraClass or= ""
+          options.iconOptions.extraClass += " #{cls.cssClass("icon")}"
+          self._icon = new options.iconClass(options.iconOptions)
+        if options.hasText
+          options.textOptions.extraClass or= ""
+          options.textOptions.extraClass += " #{cls.cssClass("text")}"
+          self._text = new options.textClass(options.textOptions)
 
       onskeleton: ->
         self = this

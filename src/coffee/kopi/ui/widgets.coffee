@@ -78,6 +78,8 @@ kopi.module("kopi.ui.widgets")
       klass.configure this,
         # @type {String}    tag name of element to create
         tagName: "div"
+        # @type {String}    extra css class added to element
+        extraClass: ""
 
       # }}}
 
@@ -164,6 +166,8 @@ kopi.module("kopi.ui.widgets")
         if not self.element.hasClass(cssClass)
           self.element.addClass(cssClass)
         self._readOptions()
+        if self._options.extraClass
+          self.element.addClass(self._options.extraClass)
         self.emit("skeleton")
 
       delegate: ->
