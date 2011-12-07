@@ -78,6 +78,12 @@ kopi.module("kopi.ui.widgets")
       klass.configure this,
         # @type {String}    tag name of element to create
         tagName: "div"
+
+      # }}}
+
+      # {{{ Accessors
+      proto = this.prototype
+      klass.accessor proto, "end"
       # }}}
 
       # {{{ Class methods
@@ -129,6 +135,8 @@ kopi.module("kopi.ui.widgets")
         self.guid = utils.guid(self.constructor.prefix)
         # @type {jQuery Element}
         self.element = element if element
+        # @type {Object}
+        self._end = null
 
         # {{{ State properties
         # If skeleton has been built
@@ -294,6 +302,19 @@ kopi.module("kopi.ui.widgets")
         if self._options.template
           return $(self._options.template).tmpl(self)
         $(document.createElement(self._options.tagName))
+
+      ###
+      Get or create wrapper element
+      ###
+      _ensureWrapper: (name="wrapper", tag="div", parent) ->
+        cls = this.constructor
+        self = this
+        parent or= self.element
+        cssClass = cls.cssClass(name)
+        wrapper = $("." + cssClass, parent)
+        if not wrapper.length
+          wrapper = $("<#{tag}></#{tag}>", class: cssClass).appendTo(parent)
+        wrapper
 
       ###
       Update options from data attributes of element

@@ -10,5 +10,6 @@
 .sass-cache
 .todo*
 .rvmrc
+.DS_Store
 build
 tmp

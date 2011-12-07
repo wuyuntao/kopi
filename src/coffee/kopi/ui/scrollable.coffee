@@ -1,12 +1,13 @@
 kopi.module("kopi.ui.scrollable")
   .require("kopi.utils.events")
   .require("kopi.utils.css")
+  .require("kopi.utils.klass")
   .require("kopi.utils.support")
   .require("kopi.utils.text")
   .require("kopi.utils.number")
   .require("kopi.ui.touchable")
   .require("kopi.logging")
-  .define (exports, events, css, support, text, number, touchable, logging) ->
+  .define (exports, events, css, klass, support, text, number, touchable, logging) ->
 
     math = Math
     logger = logging.logger(exports.name)
@@ -54,8 +55,7 @@ kopi.module("kopi.ui.scrollable")
         ontransitionend: null
         onresize: null
 
-      constructor: ->
-        super
+      klass.accessor kls.prototype, "scroller"
 
       scrollTo: (x, y, duration) ->
         self = this
@@ -73,15 +73,22 @@ kopi.module("kopi.ui.scrollable")
         self.element.css('overflow', 'hidden')
 
         # Set default styles to element
-        self._scrollerElement = self.element.children().first()
+        self._scroller = self._ensureScroller()
         styles = {}
         styles[TRANSITION_PROPERTY] = cls.TRANSITION_PROPERTY_STYLE
         styles[TRANSITION_DURATION] = cls.TRANSITION_DURATION_STYLE
         styles[TRANSITION_TIMING_FUNCTION] = cls.TRANSITION_TIMING_FUNCTION_STYLE
         styles[TRANSFORM_ORIGIN] = cls.TRANSFORM_ORIGIN_STYLE
         styles[TRANSFORM] = text.format(cls.TRANSFORM_STYLE, x: 0, y: 0)
-        self._scrollerElement.css(styles)
+        self._scroller.css(styles)
         super
+
+      _ensureScroller: ->
+        children = this.element.children()
+        scroller = this._ensureWrapper("scroller")
+        if children.length > 0
+          children.appendTo(scroller)
+        scroller
 
       ontouchstart: (e, event) ->
         cls = this.constructor
@@ -101,11 +108,11 @@ kopi.module("kopi.ui.scrollable")
         self._duration(0)
 
         if self._options.momentum
-          matrix = this._scrollerElement.css(TRANSFORM).replace(RE_MATRIX, BLANK).split(COMMA)
+          matrix = this._scroller.css(TRANSFORM).replace(RE_MATRIX, BLANK).split(COMMA)
           x = parseInt(matrix[4])
           y = parseInt(matrix[5])
           if x != self._x or y != self._y
-            self._scrollerElement.unbind(events.WEBKIT_TRANSITION_END_EVENT)
+            self._scroller.unbind(events.WEBKIT_TRANSITION_END_EVENT)
             self._steps = []
             self._position(x, y)
         super
@@ -202,6 +209,7 @@ kopi.module("kopi.ui.scrollable")
         super
 
       onresize: ->
+        return unless this.rendered
         cls = this.constructor
         self = this
         self._elementWidth = self.element.innerWidth()
@@ -210,8 +218,8 @@ kopi.module("kopi.ui.scrollable")
         self._elementOffsetLeft = -elementOffset.left
         self._elementOffsetTop = -elementOffset.top
 
-        self._scrollerWidth = self._scrollerElement.outerWidth()
-        self._scrollerHeight = self._scrollerElement.outerHeight()
+        self._scrollerWidth = self._scroller.outerWidth()
+        self._scrollerHeight = self._scroller.outerHeight()
 
         self._minScrollX = 0
         self._minScrollY = 0
@@ -227,7 +235,7 @@ kopi.module("kopi.ui.scrollable")
       ontransitionend: (e, event) ->
         cls = this.constructor
         self = this
-        self._scrollerElement.unbind(events.WEBKIT_TRANSITION_END_EVENT)
+        self._scroller.unbind(events.WEBKIT_TRANSITION_END_EVENT)
         self._animate()
         self._callback(cls.TRANSITION_END_EVENT, arguments)
 
@@ -248,7 +256,7 @@ kopi.module("kopi.ui.scrollable")
         self = this
         x = if self._options.scrollX then x else 0
         y = if self._options.scrollY then y else 0
-        self._scrollerElement.css TRANSFORM, text.format(cls.TRANSFORM_STYLE, x: x, y: y)
+        self._scroller.css TRANSFORM, text.format(cls.TRANSFORM_STYLE, x: x, y: y)
         self._x = x
         self._y = y
         self
@@ -275,7 +283,7 @@ kopi.module("kopi.ui.scrollable")
             e.preventDefault()
             e.stopPropagation()
             self.emit cls.TRANSITION_END_EVENT
-          self._scrollerElement.bind events.WEBKIT_TRANSITION_END_EVENT, transitionEndFn
+          self._scroller.bind events.WEBKIT_TRANSITION_END_EVENT, transitionEndFn
         else
           self._resetPosition(0)
         return self
@@ -316,7 +324,7 @@ kopi.module("kopi.ui.scrollable")
 
       # Set transition duration for scroller
       _duration: (duration) ->
-        this._scrollerElement.css TRANSITION_DURATION, duration + 'ms'
+        this._scroller.css TRANSITION_DURATION, duration + 'ms'
         this
 
     exports.Scrollable = Scrollable
