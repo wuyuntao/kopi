@@ -209,7 +209,7 @@ kopi.module("kopi.ui.scrollable")
         super
 
       onresize: ->
-        return unless this.rendered
+        # return unless this.rendered
         cls = this.constructor
         self = this
         self._elementWidth = self.element.innerWidth()
@@ -226,7 +226,7 @@ kopi.module("kopi.ui.scrollable")
         self._maxScrollX = self._elementWidth - self._scrollerWidth
         self._maxScrollY = self._elementHeight - self._scrollerHeight
 
-        self._scrollX = self._options.scrollX and self._maxScrollX < self._minScrollY
+        self._scrollX = self._options.scrollX and self._maxScrollX < self._minScrollX
         self._scrollY = self._options.scrollY and self._maxScrollY < self._minScrollY
 
         self._duration(0)

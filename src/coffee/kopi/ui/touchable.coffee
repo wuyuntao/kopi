@@ -17,8 +17,8 @@ kopi.module("kopi.ui.touchable")
       kls.EVENT_NAMESPACE = "touchable"
 
       kls.configure
-        preventDefault: true
-        stopPropagation: true
+        preventDefault: false
+        stopPropagation: false
         multiTouch: false
         ontouchstart: null
         ontouchmove: null

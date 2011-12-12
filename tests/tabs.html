@@ -21,7 +21,7 @@
         -webkit-user-select: none;
       }
 
-      .tabbar {
+      .tabbar, .stabbar {
         background: white;
         position: absolute;
         bottom: 0;
@@ -29,7 +29,7 @@
         right: 0;
       }
 
-      .tabbar .kopi-tab {
+      .tabbar .kopi-tab, .stabbar .kopi-tab {
         -webkit-transition: all 0.5s ease-out 0s;
         background: yellow;
         display: inline-block;
@@ -37,19 +37,19 @@
         padding: 5px 0;
       }
 
-      .tabbar .kopi-tab-hover {
+      .tabbar .kopi-tab-hover, .stabbar .kopi-tab-hover {
         background: red;
       }
 
-      .tabbar .kopi-tab-active {
+      .tabbar .kopi-tab-active, .stabbar .kopi-tab-active {
         background: green;
       }
 
-      .tabbar .kopi-tab-selected {
+      .tabbar .kopi-tab-selected, .stabbar .kopi-tab-selected {
         background: blue;
       }
 
-      .tabbar .kopi-tab .kopi-tab-icon {
+      .tabbar .kopi-tab .kopi-tab-icon, .stabbar .kopi-tab .kopi-tab-icon {
         display: block;
         /* width: 24px; */
         height: 24px;
@@ -58,23 +58,19 @@
         text-align: center;
       }
 
-      .tabbar .kopi-tab .kopi-tab-icon img {
+      .tabbar .kopi-tab .kopi-tab-icon img, .stabbar .kopi-tab .kopi-tab-icon img {
         width: 24px;
         height: 24px;
         border-width: 0;
       }
 
-      .tabbar .kopi-tab .kopi-tab-text {
+      .tabbar .kopi-tab .kopi-tab-text, .stabbar .kopi-tab .kopi-tab-text {
         margin-top: 5px;
         display: block;
         font-size: 12px;
         line-height: 16px;
         height: 16px;
         text-align: center;
-      }
-
-      .stabbar {
-        background: white;
       }
 
     </style>
@@ -139,6 +135,23 @@
           .render();
 
         var stabBar = new kopi.ui.tabs.ScrollableTabBar(".stabbar", {
+          tabBarOptions: {
+            layout: kopi.ui.tabs.TabBar.LAYOUT_HORIZONTAL,
+            style: kopi.ui.tabs.TabBar.STYLE_FIXED,
+            width: 64,
+          },
+          scrollableOptions: {
+            scrollY: false,
+            ontouchstart: function(e) {
+              console.log("start");
+            },
+            ontouchmove: function(e) {
+              console.log("move");
+            },
+            ontouchend: function(e) {
+              console.log("end");
+            },
+          }
         }).tabBar()
             .add("tab1")
               .text("Tab #1")
@@ -165,8 +178,36 @@
               .icon("images/icon5.png")
               .on("select", function() { console.log(4) })
               .end()
+            .add("tab6")
+              .text("Tab #6")
+              .icon("images/icon1.png")
+              .on("select", function() { console.log(5) })
+              .end()
+            .add("tab7")
+              .text("Tab #7")
+              .icon("images/icon2.png")
+              .on("select", function() { console.log(6) })
+              .end()
+            .add("tab8")
+              .text("Tab #8")
+              .icon("images/icon3.png")
+              .on("select", function() { console.log(7) })
+              .end()
+            .add("tab9")
+              .text("Tab #9")
+              .icon("images/icon4.png")
+              .on("select", function() { console.log(8) })
+              .end()
+            .add("tab10")
+              .text("Tab #10")
+              .icon("images/icon5.png")
+              .on("select", function() { console.log(9) })
+              .end()
             .end()
           .skeleton()
+          .scrollable()
+            .emit(kopi.ui.scrollable.Scrollable.RESIZE_EVENT)
+            .end()
           .render();
       });
     </script>

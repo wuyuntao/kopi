@@ -91,7 +91,9 @@ kopi.module("kopi.ui.tabs")
       kls.configure
         tabClass: Tab
         layout: kls.LAYOUT_VERTICAL
-        tabStyle: kls.STYLE_EVEN
+        style: kls.STYLE_EVEN
+        width: null
+        height: null
       # }}}
 
       # {{{ Accessors
@@ -158,16 +160,64 @@ kopi.module("kopi.ui.tabs")
         cls = this.constructor
         self = this
         options = self._options
-        tabBarWidth = self.element.innerWidth()
+
+        if options.layout == cls.LAYOUT_VERTICAL
+          # self.element.width(options.width) if options.width
+          tabBarStyle = "height"
+        else
+          # self.element.height(options.height) if options.height
+          tabBarStyle = "width"
+
+        switch options.style
+          when cls.STYLE_EVEN
+            self._skeletonEvenTabs(tabBarStyle)
+            break
+          when cls.STYLE_FIXED
+            self._skeletonFixedTabs(tabBarStyle)
+            break
+          when cls.STYLE_FLEX
+            self._skeletonFlexTabs(tabBarStyle)
+            break
+          else
+            throw new exceptions.ValueError("Unknown tab style: #{options.style}")
+        super
+
+      _skeletonEvenTabs: (style) ->
+        self = this
+        element = self.element
         tabsCount = self._tabs.length
         for tab in self._tabs
-          element = tab.skeleton().element.appendTo(self.element)
-          style = if options.layout == cls.LAYOUT_VERTICAL then "height" else "width"
-          switch options.tabStyle
-            when cls.STYLE_EVEN
-              element.css(style, "#{100 / tabsCount}%")
-              # TODO Consider other styles
-        super
+          tabElement = self._skeletonTab(element, tab)
+          tabElement.css(style, "#{100 / tabsCount}%")
+        self
+
+      _skeletonFixedTabs: (style) ->
+        self = this
+        options = self._options
+        element = self.element
+        # TODO What about height?
+        tabBarWidth = 0
+        tabWidth = parseInt(self._options[style])
+        for tab in self._tabs
+          tabElement = self._skeletonTab(element, tab)
+          tabElement[style](tabWidth))
+          tabBarWidth += tabElement.outerWidth()
+        self.element.width(tabBarWidth)
+        self
+
+      _skeletonFlexTabs: (element, tab, style) ->
+        self = this
+        element = self.element
+        # TODO What about height?
+        tabBarWidth = 0
+        for tab in self._tabs
+          tabElement = self._skeletonTab(element, tab)
+          tabBarWidth += tabElement.outerWidth()
+        self.element.width(tabBarWidth)
+        self
+
+      _skeletonTab: (element, tab) ->
+        tab.skeleton().element.appendTo(element)
 
       onrender: ->
         self = this
