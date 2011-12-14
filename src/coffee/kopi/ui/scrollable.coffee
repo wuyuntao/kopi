@@ -19,8 +19,6 @@ kopi.module("kopi.ui.scrollable")
     TRANSFORM = css.experimental("transform")
 
     RE_MATRIX = /[^0-9-.,]/g
-    COMMA = ','
-    BLANK = ''
 
     ###
     TODO Support legacy animation
@@ -108,7 +106,7 @@ kopi.module("kopi.ui.scrollable")
         self._duration(0)
 
         if self._options.momentum
-          matrix = this._scroller.css(TRANSFORM).replace(RE_MATRIX, BLANK).split(COMMA)
+          matrix = this._scroller.css(TRANSFORM).replace(RE_MATRIX, "").split(",")
           x = parseInt(matrix[4])
           y = parseInt(matrix[5])
           if x != self._x or y != self._y
@@ -208,6 +206,13 @@ kopi.module("kopi.ui.scrollable")
         this.ontouchend(arguments...)
         super
 
+      ontransitionend: (e, event) ->
+        cls = this.constructor
+        self = this
+        self._scroller.unbind(events.WEBKIT_TRANSITION_END_EVENT)
+        self._animate()
+        self._callback(cls.TRANSITION_END_EVENT, arguments)
+
       onresize: ->
         # return unless this.rendered
         cls = this.constructor
@@ -232,12 +237,15 @@ kopi.module("kopi.ui.scrollable")
         self._duration(0)
         self._callback(cls.RESIZE_EVENT, arguments)
 
-      ontransitionend: (e, event) ->
+      _position: (x, y) ->
         cls = this.constructor
         self = this
-        self._scroller.unbind(events.WEBKIT_TRANSITION_END_EVENT)
-        self._animate()
-        self._callback(cls.TRANSITION_END_EVENT, arguments)
+        x = if self._options.scrollX then x else 0
+        y = if self._options.scrollY then y else 0
+        self._scroller.css TRANSFORM, text.format(cls.TRANSFORM_STYLE, x: x, y: y)
+        self._x = x
+        self._y = y
+        self
 
       _resetPosition: (duration=0) ->
         self = this
@@ -250,16 +258,6 @@ kopi.module("kopi.ui.scrollable")
           return
 
         self.scrollTo(resetX, resetY, duration)
-
-      _position: (x, y) ->
-        cls = this.constructor
-        self = this
-        x = if self._options.scrollX then x else 0
-        y = if self._options.scrollY then y else 0
-        self._scroller.css TRANSFORM, text.format(cls.TRANSFORM_STYLE, x: x, y: y)
-        self._x = x
-        self._y = y
-        self
 
       _animate: ->
         cls = this.constructor
