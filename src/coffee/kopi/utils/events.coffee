@@ -3,11 +3,11 @@ kopi.module("kopi.utils.events")
   .require("kopi.utils.support")
   .define (exports, settings, support) ->
 
-    exports.MOUSE_OVER_EVENT = "mouseover"
+    exports.MOUSE_OVER_EVENT = "mouseenter"
     exports.MOUSE_DOWN_EVENT = "mousedown"
     exports.MOUSE_MOVE_EVENT = "mousemove"
     exports.MOUSE_UP_EVENT = "mouseup"
-    exports.MOUSE_OUT_EVENT = "mouseout"
+    exports.MOUSE_OUT_EVENT = "mouseleave"
 
     exports.ORIENTATION_CHANGE_EVENT = "orientationchange"
     exports.THROTTLED_RESIZE_EVENT = "throttledresize"
