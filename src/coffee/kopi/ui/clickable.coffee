@@ -79,7 +79,8 @@ kopi.module("kopi.ui.clickable")
         self = this
         self._clearHoldTimeout()
         self.element.removeClass(cls.ACTIVE_CLASS)
-        if not self._holded
+        # TODO a small distance move will trigger a click event too
+        if not self._holded and not self._moved
           self.emit(cls.CLICK_EVENT, [event])
         super
 

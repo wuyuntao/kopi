@@ -70,8 +70,8 @@ kopi.module("kopi.ui.scrollable")
         self = this
         self.element.css('overflow', 'hidden')
 
-        # Set default styles to element
         self._scroller = self._ensureScroller()
+        # Set default styles to element
         styles = {}
         styles[TRANSITION_PROPERTY] = cls.TRANSITION_PROPERTY_STYLE
         styles[TRANSITION_DURATION] = cls.TRANSITION_DURATION_STYLE
@@ -116,6 +116,9 @@ kopi.module("kopi.ui.scrollable")
         super
 
       ontouchmove: (e, event) ->
+        event.preventDefault()
+        event.stopPropagation()
+
         self = this
         options = self._options
         point = self._points(event)
@@ -172,6 +175,9 @@ kopi.module("kopi.ui.scrollable")
           # TODO Find last touched element and trigger click event for it
           return
 
+        event.preventDefault()
+        event.stopPropagation()
+
         if duration < 300 and self._options.momentum
           momentumX = if not newX then momentumX else
             self._momentum(newX - self._startX, duration, -self._x
@@ -223,8 +229,18 @@ kopi.module("kopi.ui.scrollable")
         self._elementOffsetLeft = -elementOffset.left
         self._elementOffsetTop = -elementOffset.top
 
-        self._scrollerWidth = self._scroller.outerWidth()
-        self._scrollerHeight = self._scroller.outerHeight()
+        # Calculate read width or height of scroller
+        # TODO how about height
+        children = self._scroller.children()
+        if children.length > 0
+          scrollerWidth = 0
+          for child in children
+            child = $(child)
+            scrollerWidth += child.outerWidth()
+          self._scroller.width(scrollerWidth)
+
+        self._scrollerWidth = math.max(self._scroller.outerWidth(), self._elementWidth)
+        self._scrollerHeight = math.max(self._scroller.outerHeight(), self._elementHeight)
 
         self._minScrollX = 0
         self._minScrollY = 0
@@ -312,11 +328,11 @@ kopi.module("kopi.ui.scrollable")
           speed = speed * maxDistLower / newDist
           newDist = maxDistLower
 
-        speed = math.min(1, speed)
+        # FIXME Here is a workaround to fix negative duration problem
+        speed = math.min(1, math.abs(speed))
         newDist = math.min(200, newDist)
         newDist = newDist * (if dist < 0 then -1 else 1)
         newTime = math.min(speed / deceleration, 1000)
-        logger.debug("dist: #{newDist}, speed: #{speed}, time: #{newTime}")
 
         return { dist: newDist, time: math.round(newTime) }
 

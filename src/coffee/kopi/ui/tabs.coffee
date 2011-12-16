@@ -200,7 +200,7 @@ kopi.module("kopi.ui.tabs")
         tabWidth = parseInt(self._options[style])
         for tab in self._tabs
           tabElement = self._skeletonTab(element, tab)
-          tabElement[style](tabWidth))
+          tabElement[style](tabWidth)
           tabBarWidth += tabElement.outerWidth()
         self.element.width(tabBarWidth)
         self
