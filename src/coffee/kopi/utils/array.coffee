@@ -15,6 +15,9 @@ kopi.module("kopi.utils.array")
         n += 1 if iterator.call context, v, i
       n
 
+    fill = (value, count) ->
+      if count == 0 then [] else (value for i in [0...count])
+
     forEach = (array, iterator, context) ->
       try
         iterator.call(context, v, i, array) for v, i in array
@@ -109,6 +112,7 @@ kopi.module("kopi.utils.array")
     exports.forEach = forEach
     exports.asyncForEach = asyncForEach
     exports.asyncParForEach = asyncParForEach
+    exports.fill = fill
     exports.indexOf = indexOf
     exports.isArray = isArray
     exports.isEmpty = isEmpty

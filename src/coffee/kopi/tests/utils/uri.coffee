@@ -66,3 +66,39 @@ kopi.module("kopi.tests.utils.uri")
 
       test "make absolute url", ->
         equal uri.absolute("/test"), "#{uri.base().domain}/test"
+
+      test "unjoin absolute urls", ->
+        equal uri.unjoin("http://www.google.com/foo/bar", "http://www.google.com/search"), "../search"
+        equal uri.unjoin("http://www.google.com/foo/bar", "http://www.google.com/search/path"), "../search/path"
+
+      test "unjoin relative urls", ->
+        equal uri.unjoin("foo/bar", "foo/search"), "search"
+
+      test "unjoin scheme", ->
+        equal uri.unjoin("http://www.google.com/foo/bar", "ftp://www.google.com/search"),
+          "ftp://www.google.com/search"
+
+      test "unjoin domain", ->
+        equal uri.unjoin("http://www.google.com/foo/bar", "http://www.bing.com/search"),
+          "http://www.bing.com/search"
+        equal uri.unjoin("http://www.google.com:80/foo/", "http://www.google.com/bar"),
+          "http://www.google.com/bar"
+
+      test "unjoin dirname", ->
+        equal uri.unjoin("http://www.google.com/foo", "http://www.google.com/bar"), "bar"
+        equal uri.unjoin("http://www.google.com/foo/", "http://www.google.com/bar"), "../bar"
+        equal uri.unjoin("http://www.google.com/foo", "http://www.google.com/foo"), "foo"
+        equal uri.unjoin("http://www.google.com/foo/", "http://www.google.com/foo"), "../foo"
+        equal uri.unjoin("http://www.google.com/foo", "http://www.google.com/bar/search"), "bar/search"
+        equal uri.unjoin("http://www.google.com/foo/", "http://www.google.com/bar/search"), "../bar/search"
+        equal uri.unjoin("http://www.google.com/foo/bar", "http://www.google.com/search/path"), "../search/path"
+        equal uri.unjoin("http://www.google.com/foo/bar/", "http://www.google.com/search/path"),
+          "../../search/path"
+        equal uri.unjoin("http://www.google.com/foo", "http://www.google.com/bar"), "bar"
+
+      test "unjoin query", ->
+        equal uri.unjoin("http://www.google.com/foo;para?query#frag", "http://www.google.com/foo"), "foo"
+
+      test "unjoin fragment", ->
+        equal uri.unjoin("http://www.google.com/foo", "http://www.google.com/foo;para?query#frag"),
+          "foo;para?query#frag"
