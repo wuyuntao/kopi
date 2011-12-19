@@ -112,7 +112,6 @@ kopi.module("kopi.utils.uri")
     RFC 3986, section 5.2.4.
     ###
     removeDotSegments = (path) ->
-      console.log(path)
       return emp if path == par or path == cur
       # This optimization detects uris which do not contain dot-segments,
       # and as a consequence do not require any processing.
