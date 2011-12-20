@@ -3,24 +3,7 @@ kopi.module("kopi.app.router")
   .define (exports, uri) ->
 
     ###
-    URL 路由管理
-
-    Usage
-
-      router
-        .view(BookListView)
-          .route("/book", name: "book-list")
-          .route("/book/search", name: "book-search")
-          .route("/book/:category, name: "book-category", group: "category")
-          .end()
-        .view(BookDetailView)
-          .route("/book/:id", name: "book-detail", group: "id")
-          .route("/book/:id/chapter", name: "chapter-list", group: "id")
-          .end()
-        .view(ChapterDetailView)
-          .route("/book/:bid/chapter/:chid", name: "chapter-detail", group: ["bid", "chid"])
-          .end()
-        ...
+    URL routing manager
 
     ###
     class Router
@@ -30,6 +13,7 @@ kopi.module("kopi.app.router")
         self.statics = {}
         self.dynamics = []
         self.names = {}
+        self.views = []
         self.compiled = false
         # JavaScript does not support negative lookbehind assertion
         # self.syntax = /(?<!\\):([a-zA-Z_]+)?(?:#(.*?)#)?/i
@@ -73,14 +57,16 @@ kopi.module("kopi.app.router")
       # Return a regexp pattern with groups
       group: (route) ->
         out = ''
+        params = []
         for part, i in route.tokens
           if (i % 3 == 0)
             out += part.replace('\:', ':').replace('(', '\\(').replace(')', '\\)')
           else if (i % 3 == 1)
+            params.push(part || params.length)
             out += '('   # Javascript does not support named groups
           else
             out += (part or this.base) + ')'
-        out
+        [out, params]
 
       # Check if route is static
       isStatic: (route) ->
@@ -89,17 +75,19 @@ kopi.module("kopi.app.router")
       # Match a path and return a route object
       match: (path, scope=null) ->
         self = this
-        request = uri.parse(path)
-        if request.path of self.statics
-          route = self.statics[request.path]
-          return route: route, args: [request]
+        url = uri.parse(path)
+        if url.path of self.statics
+          route = self.statics[url.path]
+          return route: route, url: url, params: {}
 
         for dynamic in self.dynamics
-          matches = request.path.match(dynamic.regexp)
+          matches = url.path.match(dynamic.regexp)
           if matches
             route = dynamic.route
-            matches[0] = request
-            return route: route, args: matches
+            params = []
+            for param, i in dynamic.params
+              params[param] = matches[i + 1]
+            return route: route, url: url, params: params
 
         # Late check to reduce overhead on hits
         if not self.compiled
@@ -110,18 +98,37 @@ kopi.module("kopi.app.router")
       compile: ->
         self = this
         self.reset()
+        # Compile route
         for route, i in self.routes
-          console.log "router #{i}"
-          console.log route
-          console.log self.isStatic(route)
+          # Add group key
+          # self.views[route.view.name] or= {}
+          # if route.group is true
+          #   self.views[route.view.name]['view'] = true
+          # else if not route.group
+          #   self.views[route.view.name]['path'] = true
+          # else if text.isString(route.group)
+          #   self.views[route.view.name]['args'] or= []
+          #   self.views[route.view.name]['args'].push(route.group)
+          # else if array.isArray(route.group)
+          #   self.views[route.view.name]['args'] or= []
+          #   self.views[route.view.name]['args'].push(route.group.join(':'))
+
+          # Add to named routes
           if route.name
             self.names[route.name] = route
+          # Add to static routes
           if self.isStatic(route)
             self.statics[route.route] = route
             continue
-          regexp = new RegExp('^' + self.group(route) + '$', 'i')
-          self.dynamics.push regexp: regexp, route: route
+          # Add to dynamic routes
+          [regexp, params] = self.group(route)
+          self.dynamics.push
+            regexp: new RegExp('^' + regexp + '$', 'i'),
+            params: params
+            route: route
         self.dynamics.reverse()
+        # Compile view keys
+
         self.compiled = true
         self
 
@@ -132,6 +139,7 @@ kopi.module("kopi.app.router")
         self.statics = {}
         self.dynamics = []
         self.names = {}
+        self.views = {}
         self
 
     # Singleton instance of router
@@ -146,6 +154,23 @@ kopi.module("kopi.app.router")
 
     ###
     Return a view object to add route
+
+    Usage:
+      router
+        .view(BookListView)
+          .route("/book", name: "book-list")
+          .route("/book/search", name: "book-search")
+          .route("/book/:category, name: "book-category", group: "category")
+          .end()
+        .view(BookDetailView)
+          .route("/book/:id", name: "book-detail", group: "id")
+          .route("/book/:id/chapter", name: "chapter-list", group: "id")
+          .end()
+        .view(ChapterDetailView)
+          .route("/book/:bid/chapter/:chid", name: "chapter-detail", group: ["bid", "chid"])
+          .end()
+        ...
+
     ###
     view = (view) ->
       route: (route, option) -> router.add(route, view, option)

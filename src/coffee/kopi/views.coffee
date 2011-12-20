@@ -41,14 +41,15 @@ kopi.module("kopi.views")
       # type  #{Boolean}  started   视图是否允许操作
       locked: false
 
-      constructor: (app, args=[]) ->
+      constructor: (app, url, params={}) ->
         if not app
           throw new exceptions.ValueError("app must be instance of Application")
         self = this
         self.constructor.prefix or= text.underscore(self.constructor.name)
         self.guid = utils.guid(self.constructor.prefix)
         self.app = app
-        self.args = args
+        self.url = url
+        self.params = params
         self.panels = app.layout.panels
 
       ###
@@ -59,7 +60,7 @@ kopi.module("kopi.views")
         return self if self.created
         logging.debug("Create view. #{self.guid}")
         self.lock()
-        self.on('created', (e) -> fn(false, self)) if $.isFunction(fn)
+        self.on('created', (e) -> fn(false, self)) if fn
         self.emit('create')
 
       ###
@@ -71,7 +72,7 @@ kopi.module("kopi.views")
         return self if self.started
         logging.debug("Start view. #{self.guid}")
         self.lock()
-        self.on('started', (e) -> fn(false, self)) if $.isFunction(fn)
+        self.on('started', (e) -> fn(false, self)) if fn
         self.emit('start')
 
       ###
@@ -80,7 +81,7 @@ kopi.module("kopi.views")
       update: (fn) ->
         self = this
         logging.debug("Update view. #{self.guid}")
-        self.on('updated', (e) -> fn(false, this)) if $.isFunction(fn)
+        self.on('updated', (e) -> fn(false, this)) if fn
         self.emit('update')
 
       ###
@@ -92,7 +93,7 @@ kopi.module("kopi.views")
         return self if not self.started
         logging.debug("Stop view. #{self.guid}")
         self.lock()
-        self.on('stopped', (e) -> fn(false, self)) if $.isFunction(fn)
+        self.on('stopped', (e) -> fn(false, self)) if fn
         self.emit('stop')
 
       ###
@@ -104,7 +105,7 @@ kopi.module("kopi.views")
         return self if not self.created
         logging.debug("Destroy view. #{self.guid}")
         self.lock()
-        self.on('destroyed', (e) -> fn(false, self)) if $.isFunction(fn)
+        self.on('destroyed', (e) -> fn(false, self)) if fn
         self.emit('destroy')
 
       lock: (fn) ->
@@ -113,7 +114,7 @@ kopi.module("kopi.views")
         logging.debug("Lock view. #{self.guid}")
         self.locked = true
         self.emit 'lock'
-        fn(false, self) if $.isFunction(fn)
+        fn(false, self) if fn
         self
 
       unlock: (fn) ->
@@ -122,7 +123,7 @@ kopi.module("kopi.views")
         logging.debug("Unlock view. #{self.guid}")
         self.locked = false
         self.emit 'unlock'
-        fn(false, self) if $.isFunction(fn)
+        fn(false, self) if fn
         self
 
       ###

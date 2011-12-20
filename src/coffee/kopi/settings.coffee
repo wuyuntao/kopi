@@ -5,8 +5,22 @@ kopi.module("kopi.settings")
       debug: true
 
       app:
-        # @type   {Number}          Interval to check state change
+        # @type {Boolean}         Enable task queue for application
+        task: false
+        # @type  {String}         Start URL of app
+        startURL: null
+        # @type  {Boolean}        Use pushState for URL change if available
+        usePushState: true
+        # @type  {Boolean}        Use hashChange for URL change if available
+        useHashChange: true
+        # @type  {Boolean}        Use interval for URL change if available
+        useInterval: true
+        # @type {Number}          time to check state change
         interval: 50
+        # @type  {Boolean}        Use hash even pushState is available. Good for offline-capable app
+        alwaysUseHash: true
+        # @type  {Boolean}        Do page redirect if no matched route is found
+        redirectWhenNoRouteFound: false
 
       cache:
         # 是否自动绑定 applicationCache 事件
