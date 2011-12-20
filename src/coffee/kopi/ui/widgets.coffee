@@ -264,6 +264,12 @@ kopi.module("kopi.ui.widgets")
 
       # {{{ Helper methods
       ###
+      Check if widgets are same
+      ###
+      equals: (widget) ->
+        this.guid == widget.guid
+
+      ###
       Human readable widget name
       ###
       widget: ->

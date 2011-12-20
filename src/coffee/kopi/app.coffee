@@ -4,11 +4,13 @@ kopi.module("kopi.app")
   .require("kopi.events")
   .require("kopi.utils.uri")
   .require("kopi.utils.support")
+  .require("kopi.utils.text")
+  .require("kopi.utils.array")
   .require("kopi.app.cache")
   .require("kopi.app.router")
   .require("kopi.ui.viewport")
   .define (exports, settings, logging, events
-                  , uri, support
+                  , uri, support, text, array
                   , cache, router, viewport) ->
 
     win = $(window)
@@ -59,7 +61,12 @@ kopi.module("kopi.app")
         self._currentURL = null
         self._currentView = null
         self._views = []
+        self._interval = null
 
+      ###
+      Launch the application
+
+      ###
       start: ->
         cls = this.constructor
         self = this
@@ -80,77 +87,106 @@ kopi.module("kopi.app")
         self._listenToStateChange()
         self
 
-      load: (url) ->
-        self = this
-        self.url(url)
-
       ###
-      Convert url to state
+      load URL
 
-      @param {String} url
-      ###
-      _parse: (url) ->
-        # url = uri.current() if not url
-        if support.pushState and appSettings.usePushState
-          #
-        else
-          #
-
-      _listenToURLChange: ->
-        cls = this.constructor
-        self = this
-        if support.pushState and appSettings.usePushState
-          $(hist).bind 'popstate', (e) ->
-            self.emit(cls.REQUEST_EVENT, [url])
-        else if support.hashChange and appSettings.useHashChange
-          win.bind "hashchange",
-        else if appSettings.useInterval
-          #
-        else
-          logger.warn("App will not repond to url change")
-        return
-
-      ###
       ###
       url: (url) ->
         cls = this.constructor
         self = this
         url = uri.absolute(url)
+        # When using hash, absolute URLs will be converted to relative hashes.
+        # e.g.
+        #   If baseURI is /foo and absolute URL is /foo/bar
+        #   The request url will be /foo#/bar
         if support.pushState and appSettings.usePushState
+          if appSettings.alwaysUseHash
+            url = "#" + uri.relative(url)
           hist.pushState(url)
           self.emit(cls.REQUEST_EVENT, [url])
         else
-          loc.hash = url
+          loc.hash = uri.relative(url)
         self
 
       ###
-      See if state has been changed
+      callback when app starts
+
       ###
-      check: (e) ->
-        # TODO Add to queue if locked
-        return false if this.locked
-
-        current = this.getCurrent()
-        return false if state == current
-        this.load(current)
-
       onstart: (e) ->
 
+      ###
+      callback when app receives new request
+
+      @param {Event}  e
+      @param {String} url
+      ###
       onrequest: (e, url) ->
         self = this
         view = self._match(url)
+        # If views are same, update the current view
+        # TODO Add to some method. e.g. view.equals(self._currentView)
+        if view.guid == self._currentView.guid
+          self._currentView.update()
+          return
+
+        # If views are different, stop current view and start target view
         if self._currentView and self._currentView.started
           self._currentView.stop()
+        # If view is not created, create view then start
         if not view.created
-          view.create ->
-            view.start()
+          view.create -> view.start()
         else
           view.start()
 
       ###
+      Listen to URL change events.
+      For HTML5 browsers, listen to `onpopstate` event by default.
+      For HTML4 browsers, listen to `onhashchange` event by default.
+      For Legacy browsers, check url change by interval.
+
+      ###
+      _listenToURLChange: ->
+        self = this
+        checkFn = -> self._checkURLChange()
+        if support.pushState and appSettings.usePushState
+          self._useHash = appSettings.alwaysUseHash
+          $(hist).bind 'popstate', checkFn
+        else if support.hashChange and appSettings.useHashChange
+          self._useHash = true
+          win.bind "hashchange", checkFn
+        else if appSettings.useInterval
+          self._useHash = true
+          self._interval = setInterval checkFn, appSettings.interval
+        else
+          logger.warn("App will not repond to url change")
+        return
+
+      ###
+      Check if URL is different from last state
+      ###
+      _checkURLChange: ->
+        cls = this.constructor
+        self = this
+        url = uri.parse(location.href)
+        if self._useHash
+          # Combine path and hash
+          url = uri.join(url.urlNoQuery, url.fragment.replace(/^#/, ''))
+        else
+          url = url.urlNoQuery
+
+        if not self._currentURL or url != self._currentURL
+          self._currentURL = url
+          self.emit(cls.REQUEST_EVENT, [url])
+        self
+
+      ###
       Find existing view in stack
+
+      @param  {kopi.utils.uri.URI} url
+      @return {kopi.views.View}
       ###
       _match: (url) ->
+        self = this
         path = uri.parse(url).path
         request = router.match(path)
 
@@ -163,55 +199,33 @@ kopi.module("kopi.app")
           return
 
         route = request.route
-        # Find route in existing views
-        # If `group` is `true`, use same view for every URL matches route
-        # if route.group is true
-        #   viewKey = "view:#{route.view.name}"
-        # If `group` is `false` or not defined, use unique key for different URLs
-        # else if not route.group
-        #   pathKey = "path:#{path}"
-        # else if text.isString(route.group)
-        #   arg = route.group
-        #   if arg not in route.args
-        #     logger.warn("Can not find argument: #{arg}")
-        #   argsKey = "args:#{arg}:#{route.args[arg]}"
-        # else if array.isArray(route.group)
-        #   args = []
-        #   for arg in route.group
-        #     if arg not in route.args
-        #       logger.warn("Can not find argument: #{arg}")
-        #       continue
-        #     args.push("#{arg}:#{route.args[arg]}")
-        #   argsKey = "args:#{args.join(':')}"
-        # logger.debug "Got key for view. #{key}"
-        key = null # Find key for view
-        view = null # Find view by key
+        for view in self._views
+          # If `group` is `true`, use same view for every URL matches route
+          if route.group is true
+            if view.name == route.view.name
+              return view
+          # If `group` is `string`, use same view for every URL matches route
+          else if text.isString(route.group)
+            if view.params[route.group] == route.params[route.group]
+              return view
+          # If `group` is `array`, use same view for every URL matches route
+          else if array.isArray(route.group)
+            matches = true
+            for param in route.group
+              if view.params[param] != route.params[param]
+                matches = false
+                break
+            if matches
+              return view
+          # If `group` is false, use different view for different URLs
+          else
+            if view.url.path == path
+              return view
 
-        # Create view and add it to list if neccessary
-        if not view
-          view = new route.view(self, request.url, request.params)
-          self._views.push(view)
+        # Create view and add it to list
+        view = new route.view(self, request.url, request.params)
+        self._views.push(view)
         view
-
-        ###
-        path = uri.parse(url).path
-        # Find started view
-        view = self.match(path)
-        unless view
-          # Find view matches
-          match = router.match(path)
-          unless match
-            return uri.goto url
-          view = new match.route.view(self, match.args)
-
-        # Stop current view
-        if self.current and self.current.started
-          self.current.stop()
-        # Start view
-        if not view.created
-          view.create()
-        view.start()
-        ###
 
     exports.App = App
     exports.instance = -> appInstance

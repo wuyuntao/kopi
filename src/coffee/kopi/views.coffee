@@ -203,6 +203,12 @@ kopi.module("kopi.views")
       onunlock: (e) ->
 
       ###
+      Helper methods
+      ###
+      equals: (view) ->
+        this.guid == view.guid
+
+      ###
       Get panel if exists or create panel from template class or function
       ###
       _getContent: (name, create=true) ->
