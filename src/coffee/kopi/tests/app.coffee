@@ -9,6 +9,7 @@ kopi.module("kopi.tests.app")
     loc = location
     hist = history
     win = $(window)
+    base = uri.current()
 
     # View definitions
     class AlphaView extends views.View
@@ -35,47 +36,118 @@ kopi.module("kopi.tests.app")
         .route('/gamma/:id/page/:page', name: 'gamma-page-detail', group: ["id"])
         .end()
 
+    app = new DeltaApp()
+    app.start()
+
     module("kopi.app")
 
     test "push state", ->
-      app = new DeltaApp
+      app.configure
         usePushState: true
         useHashChange: false
         useInterval: false
         alwaysUseHash: false
-      app.start()
 
+      stop()
+      app.once DeltaApp.REQUEST_EVENT, (e, url) ->
+        equals url.path, "/alpha"
+        start()
       app.load "/alpha"
       app.currentURL = "/alpha"
       equals loc.pathname, "/alpha"
 
+      stop()
+      app.once DeltaApp.REQUEST_EVENT, (e, url) ->
+        equals url.path, "/alpha/1"
+        start()
       app.load "/alpha/1"
       app.currentURL = "/alpha/1"
       equals loc.pathname, "/alpha/1"
 
+      stop()
+      app.once DeltaApp.REQUEST_EVENT, (e, url) ->
+        equals url.path, "/alpha"
+        start()
       hist.back()
+      stop()
+      waitFn = ->
+        app.currentURL = "/alpha"
+        equals loc.pathname, "/alpha"
+        start()
+
+        # Revert original URL
+        hist.pushState(null, null, base)
+
+      # Wait for history being changed
+      setTimeout waitFn, 500
+
+    test "push state with hash", ->
+      app.configure
+        usePushState: true
+        useHashChange: false
+        useInterval: false
+        alwaysUseHash: true
+
+      stop()
+      app.once DeltaApp.REQUEST_EVENT, (e, url) ->
+        equals url.path, "/alpha"
+        start()
+      app.load "/alpha"
       app.currentURL = "/alpha"
-      equals loc.pathname, "/alpha"
+      equals loc.hash, "#../alpha"
 
-    # test "push state with hash", ->
-    #   app = new DeltaApp
-    #     usePushState: true
-    #     useHashChange: false
-    #     useInterval: false
-    #     alwaysUseHash: true
-    #   app.start()
+      stop()
+      app.once DeltaApp.REQUEST_EVENT, (e, url) ->
+        equals url.path, "/alpha/1"
+        start()
+      app.load "/alpha/1"
+      app.currentURL = "/alpha/1"
+      equals loc.hash, "#../alpha/1"
 
-    #   app.stop()
+      stop()
+      app.once DeltaApp.REQUEST_EVENT, (e, url) ->
+        equals url.path, "/alpha"
+        start()
+      hist.back()
+      stop()
+      waitFn = ->
+        app.currentURL = "/alpha"
+        equals loc.hash, "#../alpha"
+        start()
 
-    # test "hash change", ->
-    #   app = new DeltaApp
-    #     usePushState: false
-    #     useHashChange: true
-    #     useInterval: false
-    #     alwaysUseHash: true
-    #   app.start()
+        # Revert original URL
+        hist.pushState(null, null, base)
 
-    #   app.stop()
+      # Wait for history being changed
+      setTimeout waitFn, 500
+
+    test "hash change", ->
+      app.configure
+        usePushState: false
+        useHashChange: true
+        useInterval: false
+        alwaysUseHash: true
+
+      app.load "/alpha"
+      app.currentURL = "/alpha"
+      equals loc.hash, "#../alpha"
+
+      app.load "/alpha/1"
+      app.currentURL = "/alpha/1"
+      equals loc.hash, "#../alpha/1"
+
+      hist.back()
+      stop()
+      waitFn = ->
+        app.currentURL = "/alpha"
+        equals loc.hash, "#../alpha"
+        start()
+
+        # Revert original URL
+        hist.pushState(null, null, base)
+
+      # Wait for history being changed
+      setTimeout waitFn, 500
 
     # test "interval", ->
     #   app = new DeltaApp

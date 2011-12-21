@@ -16,7 +16,7 @@ kopi.module("kopi.ui.notification.widgets")
       kls.configure
         autoSkeleton: true
 
-      actions = [SHOW, HIDE, TRANSPARENT]
+      actions = [kls.SHOW, kls.HIDE, kls.TRANSPARENT]
 
       for action in actions
         ((a) =>

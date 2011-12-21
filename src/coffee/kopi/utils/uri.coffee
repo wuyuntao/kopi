@@ -22,7 +22,7 @@ kopi.module("kopi.utils.uri")
     Convert an absolute URI into a relative URI
     ###
     relative = (url, baseURL) ->
-      baseURL = base() if not baseURL
+      baseURL = current() if not baseURL
       unjoin(baseURL, url)
 
     ###

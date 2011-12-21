@@ -6,9 +6,8 @@ kopi.module("kopi.views")
   .require("kopi.utils")
   .require("kopi.utils.html")
   .require("kopi.utils.text")
-  .require("kopi.ui.panels")
   .define (exports, exceptions, settings, events, logging
-                  , utils, html, text, panels) ->
+                  , utils, html, text) ->
 
     ###
     View 的基类
@@ -50,7 +49,6 @@ kopi.module("kopi.views")
         self.app = app
         self.url = url
         self.params = params
-        self.panels = app.layout.panels
 
       ###
       Initialize UI components skeleton and append them to DOM Tree
@@ -132,11 +130,11 @@ kopi.module("kopi.views")
       oncreate: (e) ->
         self = this
         # create contents and append them to panel asynchronously
-        for name, panel of self.panels
-          content = this._getContent(name, true)
-          if content
-            content.skeleton()
-            panel.append(content)
+        # for name, panel of self.panels
+        #   content = this._getContent(name, true)
+        #   if content
+        #     content.skeleton()
+        #     panel.append(content)
 
         self.created = true
         self.unlock()
@@ -146,10 +144,10 @@ kopi.module("kopi.views")
       onstart: (e) ->
         self = this
         # Show contents asynchronously
-        for name, panel of self.panels
-          content = this._getContent(name)
-          content.lock() if content
-          panel.load(content)
+        # for name, panel of self.panels
+        #   content = this._getContent(name)
+        #   content.lock() if content
+        #   panel.load(content)
 
         self.started = true
         self.unlock()
@@ -162,9 +160,9 @@ kopi.module("kopi.views")
       oninitialize: (e) ->
         self = this
         # Initialize contents asynchronously
-        for name, panel of self.panels
-          panel = this._getContent(name)
-          panel.render() if panel and not panel.rendered
+        # for name, panel of self.panels
+        #   panel = this._getContent(name)
+        #   panel.render() if panel and not panel.rendered
 
         self.initialized = true
         logging.debug("View initialized. #{self.guid}")
@@ -175,9 +173,9 @@ kopi.module("kopi.views")
         this.emit 'updated'
 
       onstop: (e) ->
-        for name, panel of self.panels
-          content = this._getContent(name)
-          content.unlock() if content
+        # for name, panel of self.panels
+        #   content = this._getContent(name)
+        #   content.unlock() if content
 
         self = this
         self.started = false
@@ -186,11 +184,11 @@ kopi.module("kopi.views")
         self.emit 'stopped'
 
       ondestroy: (e) ->
-        for name, panel of self.panels
-          content = this._getContent(name)
-          if content
-            content.destroy()
-            panel.remove(content)
+        # for name, panel of self.panels
+        #   content = this._getContent(name)
+        #   if content
+        #     content.destroy()
+        #     panel.remove(content)
 
         self = this
         self.created = false

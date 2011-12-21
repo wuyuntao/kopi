@@ -3,6 +3,8 @@ kopi.module("kopi.ui.notification.dialogs")
   .require("kopi.utils.i18n")
   .require("kopi.ui.notification.widgets")
   .require("kopi.ui.notification.overlays")
+  .require("kopi.ui.notification.messages.en")
+  .require("kopi.ui.notification.messages.zh_CN")
   .define (exports, exceptions, i18n, widgets, overlays) ->
 
     ###
@@ -16,7 +18,7 @@ kopi.module("kopi.ui.notification.dialogs")
     ###
     class Dialog extends widgets.Widget
 
-      this.defaults
+      this.configure
         title: i18n.t("kopi.notification.messages.title")
         action: i18n.t("kopi.notification.messages.action")
         close: i18n.t("kopi.notification.messages.close")

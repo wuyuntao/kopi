@@ -8,7 +8,7 @@ kopi.module("kopi.ui.notification.overlays")
 
       constructor: ->
         super(settings.kopi.ui.notification.overlay)
-        this.element.bind "click", (e) -> return false
+        $(this.element).bind "click", (e) -> return false
 
       show: (transparent=false) ->
         self = this

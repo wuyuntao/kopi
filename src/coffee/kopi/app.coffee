@@ -2,6 +2,7 @@ kopi.module("kopi.app")
   .require("kopi.settings")
   .require("kopi.logging")
   .require("kopi.events")
+  .require("kopi.utils")
   .require("kopi.utils.uri")
   .require("kopi.utils.support")
   .require("kopi.utils.text")
@@ -11,12 +12,13 @@ kopi.module("kopi.app")
   .require("kopi.app.router")
   .require("kopi.ui.viewport")
   .define (exports, settings, logging, events
-                  , uri, support, text, array, klass
+                  , utils, uri, support, text, array, klass
                   , cache, router, viewport) ->
 
     win = $(window)
     hist = history
     loc = location
+    baseURL = uri.current()
     logger = logging.logger(exports.name)
     appSettings = settings.kopi.app
     appInstance = null
@@ -107,18 +109,21 @@ kopi.module("kopi.app")
       load: (url) ->
         cls = this.constructor
         self = this
-        url = uri.absolute(url)
+        url = uri.parse uri.absolute(url)
         # When using hash, absolute URLs will be converted to relative hashes.
         # e.g.
         #   If baseURI is /foo and absolute URL is /foo/bar
         #   The request url will be /foo#/bar
-        if support.pushState and self._options.usePushState
+        if support.history and self._options.usePushState
           if self._options.alwaysUseHash
-            url = "#" + uri.relative(url)
-          hist.pushState(url)
+            console.log(url, baseURL, uri.relative(url.path, baseURL))
+            state = "#" + uri.relative(url.urlNoQuery, baseURL)
+          else
+            state = url.path
+          hist.pushState(null, null, state)
           self.emit(cls.REQUEST_EVENT, [url])
-        else
-          loc.hash = uri.relative(url)
+        else if self._options.useHashChange or self._options.useInterval
+          loc.hash = uri.relative(url.urlNoQuery, baseURL)
         self
 
       ###
@@ -132,12 +137,20 @@ kopi.module("kopi.app")
       callback when app receives new request
 
       @param {Event}  e
-      @param {String} url
+      @param {kopi.utils.uri.URI} url
       ###
       onrequest: (e, url) ->
         logger.info "Receive request: #{url}"
         self = this
         view = self._match(url)
+
+        if not view
+          if self._options.redirectWhenNoRouteFound
+            url = uri.unparse url
+            logger.info("Redirect to URL: #{url}")
+            uri.goto url
+          return
+
         # If views are same, update the current view
         # TODO Add to some method. e.g. view.equals(self.currentView)
         if view.guid == self.currentView.guid
@@ -152,6 +165,7 @@ kopi.module("kopi.app")
           view.create -> view.start()
         else
           view.start()
+        self.currentView = view
 
       ###
       Listen to URL change events.
@@ -163,10 +177,10 @@ kopi.module("kopi.app")
       _listenToURLChange: ->
         self = this
         checkFn = -> self._checkURLChange()
-        if support.pushState and self._options.usePushState
+        if support.history and self._options.usePushState
           self._useHash = self._options.alwaysUseHash
-          $(hist).bind 'popstate', checkFn
-        else if support.hashChange and self._options.useHashChange
+          win.bind 'popstate', checkFn
+        else if support.hash and self._options.useHashChange
           self._useHash = true
           win.bind "hashchange", checkFn
         else if self._options.useInterval
@@ -186,9 +200,9 @@ kopi.module("kopi.app")
       _stopListenToURLChange: ->
         self = this
         checkFn = -> self._checkURLChange()
-        if support.pushState and self._options.usePushState
-          $(hist).unbind 'popstate'
-        else if support.hashChange and self._options.useHashChange
+        if support.history and self._options.usePushState
+          win.unbind 'popstate'
+        else if support.hash and self._options.useHashChange
           win.unbind "hashchange"
         else if self._options.useInterval
           if self._interval
@@ -205,11 +219,10 @@ kopi.module("kopi.app")
         url = uri.parse(location.href)
         if self._useHash
           # Combine path and hash
-          url = uri.join(url.urlNoQuery, url.fragment.replace(/^#/, ''))
-        else
-          url = url.urlNoQuery
+          console.log(url.fragment, url.path, uri.absolute(url.fragment.replace(/^#/, ''), url.path))
+          url.path = uri.absolute(url.fragment.replace(/^#/, ''), url.path)
 
-        if not self.currentURL or url != self.currentURL
+        if not self.currentURL or url.path != self.currentURL.path
           self.currentURL = url
           self.emit(cls.REQUEST_EVENT, [url])
         self
@@ -228,9 +241,6 @@ kopi.module("kopi.app")
         # If no proper router is found
         if not request
           logger.warn("Can not find proper route for path: #{path}")
-          if self._options.redirectWhenNoRouteFound
-            logger.info("Redirect to URL: #{url}")
-            uri.goto url
           return
 
         route = request.route

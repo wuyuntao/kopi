@@ -1,8 +1,9 @@
 kopi.module("kopi.ui.notification.indicators")
+  .require("kopi.settings")
   .require("kopi.utils.i18n")
   .require("kopi.ui.notification.widgets")
   .require("kopi.ui.notification.overlays")
-  .define (exports, i18n, widgets, overlays) ->
+  .define (exports, settings, i18n, widgets, overlays) ->
 
     class Indicator extends widgets.Widget
 

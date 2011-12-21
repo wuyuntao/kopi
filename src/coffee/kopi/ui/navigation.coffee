@@ -1,15 +1,14 @@
 kopi.module("kopi.ui.navigation")
   .require("kopi.settings")
-  .require("kopi.ui.panels")
-  .require("kopi.ui.contents")
+  .require("kopi.ui.widgets")
   .require("kopi.utils")
   .require("kopi.utils.i18n")
-  .define (exports, settings, panels, contents, utils, i18n) ->
+  .define (exports, settings, widgets, utils, i18n) ->
 
     ###
     管理 导航栏 的容器
     ###
-    class Navbar extends panels.Panel
+    class Navbar extends widgets.Widget
 
       skeleton: (element) ->
         super
@@ -19,7 +18,7 @@ kopi.module("kopi.ui.navigation")
         #   this.nav = nav title: i18n.t("loading")
         # this.nav = nav title: i18n.t("loading")
 
-    class Nav extends contents.Content
+    class Nav extends widgets.Widget
       this.configure {}
 
       parts = ["left", "center", "right"]

@@ -173,8 +173,10 @@ kopi.module("kopi.app.router")
 
     ###
     view = (view) ->
-      route: (route, option) -> router.add(route, view, option)
-      end: -> router
+      route: (route, option) ->
+        router.add(route, view, option)
+        this
+      end: -> exports
 
     exports.instance = instance
     exports.match = match

@@ -42,6 +42,7 @@ kopi.module("kopi.tests.utils.uri")
         equal uri.join(url, 'foo/bar'), 'http://www.google.com:8080/search/foo/bar'
 
         equal uri.join('foo', 'bar'), 'bar'
+        equal uri.join('/foo/bar', '../search'), 'search'
 
       test "join domain", ->
         equal uri.join('https://www.fark.com:443/search/', '//www.google.com/foo/bar'),
@@ -98,7 +99,7 @@ kopi.module("kopi.tests.utils.uri")
 
       test "unjoin query", ->
         equal uri.unjoin("http://www.google.com/foo;para?query#frag", "http://www.google.com/foo"), "foo"
-        equal uri.unjoin("http://localhost/alpha/1", "http://localhost.com/tests/kopi?notrycatch=true"), "alpha/1"
+        equal uri.unjoin("http://localhost/tests/kopi?notrycatch=true", "http://localhost/alpha/1"), "../alpha/1"
 
       test "unjoin fragment", ->
         equal uri.unjoin("http://www.google.com/foo", "http://www.google.com/foo;para?query#frag"),
