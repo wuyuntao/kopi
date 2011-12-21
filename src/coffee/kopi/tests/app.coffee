@@ -148,37 +148,3 @@ kopi.module("kopi.tests.app")
 
       # Wait for history being changed
       setTimeout waitFn, 500
-
-    # test "interval", ->
-    #   app = new DeltaApp
-    #     usePushState: false
-    #     useHashChange: false
-    #     useInterval: false
-    #     alwaysUseHash: true
-    #   app.start()
-
-    #   app.stop()
-
-    # Test flow
-    # flow = (app) ->
-    #   app.start()
-
-    #   # Should start AlphaView
-    #   app.load "/alpha"
-    #   equals loc.pathname, "/alpha"
-    #   view1 = app.currentView
-    #   equals view1.guid, ""
-    #   url1 = uri.parse app.currentURL
-    #   equals url1.path, "/alpha"
-
-    #   # Should start another AlphaView
-    #   app.load "/alpha/1?query=ignore"
-    #   equals loc.pathname, "/alpha/1?query=ignore"
-    #   view2 = app.currentView
-    #   equals view2.guid, ""
-    #   ok view2.guid != view1.guid
-    #   url2 = uri.parse app.currentURL
-    #   equals url.path, "/alpha/1"
-
-    #   app.stop()
-

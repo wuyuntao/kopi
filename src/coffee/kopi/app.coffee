@@ -142,7 +142,7 @@ kopi.module("kopi.app")
       onrequest: (e, url) ->
         logger.info "Receive request: #{url.path}"
         self = this
-        view = self._match(url)
+        [view, request] = self._match(url)
 
         if not view
           if self._options.redirectWhenNoRouteFound
@@ -154,7 +154,7 @@ kopi.module("kopi.app")
         # If views are same, update the current view
         # TODO Add to some method. e.g. view.equals(self.currentView)
         if self.currentView and view.guid == self.currentView.guid
-          self.currentView.update()
+          self.currentView.update(request.url, request.params)
           return
 
         # If views are different, stop current view and start target view
@@ -162,9 +162,9 @@ kopi.module("kopi.app")
           self.currentView.stop()
         # If view is not created, create view then start
         if not view.created
-          view.create -> view.start()
+          view.create -> view.start(request.url, request.params)
         else
-          view.start()
+          view.start(request.url, request.params)
         self.currentView = view
 
       ###
@@ -270,7 +270,7 @@ kopi.module("kopi.app")
         # Create view and add it to list
         view = new route.view(self, request.url, request.params)
         self._views.push(view)
-        view
+        [view, request]
 
     exports.App = App
     exports.instance = -> appInstance

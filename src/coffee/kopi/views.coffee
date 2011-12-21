@@ -14,31 +14,55 @@ kopi.module("kopi.views")
 
     视图的载入应该越快越好，所以 AJAX 和数据库等 IO 操作不应该阻塞视图的显示
 
+    Life cycle:
+
+    Constructor -> Create -> Start -> Update -> Stop -> Destroy
+
+
     Example:
 
-      class BookView
-        header: new Nav(title: "Title")
-        contentClass: ListContent
-        footerFn: (view) ->
+      class SomeView
+
+        oncreate: ->
+          this.nav = new SomeNav()
+          this.content = new SomeContent()
+          this.footer = new SomeTabs()
 
         onstart: ->
-          Book.fetch (book) =>
-            this.book = book
-            super
+          this.nav.skeleton().render()
+          this.content.skeleton().render()
+          this.footer.skeleton().render()
+
+          this.app.navBar.load(this.nav)
+          this.app.viewFlipper.load(this.content)
+          this.app.tabBar.load(this.footer)
+
+        onstop: ->
+          this.nav.destroy()
+          this.content.destroy()
+          this.footer.destroy()
+
+        ondestroy: ->
+          this.nav = null
+          this.content = null
+          this.footer = null
+
     ###
     class View extends events.EventEmitter
 
-      # utils.configure this
-      #   eventTimeout: 60 * 1000     # 60 seconds
-
-      # type  #{Boolean}  created   视图是否已创建
-      created: false
-      # type  #{Boolean}  started   视图是否已启动
-      started: false
-      # type  #{Boolean}  created   视图是否已初始化
-      initialized: false
-      # type  #{Boolean}  started   视图是否允许操作
-      locked: false
+      kls = this
+      kls.CREATE_EVENT = "create"
+      kls.CREATED_EVENT = "created"
+      kls.START_EVENT = "start"
+      kls.STARTED_EVENT = "started"
+      kls.UPDATE_EVENT = "update"
+      kls.UPDATED_EVENT = "updated"
+      kls.STOP_EVENT = "stop"
+      kls.STOPPED_EVENT = "stopped"
+      kls.DESTROY_EVENT = "destroy"
+      kls.DESTROYED_EVENT = "destroyed"
+      kls.LOCK_EVENT = "lock"
+      kls.UNLOCK_EVENT = "unlock"
 
       constructor: (app, url, params={}) ->
         if not app
@@ -50,77 +74,104 @@ kopi.module("kopi.views")
         self.url = url
         self.params = params
 
+        # type  #{Boolean}  created   视图是否已创建
+        self.created = false
+        # type  #{Boolean}  started   视图是否已启动
+        self.started = false
+        # type  #{Boolean}  started   视图是否允许操作
+        self.locked = false
+
       ###
       Initialize UI components skeleton and append them to DOM Tree
       ###
       create: (fn) ->
+        cls = this.constructor
         self = this
-        return self if self.created
-        logging.debug("Create view. #{self.guid}")
+        if self.created or self.locked
+          logger.warn "View is already created or locked."
+          return self
+        logging.info("Create view. #{self.guid}")
         self.lock()
-        self.on('created', (e) -> fn(false, self)) if fn
-        self.emit('create')
+        self.on(cls.CREATED_EVENT, (e) -> fn(false, self)) if fn
+        self.emit(cls.CREATE_EVENT)
 
       ###
       Display UI components and then render them with data
       ###
-      start: (fn) ->
+      start: (url, params, fn) ->
+        cls = this.constructor
         self = this
         throw new exceptions.ValueError("Must create view first.") if not self.created
-        return self if self.started
-        logging.debug("Start view. #{self.guid}")
+        if self.started or self.locked
+          logger.warn "View is already started or locked."
+          return self
+        logging.info("Start view. #{self.guid}")
         self.lock()
-        self.on('started', (e) -> fn(false, self)) if fn
-        self.emit('start')
+        self.on(cls.STARTED_EVENT, (e) -> fn(false, self)) if fn
+        self.emit(cls.START_EVENT)
 
       ###
       Update UI components when URL changes
       ###
-      update: (fn) ->
+      update: (url, params, fn) ->
+        cls = this.constructor
         self = this
-        logging.debug("Update view. #{self.guid}")
-        self.on('updated', (e) -> fn(false, this)) if fn
-        self.emit('update')
+        if not self.started
+          throw new exceptions.ValueError("Must start view first.")
+        if self.locked
+          logger.warn "View is locked."
+          return self
+        logging.info("Update view. #{self.guid}")
+        self.on(cls.UPDATED_EVENT, (e) -> fn(false, this)) if fn
+        self.emit(cls.UPDATE_EVENT)
 
       ###
       Hide UI components
       ###
       stop: (fn) ->
+        cls = this.constructor
         self = this
         throw new exceptions.ValueError("Must create view first.") if not self.created
-        return self if not self.started
-        logging.debug("Stop view. #{self.guid}")
+        if not self.started or self.locked
+          logger.warn "View is already stopped or locked."
+          return self
+        logging.info("Stop view. #{self.guid}")
         self.lock()
-        self.on('stopped', (e) -> fn(false, self)) if fn
-        self.emit('stop')
+        self.on(cls.STOPPED_EVENT, (e) -> fn(false, self)) if fn
+        self.emit(cls.STOP_EVENT)
 
       ###
       Remove UI components from DOM Tree
       ###
       destroy: (fn) ->
+        cls = this.constructor
         self = this
         throw new exceptions.ValueError("Must stop view first.") if self.started
-        return self if not self.created
-        logging.debug("Destroy view. #{self.guid}")
+        if not self.created or self.locked
+          logger.warn "View is already destroyed or locked."
+          return self
+        logging.info("Destroy view. #{self.guid}")
         self.lock()
-        self.on('destroyed', (e) -> fn(false, self)) if fn
-        self.emit('destroy')
+        self.on(cls.DESTROYED_EVENT, (e) -> fn(false, self)) if fn
+        self.emit(cls.DESTROY_EVENT)
 
       lock: (fn) ->
+        cls = this.constructor
         self = this
         return self if self.locked
-        logging.debug("Lock view. #{self.guid}")
+        logging.info("Lock view. #{self.guid}")
         self.locked = true
-        self.emit 'lock'
+        self.emit cls.LOCK_EVENT
         fn(false, self) if fn
         self
 
       unlock: (fn) ->
+        cls = this.constructor
         self = this
         return self unless self.locked
-        logging.debug("Unlock view. #{self.guid}")
+        logging.info("Unlock view. #{self.guid}")
         self.locked = false
-        self.emit 'unlock'
+        self.emit cls.UNLOCK_EVENT
         fn(false, self) if fn
         self
 
@@ -128,73 +179,42 @@ kopi.module("kopi.views")
       事件的模板方法
       ###
       oncreate: (e) ->
+        cls = this.constructor
         self = this
-        # create contents and append them to panel asynchronously
-        # for name, panel of self.panels
-        #   content = this._getContent(name, true)
-        #   if content
-        #     content.skeleton()
-        #     panel.append(content)
-
         self.created = true
         self.unlock()
-        logging.debug("View created. #{self.guid}")
-        self.emit 'created'
+        logging.info("View created. #{self.guid}")
+        self.emit cls.CREATED_EVENT
 
       onstart: (e) ->
+        cls = this.constructor
         self = this
-        # Show contents asynchronously
-        # for name, panel of self.panels
-        #   content = this._getContent(name)
-        #   content.lock() if content
-        #   panel.load(content)
-
         self.started = true
         self.unlock()
-        if not self.initialized
-          logging.debug("Initialize view. #{self.guid}")
-          self.emit 'initialize'
-        logging.debug("View started. #{self.guid}")
-        self.emit 'started'
-
-      oninitialize: (e) ->
-        self = this
-        # Initialize contents asynchronously
-        # for name, panel of self.panels
-        #   panel = this._getContent(name)
-        #   panel.render() if panel and not panel.rendered
-
-        self.initialized = true
-        logging.debug("View initialized. #{self.guid}")
-        self.emit 'initialized'
+        logging.info("View started. #{self.guid}")
+        self.emit cls.STARTED_EVENT
 
       onupdate: (e) ->
-        logging.debug("View updated. #{self.guid}")
-        this.emit 'updated'
+        cls = this.constructor
+        self = this
+        logging.info("View updated. #{self.guid}")
+        self.emit cls.UPDATED_EVENT
 
       onstop: (e) ->
-        # for name, panel of self.panels
-        #   content = this._getContent(name)
-        #   content.unlock() if content
-
+        cls = this.constructor
         self = this
         self.started = false
         self.unlock()
-        logging.debug("View stopped. #{self.guid}")
-        self.emit 'stopped'
+        logging.info("View stopped. #{self.guid}")
+        self.emit cls.STOPPED_EVENT
 
       ondestroy: (e) ->
-        # for name, panel of self.panels
-        #   content = this._getContent(name)
-        #   if content
-        #     content.destroy()
-        #     panel.remove(content)
-
+        cls = this.constructor
         self = this
         self.created = false
         self.unlock()
-        logging.debug("View destroyed. #{self.guid}")
-        self.emit 'destroyed'
+        logging.info("View destroyed. #{self.guid}")
+        self.emit cls.DESTROYED_EVENT
 
       onlock: (e) ->
 
@@ -205,15 +225,5 @@ kopi.module("kopi.views")
       ###
       equals: (view) ->
         this.guid == view.guid
-
-      ###
-      Get panel if exists or create panel from template class or function
-      ###
-      _getContent: (name, create=true) ->
-        return this[name] if name of this or not create
-        contentClass = this[name + "Class"]
-        return this[name] = new contentClass(this) if contentClass
-        contentFn = this[name + "Fn"]
-        return this[name] = contentFn(this) if contentFn
 
     exports.View = View
