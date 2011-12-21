@@ -140,7 +140,7 @@ kopi.module("kopi.app")
       @param {kopi.utils.uri.URI} url
       ###
       onrequest: (e, url) ->
-        logger.info "Receive request: #{url}"
+        logger.info "Receive request: #{url.path}"
         self = this
         view = self._match(url)
 
@@ -153,7 +153,7 @@ kopi.module("kopi.app")
 
         # If views are same, update the current view
         # TODO Add to some method. e.g. view.equals(self.currentView)
-        if view.guid == self.currentView.guid
+        if self.currentView and view.guid == self.currentView.guid
           self.currentView.update()
           return
 

@@ -29,6 +29,11 @@ kopi.module("kopi.utils.text")
       scope
 
     ###
+    字符串是否包含某些字符
+    ###
+    contains = (string, sub) -> string.indexOf(sub) >= 0
+
+    ###
     格式化字符串
 
     @param  {String}  string      待格式化的字符串
@@ -48,7 +53,7 @@ kopi.module("kopi.utils.text")
     Prefix checker
     ###
     startsWith = (string, prefix) ->
-      str.lastIndexOf(prefix, 0) == 0
+      string.lastIndexOf(prefix, 0) == 0
 
     ###
     Suffix checker
@@ -89,7 +94,10 @@ kopi.module("kopi.utils.text")
 
     exports.camelize = camelize
     exports.constantize = constantize
+    exports.contains = contains
     exports.format = format
     exports.isString = isString
+    exports.startsWith = startsWith
+    exports.endsWith = endsWith
     exports.truncate = truncate
     exports.underscore = underscore

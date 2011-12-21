@@ -42,7 +42,7 @@ kopi.module("kopi.tests.utils.uri")
         equal uri.join(url, 'foo/bar'), 'http://www.google.com:8080/search/foo/bar'
 
         equal uri.join('foo', 'bar'), 'bar'
-        equal uri.join('/foo/bar', '../search'), 'search'
+        equal uri.join('/foo/bar', '../search'), '/search'
 
       test "join domain", ->
         equal uri.join('https://www.fark.com:443/search/', '//www.google.com/foo/bar'),

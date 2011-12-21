@@ -119,7 +119,7 @@ kopi.module("kopi.utils.uri")
       return emp if path == par or path == cur
       # This optimization detects uris which do not contain dot-segments,
       # and as a consequence do not require any processing.
-      return path unless './' in path or '/.' in path
+      return path unless text.contains(path, "./") or text.contains(path, "/.")
       absolute = text.startsWith(path, sep)
       segments = path.split(sep)
       length = segments.length
