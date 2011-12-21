@@ -14,12 +14,16 @@ kopi.module("kopi.utils.uri")
     ###
     Convert a relative URL into an absolute URI
     ###
-    absolute = (url) -> join(base(), url)
+    absolute = (url, baseURL) ->
+      baseURL = base() if not baseURL
+      join(baseURL, url)
 
     ###
     Convert an absolute URI into a relative URI
     ###
-    relative = (url) -> unjoin(base(), url)
+    relative = (url, baseURL) ->
+      baseURL = base() if not baseURL
+      unjoin(baseURL, url)
 
     ###
     获取当前页面 baseURI

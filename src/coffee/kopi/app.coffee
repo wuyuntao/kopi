@@ -6,11 +6,12 @@ kopi.module("kopi.app")
   .require("kopi.utils.support")
   .require("kopi.utils.text")
   .require("kopi.utils.array")
+  .require("kopi.utils.klass")
   .require("kopi.app.cache")
   .require("kopi.app.router")
   .require("kopi.ui.viewport")
   .define (exports, settings, logging, events
-                  , uri, support, text, array
+                  , uri, support, text, array, klass
                   , cache, router, viewport) ->
 
     win = $(window)
@@ -53,15 +54,21 @@ kopi.module("kopi.app")
       kls.START_EVENT = "start"
       kls.REQUEST_EVENT = "request"
 
-      constructor: ->
+      klass.configure kls
+
+      constructor: (options={}) ->
         self = this
+        self.guid = utils.guid("app")
         self.started = false
         self.locked = false
 
-        self._currentURL = null
-        self._currentView = null
+        self.currentURL = null
+        self.currentView = null
+
         self._views = []
         self._interval = null
+
+        self.configure appSettings, options
 
       ###
       Launch the application
@@ -74,7 +81,7 @@ kopi.module("kopi.app")
           logger.warn("App has already been launched.")
           return self
         # Make sure only one app is launched in current page
-        if appInstance
+        if appInstance and appInstance.guid != self.guid
           logger.error("Only one app can be launched in current page")
           return self
         # Set singleton of application
@@ -83,15 +90,21 @@ kopi.module("kopi.app")
         self.viewport = new viewport.Viewport()
         self.emit(kls.START_EVENT)
         # Load current URL
-        self.load(appSettings.startURL or uri.current())
-        self._listenToStateChange()
+        # self.load(self._options.startURL or uri.current())
+        self._listenToURLChange()
+        self.started = true
         self
+
+      stop: ->
+        this._stopListenToURLChange()
+        self.started = false
+        appInstance = null
 
       ###
       load URL
 
       ###
-      url: (url) ->
+      load: (url) ->
         cls = this.constructor
         self = this
         url = uri.absolute(url)
@@ -99,8 +112,8 @@ kopi.module("kopi.app")
         # e.g.
         #   If baseURI is /foo and absolute URL is /foo/bar
         #   The request url will be /foo#/bar
-        if support.pushState and appSettings.usePushState
-          if appSettings.alwaysUseHash
+        if support.pushState and self._options.usePushState
+          if self._options.alwaysUseHash
             url = "#" + uri.relative(url)
           hist.pushState(url)
           self.emit(cls.REQUEST_EVENT, [url])
@@ -113,6 +126,7 @@ kopi.module("kopi.app")
 
       ###
       onstart: (e) ->
+        logger.info "Start app: #{this.guid}"
 
       ###
       callback when app receives new request
@@ -121,17 +135,18 @@ kopi.module("kopi.app")
       @param {String} url
       ###
       onrequest: (e, url) ->
+        logger.info "Receive request: #{url}"
         self = this
         view = self._match(url)
         # If views are same, update the current view
-        # TODO Add to some method. e.g. view.equals(self._currentView)
-        if view.guid == self._currentView.guid
-          self._currentView.update()
+        # TODO Add to some method. e.g. view.equals(self.currentView)
+        if view.guid == self.currentView.guid
+          self.currentView.update()
           return
 
         # If views are different, stop current view and start target view
-        if self._currentView and self._currentView.started
-          self._currentView.stop()
+        if self.currentView and self.currentView.started
+          self.currentView.stop()
         # If view is not created, create view then start
         if not view.created
           view.create -> view.start()
@@ -148,17 +163,37 @@ kopi.module("kopi.app")
       _listenToURLChange: ->
         self = this
         checkFn = -> self._checkURLChange()
-        if support.pushState and appSettings.usePushState
-          self._useHash = appSettings.alwaysUseHash
+        if support.pushState and self._options.usePushState
+          self._useHash = self._options.alwaysUseHash
           $(hist).bind 'popstate', checkFn
-        else if support.hashChange and appSettings.useHashChange
+        else if support.hashChange and self._options.useHashChange
           self._useHash = true
           win.bind "hashchange", checkFn
-        else if appSettings.useInterval
+        else if self._options.useInterval
           self._useHash = true
-          self._interval = setInterval checkFn, appSettings.interval
+          self._interval = setInterval checkFn, self._options.interval
         else
           logger.warn("App will not repond to url change")
+        return
+
+      ###
+      Listen to URL change events.
+      For HTML5 browsers, stop listen to `onpopstate` event by default.
+      For HTML4 browsers, stop listen listen to `onhashchange` event by default.
+      For Legacy browsers, stop listen check url change by interval.
+
+      ###
+      _stopListenToURLChange: ->
+        self = this
+        checkFn = -> self._checkURLChange()
+        if support.pushState and self._options.usePushState
+          $(hist).unbind 'popstate'
+        else if support.hashChange and self._options.useHashChange
+          win.unbind "hashchange"
+        else if self._options.useInterval
+          if self._interval
+            clearInterval(self._interval)
+            self._interval = null
         return
 
       ###
@@ -174,8 +209,8 @@ kopi.module("kopi.app")
         else
           url = url.urlNoQuery
 
-        if not self._currentURL or url != self._currentURL
-          self._currentURL = url
+        if not self.currentURL or url != self.currentURL
+          self.currentURL = url
           self.emit(cls.REQUEST_EVENT, [url])
         self
 
@@ -193,7 +228,7 @@ kopi.module("kopi.app")
         # If no proper router is found
         if not request
           logger.warn("Can not find proper route for path: #{path}")
-          if appSettings.redirectWhenNoRouteFound
+          if self._options.redirectWhenNoRouteFound
             logger.info("Redirect to URL: #{url}")
             uri.goto url
           return

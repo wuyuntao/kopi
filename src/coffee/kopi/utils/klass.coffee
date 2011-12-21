@@ -22,9 +22,9 @@ kopi.module("kopi.utils.klass")
       klass.configure or= (options) ->
         configure this, options
         this
-      klass.prototype.configure or= (options) ->
+      klass.prototype.configure or= () ->
         this._options or= object.clone(this.constructor._options)
-        object.extend this._options, options if options
+        object.extend this._options, arguments... if arguments.length
         this
       return
 

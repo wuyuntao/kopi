@@ -98,6 +98,7 @@ kopi.module("kopi.tests.utils.uri")
 
       test "unjoin query", ->
         equal uri.unjoin("http://www.google.com/foo;para?query#frag", "http://www.google.com/foo"), "foo"
+        equal uri.unjoin("http://localhost/alpha/1", "http://localhost.com/tests/kopi?notrycatch=true"), "alpha/1"
 
       test "unjoin fragment", ->
         equal uri.unjoin("http://www.google.com/foo", "http://www.google.com/foo;para?query#frag"),
