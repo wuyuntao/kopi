@@ -32,5 +32,9 @@ kopi.module("kopi.ui.notification.widgets")
           this.constructor.prefix or= text.underscore(this.constructor.name)
           element = settings.kopi.ui.notification[this.constructor.prefix]
         super(element, options)
+        this.hidden = true
+
+      # show: ->
+      # hidden: ->
 
     exports.Widget = Widget

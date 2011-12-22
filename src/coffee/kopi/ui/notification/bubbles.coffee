@@ -5,6 +5,11 @@ kopi.module("kopi.ui.notification.bubbles")
 
     class Bubble extends widgets.Widget
 
+      constructor: (overlay) ->
+        super
+        this.hidden = true
+        this._overlay = overlay
+
       onskeleton: ->
         this._content = $("p", this.element)
         super
@@ -12,20 +17,26 @@ kopi.module("kopi.ui.notification.bubbles")
       content: (text) ->
         this._content.text(text)
 
-      show: ->
+      show: (lock=false) ->
         cls = this.constructor
         self = this
-        slef.element
+        return self if not self.hidden
+        self._overlay.show() if lock
+        self.hidden = false
+        self.element
           .addClass(cls.showClass())
           .removeClass(cls.hideClass())
-        slef
+        self
 
       hide: ->
         cls = this.constructor
         self = this
+        return self if self.hidden
+        self.hidden = true
+        self._overlay.hide()
         self.element
           .addClass(cls.hideClass())
           .removeClass(cls.showClass())
         self
 
-    $ -> exports.bubble = new Bubble().skeleton().render()
+    exports.Bubble = Bubble

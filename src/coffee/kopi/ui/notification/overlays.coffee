@@ -6,9 +6,6 @@ kopi.module("kopi.ui.notification.overlays")
 
     class Overlay extends widgets.Widget
 
-      constructor: ->
-        super(settings.kopi.ui.notification.overlay)
-
       onskeleton: ->
         $(this.element).bind "click", (e) -> return false
         super
@@ -16,6 +13,8 @@ kopi.module("kopi.ui.notification.overlays")
       show: (transparent=false) ->
         cls = this.constructor
         self = this
+        return self if not self.hidden
+        self.hidden = false
         self.element.removeClass(cls.hideClass()).addClass(cls.showClass())
         self.element.addClass(cls.transparentClass()) if transparent
         self
@@ -23,10 +22,12 @@ kopi.module("kopi.ui.notification.overlays")
       hide: ->
         cls = this.constructor
         self = this
+        return self if self.hidden
+        self.hidden = true
         self.element
           .addClass(cls.hideClass())
           .removeClass("#{cls.showClass()} #{cls.transparentClass()}")
         self
 
     # Singleton
-    $ -> exports.overlay = new Overlay().skeleton().render()
+    exports.Overlay = Overlay

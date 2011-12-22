@@ -12,34 +12,39 @@ kopi.module("kopi.ui.notification")
     ###
     class DuplicateNotificationError extends exceptions.Exception
 
+    # Notification widget instances (singleton)
+    bubbleInstance = null
+    dialogInstance = null
+    indicatorInstance = null
+    overlayInstance = null
+
     ###
     显示透明的 overlay
     ###
-    lock = -> overlays.overlay.show(true)
+    overlay = ->
+      overlayInstance or= new overlays.Overlay().skeleton().render()
 
-    unlock = -> overlays.overlay.hide()
-
-    dialog = (message) ->
-      if dialogs.dialog.active
-        throw new DuplicateNotificationError(dialogs.dialog)
-      dialogs.dialog.message(message)
+    dialog = ->
+      overlayInstance or= overlay()
+      dialogInstance or= new dialogs.Dialog(overlayInstance).skeleton().render()
+      if dialogInstance.active
+        throw new DuplicateNotificationError(dialogInstance)
+      dialogInstance
 
     ###
     显示 loader
     ###
-    loading = -> indicators.indicator.show()
+    indicator = ->
+      overlayInstance or= overlay()
+      indicatorInstance or= new indicators.Indicator(overlayInstance).skeleton().render()
+      indicatorInstance.show()
 
-    loaded = -> indicators.indicator.hide()
+    bubble = ->
+      overlayInstance or= overlay()
+      bubbleInstance or= new bubbles.Bubble(overlayInstance).skeleton().render()
 
-    # bubble = (text) ->
-    #   # TODO 更新消息框，而不是抛出异常
-    #   if bubbles.bubble.active
-    #     throw new DuplicateNotificationError(bubbles.bubble)
-    #   bubbles.bubble.context(text).show()
-
-    exports.lock = lock
-    exports.unlock = unlock
-    exports.loading = loading
-    exports.loaded = loaded
+    # Factory methods
+    exports.overlay = overlay
+    exports.bubble = bubble
     exports.dialog = dialog
-    # exports.bubble = bubble
+    exports.indicator = indicator

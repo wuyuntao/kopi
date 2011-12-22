@@ -2,10 +2,9 @@ kopi.module("kopi.ui.notification.dialogs")
   .require("kopi.exceptions")
   .require("kopi.utils.i18n")
   .require("kopi.ui.notification.widgets")
-  .require("kopi.ui.notification.overlays")
   .require("kopi.ui.notification.messages.en")
   .require("kopi.ui.notification.messages.zh_CN")
-  .define (exports, exceptions, i18n, widgets, overlays) ->
+  .define (exports, exceptions, i18n, widgets) ->
 
     ###
     kopi.notification.dialog()
@@ -26,6 +25,10 @@ kopi.module("kopi.ui.notification.dialogs")
 
       kls.ACTION_EVENT = "action"
       kls.CLOSE_EVENT = "close"
+
+      constructor: (overlay) ->
+        super
+        this._overlay = overlay
 
       title: (title) ->
         this._title.text(title)
@@ -56,31 +59,35 @@ kopi.module("kopi.ui.notification.dialogs")
             ((m) -> self[m](message[m]) if m of message)(method)
         self
 
-      show: ->
+      show: (lock=false) ->
         if not this._content.html().length
           throw new exceptions.ValueError("Missing content of dialog")
 
         cls = this.constructor
-        this.active = true
-        overlays.overlay.show()
-        this.element
+        self = this
+        return self if not self.hidden
+        self.hidden = false
+        self._overlay.show() if lock
+        self.element
           .removeClass(cls.hideClass())
           .addClass(cls.showClass())
-        this
+        self
 
       hide: ->
         cls = this.constructor
-        overlays.overlay.hide()
-        this.element
+        self = this
+        return self if self.hidden
+        self._overlay.hide()
+        self.element
           .addClass(cls.hideClass())
           .removeClass(cls.showClass())
-        this.reset()
-        this
+        self.reset()
+        self
 
       reset: ->
         cls = this.constructor
         self = this
-        this.active = false
+        this.hidden = true
         this
           .title(this._options.title)
           .content("")
@@ -103,11 +110,8 @@ kopi.module("kopi.ui.notification.dialogs")
 
       onaction: ->
         this.hide()
-        this.reset()
 
       onclose: ->
         this.hide()
-        this.reset()
 
-    # Singleton
-    $ -> exports.dialog = new Dialog().skeleton().render()
+    exports.Dialog = Dialog
