@@ -23,4 +23,4 @@ kopi.module("kopi.ui.notification.indicators")
         this
 
     # Singleton
-    $ -> exports.indicator = new Indicator()
+    $ -> exports.indicator = new Indicator().skeleton().render()

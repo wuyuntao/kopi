@@ -18,27 +18,33 @@ kopi.module("kopi.ui.notification.dialogs")
     ###
     class Dialog extends widgets.Widget
 
-      this.configure
+      kls = this
+      kls.configure
         title: i18n.t("kopi.notification.messages.title")
         action: i18n.t("kopi.notification.messages.action")
         close: i18n.t("kopi.notification.messages.close")
 
+      kls.ACTION_EVENT = "action"
+      kls.CLOSE_EVENT = "close"
+
       title: (title) ->
-        this.element.title.text(title)
+        this._title.text(title)
         this
 
       content: (content) ->
-        this.element.content.html(content)
+        this._content.html(content)
         this
 
       action: (text, fn) ->
-        this.element.action.text(text) if text
-        this.on('action', fn) if $.isFunction(fn)
+        cls = this.constructor
+        this._action.text(text) if text
+        this.on(cls.ACTION_EVENT, fn) if $.isFunction(fn)
         this
 
       close: (text, fn) ->
-        this.element.close.text(text) if text
-        this.on('close', fn) if $.isFunction(fn)
+        cls = this.constructor
+        this._close.text(text) if text
+        this.on(cls.CLOSE_EVENT, fn) if $.isFunction(fn)
         this
 
       message: (message) ->
@@ -51,7 +57,7 @@ kopi.module("kopi.ui.notification.dialogs")
         self
 
       show: ->
-        if not this.element.content.html().length
+        if not this._content.html().length
           throw new exceptions.ValueError("Missing content of dialog")
 
         cls = this.constructor
@@ -72,24 +78,27 @@ kopi.module("kopi.ui.notification.dialogs")
         this
 
       reset: ->
+        cls = this.constructor
+        self = this
         this.active = false
         this
           .title(this._options.title)
           .content("")
           .action(this._options.action)
           .close(this._options.close)
-          .off('action')
-          .off('close')
+          .off(cls.ACTION_EVENT)
+          .off(cls.CLOSE_EVENT)
 
-      skeleton: ->
+      onskeleton: ->
         super
+        cls = this.constructor
         self = this
-        self.element.title = $('.kopi-notification-dialog-title', self.element)
-        self.element.content = $('.kopi-notification-dialog-content p', self.element)
-        self.element.action = $('.kopi-notification-dialog-action', self.element)
-        self.element.close = $('.kopi-notification-dialog-close', self.element)
-        self.element.action.click (e) -> self.emit('action', [self])
-        self.element.close.click (e) -> self.emit('close', [self])
+        self._title = $('.kopi-notification-dialog-title', self.element)
+        self._content = $('.kopi-notification-dialog-content p', self.element)
+        self._action = $('.kopi-notification-dialog-action', self.element)
+        self._close = $('.kopi-notification-dialog-close', self.element)
+        self._action.click (e) -> self.emit(cls.ACTION_EVENT)
+        self._close.click (e) -> self.emit(cls.CLOSE_EVENT)
         self.reset()
 
       onaction: ->
@@ -101,4 +110,4 @@ kopi.module("kopi.ui.notification.dialogs")
         this.reset()
 
     # Singleton
-    $ -> exports.dialog = new Dialog()
+    $ -> exports.dialog = new Dialog().skeleton().render()

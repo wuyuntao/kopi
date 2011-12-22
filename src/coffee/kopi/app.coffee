@@ -90,7 +90,8 @@ kopi.module("kopi.app")
         appInstance = self
         # Ensure layout elements
         self.viewport = new viewport.Viewport()
-        self.emit(kls.START_EVENT)
+        self.viewport.skeleton().render()
+        self.emit(cls.START_EVENT)
         # Load current URL
         # self.load(self._options.startURL or uri.current())
         self._listenToURLChange()
@@ -116,7 +117,6 @@ kopi.module("kopi.app")
         #   The request url will be /foo#/bar
         if support.history and self._options.usePushState
           if self._options.alwaysUseHash
-            console.log(url, baseURL, uri.relative(url.path, baseURL))
             state = "#" + uri.relative(url.urlNoQuery, baseURL)
           else
             state = url.path
@@ -142,14 +142,16 @@ kopi.module("kopi.app")
       onrequest: (e, url) ->
         logger.info "Receive request: #{url.path}"
         self = this
-        [view, request] = self._match(url)
+        match = self._match(url)
 
-        if not view
+        if not match
           if self._options.redirectWhenNoRouteFound
             url = uri.unparse url
             logger.info("Redirect to URL: #{url}")
             uri.goto url
           return
+
+        [view, request] = match
 
         # If views are same, update the current view
         # TODO Add to some method. e.g. view.equals(self.currentView)
@@ -219,7 +221,6 @@ kopi.module("kopi.app")
         url = uri.parse(location.href)
         if self._useHash
           # Combine path and hash
-          console.log(url.fragment, url.path, uri.absolute(url.fragment.replace(/^#/, ''), url.path))
           url.path = uri.absolute(url.fragment.replace(/^#/, ''), url.path)
 
         if not self.currentURL or url.path != self.currentURL.path
@@ -248,11 +249,11 @@ kopi.module("kopi.app")
           # If `group` is `true`, use same view for every URL matches route
           if route.group is true
             if view.name == route.view.name
-              return view
+              return [view, request]
           # If `group` is `string`, use same view for every URL matches route
           else if text.isString(route.group)
             if view.params[route.group] == route.params[route.group]
-              return view
+              return [view, request]
           # If `group` is `array`, use same view for every URL matches route
           else if array.isArray(route.group)
             matches = true
@@ -261,11 +262,11 @@ kopi.module("kopi.app")
                 matches = false
                 break
             if matches
-              return view
+              return [view, request]
           # If `group` is false, use different view for different URLs
           else
             if view.url.path == path
-              return view
+              return [view, request]
 
         # Create view and add it to list
         view = new route.view(self, request.url, request.params)

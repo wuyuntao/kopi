@@ -1,9 +1,10 @@
 kopi.module("kopi.ui.viewport")
   .require("kopi.settings")
   .require("kopi.logging")
+  .require("kopi.utils.browser")
   .require("kopi.ui.widgets")
   .require("kopi.ui.notification")
-  .define (exports, settings, logging, widgets, notification) ->
+  .define (exports, settings, logging, browser, widgets, notification) ->
 
     win = $(window)
 
@@ -23,22 +24,27 @@ kopi.module("kopi.ui.viewport")
     ###
     class Viewport extends widgets.Widget
 
-      constructor: (element, options={}) ->
-        super
+      this.RESIZE_EVENT = "resize"
 
-      _skeleton: ->
+      constructor: ->
+        super("body", {})
+        this.width = null
+        this.height = null
+
+      onskeleton: ->
+        cls = this.constructor
         self = this
         self._browser()
-        self._resize()
-        # TODO Use thottle resize event
-        win.bind 'resize', -> self._resize()
+        self.emit(cls.RESIZE_EVENT)
+        # TODO Use thottle resize event of window
+        win.bind cls.RESIZE_EVENT, -> self.emit(cls.RESIZE_EVENT)
 
-      _resize: ->
+      onresize: ->
         self = this
         [width, height] = [win.width(), win.height()]
-        return unless width > 0 and height > 0 and self.changed(width, height)
+        return unless width > 0 and height > 0 and self.isSizeChanged(width, height)
 
-        logging.debug("Resize viewport to #{width}x#{height}")
+        logging.info("Resize viewport to #{width}x#{height}")
         notification.loading()
         self.lock()
         self.element.width(width).height(height)
@@ -52,14 +58,14 @@ kopi.module("kopi.ui.viewport")
       ###
       Check if size is different from last time
       ###
-      changed: (width, height) ->
+      isSizeChanged: (width, height) ->
         width != this.width or height != this.height
 
       ###
       Add browser identify classes to viewport element
       ###
       _browser: ->
-        classes = (key for key of $.browser when key != "version").join(" ")
+        classes = (key for key of browser when key != "version").join(" ")
         logging.debug("Add viewport classes: #{classes}")
         this.element.addClass(classes)
 

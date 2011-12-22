@@ -16,7 +16,7 @@ kopi.module("kopi.views")
 
     Life cycle:
 
-    Constructor -> Create -> Start -> Update -> Stop -> Destroy
+    Constructor -> Create -> Start (-> Update) -> Stop -> Destroy (-> Create -> ...)
 
 
     Example:
