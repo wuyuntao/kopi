@@ -8,8 +8,7 @@ kopi.module("kopi.db.models")
   .require("kopi.utils.object")
   .require("kopi.utils.text")
   .require("kopi.db.collections")
-  .require("kopi.db.exceptions")
-  # .require("kopi.db.indexes")
+  .require("kopi.db.errors")
   .define (exports, exceptions, events
                   , utils, klass, func, html, object, text
                   , collections, errors) ->
