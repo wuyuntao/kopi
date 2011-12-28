@@ -18,33 +18,46 @@ kopi.module("kopi.ui.notification")
     indicatorInstance = null
     overlayInstance = null
 
-    ###
-    显示透明的 overlay
-    ###
     overlay = ->
       overlayInstance or= new overlays.Overlay().skeleton().render()
 
     dialog = ->
       overlayInstance or= overlay()
       dialogInstance or= new dialogs.Dialog(overlayInstance).skeleton().render()
-      if dialogInstance.active
-        throw new DuplicateNotificationError(dialogInstance)
       dialogInstance
 
-    ###
-    显示 loader
-    ###
     indicator = ->
       overlayInstance or= overlay()
       indicatorInstance or= new indicators.Indicator(overlayInstance).skeleton().render()
-      indicatorInstance.show()
 
     bubble = ->
       overlayInstance or= overlay()
       bubbleInstance or= new bubbles.Bubble(overlayInstance).skeleton().render()
+
+    lock = (transparent=false) ->
+      overlay().show(transparent)
+
+    unlock = ->
+      overlay().hide()
+
+    loading = (transparent=false) ->
+      indicator().show(transparent)
+
+    loaded = ->
+      indicator().hide()
+
+    message = (text) ->
+      bubble().content(text).show()
 
     # Factory methods
     exports.overlay = overlay
     exports.bubble = bubble
     exports.dialog = dialog
     exports.indicator = indicator
+
+    # Shortcut methods
+    exports.lock = lock
+    exports.unlock = unlock
+    exports.loading = loading
+    exports.loaded = loaded
+    exports.message = message

@@ -97,7 +97,7 @@ kopi.module("kopi.ui.widgets")
         key = "#{action},#{prefix}"
         value = this._cssClasses[key]
         if not value
-          this.prefix or= text.underscore(this.name)
+          this.prefix or= text.underscore(this.name, '-')
           value = this.prefix
           value = value + "-" + prefix if prefix
           value = settings.kopi.ui.prefix + "-" + value if settings.kopi.ui.prefix
@@ -132,7 +132,7 @@ kopi.module("kopi.ui.widgets")
 
         self = this
         # @type {String}
-        self.constructor.prefix or= text.underscore(self.constructor.name)
+        self.constructor.prefix or= text.underscore(self.constructor.name, '-')
         # @type {String}
         self.guid = utils.guid(self.constructor.prefix)
         # @type {jQuery Element}
@@ -332,7 +332,7 @@ kopi.module("kopi.ui.widgets")
       _readOptions: ->
         return this unless this.element.length > 0
         for name, value of this._options
-          value = this.element.data(text.underscore(name))
+          value = this.element.data(text.underscore(name, '-'))
           this._options[name] = value if value isnt undefined
         this
 

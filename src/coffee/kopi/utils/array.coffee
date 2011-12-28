@@ -45,6 +45,8 @@ kopi.module("kopi.utils.array")
 
     isEmpty = (array) -> array.length == 0
 
+    last = (array) -> if array.length > 0 then array[array.length - 1] else undefined
+
     map = (array, iterator, context) ->
       results = []
       forEach array, (v, i) ->
@@ -116,6 +118,7 @@ kopi.module("kopi.utils.array")
     exports.indexOf = indexOf
     exports.isArray = isArray
     exports.isEmpty = isEmpty
+    exports.last = last
     exports.map = map
     exports.remove = remove
     exports.removeAt = removeAt

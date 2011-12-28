@@ -29,7 +29,7 @@ kopi.module("kopi.ui.notification.widgets")
 
       constructor: (element, options) ->
         unless element
-          this.constructor.prefix or= text.underscore(this.constructor.name)
+          this.constructor.prefix or= text.underscore(this.constructor.name, '-')
           element = settings.kopi.ui.notification[this.constructor.prefix]
         super(element, options)
         this.hidden = true

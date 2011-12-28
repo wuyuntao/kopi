@@ -100,19 +100,6 @@ kopi.module("kopi.app.router")
         self.reset()
         # Compile route
         for route, i in self.routes
-          # Add group key
-          # self.views[route.view.name] or= {}
-          # if route.group is true
-          #   self.views[route.view.name]['view'] = true
-          # else if not route.group
-          #   self.views[route.view.name]['path'] = true
-          # else if text.isString(route.group)
-          #   self.views[route.view.name]['args'] or= []
-          #   self.views[route.view.name]['args'].push(route.group)
-          # else if array.isArray(route.group)
-          #   self.views[route.view.name]['args'] or= []
-          #   self.views[route.view.name]['args'].push(route.group.join(':'))
-
           # Add to named routes
           if route.name
             self.names[route.name] = route

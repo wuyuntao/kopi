@@ -26,7 +26,7 @@ kopi.module("kopi.utils.css")
     Generate vender-specified style names
     ###
     experimental = (name) ->
-      VENDOR_PREFIX + text.underscore(name)
+      VENDOR_PREFIX + text.underscore(name, '-')
 
     exports.experimental = experimental
     exports.TRANSLATE_OPEN = TRANSLATE_OPEN

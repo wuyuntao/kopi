@@ -68,7 +68,7 @@ kopi.module("kopi.views")
         if not app
           throw new exceptions.ValueError("app must be instance of Application")
         self = this
-        self.constructor.prefix or= text.underscore(self.constructor.name)
+        self.constructor.prefix or= text.underscore(self.constructor.name, '-')
         self.guid = utils.guid(self.constructor.prefix)
         self.app = app
         self.url = url
