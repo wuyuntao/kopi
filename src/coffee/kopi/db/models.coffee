@@ -2,6 +2,7 @@ kopi.module("kopi.db.models")
   .require("kopi.exceptions")
   .require("kopi.events")
   .require("kopi.utils")
+  .require("kopi.utils.array")
   .require("kopi.utils.klass")
   .require("kopi.utils.func")
   .require("kopi.utils.html")
@@ -10,11 +11,20 @@ kopi.module("kopi.db.models")
   .require("kopi.db.collections")
   .require("kopi.db.errors")
   .define (exports, exceptions, events
-                  , utils, klass, func, html, object, text
+                  , utils, array, klass, func, html, object, text
                   , collections, errors) ->
 
+
+    # Enum of field types
+    INTEGER = 0
+    STRING = 1
+    TEXT = 2
+    FLOAT = 3
+    DATETIME = 4
+    BLOB = 5
+
     ###
-    所有模型的基类
+    Base class of all models
 
     Usage
 
@@ -44,17 +54,26 @@ kopi.module("kopi.db.models")
       kls._fields = {}
       kls._fieldNames = []
       kls._pkName = null
-      kls._belongsTo = {}
-      kls._hasMany = {}
-      kls._hasAndBelongsToMany = {}
+      kls._belongsTo = []
+      kls._hasMany = []
+      kls._hasAndBelongsToMany = []
       kls._collection = collections.Collection
       kls._adapters = {}
       # kls._indexes = {}
+      kls._prepared = false
 
       # Define accessors
       klass.accessor kls, "pkName"
       klass.accessor kls, "tableName",
-        get: -> this._tableName or= this.name
+        get: -> this._tableName or= text.underscore(this.name)
+
+      ###
+      Prepare fields and relationships for model
+      ###
+      kls._prepare = ->
+        cls = this
+        return cls if cls._prepared
+        cls._prepared = true
 
       ###
       Define accessor of adapters for model
@@ -78,42 +97,37 @@ kopi.module("kopi.db.models")
       kls.fields = (fields={}) ->
         cls = this
         for name, field of fields
-          # Setup primary key field
-          if fields.primary
-            throw new errors.DuplicatePkField(cls._pkName) if cls._pkName
-            cls._pkName = name
           # Convert string to field object
           if text.isString(field)
             field =
               type: field
+          if not field.type
+            field.type = STRING
+          # Setup primary key field
+          if field.primary
+            throw new errors.DuplicatePkField(cls._pkName) if cls._pkName
+            cls._pkName = name
           cls._fields[name] = field
-        # Update field names
-        cls._fieldNames = object.keys(cls.fields)
+          cls._fieldNames.push[name]
         cls
 
       ###
-      定义外键
+      Relations
+
       ###
       kls.belongsTo = (model, options={}) ->
-        if typeof model is "string"
-          model = text.constantize(model)
-        options.name or= model.name
-        this._belongsTo[options.name] = model
+        this._belongsTo.push([model, options])
         this
 
       kls.hasMany = (model, options={}) ->
-        if typeof model is "string"
-          model = text.constantize(model)
-        options.name or= model.name
-        this._hasMany[options.name] = model
+        this._hasMany.push([model, options])
         this
 
       kls.hasAndBelongsToMany = (model, options={}) ->
-        if typeof model is "string"
-          model = text.constantize(model)
-        options.name or= model.name
-        this._hasAndBelongsToMany[options.name] = model
+        this._hasAndBelongsToMany.push([model, options])
         this
+
+      kls._compiled = false
 
       # kls.index = (field) ->
       #   this._indexes[field] or= new Index(this, field)
@@ -166,6 +180,7 @@ kopi.module("kopi.db.models")
         self = this
         cls = this.constructor
         cls.prefix or= text.underscore(cls.name)
+        cls._prepare() if not cls._prepared
 
         self.guid = utils.guid(cls.prefix)
         self._new = true
@@ -178,7 +193,7 @@ kopi.module("kopi.db.models")
             self._data[field]
           fieldSetterFn = (value) ->
             oldValue = self[field]
-            unless self._valueEquals(value, oldValue)
+            unless self._valueEquals(field, value)
               self._data[field] = value
               self._dirtyProperties[field] = oldValue
               self.emit "set change", [self, field, value]
@@ -207,7 +222,15 @@ kopi.module("kopi.db.models")
         object.clone(this._data)
 
       equals: (model) ->
-        self.guid == model.guid
+        this.guid == model.guid
+
+      update: (attributes={}) ->
+        cls = this.constructor
+        self = this
+        for name, attribute of attributes
+          if name of cls._fields
+            self[name] = attribute
+        self
 
       ###
       Fetch model data from server
@@ -311,4 +334,13 @@ kopi.module("kopi.db.models")
       fromJSON: ->
         throw new exceptions.NotImplementedError()
 
+      _valueEquals: (field, value) ->
+        false
+
+    exports.INTEGER = INTEGER
+    exports.STRING = STRING
+    exports.TEXT = TEXT
+    exports.FLOAT = FLOAT
+    exports.DATETIME = DATETIME
+    exports.BLOB = BLOB
     exports.Model = Model

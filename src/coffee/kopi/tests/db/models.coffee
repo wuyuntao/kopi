@@ -12,7 +12,7 @@ kopi.module("kopi.tests.db.models")
         email:
           type: models.STRING
 
-      this.hasOne "kopi.tests.db.models.Blog"
+      this.hasMany "kopi.tests.db.models.Blog"
       this.hasMany "kopi.tests.db.models.Post"
 
     class Tag extends models.Model
@@ -32,8 +32,7 @@ kopi.module("kopi.tests.db.models")
         id:
           type: models.INTEGER
           primary: true
-        title:
-          type: models.STRING
+        title: models.STRING
         body:
           type: models.TEXT
         publishedAt:
@@ -87,9 +86,20 @@ kopi.module("kopi.tests.db.models")
     module "kopi.db.models"
 
     test "primary key", ->
+      equals author.pk(), 1
 
     test "fields", ->
+      equals author.id, 1
+      equals author.name, "Alpha"
+      equals author.email, "alpha@beta.com"
 
     test "foreign field", ->
+      equals author.blogId, 1
+      equals author.blog.id, 1
+      equals author.blog.title, "Gamma Blog"
+
+      equals blog.authorId, 1
+      equals blog.author.id, 1
+      equals blog.author.name, "Alpha"
 
     test "many to many field", ->
