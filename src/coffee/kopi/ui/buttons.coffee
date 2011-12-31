@@ -6,8 +6,6 @@ kopi.module("kopi.ui.buttons")
   .require("kopi.ui.clickable")
   .define (exports, exceptions, klass, images, text, clickable) ->
 
-    ROUND = "round"
-
     class Button extends clickable.Clickable
 
       kls = this
@@ -83,4 +81,70 @@ kopi.module("kopi.ui.buttons")
         self._text.update() if options.hasText
         super
 
+    ###
+    A button which does a asynchronic job like AJAX request, or WebSQL request when clicked
+
+    ###
+    class AsyncButton extends Button
+
+      kls = this
+      kls.JOB_START_EVENT = "jobstart"
+      kls.JOB_SUCCEED_EVENT = "jobsucceed"
+      kls.JOB_FAIL_EVENT = "jobfail"
+
+      constructor: ->
+        super
+        cls = this.constructor
+        cls.LOAD_CLASS or= cls.cssClass("load")
+        cls.SUCCEED_CLASS or= cls.cssClass("succeed")
+        cls.FAIL_CLASS or= cls.cssClass("fail")
+
+      onjobstart: ->
+        cls = this.constructor
+        this.element.addClass(cls.LOAD_CLASS)
+        this._job()
+
+      onjobsucceed: ->
+        cls = this.constructor
+        this.element.removeClass(cls.LOAD_CLASS).addClass(cls.SUCCEED_CLASS)
+
+      onjobfail: ->
+        cls = this.constructor
+        this.element.removeClass(cls.LOAD_CLASS).addClass(cls.FAIL_CLASS)
+
+      onclick: (e, event) ->
+        self = this
+        cls = this.constructor
+        self.emit(cls.JOB_START_EVENT)
+        super
+
+      _job: ->
+        throw new exceptions.NotImplementedError()
+
+
+    ###
+    A button which does a asynchronic job like AJAX request, or WebSQL request when clicked
+
+    Usage:
+
+      class GetUserButton extends AjaxButton
+        this.configure
+          url: "/users/1"
+          type: "GET"
+          dataType: "JSON"
+
+    ###
+    class AjaxButton extends AsyncButton
+      kls = this
+
+      _job: ->
+        cls = this.constructor
+        self = this
+        doneFn = -> self.emit(cls.JOB_SUCCEED_EVENT, arguments)
+        failFn = -> self.emit(cls.JOB_FAIL_EVENT, arguments)
+        $.ajax(this._options).done(doneFn).fail(failFn)
+        return
+
     exports.Button = Button
+    exports.AsyncButton = AsyncButton
+    exports.AjaxButton = AjaxButton
