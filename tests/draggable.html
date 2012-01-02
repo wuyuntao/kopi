@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
+    <title>Scrollable</title>
+    <style type="text/css" media="screen">
+      body {
+        background: black;
+        -webkit-user-select: none;
+      }
+
+      .draggable {
+        width: 200px;
+        height: 200px;
+        background: gray;
+      }
+    </style>
+    <script type="text/javascript" src="../lib/js/jquery.js"></script>
+    <script type="text/javascript" src="../build/js/kopi.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/exceptions.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/array.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/text.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/func.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/number.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/object.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/settings.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/logging.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/browser.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/support.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/css.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/events.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/html.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/jquery.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/klass.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/events.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/ui/widgets.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/ui/touchable.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/ui/draggable.js"></script>
+    <script type="text/javascript">
+      $(function() {
+        var draggable = new kopi.ui.draggable.Draggable(".draggable", {
+        });
+        draggable.skeleton().render();
+      });
+    </script>
+  </head>
+  <body>
+    <div class="draggable"></div>
+  </body>
+</html>

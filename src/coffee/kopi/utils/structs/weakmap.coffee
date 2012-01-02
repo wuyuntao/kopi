@@ -37,7 +37,7 @@ kopi.module("kopi.utils.structs.weakmap")
       Removes any value associated to the key object. After such a call, WeakMap.has(key)
       will return false.
       ###
-      delete: (key) ->
+      remove: (key) ->
         i = this.keys.indexOf(key)
         if i >= 0
           this.keys.splice(i, 1)
@@ -46,12 +46,10 @@ kopi.module("kopi.utils.structs.weakmap")
       ###
       Iterate over the map
       ###
-      ###
-      forEach: (fn) ->
-        if fn
+      forEach: (iterator) ->
+        if iterator
           for key, i in this.keys
             value = this.values[i]
-            fn(key, value)
-      ###
+            iterator.call(this, key, value)
 
     exports.WeakMap = WeakMap

@@ -15,6 +15,8 @@ kopi.module("kopi.utils.array")
         n += 1 if iterator.call context, v, i
       n
 
+    empty = (array) -> array.length = 0
+
     fill = (value, count) ->
       if count == 0 then [] else (value for i in [0...count])
 
@@ -40,6 +42,9 @@ kopi.module("kopi.utils.array")
           return i if v == obj
         -1
 
+    insertAt = (array, index, obj) ->
+      array.splice(index, 0, obj)
+
     isArray = Array.isArray or= (array) ->
       !!(array and array.concat and array.unshift and not array.callee)
 
@@ -60,14 +65,14 @@ kopi.module("kopi.utils.array")
     removeAt = (array, i) ->
       ArrayProto.splice.call(array, i, 1).length == 1
 
-    # rotate = (array, reverse=false) ->
-    #   if reverse
-    #     obj = array.shift()
-    #     array.push(obj)
-    #   else
-    #     obj = array.pop()
-    #     array.unshift(obj)
-    #   obj
+    rotate = (array, reverse=false) ->
+      if reverse
+        obj = array.shift()
+        array.push(obj)
+      else
+        obj = array.pop()
+        array.unshift(obj)
+      obj
 
     ###
     求和
@@ -114,15 +119,17 @@ kopi.module("kopi.utils.array")
     exports.forEach = forEach
     exports.asyncForEach = asyncForEach
     exports.asyncParForEach = asyncParForEach
+    exports.empty = empty
     exports.fill = fill
     exports.indexOf = indexOf
+    exports.insertAt = insertAt
     exports.isArray = isArray
     exports.isEmpty = isEmpty
     exports.last = last
     exports.map = map
     exports.remove = remove
     exports.removeAt = removeAt
-    # exports.rotate = rotate
+    exports.rotate = rotate
     exports.sum = sum
     exports.average = average
     exports.unique = unique
