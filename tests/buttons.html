@@ -39,7 +39,7 @@
     <script type="text/javascript" src="../build/js/kopi/ui/buttons.js"></script>
     <script type="text/javascript">
       $(function() {
-        var button = new kopi.ui.buttons.Button("#button1", {
+        var button = new kopi.ui.buttons.Button({
           hasIcon: false,
           onhover: function() {
             console.log("hover");
@@ -55,7 +55,7 @@
           }
         });
         console.log(button);
-        button.text("button").skeleton().render();
+        button.text("button").skeleton("#button1").render();
       });
     </script>
   </head>

@@ -48,11 +48,11 @@
     <script type="text/javascript" src="../build/js/kopi/ui/scrollable.js"></script>
     <script type="text/javascript">
       $(function() {
-        var scrollable = new kopi.ui.scrollable.Scrollable(".scrollable", {
+        var scrollable = new kopi.ui.scrollable.Scrollable({
           scrollX: false,
           damping: 0.5
         });
-        scrollable.skeleton().render();
+        scrollable.skeleton(".scrollable").render();
       });
     </script>
   </head>

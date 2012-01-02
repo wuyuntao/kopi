@@ -43,7 +43,7 @@ kopi.module("kopi.ui.buttons")
           this._text.text(text) if this._options.hasText
           this
 
-      constructor: (element, options) ->
+      constructor: (options) ->
         super
         cls = this.constructor
         self = this

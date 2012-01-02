@@ -110,7 +110,7 @@
     <script type="text/javascript" src="../build/js/kopi/ui/tabs.js"></script>
     <script type="text/javascript">
       $(function() {
-        var tabBar = new kopi.ui.tabs.TabBar(".tabbar", {
+        var tabBar = new kopi.ui.tabs.TabBar({
           layout: kopi.ui.tabs.TabBar.LAYOUT_HORIZONTAL
         }).add("tab1")
             .text("Tab #1")
@@ -137,10 +137,10 @@
             .icon("images/icon5.png")
             .on("select", function() { console.log(4) })
             .end()
-          .skeleton()
+          .skeleton(".tabbar")
           .render();
 
-        var stabBar = new kopi.ui.tabs.ScrollableTabBar(".stabbar", {
+        var stabBar = new kopi.ui.tabs.ScrollableTabBar({
           tabBarOptions: {
             layout: kopi.ui.tabs.TabBar.LAYOUT_HORIZONTAL,
             style: kopi.ui.tabs.TabBar.STYLE_FIXED,
@@ -210,7 +210,7 @@
               .on("select", function() { console.log(9) })
               .end()
             .end()
-          .skeleton()
+          .skeleton(".stabbar")
           .scrollable()
             .emit(kopi.ui.scrollable.Scrollable.RESIZE_EVENT)
             .end()

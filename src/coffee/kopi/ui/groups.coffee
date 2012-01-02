@@ -10,7 +10,7 @@ kopi.module("kopi.ui.groups")
         # @type  {kopi.ui.widgets.Widget}
         childClass: widgets.Widget
 
-      constructor: (element, options, data) ->
+      constructor: (options) ->
         super
         this._guids = []
         this._children = []

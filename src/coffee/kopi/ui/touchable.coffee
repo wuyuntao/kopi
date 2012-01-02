@@ -4,6 +4,8 @@ kopi.module("kopi.ui.touchable")
   .require("kopi.ui.widgets")
   .define (exports, events, support, widgets) ->
 
+    doc = $(document)
+
     ###
     A widget supports touch events
     ###
@@ -37,7 +39,7 @@ kopi.module("kopi.ui.touchable")
           e.preventDefault() if preventDefault
           e.stopPropagation() if stopPropagation
           self.emit(cls.TOUCH_START_EVENT, [e])
-          self.element
+          doc
             .bind(kls.eventName(events.TOUCH_MOVE_EVENT), touchMoveFn)
             .bind(kls.eventName(events.TOUCH_END_EVENT), touchEndFn)
             .bind(kls.eventName(events.TOUCH_CANCEL_EVENT), touchCancelFn)
@@ -52,7 +54,7 @@ kopi.module("kopi.ui.touchable")
           # TODO What to do if widget is locked?
           e.preventDefault() if preventDefault
           e.stopPropagation() if stopPropagation
-          self.element
+          doc
             .unbind(kls.eventName(events.TOUCH_MOVE_EVENT))
             .unbind(kls.eventName(events.TOUCH_END_EVENT))
             .unbind(kls.eventName(events.TOUCH_CANCEL_EVENT))
@@ -62,7 +64,7 @@ kopi.module("kopi.ui.touchable")
           # TODO What to do if widget is locked?
           e.preventDefault() if preventDefault
           e.stopPropagation() if stopPropagation
-          self.element
+          doc
             .unbind(kls.eventName(events.TOUCH_MOVE_EVENT))
             .unbind(kls.eventName(events.TOUCH_END_EVENT))
             .unbind(kls.eventName(events.TOUCH_CANCEL_EVENT))

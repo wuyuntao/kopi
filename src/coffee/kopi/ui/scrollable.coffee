@@ -49,6 +49,7 @@ kopi.module("kopi.ui.scrollable")
         bounce: true
         momentum: true
         damping: 0.5
+        snap: true
         deceleration: 0.0006
         ontransitionend: null
         onresize: null

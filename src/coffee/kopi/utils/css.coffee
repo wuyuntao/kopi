@@ -6,7 +6,7 @@ kopi.module("kopi.utils.css")
 
     VENDOR_PREFIX = if browser.webkit
       "-webkit-"
-    else if browser.firefox
+    else if browser.mozilla
       "-moz-"
     else if browser.opera
       "-o-"
