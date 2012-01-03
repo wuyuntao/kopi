@@ -188,6 +188,13 @@ kopi.module("kopi.db.models")
         self._dirtyProperties = {}
         self._data = {}
 
+        ###
+        Define getter and setter for regular fields.
+
+        e.g.
+          book.title            # returns 'Book'
+          book.title = 'Title'  # returns 'Title'
+        ###
         fieldDefineProp = (field) ->
           fieldGetterFn = ->
             self._data[field]
@@ -205,13 +212,48 @@ kopi.module("kopi.db.models")
           value = cls._fields[field]["default"]
           # TODO Get default values by field type
 
-        for field, scheme of cls._fields
-          if cls._fields.hasOwnProperty(field)
-            fieldDefineProp(field)
+        for own field, scheme of cls._fields
+          fieldDefineProp(field)
           self[field] = defaultValue(field)
+
+        ###
+        Define getter and setter for foreign fields
+
+        e.g.
+          book.author           # returns [Author 1]
+          book.author = author  # returns [Author 2]
+          book.authorId         # returns 2
+          book.authorId = 3     # returns 3
+        ###
+        fieldDefineProp = (field) ->
+        for own field, model of cls._belongsTo
+          fieldDefineProp(field)
+
+        ###
+        Define getter and setter for reverse foreign fields
+
+        e.g.
+          author.books
+        ###
+        fieldDefineProp = (field) ->
+        for own field, model of cls._hasMany
+          fieldDefineProp(field)
+
+        ###
+        Define getter and setter for many-to-many fields
+
+        e.g.
+          article.tags                  # returns []
+          article.tags = [tag1, tag2]   # returns [[Tag 1], [Tag 2]]
+          article.tags.push(tag3)       # returns [[Tag 1], [Tag 2], [Tag 3]]
+        ###
+        fieldDefineProp = (field) ->
+        for own field, model of cls._hasAndBelongsToMany
+          fieldDefineProp(field)
 
         self.update(attributes)
 
+      # TODO Modify pk() as a custom property
       pk: ->
         this[this.constructor._pkName]
 
@@ -324,6 +366,9 @@ kopi.module("kopi.db.models")
         unless cls.RE_ITEM_TYPE.test(element.attr('itemtype'))
           throw new exceptions.NoSuchElementError("Element does not have correct 'itemtype' attribute")
         this.update(html.scope(element))
+
+      toString: ->
+        "[#{this.name} #{this.pk() or "null"}"
 
       ###
       # TODO Move to HTML adapter/proxy
