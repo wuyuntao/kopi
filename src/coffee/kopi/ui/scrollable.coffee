@@ -22,6 +22,7 @@ kopi.module("kopi.ui.scrollable")
 
     ###
     TODO Support legacy animation
+
     ###
     class Scrollable extends touchable.Touchable
 
@@ -34,6 +35,7 @@ kopi.module("kopi.ui.scrollable")
       kls.TRANSITION_TIMING_FUNCTION_STYLE = "cubic-bezier(0.33,0.66,0.66,1)"
       kls.TRANSFORM_ORIGIN_STYLE = "0 0"
       kls.TRANSFORM_STYLE = "#{css.TRANSLATE_OPEN}{x}px,{y}px#{css.TRANSLATE_CLOSE}"
+      kls.EVENT_NAMESPACE = "scrollable"
       # kls.LEGACY_TRANSFORM_STYLE =
       #   position: absolute
       #   top: "{y}px"
@@ -82,20 +84,11 @@ kopi.module("kopi.ui.scrollable")
         self._scroller.css(styles)
         super
 
-      _ensureScroller: ->
-        children = this.element.children()
-        scroller = this._ensureWrapper("scroller")
-        if children.length > 0
-          children.appendTo(scroller)
-        scroller
-
       ontouchstart: (e, event) ->
         cls = this.constructor
         self = this
         self._moved = false
         self._animating = false
-        self._deltaX = 0
-        self._deltaY = 0
         self._x or= self._options.startX
         self._y or= self._options.startY
         self._startX = self._x
@@ -275,6 +268,13 @@ kopi.module("kopi.ui.scrollable")
           return
 
         self.scrollTo(resetX, resetY, duration)
+
+      _ensureScroller: ->
+        children = this.element.children()
+        scroller = this._ensureWrapper("scroller")
+        if children.length > 0
+          children.appendTo(scroller)
+        scroller
 
       _animate: ->
         cls = this.constructor

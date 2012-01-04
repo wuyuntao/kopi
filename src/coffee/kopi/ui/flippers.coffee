@@ -1,6 +1,12 @@
 kopi.module("kopi.ui.flippers")
   .require("kopi.ui.groups")
-  .define (exports, groups) ->
+  .require("kopi.ui.draggable")
+  .define (exports, groups, draggable) ->
+
+    class Flippable extends draggable.Draggable
+
+      constructor: (element, options) ->
+        super(element, options)
 
     ###
     A simple animator that will animate between two or more views added to it.
@@ -15,4 +21,8 @@ kopi.module("kopi.ui.flippers")
     ###
     class Flipper extends groups.Group
 
+      this.configure
+        childClass: FlipperChild
+
+    exports.FlipperChild = FlipperChild
     exports.Flipper = Flipper
