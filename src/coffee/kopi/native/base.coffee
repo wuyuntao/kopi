@@ -1,4 +1,4 @@
-kopi.module("kopi.clients.base")
+kopi.module("kopi.native.base")
   .define (exports) ->
 
     class BaseClient

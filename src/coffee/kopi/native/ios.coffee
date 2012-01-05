@@ -1,5 +1,5 @@
-kopi.module("kopi.clients.ios")
-  .require("kopi.clients.base")
+kopi.module("kopi.native.ios")
+  .require("kopi.native.base")
   .define (exports, base) ->
 
     class IOSClient extends base.BaseClient

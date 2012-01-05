@@ -1,5 +1,5 @@
-kopi.module("kopi.clients.chromium")
-  .require("kopi.clients.base")
+kopi.module("kopi.native.chromium")
+  .require("kopi.native.base")
   .define (exports, base) ->
 
     class ChromiumClient extends base.BaseClient
