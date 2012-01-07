@@ -27,11 +27,49 @@ kopi.module("kopi.utils.array")
         throw e if e isnt breaker
       array
 
-    asyncForEach = (array, iterator, fn, context) ->
-      throw new exceptions.NotImplementedError()
+    ###
+    Asynchronous sequential version of Array.prototype.forEach
 
+    @param  {Array}     array     the array to iterate over
+    @param  {Function}  iterator  the function to apply to each item in the array,
+                                  function has three argument, the first is the item
+                                  value, the second is the item index, the third is
+                                  a callback function
+    @param  {Function}  fn        the function to call when the forEach has ended
+    ###
+    asyncForEach = (array, iterator, fn, context) ->
+      len = array.length
+      loopFn = ->
+        v = array.pop()
+        i = len - array.length - 1
+        iterator.call(context, v, i, doneFn, array)
+      doneFn = (error, result) ->
+        if array.length > 0 then loopFn() else (fn(error, result) if fn)
+      doneFn()
+      array
+
+    ###
+    Asynchronous parallel version of Array.prototype.forEach
+
+    @param  {Array}     array     the array to iterate over
+    @param  {Function}  iterator  the function to apply to each item in the array,
+                                  function has three argument, the first is the item
+                                  value, the second is the item index, the third is
+                                  a callback function
+    @param  {Function}  fn        the function to call when the forEach has ended
+    ###
     asyncParForEach = (array, iterator, fn, context) ->
-      throw new exceptions.NotImplementedError()
+      done = 0
+      len = array.length
+      fn() if array.length == 0
+      doneFn = (error, result) ->
+        done++
+        fn(error, result) if done == len and fn
+      try
+        iterator.call(context, v, i, doneFn, array) for v, i in array
+      catch e
+        throw e if e isnt breaker
+      array
 
     if ArrayProto.indexOf
       indexOf = (array, obj) ->

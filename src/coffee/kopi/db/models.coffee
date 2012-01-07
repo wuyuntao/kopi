@@ -1,5 +1,6 @@
 kopi.module("kopi.db.models")
   .require("kopi.exceptions")
+  .require("kopi.logging")
   .require("kopi.events")
   .require("kopi.utils")
   .require("kopi.utils.array")
@@ -10,10 +11,11 @@ kopi.module("kopi.db.models")
   .require("kopi.utils.text")
   .require("kopi.db.collections")
   .require("kopi.db.errors")
-  .define (exports, exceptions, events
+  .define (exports, exceptions, events, logging
                   , utils, array, klass, func, html, object, text
                   , collections, errors) ->
 
+    logger = logging.logger(exports.name)
 
     # Enum of field types
     INTEGER = 0
@@ -24,62 +26,112 @@ kopi.module("kopi.db.models")
     BLOB = 5
 
     ###
+    Meta class for all models
+    ###
+    class Meta
+
+      # @type  {Hash}   Contain all scheme for models
+      meta = {}
+
+      this.get = (model) ->
+        name = model.name
+        m = meta[name]
+        if m
+          if m.model != model
+            throw new errors.DuplicateModelNameError(model)
+          return m
+        meta[name] = new Meta(model)
+
+      constructor: (model) ->
+        this.model = model
+        this.pk = null
+        this.fields = []
+        this.names = {}
+        this.belongsTo = []
+        this.hasMany = []
+        this.hasAndBelongsToMany = []
+
+      prepare: ->
+        for field in this.fields
+          # Set default field type
+          if not field.type
+            field.type = STRING
+
+          # Check if primary key field is duplicately defined
+          if field.primary
+            if this.pk and this.pk != field.name
+              throw new errors.DuplicatePrimaryKeyError(field.name)
+            # Set primary key field
+            this.pk = field.name
+
+          # Add field to name-field hash
+          this.names[field.name] = field
+
+        for belongsTo in this.belongsTo
+          model = belongsTo.model
+          # Convert model string to class
+          if text.isString(model)
+            model = belongsTo.model = text.constantize(model)
+
+          # Generate model name if not specified
+          name = belongsTo.name
+          if not name
+            name = belongsTo.name = text.camelize(model.name, false)
+
+          # Add primary key to model fields
+          modelMeta = model._meta()
+          pkName = name + text.camelize(modelMeta.pk)
+          field = object.clone(modelMeta.names[modelMeta.pk])
+          field.name = pkName
+          belongsTo.pkName = pkName
+          delete field.primary
+          this.fields.push(field)
+          this.names[pkName] = field
+
+        for hasMany in this.hasMany
+          model = belongsTo.model
+          # Convert model string to class
+          if text.isString(model)
+            model = belongsTo.model = text.constantize(model)
+
+          # Generate model name if not specified
+          name = belongsTo.name
+          if not name
+            name = belongsTo.name = text.camelize(text.pluralize(model.name), false)
+
+        this
+
+    ###
     Base class of all models
 
     Usage
 
-    class Blog extends Model
-      cls = this
-      cls.adapters
-        server:
-          RESTfulAdapter
-        client:
-          [IndexDBAdapter, WebSQLAdapter, StorageAdapter, MemoryAdapter]
+      class Blog extends Model
+        cls = this
+        cls.adapters
+          server:
+            RESTfulAdapter
+          client:
+            [IndexDBAdapter, WebSQLAdapter, StorageAdapter, MemoryAdapter]
 
-      cls.fields
-        id:
-          type: Model.INTEGER
-          primary: true
-        title:
-          type: Model.STRING
+        cls.field "id", type: Model.INTEGER, primary: true
+        cls.field "title", type: Model.STRING
+        cls.field "description", type: Model.STRING
 
-      cls.belongsTo Author
-      cls.hasMany Entry
-      cls.hasAndBelongsToMany Tag
+        cls.belongsTo "author.models.Author", name: "author"
+        cls.hasMany Entry, name: "entries"
+        cls.hasAndBelongsToMany Tag, name: "tags"
 
     ###
     class Model extends events.EventEmitter
       kls = this
-      # @type {Hash}  字段的定义
-      kls._fields = {}
-      kls._fieldNames = []
-      kls._pkName = null
-      kls._belongsTo = []
-      kls._hasMany = []
-      kls._hasAndBelongsToMany = []
-      kls._collection = collections.Collection
-      kls._adapters = {}
-      # kls._indexes = {}
-      kls._prepared = false
-
-      # Define accessors
-      klass.accessor kls, "pkName"
-      klass.accessor kls, "tableName",
-        get: -> this._tableName or= text.underscore(this.name)
-
-      ###
-      Prepare fields and relationships for model
-      ###
-      kls._prepare = ->
-        cls = this
-        return cls if cls._prepared
-        cls._prepared = true
 
       ###
       Define accessor of adapters for model
       ###
       kls.adapters = (typeOrAdapters) ->
         cls = this
+        cls._adapters or= {}
         return cls._adapters if not typeOrAdapters
         return cls._adapters[typeOrAdapters] if text.isString(typeOrAdapters)
         for type, adapters of adapters
@@ -92,45 +144,185 @@ kopi.module("kopi.db.models")
         cls
 
       ###
-      扩展字段的定义
+      Define a single field
       ###
-      kls.fields = (fields={}) ->
-        cls = this
-        for name, field of fields
-          # Convert string to field object
-          if text.isString(field)
-            field =
-              type: field
-          if not field.type
-            field.type = STRING
-          # Setup primary key field
-          if field.primary
-            throw new errors.DuplicatePkField(cls._pkName) if cls._pkName
-            cls._pkName = name
-          cls._fields[name] = field
-          cls._fieldNames.push[name]
-        cls
+      kls.field = (name, options={}) ->
+        meta = this._meta()
+        if text.isString(options)
+          options =
+            type: options
+        options.name = name
+        meta.fields.push(options)
+        this._prepared = false
+        this
 
       ###
-      Relations
-
+      Define one-to-many relationship
       ###
       kls.belongsTo = (model, options={}) ->
-        this._belongsTo.push([model, options])
+        meta = this._meta()
+        options.model = model
+        meta.belongsTo.push(options)
+        this._prepared = false
         this
 
+      ###
+      Define many-to-one relationship
+      ###
       kls.hasMany = (model, options={}) ->
-        this._hasMany.push([model, options])
+        meta = this._meta()
+        options.model = model
+        meta.hasMany.push(options)
+        this._prepared = false
         this
 
+      ###
+      Define many-to-many relationship
+      ###
       kls.hasAndBelongsToMany = (model, options={}) ->
-        this._hasAndBelongsToMany.push([model, options])
+        meta = this._meta()
+        options.model = model
+        meta.hasAndBelongsToMany.push(options)
+        this._prepared = false
         this
 
-      kls._compiled = false
+      ###
+      Define query index
+      ###
+      kls.index = (field) ->
+        meta = this._meta()
+        meta.indices or= []
+        meta.indices.push(field)
+        this._prepared = false
+        this
 
-      # kls.index = (field) ->
-      #   this._indexes[field] or= new Index(this, field)
+      ###
+      Get meta for model
+      ###
+      kls._meta = -> Meta.get(this)
+
+      ###
+      Determine where two values equal to each other
+      ###
+      kls._valueEquals = (field, val1, val2) ->
+        # TODO Handle date value
+        val1 != val2
+
+      ###
+      Validates field definitions and creates some getter and setter methods for model
+
+      ###
+      # TODO Is it possible to move _prepare() to a meta class model
+      kls._prepare = ->
+        cls = this
+        return cls if cls._prepared
+
+        meta = cls._meta().prepare()
+        proto = this.prototype
+
+        ###
+        Define getter and setter for regular fields.
+
+        e.g.
+          book.title            # returns 'Book'
+          book.title = 'Title'  # returns 'Title'
+        ###
+        defineProp = (field) ->
+          name = field.name
+          getterFn = -> this._data[name]
+          setterFn = (value) ->
+            oldValue = this[name]
+            unless cls._valueEquals(name, oldValue, value)
+              this._data[name] = value
+              this._dirty[name] = oldValue
+              # this.emit cls.VALUE_CHANGE_EVENT, [this, name, value]
+          object.defineProperty proto, name,
+            get: getterFn
+            set: setterFn
+
+        for field in meta.fields
+          defineProp(field)
+
+        ###
+        Define getter and setter for one-to-many fields
+
+        e.g.
+          book.authorId               # returns 2
+          book.authorId = 3           # returns 3
+          book.author                 # returns [Author 1]
+          book.author = author        # returns [Author 2]
+        ###
+        defineProp = (field) ->
+          name = field.name
+          pkName = field.pkName
+
+          # Re-define setter for one-to-many relationship to reset related object
+          setterFn = (value) ->
+            oldValue = this[pkName]
+            unless this._valueEquals(pkName, oldValue, value)
+              this._data[pkName] = value
+              this._dirty[pkName] = oldValue
+              this.emit cls.VALUE_CHANGE_EVENT, [this, pkName, value]
+              # Reset instance of foreign fields
+              delete this._belongsTo[name]
+          object.defineProperty proto, pkName,
+            set: setterFn
+
+          getterFn = ->
+            if not this._data[pkName]
+              null
+            else if this._belongsTo[name]
+              this._belongsTo[name]
+            else
+              throw new errors.RelatedModelNotFetched(cls, this.pk())
+          setterFn = (value) ->
+            oldPk = this._data[pkName]
+            oldInstance = this._belongsTo[name]
+            pk = if value.pk then value.pk() else value
+            this[pkName] = pk
+
+            unless this._valueEquals(pkName, oldPk, pk)
+              if not value
+                this._data[pkName] = null
+                this._belongsTo[name] = undefined
+              else if value.pk
+                this._data[pkName] = value.pk()
+                this._belongsTo[name] = value
+              else
+                # TODO Is it ok to assume it's an pk? Should we validate type for pk?
+                this._data[pkName] = value
+              this.emit cls.VALUE_CHANGE_EVENT, [this, name, value]
+
+          object.defineProperty proto, name,
+            get: getterFn
+            set: setterFn
+
+        for field in meta.belongsTo
+          defineProp(field)
+
+        ###
+        Define getter and setter for reverse foreign fields
+
+        e.g.
+          author.books
+        ###
+        defineProp = (field) ->
+          name = field.name
+          getterFn = ->
+            collection = this._hasMany[name]
+            return collection if collection
+          setterFn = (value) ->
+            throw new exceptions.NotImplementedError()
+
+          object.defineProperty proto, name,
+            get: getterFn
+            set: setterFn
+
+        for field in meta.hasMany
+          defineProp(field)
+
+        cls._prepared = true
+        cls
 
       ###
       从 HTML5 定义 MicroData 格式中获取数据
@@ -172,6 +364,7 @@ kopi.module("kopi.db.models")
       kls.AFTER_UPDATE_EVENT = "afterupdate"
       kls.BEFORE_DESTROY_EVENT = "beforedestroy"
       kls.AFTER_DESTROY_EVENT = "afterdestroy"
+      kls.VALUE_CHANGE_EVENT = "change"
 
       ###
       @param  {Hash}  attributes
@@ -185,71 +378,10 @@ kopi.module("kopi.db.models")
         self.guid = utils.guid(cls.prefix)
         self._new = true
         self._type = cls.name
-        self._dirtyProperties = {}
         self._data = {}
-
-        ###
-        Define getter and setter for regular fields.
-
-        e.g.
-          book.title            # returns 'Book'
-          book.title = 'Title'  # returns 'Title'
-        ###
-        fieldDefineProp = (field) ->
-          fieldGetterFn = ->
-            self._data[field]
-          fieldSetterFn = (value) ->
-            oldValue = self[field]
-            unless self._valueEquals(field, value)
-              self._data[field] = value
-              self._dirtyProperties[field] = oldValue
-              self.emit "set change", [self, field, value]
-          object.defineProperty self, field,
-            get: fieldGetterFn,
-            set: fieldSetterFn
-
-        defaultValue = (field) ->
-          value = cls._fields[field]["default"]
-          # TODO Get default values by field type
-
-        for own field, scheme of cls._fields
-          fieldDefineProp(field)
-          self[field] = defaultValue(field)
-
-        ###
-        Define getter and setter for foreign fields
-
-        e.g.
-          book.author           # returns [Author 1]
-          book.author = author  # returns [Author 2]
-          book.authorId         # returns 2
-          book.authorId = 3     # returns 3
-        ###
-        fieldDefineProp = (field) ->
-        for own field, model of cls._belongsTo
-          fieldDefineProp(field)
-
-        ###
-        Define getter and setter for reverse foreign fields
-
-        e.g.
-          author.books
-        ###
-        fieldDefineProp = (field) ->
-        for own field, model of cls._hasMany
-          fieldDefineProp(field)
-
-        ###
-        Define getter and setter for many-to-many fields
-
-        e.g.
-          article.tags                  # returns []
-          article.tags = [tag1, tag2]   # returns [[Tag 1], [Tag 2]]
-          article.tags.push(tag3)       # returns [[Tag 1], [Tag 2], [Tag 3]]
-        ###
-        fieldDefineProp = (field) ->
-        for own field, model of cls._hasAndBelongsToMany
-          fieldDefineProp(field)
+        self._dirty = {}
+        self._belongsTo = {}
+        self._hasMany = {}
 
         self.update(attributes)
 

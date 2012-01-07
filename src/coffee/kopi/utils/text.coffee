@@ -19,6 +19,12 @@ kopi.module("kopi.utils.text")
       word
 
     ###
+    Convert a copy of string which first letter capitalized
+    ###
+    capitalize = (word) ->
+      word.replace(reFirstLetter, upperCase)
+
+    ###
     将字符串转换成对象
 
     @param  {String}  name
@@ -48,6 +54,73 @@ kopi.module("kopi.utils.text")
     # Is the given value a string?
     isString = (string) ->
       !!(string is '' or (string and string.charCodeAt and string.substr))
+
+    ###
+    Return plural form of given lowercase singular word (English only). Based on
+    ActiveState recipe http://code.activestate.com/recipes/413172/
+    ###
+    ABERRANT_PLURAL_MAP =
+      appendix: 'appendices'
+      barracks: 'barracks'
+      cactus: 'cacti'
+      child: 'children'
+      criterion: 'criteria'
+      deer: 'deer'
+      echo: 'echoes'
+      elf: 'elves'
+      embargo: 'embargoes'
+      focus: 'foci'
+      fungus: 'fungi'
+      goose: 'geese'
+      hero: 'heroes'
+      hoof: 'hooves'
+      index: 'indices'
+      knife: 'knives'
+      leaf: 'leaves'
+      life: 'lives'
+      man: 'men'
+      mouse: 'mice'
+      nucleus: 'nuclei'
+      person: 'people'
+      phenomenon: 'phenomena'
+      potato: 'potatoes'
+      self: 'selves'
+      syllabus: 'syllabi'
+      tomato: 'tomatoes'
+      torpedo: 'torpedoes'
+      veto: 'vetoes'
+      woman: 'women'
+    VOWELS = ['a', 'e', 'i', 'o', 'u']
+
+    pluralize = (singular) ->
+      return '' if not singular
+      plural = ABERRANT_PLURAL_MAP[singular]
+      return plural if plural
+
+      root = singular
+      len = singular.length
+      try
+        if singular[len-1] == 'y' and singular[len-2] not in VOWELS
+          root = singular[0...(len-1)]
+          suffix = 'ies'
+        else if singular[len-1] == 's'
+          if singular[len-2] in VOWELS
+            if singular[len-3...len] == 'ius'
+              root = singular[0...len-2]
+              suffix = 'i'
+            else
+              root = singular[0...len-1]
+              suffix = 'ses'
+          else
+            suffix = 'es'
+        else if singular[len-2...len] in ['ch', 'sh']
+          suffix = 'es'
+        else
+          suffix = 's'
+      catch e
+        suffix = 's'
+      plural = root + suffix
+      return plural
 
     ###
     Prefix checker
@@ -93,10 +166,12 @@ kopi.module("kopi.utils.text")
         .toLowerCase()
 
     exports.camelize = camelize
+    exports.capitalize = capitalize
     exports.constantize = constantize
     exports.contains = contains
     exports.format = format
     exports.isString = isString
+    exports.pluralize = pluralize
     exports.startsWith = startsWith
     exports.endsWith = endsWith
     exports.truncate = truncate

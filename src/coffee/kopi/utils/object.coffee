@@ -1,7 +1,8 @@
 kopi.module("kopi.utils.object")
   .require("kopi.utils.func")
   .require("kopi.utils.number")
-  .define (exports, func, number) ->
+  .require("kopi.utils.text")
+  .define (exports, func, number, text) ->
 
     ObjectProto = Object.prototype
 
@@ -21,11 +22,51 @@ kopi.module("kopi.utils.object")
 
     clone = (obj) -> extend {}, obj
 
+    # Define custom property. e.g.
+    # get: book.title
+    # set: book.title = 1
     defineProperty = Object.defineProperty or= (obj, field, property={}) ->
-      if func.isFunction(property.get)
+      if property.get
         obj.__defineGetter__ field, -> property.get.call(this)
-      if func.isFunction(property.set)
-        obj.__defineSetter__ field, (value) -> property.set.call(this, value)
+      if property.set
+        obj.__defineSetter__ field, (value) ->
+          property.set.call(this, value)
+          value
+      obj
+
+    ###
+    Define asynchronous property.
+
+    Usage
+
+      defineAsyncProperty book,
+        get: (fn) ->
+          asyncGetTitle (error, title) ->
+            fn(error, title) if fn
+        set: (title, fn) ->
+          asyncSetTitle title, (error, title) ->
+            fn(error, title) if fn
+
+    Get book title asynchronously
+
+      book.getTitle (error, title) -> console.log(error, title)
+
+    Set book title asynchronously
+
+      book.setTitle title, (error, title) -> console.log(error, title)
+
+    ###
+    defineAsyncProperty = (obj, field, property={}) ->
+      field = text.capitalize(field)
+      if property.get
+        obj["get" + field] = ->
+          property.get.apply(this, arguments)
+          obj
+      if property.set
+        obj["set" + field] = ->
+          property.set.apply(this, arguments)
+          obj
+      obj
 
     # Extend a given object with all of the properties in a source object.
     extend = (obj, mixins...) ->
