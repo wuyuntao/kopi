@@ -1,7 +1,7 @@
 kopi.module("kopi.db.models")
   .require("kopi.exceptions")
-  .require("kopi.logging")
   .require("kopi.events")
+  .require("kopi.logging")
   .require("kopi.utils")
   .require("kopi.utils.array")
   .require("kopi.utils.klass")
@@ -9,10 +9,11 @@ kopi.module("kopi.db.models")
   .require("kopi.utils.html")
   .require("kopi.utils.object")
   .require("kopi.utils.text")
+  .require("kopi.utils.date")
   .require("kopi.db.collections")
   .require("kopi.db.errors")
   .define (exports, exceptions, events, logging
-                  , utils, array, klass, func, html, object, text
+                  , utils, array, klass, func, html, object, text, date
                   , collections, errors) ->
 
     logger = logging.logger(exports.name)
@@ -53,51 +54,44 @@ kopi.module("kopi.db.models")
 
       prepare: ->
         for field in this.fields
-          # Set default field type
-          if not field.type
-            field.type = STRING
-
-          # Check if primary key field is duplicately defined
-          if field.primary
-            if this.pk and this.pk != field.name
-              throw new errors.DuplicatePrimaryKeyError(field.name)
-            # Set primary key field
-            this.pk = field.name
-
           # Add field to name-field hash
           this.names[field.name] = field
 
-        for belongsTo in this.belongsTo
-          model = belongsTo.model
+        for relation in this.belongsTo
+          model = relation.model
           # Convert model string to class
           if text.isString(model)
-            model = belongsTo.model = text.constantize(model)
+            model = relation.model = text.constantize(model)
 
           # Generate model name if not specified
-          name = belongsTo.name
+          name = relation.name
           if not name
-            name = belongsTo.name = text.camelize(model.name, false)
+            name = relation.name = text.camelize(model.name, false)
 
           # Add primary key to model fields
           modelMeta = model._meta()
           pkName = name + text.camelize(modelMeta.pk)
           field = object.clone(modelMeta.names[modelMeta.pk])
           field.name = pkName
-          belongsTo.pkName = pkName
+          field.isBelongsTo = true
+          relation.pkName = pkName
           delete field.primary
           this.fields.push(field)
           this.names[pkName] = field
 
-        for hasMany in this.hasMany
-          model = belongsTo.model
+        for relation in this.hasMany
+          model = relation.model
           # Convert model string to class
           if text.isString(model)
-            model = belongsTo.model = text.constantize(model)
+            model = relation.model = text.constantize(model)
 
           # Generate model name if not specified
-          name = belongsTo.name
+          name = relation.name
           if not name
-            name = belongsTo.name = text.camelize(text.pluralize(model.name), false)
+            name = relation.name = text.camelize(text.pluralize(model.name), false)
+
+        if not this.pk
+          throw new errors.PrimaryKeyNotFoundError(this.model)
 
         this
 
@@ -148,9 +142,22 @@ kopi.module("kopi.db.models")
       ###
       kls.field = (name, options={}) ->
         meta = this._meta()
+        # If options is field type
         if text.isString(options)
           options =
             type: options
+
+        # Set default field type
+        if not options.type
+          options.type = STRING
+
+        # Check if primary key field is duplicately defined
+        if options.primary
+          if meta.pk and meta.pk != name
+            throw new errors.DuplicatePrimaryKeyError(name)
+          # Set primary key field
+          meta.pk = name
+
         options.name = name
         meta.fields.push(options)
         this._prepared = false
@@ -205,8 +212,13 @@ kopi.module("kopi.db.models")
       Determine where two values equal to each other
       ###
       kls._valueEquals = (field, val1, val2) ->
-        # TODO Handle date value
-        val1 != val2
+        meta = this._meta()
+        type = meta.names[field].type
+        # Compare date objects with their
+        if type == DATETIME
+          val1 = if date.isDate(val1) then val1.getTime() else parseInt(val1)
+          val2 = if date.isDate(val2) then val2.getTime() else parseInt(val2)
+        val1 == val2
 
       ###
       Validates field definitions and creates some getter and setter methods for model
@@ -244,73 +256,60 @@ kopi.module("kopi.db.models")
           defineProp(field)
 
         ###
-        Define getter and setter for one-to-many fields
+        Define getter and setter for one-to-many relationships
 
         e.g.
-          book.authorId               # returns 2
-          book.authorId = 3           # returns 3
           book.author                 # returns [Author 1]
-          book.author = author        # returns [Author 2]
+          book.author = author2       # returns [Author 2]
         ###
-        defineProp = (field) ->
-          name = field.name
-          pkName = field.pkName
-
-          # Re-define setter for one-to-many relationship to reset related object
-          setterFn = (value) ->
-            oldValue = this[pkName]
-            unless this._valueEquals(pkName, oldValue, value)
-              this._data[pkName] = value
-              this._dirty[pkName] = oldValue
-              this.emit cls.VALUE_CHANGE_EVENT, [this, pkName, value]
-              # Reset instance of foreign fields
-              delete this._belongsTo[name]
-          object.defineProperty proto, pkName,
-            set: setterFn
+        defineProp = (relation) ->
+          name = relation.name
+          pkName = relation.pkName
 
           getterFn = ->
-            if not this._data[pkName]
-              null
-            else if this._belongsTo[name]
-              this._belongsTo[name]
-            else
-              throw new errors.RelatedModelNotFetched(cls, this.pk())
+            return null if not this._data[pkName]
+            model = this._belongsTo[name]
+            return model if model and model.pk() == this._data[pkName]
+            throw new errors.RelatedModelNotFetched(cls, this.pk())
           setterFn = (value) ->
             oldPk = this._data[pkName]
-            oldInstance = this._belongsTo[name]
             pk = if value.pk then value.pk() else value
             this[pkName] = pk
 
             unless this._valueEquals(pkName, oldPk, pk)
               if not value
                 this._data[pkName] = null
+                this._dirty[pkName] = oldPk
                 this._belongsTo[name] = undefined
               else if value.pk
                 this._data[pkName] = value.pk()
+                this._dirty[pkName] = oldPk
                 this._belongsTo[name] = value
               else
                 # TODO Is it ok to assume it's an pk? Should we validate type for pk?
                 this._data[pkName] = value
+                this._dirty[pkName] = oldPk
+                this._belongsTo[name] = undefined
               this.emit cls.VALUE_CHANGE_EVENT, [this, name, value]
 
           object.defineProperty proto, name,
             get: getterFn
             set: setterFn
 
-        for field in meta.belongsTo
-          defineProp(field)
+        for relation in meta.belongsTo
+          defineProp(relation)
 
         ###
-        Define getter and setter for reverse foreign fields
+        Define getter and setter for many-to-one relationships
 
         e.g.
           author.books
         ###
-        defineProp = (field) ->
-          name = field.name
+        defineProp = (relation) ->
+          name = relation.name
           getterFn = ->
-            collection = this._hasMany[name]
-            return collection if collection
+            collection = this._hasMany[name] or []
+            collection if collection
           setterFn = (value) ->
             throw new exceptions.NotImplementedError()
 
@@ -318,8 +317,8 @@ kopi.module("kopi.db.models")
             get: getterFn
             set: setterFn
 
-        for field in meta.hasMany
-          defineProp(field)
+        for relation in meta.hasMany
+          defineProp(relation)
 
         cls._prepared = true
         cls
@@ -375,6 +374,7 @@ kopi.module("kopi.db.models")
         cls.prefix or= text.underscore(cls.name)
         cls._prepare() if not cls._prepared
 
+        self._meta = cls._meta()
         self.guid = utils.guid(cls.prefix)
         self._new = true
         self._type = cls.name
@@ -387,7 +387,7 @@ kopi.module("kopi.db.models")
 
       # TODO Modify pk() as a custom property
       pk: ->
-        this[this.constructor._pkName]
+        this[this._meta.pk]
 
       ###
       @return {Hash}  A clone of data
@@ -401,8 +401,9 @@ kopi.module("kopi.db.models")
       update: (attributes={}) ->
         cls = this.constructor
         self = this
+        names = this._meta.names
         for name, attribute of attributes
-          if name of cls._fields
+          if name of names
             self[name] = attribute
         self
 

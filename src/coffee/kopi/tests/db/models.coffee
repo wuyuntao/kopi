@@ -28,7 +28,7 @@ kopi.module("kopi.tests.db.models")
       title: "Article Delta"
       body: "Body of article delta"
       author: authorAlpha
-      tags: [tagBeta, tagGamma]
+      categories: [tagBeta, tagGamma]
       publishedAt: new Date(2012, 2, 1, 20)
       updatedAt: new Date(2012, 2, 2, 10)
 
@@ -40,7 +40,7 @@ kopi.module("kopi.tests.db.models")
       publishedAt: new Date(2012, 2, 2, 20)
       updatedAt: new Date(2012, 2, 3, 10)
 
-    articleEpsilon.tags.push(tagBeta)
+    articleEpsilon.categories.push(tagBeta)
 
     blogZeta = new fixtures.Blog
       id: 1
@@ -61,14 +61,14 @@ kopi.module("kopi.tests.db.models")
       equals authorAlpha.id, 1
       equals authorAlpha.name, "Alpha"
       equals authorAlpha.email, "alpha@gmail.com"
-      equals authorAlpha.registerAt, new Date(2012, 2, 1, 20)
+      equals authorAlpha.registerAt.getTime(), new Date(2012, 2, 1, 20).getTime()
 
     test "set values for fields", ->
       authorTheta.name = "Iota"
       authorTheta.registerAt = new Date(2012, 2, 3, 14)
 
       equals authorTheta.name, "Iota"
-      equals authorTheta.registerAt, new Date(2012, 2, 3, 14)
+      equals authorTheta.registerAt.getTime(), new Date(2012, 2, 3, 14).getTime()
 
     test "foreign fields", ->
       equals blogZeta.authorId, 1
@@ -95,12 +95,12 @@ kopi.module("kopi.tests.db.models")
     test "set values for reverse foreign fields", ->
 
     test "many-to-many field", ->
-      tags = articleDelta.tags
-      equals tags.length, 2
-      equals tags[0].id, 1
-      equals tags[0].name, "Beta"
-      equals tags[1].id, 2
-      equals tags[1].name, "Gamma"
+      categories = articleDelta.categories
+      equals categories.length, 2
+      equals categories[0].id, 1
+      equals categories[0].name, "Beta"
+      equals categories[1].id, 2
+      equals categories[1].name, "Gamma"
 
       articles = tagBeta.articles
       equals articles.length, 2

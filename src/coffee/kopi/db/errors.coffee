@@ -12,6 +12,10 @@ kopi.module("kopi.db.errors")
       constructor: (name) ->
         super("Primary key field is already defined. #{name}")
 
+    class PrimaryKeyNotFoundError extends exceptions.Exception
+      constructor: (model) ->
+        super("Primary key field is not defined in model #{model.name}")
+
     class RelatedModelNotFetched extends exceptions.Exception
       constructor: (model, pk) ->
         super("Related '#{model}' with primary key '#{pk} not fetched.")
@@ -19,4 +23,5 @@ kopi.module("kopi.db.errors")
     exports.DoesNotExist = DoesNotExist
     exports.DuplicateModelNameError = DuplicateModelNameError
     exports.DuplicatePrimaryKeyError = DuplicatePrimaryKeyError
+    exports.PrimaryKeyNotFoundError = PrimaryKeyNotFoundError
     exports.RelatedModelNotFetched = RelatedModelNotFetched

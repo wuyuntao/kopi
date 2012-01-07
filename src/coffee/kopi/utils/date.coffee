@@ -1,6 +1,5 @@
 kopi.module("kopi.utils.date")
-  .require("kopi.utils.object")
-  .define (exports, object) ->
+  .define (exports) ->
 
     isDate = (date) -> !!(date and date.getFullYear)
 
