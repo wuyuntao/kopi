@@ -49,7 +49,9 @@ kopi.module("kopi.db.models")
         this.fields = []
         this.names = {}
         this.belongsTo = []
+        this.belongsToNames = {}
         this.hasMany = []
+        this.hasManyNames = {}
         this.hasAndBelongsToMany = []
 
       prepare: ->
@@ -78,6 +80,7 @@ kopi.module("kopi.db.models")
           delete field.primary
           this.fields.push(field)
           this.names[pkName] = field
+          this.belongsToNames[name] = relation
 
         for relation in this.hasMany
           model = relation.model
@@ -89,6 +92,7 @@ kopi.module("kopi.db.models")
           name = relation.name
           if not name
             name = relation.name = text.camelize(text.pluralize(model.name), false)
+          this.hasManyNames[name] = relation
 
         if not this.pk
           throw new errors.PrimaryKeyNotFoundError(this.model)
@@ -308,10 +312,11 @@ kopi.module("kopi.db.models")
         defineProp = (relation) ->
           name = relation.name
           getterFn = ->
-            collection = this._hasMany[name] or []
+            collection = this._hasMany[name] or= []
             collection if collection
           setterFn = (value) ->
-            throw new exceptions.NotImplementedError()
+            this._hasMany[name] = value
+            this.emit cls.VALUE_CHANGE_EVENT, [this, name, value]
 
           object.defineProperty proto, name,
             get: getterFn
@@ -402,8 +407,10 @@ kopi.module("kopi.db.models")
         cls = this.constructor
         self = this
         names = this._meta.names
+        belongsTo = this._meta.belongsToNames
+        hasMany = this._meta.hasManyNames
         for name, attribute of attributes
-          if name of names
+          if name of names or name of belongsTo or name of hasMany
             self[name] = attribute
         self
 

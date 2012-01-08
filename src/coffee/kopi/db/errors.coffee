@@ -18,7 +18,7 @@ kopi.module("kopi.db.errors")
 
     class RelatedModelNotFetched extends exceptions.Exception
       constructor: (model, pk) ->
-        super("Related '#{model}' with primary key '#{pk} not fetched.")
+        super("Related '#{model.name}' with primary key '#{pk}' not fetched.")
 
     exports.DoesNotExist = DoesNotExist
     exports.DuplicateModelNameError = DuplicateModelNameError
