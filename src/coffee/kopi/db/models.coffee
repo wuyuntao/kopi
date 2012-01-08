@@ -5,7 +5,6 @@ kopi.module("kopi.db.models")
   .require("kopi.utils")
   .require("kopi.utils.array")
   .require("kopi.utils.klass")
-  .require("kopi.utils.func")
   .require("kopi.utils.html")
   .require("kopi.utils.object")
   .require("kopi.utils.text")
@@ -13,7 +12,7 @@ kopi.module("kopi.db.models")
   .require("kopi.db.collections")
   .require("kopi.db.errors")
   .define (exports, exceptions, events, logging
-                  , utils, array, klass, func, html, object, text, date
+                  , utils, array, klass, html, object, text, date
                   , collections, errors) ->
 
     logger = logging.logger(exports.name)
@@ -53,6 +52,7 @@ kopi.module("kopi.db.models")
         this.hasMany = []
         this.hasManyNames = {}
         this.hasAndBelongsToMany = []
+        this.adapters = {}
 
       prepare: ->
         for field in this.fields
@@ -128,16 +128,16 @@ kopi.module("kopi.db.models")
       Define accessor of adapters for model
       ###
       kls.adapters = (typeOrAdapters) ->
+        meta = this._meta()
         cls = this
-        cls._adapters or= {}
-        return cls._adapters if not typeOrAdapters
-        return cls._adapters[typeOrAdapters] if text.isString(typeOrAdapters)
+        return meta.adapters if not typeOrAdapters
+        return mata.adapters[typeOrAdapters] if text.isString(typeOrAdapters)
         for type, adapters of adapters
           unless array.isArray(adapters)
-            cls._adapters[type] = new adapters(cls) if adapters.support(cls)
+            meta.adapters[type] = new adapters(cls) if adapters.support(cls)
             continue
           for adapter in adapters
-            cls._adapters[type] = new adapters(cls) if adapters.support(cls)
+            meta.adapters[type] = new adapters(cls) if adapters.support(cls)
             continue
         cls
 
@@ -429,18 +429,15 @@ kopi.module("kopi.db.models")
       save: (fn) ->
         cls = this.constructor
         self = this
-        pkName = cls._pkName
-        data = self.data()
-        pk = data[pkName]
-        create = false
+        meta = self._meta
+        pk = self.pk()
+        pkName = meta.pk
+        isCreate = false
         thenFn = (error) ->
-          self.emit if create then cls.AFTER_CREATE_EVENT else cls.AFTER_UPDATE_EVENT
-          self.emit cls.AFTER_SAVE_EVENT
-          if error
-            # TODO logging or emitting
-          else
-            # TODO logging or emitting
-          fn(error, self) if func.isFunction(fn)
+          if not error
+            self.emit if isCreate then cls.AFTER_CREATE_EVENT else cls.AFTER_UPDATE_EVENT
+            self.emit cls.AFTER_SAVE_EVENT
+          fn(error, self) if fn
         self.emit cls.BEFORE_SAVE_EVENT
         if pk
           criteria = {}
@@ -452,7 +449,7 @@ kopi.module("kopi.db.models")
         else
           self.emit cls.BEFORE_CREATE_EVENT
           cls.create data, thenFn
-          create = true
+          isCreate = true
         self
 
       ###
@@ -471,7 +468,7 @@ kopi.module("kopi.db.models")
             # TODO logging or emitting
           else
             # TODO logging or emitting
-          fn(error, self) if func.isFunction(fn)
+          fn(error, self) if fn
         self.emit cls.BEFORE_DESTROY_EVENT
         cls.destroy(criteria, thenFn)
         self
