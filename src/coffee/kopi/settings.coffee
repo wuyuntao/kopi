@@ -67,6 +67,15 @@ kopi.module("kopi.settings")
           indicator: '#kopi-notification-indicator'
           overlay: '#kopi-notification-overlay'
 
+      native:
+        # @type {Boolean} Support Android native interface
+        android: true
+        # @type {Boolean} Support Chromium native interface
+        chromium: true
+        # @type {Boolean} Support iOS native interface
+        ios: true
+
+
     # Read settings from localStorage
     load = ->
       throw new exceptions.NotImplementedError()

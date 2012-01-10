@@ -250,8 +250,8 @@ kopi.module("kopi.ui.scrollable")
       _position: (x, y) ->
         cls = this.constructor
         self = this
-        x = if self._options.scrollX then x else 0
-        y = if self._options.scrollY then y else 0
+        x = if self._scrollX then x else 0
+        y = if self._scrollY then y else 0
         self._scroller.css TRANSFORM, text.format(cls.TRANSFORM_STYLE, x: x, y: y)
         self._x = x
         self._y = y
