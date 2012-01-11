@@ -3,6 +3,8 @@ kopi.module("kopi.ui.clickable")
   .require("kopi.ui.touchable")
   .define (exports, events, touchable) ->
 
+    math = Math
+
     ###
     A base widget responsive to click, hold, hover and other button-like behaviors
     ###
@@ -18,6 +20,8 @@ kopi.module("kopi.ui.clickable")
       kls.configure
         # @type   {Integer}   holdTime      time for touch and hold event
         holdTime: 2000
+        # @type   {Integer}   moveThreshold moving distance should be ignored
+        moveThreshold: 10
         # @type   {Function}  onhover       custom callback function
         onhover: null
         # @type   {Function}  onhoverout    custom callback function
@@ -63,13 +67,22 @@ kopi.module("kopi.ui.clickable")
         self._moved = false
         self._holded = false
         point = self._points(event)
+        self._pointX = point.pageX
+        self._pointY = point.pageY
+        point = self._points(event)
         self.element.addClass(cls.ACTIVE_CLASS)
         self._setHoldTimeout()
         super
 
       ontouchmove: (e, event) ->
         self = this
-        self._moved = true
+        threshold = self._options.moveThreshold
+        point = self._points(event)
+        deltaX = point.pageX - self._pointX
+        deltaY = point.pageY - self._pointY
+        # Only if move distance over threshold
+        if not self._moved and ((math.abs(deltaX) > threshold) or (math.abs(deltaY) > threshold))
+          self._moved = true
         # Reset hold timeout if touch moves
         self._setHoldTimeout()
         super
@@ -79,7 +92,7 @@ kopi.module("kopi.ui.clickable")
         self = this
         self._clearHoldTimeout()
         self.element.removeClass(cls.ACTIVE_CLASS)
-        # TODO a small distance move will trigger a click event too
+        # a small distance move will trigger a click event too
         if not self._holded and not self._moved
           self.emit(cls.CLICK_EVENT, [event])
         super

@@ -13,8 +13,8 @@ kopi.module("kopi.ui.groups")
 
       constructor: (options) ->
         super
-        # @type {Array} guid list of child views
-        this._guids = []
+        # @type {Array} key list of child views
+        this._keys = []
         # @type {Array} list of child views
         this._children = []
         # @type {kopi.ui.widgets.Widget} active child
@@ -24,13 +24,13 @@ kopi.module("kopi.ui.groups")
       If a child widget is in the group
       ###
       has: (child) ->
-        array.indexOf(this._guids, child.guid) != -1
+        array.indexOf(this._keys, this._key(child)) != -1
 
       ###
       Add a child widget
       ###
       add: (child, options={}) ->
-        this.addAt(child, options, this._guids.length)
+        this.addAt(child, options, this._keys.length)
 
       addAt: (child, options={}, index=0) ->
         if not child instanceof this._options.childClass
@@ -38,28 +38,29 @@ kopi.module("kopi.ui.groups")
         if this.has(child)
           # TODO Add custom exception
           throw new exceptions.ValueError("Already added!!!")
-        array.insertAt(this._guids, index, child.guid)
+        array.insertAt(this._keys, index, this._key(child))
         array.insertAt(this._children, index, child)
+        child
 
       ###
       Remove a child widget
       ###
       remove: (child) ->
-        index = array.indexOf(this._guids, child.guid)
+        index = array.indexOf(this._keys, this._key(child))
         this.removeAt(index)
 
       ###
       Removes the child at the specified position in the group.
       ###
       removeAt: (index) ->
-        if index < 0 or index >= this._guids.length
+        if index < 0 or index >= this._keys.length
           # TODO Add custom exception
           throw new exceptions.ValueError("Child view does not exist")
         child = this._children[index]
-        if child.guid == this._currentChild.guid
+        if this._key(child) == this._key(this._currentChild)
           throw new exceptions.ValueError("Can not remove current view.")
         child.destroy()
-        array.removeAt(this._guids, index)
+        array.removeAt(this._keys, index)
         array.removeAt(this._children, index)
 
       ###
@@ -69,7 +70,7 @@ kopi.module("kopi.ui.groups")
         # Destroy all children
         for child in this._children
           child.destroy()
-        array.empty(this._guids)
+        array.empty(this._keys)
         array.empty(this._children)
 
       ###
@@ -83,8 +84,8 @@ kopi.module("kopi.ui.groups")
       ###
       next: ->
         if this._currentChild
-          index = array.indexOf(this._guids, this._currentChild.guid)
-          if index + 1 < this._guids.length
+          index = array.indexOf(this._keys, this._key(this._currentChild))
+          if index + 1 < this._keys.length
             return this._children[index + 1]
 
       ###
@@ -92,7 +93,7 @@ kopi.module("kopi.ui.groups")
       ###
       previous: ->
         if this._currentChild
-          index = array.indexOf(this._guids, this._currentChild.guid)
+          index = array.indexOf(this._keys, this._key(this._currentChild))
           if index - 1 >= 0
             return this._children[index - 1]
 
@@ -107,5 +108,7 @@ kopi.module("kopi.ui.groups")
       ###
       showAt: (index) ->
         throw new exceptions.NotImplementedError()
+
+      _key: (child) -> child.guid
 
     exports.Group = Group

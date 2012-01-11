@@ -3,11 +3,12 @@ kopi.module("kopi.ui.tabs")
   .require("kopi.logging")
   .require("kopi.utils.array")
   .require("kopi.utils.klass")
+  .require("kopi.utils.text")
   .require("kopi.ui.buttons")
   .require("kopi.ui.groups")
   .require("kopi.ui.widgets")
   .require("kopi.ui.scrollable")
-  .define (exports, exceptions, logging, array, klass
+  .define (exports, exceptions, logging, array, klass, text
                   , buttons, groups, widgets, scrollable) ->
 
     logger = logging.logger(exports.name)
@@ -37,7 +38,7 @@ kopi.module("kopi.ui.tabs")
       kls.configure
         iconPos: this.ICON_POS_TOP
 
-      klass.accessor kls, "key"
+      klass.accessor kls.prototype, "key"
 
       constructor: (tabBar, key, options) ->
         super(options)
@@ -67,7 +68,7 @@ kopi.module("kopi.ui.tabs")
     ###
     Tab bar contains multiple tabs
     ###
-    class TabBar extends widgets.Widget
+    class TabBar extends groups.Group
 
       kls = this
 
@@ -89,7 +90,7 @@ kopi.module("kopi.ui.tabs")
 
       # {{{ Configuration
       kls.configure
-        tabClass: Tab
+        childClass: Tab
         layout: kls.LAYOUT_VERTICAL
         style: kls.STYLE_EVEN
         width: null
@@ -97,28 +98,33 @@ kopi.module("kopi.ui.tabs")
       # }}}
 
       # {{{ Accessors
-      klass.accessor this, "tabs"
+      klass.accessor this, "tabs",
+        name: "children"
       # }}}
 
       ###
       @param  {Array}   tabs    Array of name/value pair
       @param  {Hash}    options
       ###
-      constructor: ->
+      constructor: (options) ->
         super
-        this._tabs = []
-        this._keys = []
         this._selectedIndex = -1
 
       add: (key, options) ->
+        self = this
+        tab = new self._options.childClass(self, key, options).end(self)
+        self._renderTab(tab)
+        super(tab, options)
+
+      addAt: (key, options, index=0) ->
+        self = this
+        tab = new self._options.childClass(self, key, options).end(self)
+        self._renderTab(tab)
+        super(tab, options, index)
+
+      _renderTab: (tab) ->
         cls = this.constructor
         self = this
-        # Check if tab key is already used in tab bar
-        throw new DuplicateTabKeyError(key) if key in self._keys
-
-        tab = new self._options.tabClass(self, key, options).end(self)
-        self._tabs.push(tab)
-        self._keys.push(key)
         if self.initialized
           tab.skeleton().element.appendTo(self.element)
         if self.rendered
@@ -128,21 +134,13 @@ kopi.module("kopi.ui.tabs")
         tab
 
       remove: (key) ->
-        cls = this.constructor
-        self = this
-        index = array.indexOf(self._keys, key)
-        throw new TabIndexError(index) if index == -1
-        self.removeAt(index)
+        index = array.indexOf(this._keys, key)
+        this.removeAt(index)
 
       removeAt: (index) ->
-        self = this
-        tab = self._tabs[index]
-        throw new TabIndexError(index) if not tab
-        tab.destroy()
-        array.removeAt(self._tabs, index)
-        array.removeAt(self._keys, index)
-        self.emit(cls.REMOVE_EVENT)
-        self
+        child = super(index)
+        this.emit(cls.REMOVE_EVENT)
+        child
 
       ###
       Select a tab as if clicked.
@@ -152,7 +150,7 @@ kopi.module("kopi.ui.tabs")
         self = this
         index = array.indexOf(self._keys, key)
         self._selectedIndex = index
-        for tab, i in self._tabs
+        for tab, i in self._children
           if i == index then tab.select() else tab.unselect()
         self.emit(self.constructor.SELECT_EVENT, [key])
 
@@ -185,8 +183,8 @@ kopi.module("kopi.ui.tabs")
       _skeletonEvenTabs: (style) ->
         self = this
         element = self.element
-        tabsCount = self._tabs.length
-        for tab in self._tabs
+        tabsCount = self._children.length
+        for tab in self._children
           tabElement = self._skeletonTab(element, tab)
           tabElement.css(style, "#{100 / tabsCount}%")
         self
@@ -195,33 +193,35 @@ kopi.module("kopi.ui.tabs")
         self = this
         options = self._options
         element = self.element
-        # TODO What about height?
-        tabBarWidth = 0
-        tabWidth = parseInt(self._options[style])
-        for tab in self._tabs
+        tabBarSize = 0
+        tabSize = parseInt(self._options[style])
+        outerStyle = "outer" + text.capitalize(style)
+        for tab in self._children
           tabElement = self._skeletonTab(element, tab)
-          tabElement[style](tabWidth)
-          tabBarWidth += tabElement.outerWidth()
-        self.element.width(tabBarWidth)
+          tabElement[style](tabSize)
+          tabBarSize += tabElement[outerStyle]()
+        self.element[style](tabBarSize)
         self
 
       _skeletonFlexTabs: (element, tab, style) ->
         self = this
         element = self.element
-        # TODO What about height?
-        tabBarWidth = 0
-        for tab in self._tabs
+        tabBarSize = 0
+        outerStyle = "outer" + text.capitalize(style)
+        for tab in self._children
           tabElement = self._skeletonTab(element, tab)
-          tabBarWidth += tabElement.outerWidth()
-        self.element.width(tabBarWidth)
+          tabBarSize += tabElement[outerStyle]()
+        self.element[style](tabBarSize)
         self
 
       _skeletonTab: (element, tab) ->
         tab.skeleton().element.appendTo(element)
 
+      _key: (tab) -> tab.key()
+
       onrender: ->
         self = this
-        for tab in self._tabs
+        for tab in self._children
           tab.render()
         super
 

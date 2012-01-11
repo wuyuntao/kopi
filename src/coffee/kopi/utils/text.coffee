@@ -22,7 +22,7 @@ kopi.module("kopi.utils.text")
     Convert a copy of string which first letter capitalized
     ###
     capitalize = (word) ->
-      word.replace(reFirstLetter, upperCase)
+      word.replace(reFirstLetter, upperCaseFn)
 
     ###
     将字符串转换成对象
