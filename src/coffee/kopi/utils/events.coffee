@@ -12,6 +12,10 @@ kopi.module("kopi.utils.events")
     exports.ORIENTATION_CHANGE_EVENT = "orientationchange"
     exports.THROTTLED_RESIZE_EVENT = "throttledresize"
 
+    exports.LEFT_BUTTON = 1
+    exports.MIDDLE_BUTTON = 2
+    exports.RIGHT_BUTTON = 3
+
     if support.touch
       exports.TOUCH_START_EVENT = "touchstart"
       exports.TOUCH_MOVE_EVENT = "touchmove"
@@ -24,3 +28,11 @@ kopi.module("kopi.utils.events")
       exports.TOUCH_CANCEL_EVENT = exports.MOUSE_OUT_EVENT
 
     exports.WEBKIT_TRANSITION_END_EVENT = "webkitTransitionEnd"
+
+    # TODO Check on mobile devices
+    exports.isLeftClick = (event) ->
+      event.which == exports.LEFT_BUTTON
+
+    # TODO Check on mobile devices
+    exports.isRightClick = (event) ->
+      event.which == exports.RIGHT_BUTTON

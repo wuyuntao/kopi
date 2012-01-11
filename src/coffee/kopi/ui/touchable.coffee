@@ -34,8 +34,7 @@ kopi.module("kopi.ui.touchable")
         stopPropagation = self._options.stopPropagation
 
         touchStartFn = (e) ->
-          return if self.locked
-          # TODO return if not events.isLeftButton(e)
+          return if self.locked or not events.isLeftClick(e)
           e.preventDefault() if preventDefault
           e.stopPropagation() if stopPropagation
           self.emit(cls.TOUCH_START_EVENT, [e])

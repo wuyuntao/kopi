@@ -51,10 +51,11 @@ kopi.module("kopi.ui.scrollable")
         bounce: true
         momentum: true
         damping: 0.5
-        snap: true
         deceleration: 0.0006
         ontransitionend: null
         onresize: null
+        snap: false
+        snapThreshold: 1
 
       klass.accessor kls.prototype, "scroller"
 
@@ -91,12 +92,15 @@ kopi.module("kopi.ui.scrollable")
         self._animating = false
         self._x or= self._options.startX
         self._y or= self._options.startY
-        self._startX = self._x
-        self._startY = self._y
+        # Needed by snap threshold
+        self._absStartX = self._startX = self._x
+        self._absStartY = self._startY = self._y
         point = self._points(event)
         self._pointX = point.pageX
         self._pointY = point.pageY
         self._startTime = point.timeStamp or new Date().getTime()
+        self._directionX = 0
+        self._directionY = 0
         self._duration(0)
 
         if self._options.momentum
@@ -120,10 +124,11 @@ kopi.module("kopi.ui.scrollable")
         deltaY = point.pageY - self._pointY
         newX = self._x + deltaX
         newY = self._y + deltaY
-        timestamp = point.timeStamp or new Date().getTime()
-
         self._pointX = point.pageX
         self._pointY = point.pageY
+        timestamp = point.timeStamp or new Date().getTime()
+        self._directionX = if deltaX == 0 then 0 else -deltaX / math.abs(deltaX)
+        self._directionY = if deltaY == 0 then 0 else -deltaY / math.abs(deltaY)
 
         # Slow down If outside of the boundaries
         if self._minScrollX < newX or newX < self._maxScrollX
@@ -145,6 +150,7 @@ kopi.module("kopi.ui.scrollable")
         self._moved = true
         self._position(newX, newY)
 
+        # Reset start time and position if mouse or finger stops for a while
         if timestamp - self._startTime > 300
           self._startTime = timestamp
           self._startX = self._x
@@ -155,6 +161,8 @@ kopi.module("kopi.ui.scrollable")
         self = this
         point = self._points(event)
         return if support.touch and point isnt null
+
+        options = self._options
         momentumX =
           dist: 0
           time: 0
@@ -164,6 +172,7 @@ kopi.module("kopi.ui.scrollable")
         duration = (point.timeStamp or new Date().getTime()) - self._startTime
         newX = self._x
         newY = self._y
+        console.log "x: #{newX}, y: #{newY}"
 
         if not self._moved
           # TODO Find last touched element and trigger click event for it
@@ -172,15 +181,15 @@ kopi.module("kopi.ui.scrollable")
         event.preventDefault()
         event.stopPropagation()
 
-        if duration < 300 and self._options.momentum
+        if duration < 300 and options.momentum
           momentumX = if not newX then momentumX else
             self._momentum(newX - self._startX, duration, -self._x
               , self._scrollerWidth - self._elementWidth + self._x
-              , if self._options.bounce then self._elementWidth else 0)
+              , if options.bounce then self._elementWidth else 0)
           momentumY = if not newY then momentumY else
             self._momentum(newY - self._startY, duration, -self._y
               , self._scrollerHeight - self._elementHeight + self._y
-              , if self._options.bounce then self._elementHeight else 0)
+              , if options.bounce then self._elementHeight else 0)
 
           newX = self._x + momentumX.dist
           newY = self._y + momentumY.dist
@@ -194,13 +203,22 @@ kopi.module("kopi.ui.scrollable")
               dist: 0
               time: 0
 
+        super
+
         if momentumX.dist or momentumY.dist
           duration = math.max(momentumX.time, momentumY.time, 10)
+          if options.snap
+            self._snapPosition(newX, newY, duration)
+            return
+
           self.scrollTo(math.round(newX), math.round(newY), duration)
           return
 
+        if options.snap
+          self._snapPosition(newX, newY, duration, true)
+          return
+
         self._resetPosition(200)
-        super
 
       ontouchcancel: ->
         this.ontouchend(arguments...)
@@ -214,7 +232,6 @@ kopi.module("kopi.ui.scrollable")
         self._callback(cls.TRANSITION_END_EVENT, arguments)
 
       onresize: ->
-        # return unless this.rendered
         cls = this.constructor
         self = this
         self._elementWidth = self.element.innerWidth()
@@ -224,14 +241,7 @@ kopi.module("kopi.ui.scrollable")
         self._elementOffsetTop = -elementOffset.top
 
         # Calculate read width or height of scroller
-        # TODO how about height
-        children = self._scroller.children()
-        if children.length > 0
-          scrollerWidth = 0
-          for child in children
-            child = $(child)
-            scrollerWidth += child.outerWidth()
-          self._scroller.width(scrollerWidth)
+        self._size()
 
         self._scrollerWidth = math.max(self._scroller.outerWidth(), self._elementWidth)
         self._scrollerHeight = math.max(self._scroller.outerHeight(), self._elementHeight)
@@ -244,8 +254,35 @@ kopi.module("kopi.ui.scrollable")
         self._scrollX = self._options.scrollX and self._maxScrollX < self._minScrollX
         self._scrollY = self._options.scrollY and self._maxScrollY < self._minScrollY
 
+        self._directionX = 0
+        self._directionY = 0
+
         self._duration(0)
         self._callback(cls.RESIZE_EVENT, arguments)
+
+      ###
+      Calculate size of scroller
+      ###
+      _size: ->
+        self = this
+        children = self._scroller.children()
+        if children.length > 0
+
+          # Set total width
+          if self._options.scrollX
+            scrollerWidth = 0
+            for child in children
+              child = $(child)
+              scrollerWidth += child.outerWidth()
+            self._scroller.width(scrollerWidth)
+
+          # Set total height
+          if self._options.scrollY
+            scrollerHeight = 0
+            for child in children
+              child = $(child)
+              scrollerHeight += child.outerHeight()
+            self._scroller.height(scrollerHeight)
 
       _position: (x, y) ->
         cls = this.constructor
@@ -309,6 +346,34 @@ kopi.module("kopi.ui.scrollable")
         this._animating = false
         this
 
+      ###
+      Get position where scroller should snap to
+
+      ###
+      _snapPosition: (x, y, duration, reset=false) ->
+        self = this
+        threshold = self._options.snapThreshold
+        distX = x - self._absStartX
+        distY = y - self._absStartY
+        if math.abs(distX) < threshold and math.abs(distY) < threshold
+          x = self._absStartX
+          y = self._absStartY
+          duration = 200
+        else
+          snap = if reset then self._snap(self._x, self._y) else self._snap(x, y)
+          x = snap.x
+          y = snap.y
+          duration = math.max(snap.time, duration)
+        self.scrollTo(math.round(x), math.round(y), duration)
+
+      ###
+      Implement in subclasses
+      ###
+      _snap: (x, y) ->
+        x: x
+        y: y
+        time: 200
+
       # Thx iScroll
       _momentum: (dist, time, maxDistUpper, maxDistLower, size) ->
         deceleration = this._options.deceleration
@@ -334,8 +399,10 @@ kopi.module("kopi.ui.scrollable")
         newDist = math.min(200, newDist)
         newDist = newDist * (if dist < 0 then -1 else 1)
         newTime = math.min(speed / deceleration, 1000)
+        console.log "dist: #{newDist}, time: #{math.round(newTime)}"
 
-        return { dist: newDist, time: math.round(newTime) }
+        dist: newDist
+        time: math.round(newTime)
 
       # Set transition duration for scroller
       _duration: (duration) ->

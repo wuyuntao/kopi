@@ -112,35 +112,20 @@ kopi.module("kopi.ui.tabs")
 
       add: (key, options) ->
         self = this
-        tab = new self._options.childClass(self, key, options).end(self)
-        self._renderTab(tab)
+        tab = new self._options.childClass(self, key, options)
         super(tab, options)
 
       addAt: (key, options, index=0) ->
         self = this
-        tab = new self._options.childClass(self, key, options).end(self)
-        self._renderTab(tab)
+        tab = new self._options.childClass(self, key, options)
         super(tab, options, index)
 
-      _renderTab: (tab) ->
-        cls = this.constructor
-        self = this
-        if self.initialized
-          tab.skeleton().element.appendTo(self.element)
-        if self.rendered
-          tab.render()
-        # TODO Adjust width of tabs
-        self.emit(cls.ADD_EVENT)
-        tab
+      _wrapper: ->
+        this.element
 
       remove: (key) ->
         index = array.indexOf(this._keys, key)
         this.removeAt(index)
-
-      removeAt: (index) ->
-        child = super(index)
-        this.emit(cls.REMOVE_EVENT)
-        child
 
       ###
       Select a tab as if clicked.
@@ -160,10 +145,8 @@ kopi.module("kopi.ui.tabs")
         options = self._options
 
         if options.layout == cls.LAYOUT_VERTICAL
-          # self.element.width(options.width) if options.width
           tabBarStyle = "height"
         else
-          # self.element.height(options.height) if options.height
           tabBarStyle = "width"
 
         switch options.style
@@ -182,7 +165,7 @@ kopi.module("kopi.ui.tabs")
 
       _skeletonEvenTabs: (style) ->
         self = this
-        element = self.element
+        element = self._wrapper()
         tabsCount = self._children.length
         for tab in self._children
           tabElement = self._skeletonTab(element, tab)
@@ -192,7 +175,7 @@ kopi.module("kopi.ui.tabs")
       _skeletonFixedTabs: (style) ->
         self = this
         options = self._options
-        element = self.element
+        element = self._wrapper()
         tabBarSize = 0
         tabSize = parseInt(self._options[style])
         outerStyle = "outer" + text.capitalize(style)
@@ -200,18 +183,18 @@ kopi.module("kopi.ui.tabs")
           tabElement = self._skeletonTab(element, tab)
           tabElement[style](tabSize)
           tabBarSize += tabElement[outerStyle]()
-        self.element[style](tabBarSize)
+        element[style](tabBarSize)
         self
 
-      _skeletonFlexTabs: (element, tab, style) ->
+      _skeletonFlexTabs: (style) ->
         self = this
-        element = self.element
+        element = self._wrapper()
         tabBarSize = 0
         outerStyle = "outer" + text.capitalize(style)
         for tab in self._children
           tabElement = self._skeletonTab(element, tab)
           tabBarSize += tabElement[outerStyle]()
-        self.element[style](tabBarSize)
+        element[style](tabBarSize)
         self
 
       _skeletonTab: (element, tab) ->
@@ -234,13 +217,10 @@ kopi.module("kopi.ui.tabs")
 
       kls = this
       kls.configure
-        tabBarClass: TabBar
-        tabBarOptions: {}
         scrollableClass :scrollable.Scrollable
         scrollableOptions: {}
 
       proto = kls.prototype
-      klass.accessor proto, "tabBar"
       klass.accessor proto, "scrollable"
 
       constructor: ->
@@ -248,27 +228,21 @@ kopi.module("kopi.ui.tabs")
         self = this
         options = self._options
         self._scrollable = new options.scrollableClass(options.scrollableOptions).end(self)
-        self._tabBar = new options.tabBarClass(options.tabBarOptions).end(self)
 
       onskeleton: ->
-        self = this
-        self._scrollable.skeleton()
-          .element.appendTo(self.element)
-        self._tabBar.skeleton()
-          .element.appendTo(self._scrollable.scroller())
+        this._scrollable.skeleton()
+          .element.appendTo(this.element)
         super
 
       onrender: ->
-        self = this
-        self._scrollable.render()
-        self._tabBar.render()
+        this._scrollable.render()
         super
 
       ondestroy: ->
-        self = this
-        self._scrollable.destroy()
-        self._tabBar.destroy()
+        this._scrollable.destroy()
         super
+
+      _wrapper: -> this._scrollable.scroller()
 
     exports.Tab = Tab
     exports.TabBar = TabBar

@@ -2,47 +2,48 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
-    <title>Scrollable</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0;" />
+    <title>Flippable</title>
     <style type="text/css" media="screen">
       body {
         background: black;
         -webkit-user-select: none;
+        padding: 20px;
       }
 
       .flipper {
         background: gray;
-        margin: 20px;
-        width: 320px;
-        height: 480px;
+        width: 480px;
+        height: 320px;
         overflow: hidden;
         -webkit-user-select: none;
       }
 
-      .child-1, .child-2, .child-3, .child-4, .child-5 {
-        width: 320px;
-        height: 480px;
+      .page-1, .page-2, .page-3, .page-4, .page-5 {
+        width: 480px;
+        height: 320px;
         overflow: hidden;
         -webkit-user-select: none;
+        float: left;
       }
 
-      .child-1 {
+      .page-1 {
         background: red;
       }
 
-      .child-2 {
+      .page-2 {
         background: yellow;
       }
 
-      .child-3 {
+      .page-3 {
         background: green;
       }
 
-      .child-4 {
+      .page-4 {
         background: blue;
       }
 
-      .child-5 {
+      .page-5 {
         background: purple;
       }
 
@@ -53,35 +54,48 @@
     <script type="text/javascript" src="../lib/js/jquery.js"></script>
     <script type="text/javascript" src="../build/js/kopi.js"></script>
     <script type="text/javascript" src="../build/js/kopi/exceptions.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/array.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/html.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/jquery.js"></script>
     <script type="text/javascript" src="../build/js/kopi/utils/text.js"></script>
     <script type="text/javascript" src="../build/js/kopi/utils/func.js"></script>
     <script type="text/javascript" src="../build/js/kopi/utils/number.js"></script>
     <script type="text/javascript" src="../build/js/kopi/utils/object.js"></script>
     <script type="text/javascript" src="../build/js/kopi/utils/klass.js"></script>
-    <script type="text/javascript" src="../build/js/kopi/utils.js"></script>
-    <script type="text/javascript" src="../build/js/kopi/utils/html.js"></script>
-    <script type="text/javascript" src="../build/js/kopi/utils/jquery.js"></script>
     <script type="text/javascript" src="../build/js/kopi/events.js"></script>
     <script type="text/javascript" src="../build/js/kopi/settings.js"></script>
     <script type="text/javascript" src="../build/js/kopi/ui/widgets.js"></script>
     <script type="text/javascript" src="../build/js/kopi/ui/groups.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/browser.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/support.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/events.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/utils/css.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/ui/touchable.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/logging.js"></script>
+    <script type="text/javascript" src="../build/js/kopi/ui/scrollable.js"></script>
     <script type="text/javascript" src="../build/js/kopi/ui/flippers.js"></script>
     <script type="text/javascript">
       $(function() {
-        var flipper = new kopi.ui.flippers.Flipper('.flipper', {
+        var flipper = new kopi.ui.flippers.Flipper({
         });
-        var child1 = new kopi.ui.groups.Child('.child-1');
-        var child2 = new kopi.ui.groups.Child('.child-2');
-        var child3 = new kopi.ui.groups.Child('.child-3');
-        var child4 = new kopi.ui.groups.Child('.child-4');
-        var child5 = new kopi.ui.groups.Child('.child-5');
+        var page1 = new kopi.ui.flippers.Page();
+        page1.skeleton(".page-1")
+        var page2 = new kopi.ui.flippers.Page();
+        page2.skeleton(".page-2")
+        var page3 = new kopi.ui.flippers.Page();
+        page3.skeleton(".page-3")
+        var page4 = new kopi.ui.flippers.Page();
+        page4.skeleton(".page-4")
+        var page5 = new kopi.ui.flippers.Page();
+        page5.skeleton(".page-5")
         flipper
-          .add(child1)
-          .add(child2)
-          .add(child3)
-          .add(child4)
-          .add(child5)
-          .skeleton()
+          .add(page1).end()
+          .add(page2).end()
+          .add(page3).end()
+          .add(page4).end()
+          .add(page5).end()
+          .skeleton(".flipper")
           .render()
       });
     </script>
@@ -89,11 +103,11 @@
   <body>
     <div id="#flipper" class="flipper"> </div>
     <div class="hidden">
-      <div class="child-1"></div>
-      <div class="child-2"></div>
-      <div class="child-3"></div>
-      <div class="child-4"></div>
-      <div class="child-5"></div>
+      <div class="page-1"></div>
+      <div class="page-2"></div>
+      <div class="page-3"></div>
+      <div class="page-4"></div>
+      <div class="page-5"></div>
     </div>
   </body>
 </html>

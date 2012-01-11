@@ -20,6 +20,8 @@ kopi.module("kopi.ui.groups")
         # @type {kopi.ui.widgets.Widget} active child
         this._currentChild = null
 
+      children: -> this._children
+
       ###
       If a child widget is in the group
       ###
@@ -33,13 +35,16 @@ kopi.module("kopi.ui.groups")
         this.addAt(child, options, this._keys.length)
 
       addAt: (child, options={}, index=0) ->
-        if not child instanceof this._options.childClass
-          throw new exceptions.ValueError("Child view must be a subclass of #{this._options.childClass.name}")
-        if this.has(child)
+        self = this
+        if not child instanceof self._options.childClass
+          throw new exceptions.ValueError("Child view must be a subclass of #{self._options.childClass.name}")
+        if self.has(child)
           # TODO Add custom exception
           throw new exceptions.ValueError("Already added!!!")
-        array.insertAt(this._keys, index, this._key(child))
-        array.insertAt(this._children, index, child)
+        child.end(self)
+        array.insertAt(self._keys, index, self._key(child))
+        array.insertAt(self._children, index, child)
+        self._appendChild(child)
         child
 
       ###
@@ -109,6 +114,34 @@ kopi.module("kopi.ui.groups")
       showAt: (index) ->
         throw new exceptions.NotImplementedError()
 
+      ###
+      Append child to wrapper element
+
+      TODO Insert child according to its index
+      ###
+      _appendChild: (child) ->
+        if this.initialized
+          child.skeleton().element.appendTo(this._wrapper())
+        if self.rendered
+          child.render()
+
       _key: (child) -> child.guid
+
+      onskeleton: ->
+        super
+        for child in this._children
+          child.skeleton().element.appendTo(this._wrapper())
+
+      onrender: ->
+        super
+        for child in this._children
+          child.render
+
+      ###
+      Return the element which child elements should be appended to
+
+      Override in subclasses if neccessary
+      ###
+      _wrapper: -> this.element
 
     exports.Group = Group
