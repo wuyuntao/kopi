@@ -1,9 +1,12 @@
 kopi.module("kopi.ui.flippers")
+  .require("kopi.logging")
   .require("kopi.utils.number")
   .require("kopi.ui.groups")
   .require("kopi.ui.scrollable")
   .require("kopi.ui.widgets")
-  .define (exports, number, groups, scrollable, widgets) ->
+  .define (exports, logging, number, groups, scrollable, widgets) ->
+
+    logger = logging.logger(exports.name)
 
     math = Math
 
@@ -12,15 +15,22 @@ kopi.module("kopi.ui.flippers")
     ###
     class Flippable extends scrollable.Scrollable
 
+      this.configure
+        snap: true
+
       constructor: (flipper, options) ->
         super(options)
         this._flipper = flipper
         this._currentPageX = 0
         this._currentPageY = 0
         # Make sure snap is set to `true`
-        this._options.snap = true
-        this._options.momentum = false
+        if not this._options.snap
+          logger.warn("Make sure option 'snap' is set to true")
+          this._options.snap = true
 
+      ###
+      Get snapping pages
+      ###
       _size: ->
         # TODO Rewrite super._size() method
         super
@@ -29,13 +39,33 @@ kopi.module("kopi.ui.flippers")
         self._pagesX = []
         self._pagesY = []
         wrapperOffset = self._scroller.position()
-        if self._options.snap
-          for page, i in self._flipper.children()
-            pageOffset = page.element.position()
-            left = - pageOffset.left + wrapperOffset.left
-            top = - pageOffset.top + wrapperOffset.top
-            self._pagesX[i] = if left < self._maxScrollX then self._maxScrollX else left
-            self._pagesY[i] = if top < self._maxScrollY then self._maxScrollY else top
+        for page, i in self._flipper.children()
+          pageOffset = page.element.position()
+          left = - pageOffset.left + wrapperOffset.left
+          top = - pageOffset.top + wrapperOffset.top
+          self._pagesX[i] = if left < self._maxScrollX then self._maxScrollX else left
+          self._pagesY[i] = if top < self._maxScrollY then self._maxScrollY else top
+
+      ###
+      Get position where scroller should snap to
+
+      ###
+      _snapPosition: (x, y, duration, reset=false) ->
+        self = this
+        threshold = self._options.snapThreshold
+        distX = x - self._absStartX
+        distY = y - self._absStartY
+        # TODO 判断速度，而非判断距离
+        if math.abs(distX) < threshold and math.abs(distY) < threshold
+          x = self._absStartX
+          y = self._absStartY
+          duration = 200
+        else
+          snap = if reset then self._snap(self._x, self._y) else self._snap(x, y)
+          x = snap.x
+          y = snap.y
+          duration = math.max(snap.time, duration)
+        self.scrollTo(math.round(x), math.round(y), duration)
 
       _snap: (x, y) ->
         self = this

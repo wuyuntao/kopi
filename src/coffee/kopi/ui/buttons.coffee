@@ -100,9 +100,16 @@ kopi.module("kopi.ui.buttons")
         cls.FAIL_CLASS or= cls.cssClass("fail")
 
       onjobstart: ->
+        self = this
         cls = this.constructor
-        this.element.addClass(cls.LOAD_CLASS)
-        this._job()
+        self.element.addClass(cls.LOAD_CLASS)
+        doneFn = -> self.emit(cls.JOB_SUCCEED_EVENT, arguments)
+        failFn = -> self.emit(cls.JOB_FAIL_EVENT, arguments)
+        deferred = this._options.deferredExecute or this._deferredExecute
+        if deferred
+          deferred().done(doneFn).failFn(failFn)
+        else
+          (this._options.execute or this._execute)(failFn, doneFn)
 
       onjobsucceed: ->
         cls = this.constructor
@@ -118,8 +125,14 @@ kopi.module("kopi.ui.buttons")
         self.emit(cls.JOB_START_EVENT)
         super
 
-      _job: ->
+      _execute: (errorFn, successFn) ->
         throw new exceptions.NotImplementedError()
+
+      ###
+      Override this method if async job returns a deferred object
+
+      ###
+      # _deferredExecute: null
 
 
     ###
@@ -135,15 +148,8 @@ kopi.module("kopi.ui.buttons")
 
     ###
     class AjaxButton extends AsyncButton
-      kls = this
 
-      _job: ->
-        cls = this.constructor
-        self = this
-        doneFn = -> self.emit(cls.JOB_SUCCEED_EVENT, arguments)
-        failFn = -> self.emit(cls.JOB_FAIL_EVENT, arguments)
-        $.ajax(this._options).done(doneFn).fail(failFn)
-        return
+      _deferredExecute: -> $.ajax(this._options)
 
     exports.Button = Button
     exports.AsyncButton = AsyncButton
