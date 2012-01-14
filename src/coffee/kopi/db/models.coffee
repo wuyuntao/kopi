@@ -433,12 +433,14 @@ kopi.module("kopi.db.models")
         pk = self.pk()
         pkName = meta.pk
         isCreate = false
+
         thenFn = (error) ->
           if not error
             self.emit if isCreate then cls.AFTER_CREATE_EVENT else cls.AFTER_UPDATE_EVENT
             self.emit cls.AFTER_SAVE_EVENT
           fn(error, self) if fn
         self.emit cls.BEFORE_SAVE_EVENT
+
         if pk
           criteria = {}
           criteria[pkName] = pk
@@ -450,6 +452,7 @@ kopi.module("kopi.db.models")
           self.emit cls.BEFORE_CREATE_EVENT
           cls.create data, thenFn
           isCreate = true
+
         self
 
       ###
