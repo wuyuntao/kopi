@@ -4,6 +4,11 @@ kopi.module("kopi.db.adapters.base")
   .require("kopi.db.queries")
   .define (exports, exceptions, klass, queries) ->
 
+    ###
+    Interface for adapters provides for five methods
+    `create`, `retrieve`, `update`, `destroy` and `raw`
+
+    ###
     class BaseAdapter
 
       kls = this
@@ -13,7 +18,8 @@ kopi.module("kopi.db.adapters.base")
       kls.RETRIEVE = "retrieve"
       kls.UPDATE = "update"
       kls.DESTROY = "destroy"
-      kls.ACTIONS = [kls.CREATE, kls.RETRIEVE, kls.UPDATE, kls.DESTROY]
+      kls.RAW = "raw"
+      kls.ACTIONS = [kls.CREATE, kls.RETRIEVE, kls.UPDATE, kls.DESTROY, kls.RAW]
 
       constructor: (options={}) ->
         this.configure(options)

@@ -5,7 +5,8 @@ kopi.module("kopi.db.collections")
   .define (exports, events, exceptions, array) ->
 
     ###
-    模型的查询对象
+    Collection of model objects
+
     ###
     class Collection extends events.EventEmitter
 

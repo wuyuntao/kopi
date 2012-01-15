@@ -10,7 +10,8 @@ kopi.module("kopi.db.queries")
     RETRIEVE = "retrieve"
     UPDATE = "update"
     DESTROY = "destroy"
-    ACTIONS = [CREATE, RETRIEVE, UPDATE, DESTROY]
+    RAW = "raw"
+    ACTIONS = [CREATE, RETRIEVE, UPDATE, DESTROY, RAW]
 
     ONLY = "only"
     WHERE = "where"
@@ -89,6 +90,12 @@ kopi.module("kopi.db.queries")
         for method in cls.METHODS
           value = self["_#{method}"]
           criteria[method] = value if value
+
+      execute: (type, fn) ->
+        self = this
+        adapter = self.model.adapter(type)
+        adapter[self._action](self, fn)
+        this
 
     class CreateQuery extends BaseQuery
 
@@ -185,6 +192,12 @@ kopi.module("kopi.db.queries")
         this._count = !!count
         this
 
+      get: (type, fn) ->
+        self = this
+        adapter = self.model.adapter(type)
+        adapter.retrieve(self, fn)
+        self
+
     class UpdateQuery extends BaseRetriveQuery
 
       constructor: (model, criteria, attrs) ->
@@ -207,12 +220,23 @@ kopi.module("kopi.db.queries")
         this._action = DESTROY
         super(model, criteria)
 
+    class RawQuery extends BaseQuery
+
+      constructor: (model, args...) ->
+        this._action = RAW
+        this._args = args
+        super(model)
+
+      clone: -> new this.constructor(this.model, this._args...)
+
     exports.CREATE = CREATE
     exports.RETRIEVE = RETRIEVE
     exports.UPDATE = UPDATE
     exports.DESTROY = DESTROY
+    exports.RAW = RAW
     exports.ACTIONS = ACTIONS
     exports.CreateQuery = CreateQuery
     exports.RetrieveQuery = RetrieveQuery
     exports.UpdateQuery = UpdateQuery
     exports.DestroyQuery = DestroyQuery
+    exports.RawQuery = RawQuery

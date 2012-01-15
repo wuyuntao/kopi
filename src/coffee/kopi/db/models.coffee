@@ -10,10 +10,11 @@ kopi.module("kopi.db.models")
   .require("kopi.utils.text")
   .require("kopi.utils.date")
   .require("kopi.db.collections")
+  .require("kopi.db.queries")
   .require("kopi.db.errors")
   .define (exports, exceptions, events, logging
                   , utils, array, klass, html, object, text, date
-                  , collections, errors) ->
+                  , collections, queries, errors) ->
 
     logger = logging.logger(exports.name)
 
@@ -53,6 +54,7 @@ kopi.module("kopi.db.models")
         this.hasManyNames = {}
         this.hasAndBelongsToMany = []
         this.adapters = {}
+        this.defaultAdapterType = null
 
       prepare: ->
         for field in this.fields
@@ -104,13 +106,12 @@ kopi.module("kopi.db.models")
 
     Usage
 
+      # Define blog model
       class Blog extends Model
         cls = this
-        cls.adapters
-          server:
-            RESTfulAdapter
-          client:
-            [IndexDBAdapter, WebSQLAdapter, StorageAdapter, MemoryAdapter]
+
+        cls.adapter "server", RESTfulAdapter, primary: true
+        cls.adapter "client", WebSQLAdapter
 
         cls.field "id", type: Model.INTEGER, primary: true
         cls.field "title", type: Model.STRING
@@ -120,25 +121,43 @@ kopi.module("kopi.db.models")
         cls.hasMany Entry, name: "entries"
         cls.hasAndBelongsToMany Tag, name: "tags"
 
+      saveFn = (error, blog) ->
+        if not error
+          # Blog is saved in local database successfully
+
+      fetchFn = (error, blog) ->
+        if not error
+          # Save blog in local database
+          blog.save saveFn, Blog.CLIENT
+
+      # Fetch blog which id equals 1 from server
+      Blog.get id: 1, fetchFn, Blog.SERVER
+      # Or omit default adapter type
+      Blog.get id: 1, fetchFn
+
     ###
     class Model extends events.EventEmitter
       kls = this
 
-      ###
-      Define accessor of adapters for model
-      ###
-      kls.adapters = (typeOrAdapters) ->
-        meta = this._meta()
+      kls.adapter = (type="primary", adapter, options) ->
         cls = this
-        return meta.adapters if not typeOrAdapters
-        return mata.adapters[typeOrAdapters] if text.isString(typeOrAdapters)
-        for type, adapters of adapters
-          unless array.isArray(adapters)
-            meta.adapters[type] = new adapters(cls) if adapters.support(cls)
-            continue
-          for adapter in adapters
-            meta.adapters[type] = new adapters(cls) if adapters.support(cls)
-            continue
+        meta = this._meta()
+        # Define adapter getter
+        if not adapter
+          adapter = meta.adapters[type]
+          if not adapter
+            message = if type == "primary" then "Primary adapter is not defined" else "Adapter '#{type}' is not found"
+            throw new exceptions.ValueError(message)
+          return adapter
+        # Define adapter setter
+        if not adapter.support(cls)
+          logger.error "Adapter #{adapter.name} is not available."
+          return cls
+        # Provide constant string for adapter type. e.g. Blog.SERVER = "server"
+        cls[text.underscore(type).toUpperCase()] or= type
+        adapter = meta.adapters[type] = new adapter(cls)
+        if options and options.primary
+          meta.adapters.primary = adapter
         cls
 
       ###
@@ -329,31 +348,82 @@ kopi.module("kopi.db.models")
         cls
 
       ###
-      从 HTML5 定义 MicroData 格式中获取数据
 
-      @param  {String, jQuery Object, HTML Element} element   HTML 元素
-      @return {Array}                               模型列表
-      ###
-      kls.fromHTML = (element, model) ->
-        $(element).map -> (model or new this()).fromHTML(this)
+      @param {Hash}     attrs
+      @param {Function} fn
+      @param {String}   type
 
+      @return {kopi.db.models.Model}
       ###
-      向服务器请求数据
-      ###
-      kls.fromServer = (callback) ->
-
-      ###
-      ###
-      kls.create = (attributes={}, callback) ->
-        model = new this(attributes)
-        model.save(callback)
+      kls.create = (attrs={}, fn, type) ->
+        cls = this
+        new queries.CreateQuery(cls, attrs).execute(type, fn)
+        cls
 
       ###
-      返回查询对象
 
-      @return   {Collection}  查询对象
+      @param {Hash}     criteria
+      @param {Function} fn
+      @param {String}   type
+
+      @return {kopi.db.models.Model}
       ###
-      kls.all = -> new collections.Collection(this)
+      kls.get = (criteria={}, fn, type) ->
+        cls = this
+        new queries.RetrieveQuery(cls, criteria).execute(type, fn)
+        cls
+
+      ###
+      Define shortcut methods for model. e.g. Model.where({})
+
+      ###
+      defineMethod = (method) ->
+        kls[method] = ->
+          new queries.RetrieveQuery(this)[method](arguments...)
+
+      for method in queries.RetrieveQuery.METHODS
+        defineMethod(method) if method isnt "count"
+
+      ###
+
+      @param {Hash}     attrs
+      @param {Hash}     criteria
+      @param {Function} fn
+      @param {String}   type
+
+      @return {kopi.db.models.Model}
+      ###
+      kls.update = (attrs={}, criteria={}, fn, type) ->
+        cls = this
+        new queries.UpdateQuery(cls, criteria, attrs).execute(type, fn)
+        cls
+
+      ###
+      Return all models
+
+      @param {Function} fn
+      @param {String}   type
+
+      @return {kopi.db.queries.RetrieveQuery|kopi.db.models.Model}
+      ###
+      kls.all = (fn, type) -> this.get({}, fn, type)
+
+      ###
+
+      @param {Hash}     criteria
+      @param {Function} fn
+      @param {String}   type
+      @return {kopi.db.models.Model}
+      ###
+      kls.destroy = (criteria={}, fn, type) ->
+        cls = this
+        new queries.DestroyQuery(cls, criteria).execute(type, fn)
+        cls
+
+      kls.raw = (args..., fn, type) ->
+        cls = this
+        new queries.RawQuery(cls, args...).execute(type, fn)
+        cls
 
       ###
       Model events
@@ -371,9 +441,9 @@ kopi.module("kopi.db.models")
       kls.VALUE_CHANGE_EVENT = "change"
 
       ###
-      @param  {Hash}  attributes
+      @param  {Hash}  attrs
       ###
-      constructor: (attributes={}) ->
+      constructor: (attrs={}) ->
         self = this
         cls = this.constructor
         cls.prefix or= text.underscore(cls.name)
@@ -388,50 +458,35 @@ kopi.module("kopi.db.models")
         self._belongsTo = {}
         self._hasMany = {}
 
-        self.update(attributes)
+        self.update(attrs)
 
-      # TODO Modify pk() as a custom property
       pk: ->
         this[this._meta.pk]
 
-      ###
-      @return {Hash}  A clone of data
-      ###
-      data: ->
-        object.clone(this._data)
-
       equals: (model) ->
-        this.guid == model.guid
+        this.pk() == model.pk()
 
-      update: (attributes={}) ->
+      update: (attrs={}) ->
         cls = this.constructor
         self = this
         names = this._meta.names
         belongsTo = this._meta.belongsToNames
         hasMany = this._meta.hasManyNames
-        for name, attribute of attributes
+        for name, attribute of attrs
           if name of names or name of belongsTo or name of hasMany
             self[name] = attribute
         self
-
-      ###
-      Fetch model data from server
-
-      @return {Model}
-      ###
-      fetch: ->
 
       ###
       Store model data to client
 
       @return {Model}
       ###
-      save: (fn) ->
+      save: (fn, type) ->
         cls = this.constructor
         self = this
-        meta = self._meta
         pk = self.pk()
-        pkName = meta.pk
+        pkName = self._meta.pk
         isCreate = false
 
         thenFn = (error) ->
@@ -444,13 +499,14 @@ kopi.module("kopi.db.models")
         if pk
           criteria = {}
           criteria[pkName] = pk
-          delete data[pkName]
-          # TODO Check which fields need to be updated?
+          attrs = {}
+          for field, value of self._dirty
+            attrs[field] = self._data[field]
           self.emit cls.BEFORE_UPDATE_EVENT
-          cls.update criteria, data, thenFn
+          cls.update criteria, attrs, thenFn, type
         else
           self.emit cls.BEFORE_CREATE_EVENT
-          cls.create data, thenFn
+          cls.create self._data, thenFn, type
           isCreate = true
 
         self
@@ -460,7 +516,7 @@ kopi.module("kopi.db.models")
 
       @return {Model}
       ###
-      destroy: (fn) ->
+      destroy: (fn, type) ->
         cls = this.constructor
         self = this
         criteria = {}
@@ -473,54 +529,16 @@ kopi.module("kopi.db.models")
             # TODO logging or emitting
           fn(error, self) if fn
         self.emit cls.BEFORE_DESTROY_EVENT
-        cls.destroy(criteria, thenFn)
+        cls.destroy(criteria, thenFn, type)
         self
 
-      attr: (name, value) ->
-        if field of this.constructor._fieldNames
-          this[name] = value
-        this
-
-      ###
-      @param  {Hash}  attributes
-      ###
-      attrs: (data={}) ->
-        for own name, value of data when field of this.constructor._fieldNames
-          this[name] = value
-        this
-
-      ###
-      从 HTML5 定义 MicroData 格式中获取数据
-
-      @param  {String, jQuery Object, HTML Element} element   HTML 元素
-
-      # TODO Move to HTML adapter/proxy
-      ###
-      fromHTML: (element) ->
-        cls = this.constructor
-        element = $(element)
-        unless element.length
-          throw new exceptions.NoSuchElementError("Can not find element")
-
-        cls.RE_ITEM_TYPE or= new RegExp("##{this.constructor.name}$")
-        unless cls.RE_ITEM_TYPE.test(element.attr('itemtype'))
-          throw new exceptions.NoSuchElementError("Element does not have correct 'itemtype' attribute")
-        this.update(html.scope(element))
-
       toString: ->
-        "[#{this.name} #{this.pk() or "null"}"
+        "[#{this.constructor.name} #{this.pk() or "null"}"
 
       ###
-      # TODO Move to HTML adapter/proxy
+      Return a copy of model's attributes
       ###
-      toJSON: ->
-        throw new exceptions.NotImplementedError()
-
-      fromJSON: ->
-        throw new exceptions.NotImplementedError()
-
-      _valueEquals: (field, value) ->
-        false
+      toJSON: -> object.clone this._data
 
     exports.INTEGER = INTEGER
     exports.STRING = STRING

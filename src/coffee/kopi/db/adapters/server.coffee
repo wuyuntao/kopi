@@ -69,8 +69,8 @@ kopi.module("kopi.db.adapters.server")
           url: url
           type: method
           data: params
-          dataType: _options.format
-          timeout: _options.timeout
+          dataType: options.format
+          timeout: options.timeout
           success: doneFn
           error: failFn
 
