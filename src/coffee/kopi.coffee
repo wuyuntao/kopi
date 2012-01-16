@@ -1,5 +1,8 @@
+isFunction = (fn) ->
+  !!(fn and fn.constructor and fn.call and fn.apply)
+
 ###
-模块
+Module
 
 TODO 加入子模块和父模块的引用，从而实现递归导入
 TODO 如果遇到循环依赖，需要报错
@@ -28,8 +31,8 @@ class Module
   @param  {String}  src         脚本地址
   @param  {Boolean} async       是否为异步加载
   ###
-  loadScript = (src, async=true) ->
-    throw new Error("Not implemented yet")
+  # loadScript = (src, async=true) ->
+  #   throw new Error("Not implemented yet")
 
   ###
   生成模块对象
@@ -68,8 +71,8 @@ class Module
   ###
   TODO 对于没有模块的脚本，可以直接 load
   ###
-  load: (script) ->
-    this
+  # load: (script) ->
+  #   this
 
   ###
   声明引入的模块
@@ -79,27 +82,32 @@ class Module
 
   @param  {String}  name        需要引入的模块名称
   @param  {Boolean} assignment  该模块是否需要被赋值
+  @param  {Boolean} chain
   @return {Module}              模块对象
   ###
-  require: (name, assignment=true) ->
+  require: (name, assignment=true, chain=true) ->
     throw new Error("#{name} is not a valid module name") unless reModuleName.test(name)
-    this.requires.push(this.constructor.build(name, false)) if assignment
-    this
+    require = this.constructor.build(name, false)
+    this.requires.push(require) if assignment
+    if chain then this else require
 
   ###
   模块定义
 
-  @param  {Function}  func     模块定义的回调方法
+  @param  {Function}  fn     模块定义的回调方法
   @return {null}
   ###
-  define: (func) ->
-    # 模块不能重复定义
-    delete this.require
-    delete this.define
-    if $.isFunction(func)
-      func(this, this.requires...)
+  define: (fn) ->
+    self = this
+    delete self.require
+    delete self.define
+    if isFunction(fn)
+      requireFn = (name) -> self.require(name, false, false)
+      fn(self, self.requires..., requireFn)
     else
-      $.extend this, func
+      # Extend module
+      for name of fn
+        self[name] = fn[name]
     return
 
 ###
@@ -111,18 +119,34 @@ class Module
 module = (name) -> Module.build(name)
 
 ###
-获取对象
-
-NOTE
-不要直接使用这个方法
-可以调用 kopi.utils.text.constantize
-
-@param  {String}  name    模块名称
-@return {Module}          模块
+Define module `kopi`
 ###
-build = (name) -> Module.build(name, false, false, false)
+module("kopi").define module: module
 
 ###
-定义 Kopi 模块
+Provide an AMD-compatible define() method for external modules
+
+@param {String} name            The module name.
+@param {Array<string>} requires The module dependencies.
+@param {Function} factory       The module factory function.
 ###
-module("kopi").define module: module, _build: build
+define = (name, requires, fn) ->
+  argsLen = arguments.length
+
+  if argsLen < 2
+    throw new Error("ArgumentError: define() requires at least 2 arguments")
+
+  # define(name, fn)
+  else if argsLen == 2
+    fn = requires
+    requires = undefined
+
+  mod = module(name)
+  if requires
+    for require in requires
+      mod.require(require)
+  if fn
+    mod.define(fn)
+  mod
+
+window.define = define
