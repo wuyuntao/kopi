@@ -9,7 +9,7 @@ kopi.module("kopi.db.adapters.webstorage")
 
     class StorageAdapater extends kv.KeyValueAdapter
 
-      support: -> !!storage
+      this.support = -> !!storage
 
       _get: (key, value) ->
         storage.getItem(key) or value

@@ -3,8 +3,7 @@ kopi.module("kopi.db.queries")
   .require("kopi.utils")
   .require("kopi.utils.number")
   .require("kopi.utils.object")
-  .require("kopi.db.models")
-  .define (exports, exceptions, utils, number, object, models) ->
+  .define (exports, exceptions, utils, number, object) ->
 
     CREATE = "create"
     RETRIEVE = "retrieve"
@@ -104,7 +103,12 @@ kopi.module("kopi.db.queries")
         this._attrs = attrs
         super(model)
 
-      attrs: (attrs) -> object.extend this._attrs, attrs if attrs
+      attrs: (attrs) ->
+        if attrs
+          object.extend this._attrs, attrs
+          this
+        else
+          this._attrs
 
       params: -> {attrs: JSON.stringify(this._attrs)}
 
@@ -161,7 +165,7 @@ kopi.module("kopi.db.queries")
           pk = criteria.pk.eq
         catch e
           try
-            pk = criteria[model.pkName()].eq
+            pk = criteria[model.meta().pk].eq
           catch e
             pk = null
         pk
@@ -235,6 +239,7 @@ kopi.module("kopi.db.queries")
     exports.DESTROY = DESTROY
     exports.RAW = RAW
     exports.ACTIONS = ACTIONS
+
     exports.CreateQuery = CreateQuery
     exports.RetrieveQuery = RetrieveQuery
     exports.UpdateQuery = UpdateQuery

@@ -73,7 +73,7 @@ kopi.module("kopi.db.models")
             name = relation.name = text.camelize(model.name, false)
 
           # Add primary key to model fields
-          modelMeta = model._meta()
+          modelMeta = model.meta()
           pkName = name + text.camelize(modelMeta.pk)
           field = object.clone(modelMeta.names[modelMeta.pk])
           field.name = pkName
@@ -141,7 +141,7 @@ kopi.module("kopi.db.models")
 
       kls.adapter = (type="primary", adapter, options) ->
         cls = this
-        meta = this._meta()
+        meta = this.meta()
         # Define adapter getter
         if not adapter
           adapter = meta.adapters[type]
@@ -164,7 +164,7 @@ kopi.module("kopi.db.models")
       Define a single field
       ###
       kls.field = (name, options={}) ->
-        meta = this._meta()
+        meta = this.meta()
         # If options is field type
         if text.isString(options)
           options =
@@ -190,7 +190,7 @@ kopi.module("kopi.db.models")
       Define one-to-many relationship
       ###
       kls.belongsTo = (model, options={}) ->
-        meta = this._meta()
+        meta = this.meta()
         options.model = model
         meta.belongsTo.push(options)
         this._prepared = false
@@ -200,7 +200,7 @@ kopi.module("kopi.db.models")
       Define many-to-one relationship
       ###
       kls.hasMany = (model, options={}) ->
-        meta = this._meta()
+        meta = this.meta()
         options.model = model
         meta.hasMany.push(options)
         this._prepared = false
@@ -210,7 +210,7 @@ kopi.module("kopi.db.models")
       Define many-to-many relationship
       ###
       kls.hasAndBelongsToMany = (model, options={}) ->
-        meta = this._meta()
+        meta = this.meta()
         options.model = model
         meta.hasAndBelongsToMany.push(options)
         this._prepared = false
@@ -220,7 +220,7 @@ kopi.module("kopi.db.models")
       Define query index
       ###
       kls.index = (field) ->
-        meta = this._meta()
+        meta = this.meta()
         meta.indices or= []
         meta.indices.push(field)
         this._prepared = false
@@ -229,13 +229,13 @@ kopi.module("kopi.db.models")
       ###
       Get meta for model
       ###
-      kls._meta = -> Meta.get(this)
+      kls.meta = -> Meta.get(this)
 
       ###
       Determine where two values equal to each other
       ###
       kls._valueEquals = (field, val1, val2) ->
-        meta = this._meta()
+        meta = this.meta()
         type = meta.names[field].type
         # Compare date objects with their
         if type == DATETIME
@@ -252,7 +252,7 @@ kopi.module("kopi.db.models")
         cls = this
         return cls if cls._prepared
 
-        meta = cls._meta().prepare()
+        meta = cls.meta().prepare()
         proto = this.prototype
 
         ###
@@ -357,6 +357,7 @@ kopi.module("kopi.db.models")
       ###
       kls.create = (attrs={}, fn, type) ->
         cls = this
+        # TODO Return model object for callback function
         new queries.CreateQuery(cls, attrs).execute(type, fn)
         cls
 
@@ -370,6 +371,7 @@ kopi.module("kopi.db.models")
       ###
       kls.get = (criteria={}, fn, type) ->
         cls = this
+        # TODO Return model object for callback function
         new queries.RetrieveQuery(cls, criteria).execute(type, fn)
         cls
 
@@ -395,6 +397,7 @@ kopi.module("kopi.db.models")
       ###
       kls.update = (attrs={}, criteria={}, fn, type) ->
         cls = this
+        # TODO Return model object for callback function
         new queries.UpdateQuery(cls, criteria, attrs).execute(type, fn)
         cls
 
@@ -417,6 +420,7 @@ kopi.module("kopi.db.models")
       ###
       kls.destroy = (criteria={}, fn, type) ->
         cls = this
+        # TODO Return model object for callback function
         new queries.DestroyQuery(cls, criteria).execute(type, fn)
         cls
 
@@ -449,7 +453,7 @@ kopi.module("kopi.db.models")
         cls.prefix or= text.underscore(cls.name)
         cls._prepare() if not cls._prepared
 
-        self._meta = cls._meta()
+        self._meta = cls.meta()
         self.guid = utils.guid(cls.prefix)
         self._new = true
         self._type = cls.name
@@ -457,6 +461,7 @@ kopi.module("kopi.db.models")
         self._dirty = {}
         self._belongsTo = {}
         self._hasMany = {}
+        self.isNew = true
 
         self.update(attrs)
 
@@ -478,25 +483,27 @@ kopi.module("kopi.db.models")
         self
 
       ###
-      Store model data to client
+      Save model data
 
-      @return {Model}
+      @param {Function} fn    callback function
+      @param {String}   type  adapter type
+      @return {Model}         return self
       ###
       save: (fn, type) ->
         cls = this.constructor
         self = this
         pk = self.pk()
         pkName = self._meta.pk
-        isCreate = false
 
         thenFn = (error) ->
           if not error
-            self.emit if isCreate then cls.AFTER_CREATE_EVENT else cls.AFTER_UPDATE_EVENT
+            self.emit if self.isNew then cls.AFTER_CREATE_EVENT else cls.AFTER_UPDATE_EVENT
             self.emit cls.AFTER_SAVE_EVENT
+            self.isNew = false
           fn(error, self) if fn
         self.emit cls.BEFORE_SAVE_EVENT
 
-        if pk
+        if not self.isNew
           criteria = {}
           criteria[pkName] = pk
           attrs = {}
@@ -507,7 +514,6 @@ kopi.module("kopi.db.models")
         else
           self.emit cls.BEFORE_CREATE_EVENT
           cls.create self._data, thenFn, type
-          isCreate = true
 
         self
 
@@ -546,4 +552,5 @@ kopi.module("kopi.db.models")
     exports.FLOAT = FLOAT
     exports.DATETIME = DATETIME
     exports.BLOB = BLOB
+    exports.Meta = Meta
     exports.Model = Model

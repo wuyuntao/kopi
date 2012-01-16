@@ -42,9 +42,8 @@ kopi.module("kopi.db.adapters.kv")
         self = this
         model = query.model
         attrs = query.attrs()
-        pk = self._pk(query)
-        pk = attrs[model.pkName()]
-        key = self._modelKey(model, pk)
+        pk = attrs[model.meta().pk]
+        key = self._keyForModel(model, pk)
         self._set(key, self._stringify(attrs))
         message =
           ok: true
@@ -59,7 +58,7 @@ kopi.module("kopi.db.adapters.kv")
         if not pk
           fn(true, "pk not found") if fn
           return self
-        key = self._modelKey(model, pk)
+        key = self._keyForModel(model, pk)
         value = self._get(key)
         if value
           try
@@ -99,7 +98,7 @@ kopi.module("kopi.db.adapters.kv")
         if not pk
           fn(true, "pk not found") if fn
           return self
-        key = self._modelKey(model, pk)
+        key = self._keyForModel(model, pk)
         self._remove(key)
         fn(null) if fn
         self
@@ -107,24 +106,24 @@ kopi.module("kopi.db.adapters.kv")
       ###
       Build key for model instance
       ###
-      _modelKey: (model, pk) ->
+      _keyForModel: (model, pk) ->
         self = this
-        unless self._modelKeyTmpl
+        unless self._keyForModelTmpl
           prefix = self._options.keyPrefix
-          delimiter = self._options.delimiter
-          self._modelKeyTmpl = "#{prefix}#{delimiter}{model}#{delimiter}#{pk}"
-        text.format(self._modelKeyTmpl, model: model, pk: pk)
+          delimiter = self._options.keyDelimiter
+          self._keyForModelTmpl = "#{prefix}#{delimiter}{model}#{delimiter}#{pk}"
+        text.format(self._keyForModelTmpl, model: text.underscore(model.name), pk: pk)
 
       ###
       Build key for model index
       ###
-      _indexKey: (model, index="pk") ->
+      _keyForIndex: (model, index="pk") ->
         self = this
-        unless self._indexKeyTmpl
+        unless self._keyForIndexTmpl
           prefix = self._options.keyPrefix
           delimiter = self._options.delimiter
-          self._indexKeyTmpl = "#{prefix}#{delimiter}{model}#{delimiter}index#{delimiter}{index}"
-        text.format(self._modelKeyTmpl, model: model, index: index)
+          self._keyForIndexTmpl = "#{prefix}#{delimiter}{model}#{delimiter}index#{delimiter}{index}"
+        text.format(self._keyForModelTmpl, model: model, index: index)
 
       ###
       Get value from db. Implement in subclasses

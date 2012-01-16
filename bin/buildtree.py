@@ -9,6 +9,8 @@ A Script to build JavaScript dependency tree
 
 """
 
+# TODO Discover recursive dependencies
+
 import re
 import os
 from optparse import OptionParser
@@ -29,6 +31,7 @@ class DepTree(object):
         self._uri = uri
         self._extensions = extensions
         self.name = None
+        self.require_names = []
         self.requires = []
 
     def build(self):
@@ -45,6 +48,7 @@ class DepTree(object):
                 path = self.find_module_path(module)
                 tree = DepTree(path, self._path, self._uri, self._extensions)
                 tree.build()
+                self.require_names.append(module)
                 self.requires.append(tree)
         else:
             print("no matching module in %s" % self._file)
