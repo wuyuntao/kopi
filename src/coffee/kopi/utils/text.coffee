@@ -1,6 +1,8 @@
 kopi.module("kopi.utils.text")
   .define (exports) ->
 
+    StringProto = String.prototype
+
     reUnderscore = /(?:^|[_-])(.)/
     reFirstLetter = /^(.)/
     upperCaseFn = (c) -> c.toUpperCase(c)
@@ -136,9 +138,51 @@ kopi.module("kopi.utils.text")
       len >= 0 and string.indexOf(suffix, len) == len
 
     ###
-    是否为字符串
+    Remove leading and trailing white spaces from string
     ###
-    # isString = (str) -> !!(str is '' or (str and str.charCodeAt and str.substr))
+    if StringProto.trim
+      trim = (string) ->
+        StringProto.trim.call(string)
+    else
+      # Ref:
+      #   http://perfectionkills.com/whitespace-deviations/
+      whitespaces = [
+        '\\s',
+        #'0009', # 'HORIZONTAL TAB'
+        #'000A', # 'LINE FEED OR NEW LINE'
+        #'000B', # 'VERTICAL TAB'
+        #'000C', # 'FORM FEED'
+        #'000D', # 'CARRIAGE RETURN'
+        #'0020', # 'SPACE'
+
+        '00A0',  # 'NO-BREAK SPACE'
+        '1680',  # 'OGHAM SPACE MARK'
+        '180E',  # 'MONGOLIAN VOWEL SEPARATOR'
+
+        '2000-\\u200A',
+        #'2000', # 'EN QUAD'
+        #'2001', # 'EM QUAD'
+        #'2002', # 'EN SPACE'
+        #'2003', # 'EM SPACE'
+        #'2004', # 'THREE-PER-EM SPACE'
+        #'2005', # 'FOUR-PER-EM SPACE'
+        #'2006', # 'SIX-PER-EM SPACE'
+        #'2007', # 'FIGURE SPACE'
+        #'2008', # 'PUNCTUATION SPACE'
+        #'2009', # 'THIN SPACE'
+        #'200A', # 'HAIR SPACE'
+
+        '200B',  # 'ZERO WIDTH SPACE (category Cf)
+        '2028',  # 'LINE SEPARATOR'
+        '2029',  # 'PARAGRAPH SEPARATOR'
+        '202F',  # 'NARROW NO-BREAK SPACE'
+        '205F',  # 'MEDIUM MATHEMATICAL SPACE'
+        '3000'   # 'IDEOGRAPHIC SPACE'
+      ].join('\\u')
+      reLeading = new RegExp('^[' + whiteSpaces + ']+')
+      reTrailing = new RegExp('[' + whiteSpaces + ']+$')
+      trim = (string) ->
+        string.replace(reLeading, '').replace(reTrailing, '')
 
     ###
     限定字符串长度
@@ -174,5 +218,6 @@ kopi.module("kopi.utils.text")
     exports.pluralize = pluralize
     exports.startsWith = startsWith
     exports.endsWith = endsWith
+    exports.trim = trim
     exports.truncate = truncate
     exports.underscore = underscore
