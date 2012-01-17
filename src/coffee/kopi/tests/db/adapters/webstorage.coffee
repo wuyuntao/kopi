@@ -7,7 +7,7 @@ kopi.module("kopi.tests.db.adapters.webstorage")
 
     module "kopi.db.adapters.webstorage"
 
-    test "create object", ->
+    test "create user", ->
       registerAt = new Date(2012, 2, 1, 20)
       user = new fixtures.User
         id: 1
@@ -16,6 +16,7 @@ kopi.module("kopi.tests.db.adapters.webstorage")
         registerAt: registerAt
       stop()
       user.save (error, obj) ->
+        equals obj.guid, user.guid
         equals obj.id, 1
         equals obj.name, "Alpha"
         equals obj.email, "alpha@gmail.com"
@@ -29,20 +30,24 @@ kopi.module("kopi.tests.db.adapters.webstorage")
         equals value.registerAt, registerAt.toISOString()
         start()
 
-    test "retrieve object", ->
+    test "retrieve count of user", ->
+
+    test "retrieve one user", ->
       registerAt = new Date(2012, 2, 1, 20)
       stop()
-      fixtures.User.get id: 1, (error, user) ->
+      fixtures.User.where(id: 1).one (error, user) ->
         equals user.id, 1
         equals user.name, "Alpha"
         equals user.email, "alpha@gmail.com"
-        equals user.registerAt.getTime(), registerAt.getTime()
+        # equals user.registerAt.getTime(), registerAt.getTime()
         start()
 
-    test "update object", ->
+    test "retrieve all users", ->
+
+    test "update user", ->
       registerAt = new Date(2012, 2, 1, 30)
       stop()
-      fixtures.User.get id: 1, (error, user) ->
+      fixtures.User.where(id: 1).one (error, user) ->
         user.name = "Beta"
         user.email = "beta@gmail.com"
         user.registerAt = registerAt
@@ -59,9 +64,9 @@ kopi.module("kopi.tests.db.adapters.webstorage")
           equals value.registerAt, registerAt.getTime()
           start()
 
-    test "destroy object", ->
+    test "destroy user", ->
       stop()
-      fixtures.User.get id: 1, (error, user) ->
+      fixtures.User.where(id: 1).one (error, user) ->
         user.destroy (error) ->
 
         key = "kopi:user:1"

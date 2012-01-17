@@ -86,6 +86,8 @@ kopi.module("kopi.db.collections")
 
       # {{{ Private methods
       _add: (model) ->
+        if not model instanceof self.model
+          throw new exceptions.ValueError("Model must be an instance of #{self.model.name}")
         this._collection.push(model)
 
       _remove: (model) ->

@@ -348,6 +348,7 @@ kopi.module("kopi.db.models")
         cls
 
       ###
+      Create model from attributes
 
       @param {Hash}     attrs
       @param {Function} fn
@@ -357,22 +358,22 @@ kopi.module("kopi.db.models")
       ###
       kls.create = (attrs={}, fn, type) ->
         cls = this
-        # TODO Return model object for callback function
-        new queries.CreateQuery(cls, attrs).execute(type, fn)
+        model = new cls(attrs)
+        model.save fn, type
         cls
 
       ###
+      Execute create query
 
-      @param {Hash}     criteria
+      @param {Hash}     attrs
       @param {Function} fn
       @param {String}   type
 
       @return {kopi.db.models.Model}
       ###
-      kls.get = (criteria={}, fn, type) ->
+      kls._create = (attrs={}, fn, type) ->
         cls = this
-        # TODO Return model object for callback function
-        new queries.RetrieveQuery(cls, criteria).execute(type, fn)
+        new queries.CreateQuery(cls, attrs).execute(fn, type)
         cls
 
       ###
@@ -383,8 +384,8 @@ kopi.module("kopi.db.models")
         kls[method] = ->
           new queries.RetrieveQuery(this)[method](arguments...)
 
-      for method in queries.RetrieveQuery.METHODS
-        defineMethod(method) if method isnt "count"
+      for method in queries.RetrieveQuery.ALL
+        defineMethod(method)
 
       ###
 
@@ -395,21 +396,11 @@ kopi.module("kopi.db.models")
 
       @return {kopi.db.models.Model}
       ###
-      kls.update = (attrs={}, criteria={}, fn, type) ->
+      kls._update = (attrs={}, criteria={}, fn, type) ->
         cls = this
         # TODO Return model object for callback function
-        new queries.UpdateQuery(cls, criteria, attrs).execute(type, fn)
+        new queries.UpdateQuery(cls, null, attrs).where(criteria).execute(fn, type)
         cls
-
-      ###
-      Return all models
-
-      @param {Function} fn
-      @param {String}   type
-
-      @return {kopi.db.queries.RetrieveQuery|kopi.db.models.Model}
-      ###
-      kls.all = (fn, type) -> this.get({}, fn, type)
 
       ###
 
@@ -418,15 +409,15 @@ kopi.module("kopi.db.models")
       @param {String}   type
       @return {kopi.db.models.Model}
       ###
-      kls.destroy = (criteria={}, fn, type) ->
+      kls._destroy = (criteria={}, fn, type) ->
         cls = this
         # TODO Return model object for callback function
-        new queries.DestroyQuery(cls, criteria).execute(type, fn)
+        new queries.DestroyQuery(cls).where(criteria).execute(fn, type)
         cls
 
       kls.raw = (args..., fn, type) ->
         cls = this
-        new queries.RawQuery(cls, args...).execute(type, fn)
+        new queries.RawQuery(cls, args...).execute(fn, type)
         cls
 
       ###
@@ -510,10 +501,10 @@ kopi.module("kopi.db.models")
           for field, value of self._dirty
             attrs[field] = self._data[field]
           self.emit cls.BEFORE_UPDATE_EVENT
-          cls.update criteria, attrs, thenFn, type
+          cls._update criteria, attrs, thenFn, type
         else
           self.emit cls.BEFORE_CREATE_EVENT
-          cls.create self._data, thenFn, type
+          cls._create self._data, thenFn, type
 
         self
 
@@ -526,16 +517,13 @@ kopi.module("kopi.db.models")
         cls = this.constructor
         self = this
         criteria = {}
-        criteria[pkName] = pk
+        criteria[self._meta.pk] = self.pk()
         thenFn = (error) ->
-          self.emit cls.AFTER_DESTROY_EVENT
-          if error
-            # TODO logging or emitting
-          else
-            # TODO logging or emitting
+          if not error
+            self.emit cls.AFTER_DESTROY_EVENT
           fn(error, self) if fn
         self.emit cls.BEFORE_DESTROY_EVENT
-        cls.destroy(criteria, thenFn, type)
+        cls._destroy(criteria, thenFn, type)
         self
 
       toString: ->

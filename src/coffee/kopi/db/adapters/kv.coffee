@@ -1,7 +1,8 @@
 kopi.module("kopi.db.adapters.kv")
   .require("kopi.utils.text")
+  .require("kopi.utils.object")
   .require("kopi.db.adapters.client")
-  .define (exports, text, client) ->
+  .define (exports, text, object, client) ->
 
     ###
     Adapter for Key/Value Databases like local storage, memcached, redis, etc.
@@ -42,7 +43,10 @@ kopi.module("kopi.db.adapters.kv")
         self = this
         model = query.model
         attrs = query.attrs()
-        pk = attrs[model.meta().pk]
+        pk = query.pk()
+        if not pk
+          fn(true, "Must provide primary key") if fn
+          return self
         key = self._keyForModel(model, pk)
         self._set(key, self._stringify(attrs))
         message =
@@ -56,7 +60,7 @@ kopi.module("kopi.db.adapters.kv")
         model = query.model
         pk = query.pk()
         if not pk
-          fn(true, "pk not found") if fn
+          fn(true, "Must provide primary key") if fn
           return self
         key = self._keyForModel(model, pk)
         value = self._get(key)
@@ -65,16 +69,16 @@ kopi.module("kopi.db.adapters.kv")
             value = self._parse(value)
             message =
               ok: true
-              entry: value
+              entries: [value]
           catch e
             message =
               error: true
-              message: "Failed to parse: #{value}"
+              message: "Failed to parse value: #{e}"
         else
           message =
-            error: true
-            message: "Can not find entry"
-        fn(null, message) if fn
+            ok: true
+            entries: []
+        fn(message.error, message) if fn
         self
 
       update: (query, fn) ->
@@ -83,10 +87,13 @@ kopi.module("kopi.db.adapters.kv")
           if error
             fn(error, message) if fn
             return
-
-          value = message.entry
-          object.extend value, query.attrs()
-          self._set(query.pk(), self._stringify(entry))
+          value = message.entries[0]
+          if value
+            object.extend value, query.attrs()
+            self._set(query.pk(), self._stringify(value))
+            fn(null) if fn
+          else
+            fn(true, "Entry not found") if fn
 
         self.retrieve(query, retrieveFn)
         self

@@ -11,9 +11,10 @@ kopi.module("kopi.db.adapters.webstorage")
 
       this.support = -> !!storage
 
-      _get: (key, value) ->
-        storage.getItem(key) or value
-        this
+      _get: (key, defautValue) ->
+        value = storage.getItem(key)
+        console.log value
+        if value? then value else defautValue
 
       _set: (key, value) ->
         try

@@ -67,8 +67,6 @@ class Module
     this.name = name
     # @type {Array}         依赖关系
     this.requires = []
-    # @type {Hash}          模块方法
-    this.exports = {}
 
   ###
   TODO 对于没有模块的脚本，可以直接 load
@@ -91,7 +89,7 @@ class Module
     throw new Error("#{name} is not a valid module name") unless reModuleName.test(name)
     require = this.constructor.build(name, false)
     this.requires.push(require) if assignment
-    if chain then this else require.exports
+    if chain then this else require
 
   ###
   模块定义
@@ -101,15 +99,16 @@ class Module
   ###
   define: (fn) ->
     self = this
-    delete self.require
+    # Module can not be defined twice
+    # delete self.require
     delete self.define
     if isFunction(fn)
       requireFn = (name) -> self.require(name, false, false)
-      fn(self.exports, self.requires..., requireFn)
+      fn(self, self.requires..., requireFn)
     else
       # Extend module
       for name of fn
-        self.exports[name] = fn[name]
+        self[name] = fn[name]
     return
 
 ###
