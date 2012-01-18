@@ -48,6 +48,10 @@ kopi.module("kopi.db.adapters.kv")
           fn(true, "Must provide primary key") if fn
           return self
         key = self._keyForModel(model, pk)
+        isKeyExists = !!self._get(key)
+        if isKeyExists
+          fn(true, "Primary key already exists.") if fn
+          return self
         self._set(key, self._stringify(attrs, model.meta().names))
         message =
           ok: true
