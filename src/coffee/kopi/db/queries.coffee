@@ -96,7 +96,7 @@ kopi.module("kopi.db.queries")
 
       execute: (fn, type) ->
         self = this
-        adapter = self.model.adapter(type)
+        adapter = self.model.prepare().adapter(type)
         adapter[self._action](self, fn)
         this
 
@@ -208,9 +208,7 @@ kopi.module("kopi.db.queries")
           if not error
             message = message.count
           fn(error, message) if fn
-        adapter = self.model.adapter(type)
-        adapter.retrieve(self, retrieveFn)
-        self
+        self.execute(retrieveFn, type)
 
       one: (fn, type) ->
         self = this
@@ -227,9 +225,7 @@ kopi.module("kopi.db.queries")
           else
             model = null
           fn(error, model) if fn
-        adapter = self.model.adapter(type)
-        adapter.retrieve(self, retrieveFn)
-        self
+        self.execute(retrieveFn, type)
 
       all: (fn, type) ->
         self = this
@@ -247,9 +243,7 @@ kopi.module("kopi.db.queries")
               model.isNew = false
               collection.push(model)
           fn(error, collection) if fn
-        adapter = self.model.adapter(type)
-        adapter.retrieve(self, retrieve)
-        self
+        self.execute(retrieveFn, type)
 
     class UpdateQuery extends BaseRetriveQuery
 
@@ -259,8 +253,11 @@ kopi.module("kopi.db.queries")
         super(model, criteria)
 
       attrs: (attrs) ->
-        this._attrs = attrs if attrs
-        this
+        if attrs
+          object.extend this._attrs, attrs
+          this
+        else
+          this._attrs
 
       clone: ->
         cls = this.constructor

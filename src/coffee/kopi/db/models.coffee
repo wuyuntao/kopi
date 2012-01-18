@@ -24,7 +24,7 @@ kopi.module("kopi.db.models")
     TEXT = 2
     FLOAT = 3
     DATETIME = 4
-    BLOB = 5
+    JSON = 5
 
     ###
     Meta class for all models
@@ -171,7 +171,7 @@ kopi.module("kopi.db.models")
             type: options
 
         # Set default field type
-        if not options.type
+        if not options.type?
           options.type = STRING
 
         # Check if primary key field is duplicately defined
@@ -248,7 +248,7 @@ kopi.module("kopi.db.models")
 
       ###
       # TODO Is it possible to move _prepare() to a meta class model
-      kls._prepare = ->
+      kls.prepare = ->
         cls = this
         return cls if cls._prepared
 
@@ -389,14 +389,14 @@ kopi.module("kopi.db.models")
 
       ###
 
-      @param {Hash}     attrs
       @param {Hash}     criteria
+      @param {Hash}     attrs
       @param {Function} fn
       @param {String}   type
 
       @return {kopi.db.models.Model}
       ###
-      kls._update = (attrs={}, criteria={}, fn, type) ->
+      kls._update = (criteria={}, attrs={}, fn, type) ->
         cls = this
         # TODO Return model object for callback function
         new queries.UpdateQuery(cls, null, attrs).where(criteria).execute(fn, type)
@@ -442,7 +442,7 @@ kopi.module("kopi.db.models")
         self = this
         cls = this.constructor
         cls.prefix or= text.underscore(cls.name)
-        cls._prepare() if not cls._prepared
+        cls.prepare() if not cls._prepared
 
         self._meta = cls.meta()
         self.guid = utils.guid(cls.prefix)
@@ -504,7 +504,7 @@ kopi.module("kopi.db.models")
           cls._update criteria, attrs, thenFn, type
         else
           self.emit cls.BEFORE_CREATE_EVENT
-          cls._create self._data, thenFn, type
+          cls._create object.clone(self._data), thenFn, type
 
         self
 
@@ -539,6 +539,6 @@ kopi.module("kopi.db.models")
     exports.TEXT = TEXT
     exports.FLOAT = FLOAT
     exports.DATETIME = DATETIME
-    exports.BLOB = BLOB
+    exports.JSON = JSON
     exports.Meta = Meta
     exports.Model = Model

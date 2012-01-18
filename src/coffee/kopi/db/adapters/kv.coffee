@@ -48,7 +48,7 @@ kopi.module("kopi.db.adapters.kv")
           fn(true, "Must provide primary key") if fn
           return self
         key = self._keyForModel(model, pk)
-        self._set(key, self._stringify(attrs))
+        self._set(key, self._stringify(attrs, model.meta().names))
         message =
           ok: true
           pk: pk
@@ -66,7 +66,7 @@ kopi.module("kopi.db.adapters.kv")
         value = self._get(key)
         if value
           try
-            value = self._parse(value)
+            value = self._parse(value, model.meta().names)
             message =
               ok: true
               entries: [value]
@@ -87,10 +87,12 @@ kopi.module("kopi.db.adapters.kv")
           if error
             fn(error, message) if fn
             return
+          model = query.model
+          key = self._keyForModel(model, query.pk())
           value = message.entries[0]
           if value
             object.extend value, query.attrs()
-            self._set(query.pk(), self._stringify(value))
+            self._set(key, self._stringify(value, model.meta().names))
             fn(null) if fn
           else
             fn(true, "Entry not found") if fn
@@ -150,12 +152,22 @@ kopi.module("kopi.db.adapters.kv")
       ###
       Convert json to string.
       ###
-      _stringify: (json) ->
-        # TODO data processing
-        JSON.stringify(json)
+      _stringify: (obj, fields) ->
+        self = this
+        if fields
+          for own key, value of obj
+            obj[key] = self._adapterValue(value, fields[key])
+        JSON.stringify(obj)
 
-      _parse: (string) ->
-        # TODO data processing
-        JSON.parse(string)
+      ###
+      Convert string to json.
+      ###
+      _parse: (string, fields) ->
+        self = this
+        obj = JSON.parse(string)
+        if fields
+          for own key, value of obj
+            obj[key] = self._modelValue(value, fields[key])
+        obj
 
     exports.KeyValueAdapter = KeyValueAdapter
