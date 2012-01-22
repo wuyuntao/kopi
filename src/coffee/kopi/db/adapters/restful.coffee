@@ -1,7 +1,7 @@
 kopi.module("kopi.db.adapters.restful")
   .require("kopi.db.adapters.server")
-  .require("kopi.utils.url")
-  .define (exports, server, url) ->
+  .require("kopi.utils.uri")
+  .define (exports, server, uri) ->
 
     ###
     Kopi provides a query API similar to CouchDB.
