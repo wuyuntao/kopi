@@ -2,6 +2,10 @@ kopi.module("kopi.db.errors")
   .require("kopi.exceptions")
   .define (exports, exceptions) ->
 
+    class AdapterNotDefined extends exceptions.Exception
+      constructor: (model, adapter) ->
+        super("Adapter #{adapter} is not defined in model #{model.name}")
+
     class DoesNotExist extends exceptions.Exception
 
     class DuplicateModelNameError extends exceptions.Exception
@@ -20,6 +24,7 @@ kopi.module("kopi.db.errors")
       constructor: (model, pk) ->
         super("Related '#{model.name}' with primary key '#{pk}' not fetched.")
 
+    exports.AdapterNotDefined = AdapterNotDefined
     exports.DoesNotExist = DoesNotExist
     exports.DuplicateModelNameError = DuplicateModelNameError
     exports.DuplicatePrimaryKeyError = DuplicatePrimaryKeyError
