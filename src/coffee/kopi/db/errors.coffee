@@ -2,31 +2,45 @@ kopi.module("kopi.db.errors")
   .require("kopi.exceptions")
   .define (exports, exceptions) ->
 
-    class AdapterNotDefined extends exceptions.Exception
+    class ModelError extends exceptions.Exception
+      constructor: (model, message) ->
+        if not message
+          message = model
+          model = null
+        this.name = if model then model.name else this.constructor.name
+        this.message = message
+
+    class PrimaryAdapterNotFound extends ModelError
+      constructor: (model) ->
+        super(model, "Primary adapter is not found")
+
+    class AdapterNotFound extends ModelError
       constructor: (model, adapter) ->
-        super("Adapter #{adapter} is not defined in model #{model.name}")
+        super(model, "Adapter '#{adapter}' is not defined")
 
-    class DoesNotExist extends exceptions.Exception
+    class DoesNotExist extends ModelError
 
-    class DuplicateModelNameError extends exceptions.Exception
+    class ModelNameDuplicated extends ModelError
       constructor: (model) ->
         super("Model #{model.name} is already defined.")
 
-    class DuplicatePrimaryKeyError extends exceptions.Exception
-      constructor: (name) ->
-        super("Primary key field is already defined. #{name}")
+    class PrimaryKeyDuplicated extends ModelError
+      constructor: (model, name) ->
+        super(model, "Primary key field is already defined.")
 
-    class PrimaryKeyNotFoundError extends exceptions.Exception
+    class PrimaryKeyNotFound extends ModelError
       constructor: (model) ->
-        super("Primary key field is not defined in model #{model.name}")
+        super(model, "Primary key field is not defined.")
 
-    class RelatedModelNotFetched extends exceptions.Exception
+    class RelatedModelNotFetched extends ModelError
       constructor: (model, pk) ->
-        super("Related '#{model.name}' with primary key '#{pk}' not fetched.")
+        super(model, "Related '#{model.name}' with primary key '#{pk}' not fetched.")
 
-    exports.AdapterNotDefined = AdapterNotDefined
+    exports.ModelError = ModelError
+    exports.PrimaryAdapterNotFound = PrimaryAdapterNotFound
+    exports.AdapterNotFound = AdapterNotFound
     exports.DoesNotExist = DoesNotExist
-    exports.DuplicateModelNameError = DuplicateModelNameError
-    exports.DuplicatePrimaryKeyError = DuplicatePrimaryKeyError
-    exports.PrimaryKeyNotFoundError = PrimaryKeyNotFoundError
+    exports.ModelNameDuplicated = ModelNameDuplicated
+    exports.PrimaryKeyDuplicated = PrimaryKeyDuplicated
+    exports.PrimaryKeyNotFound = PrimaryKeyNotFound
     exports.RelatedModelNotFetched = RelatedModelNotFetched

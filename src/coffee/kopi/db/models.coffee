@@ -26,6 +26,8 @@ kopi.module("kopi.db.models")
     DATETIME = 4
     JSON = 5
 
+    PRIMARY = "primary"
+
     ###
     Meta class for all models
     ###
@@ -39,7 +41,7 @@ kopi.module("kopi.db.models")
         m = meta[name]
         if m
           if m.model != model
-            throw new errors.DuplicateModelNameError(model)
+            throw new errors.ModelNameDuplicated(model)
           return m
         meta[name] = new Meta(model)
 
@@ -97,7 +99,7 @@ kopi.module("kopi.db.models")
           this.hasManyNames[name] = relation
 
         if not this.pk
-          throw new errors.PrimaryKeyNotFoundError(this.model)
+          throw new errors.PrimaryKeyNotFound(this.model)
 
         this
 
@@ -139,23 +141,26 @@ kopi.module("kopi.db.models")
     class Model extends events.EventEmitter
       kls = this
 
-      kls.adapter = (type="primary", adapter, options) ->
+      kls.adapter = (type=PRIMARY, adapter, options) ->
         cls = this
         meta = this.meta()
         # Define adapter getter
         if not adapter
           adapter = meta.adapters[type]
           if not adapter
-            message = if type == "primary" then "Primary adapter is not defined" else "Adapter '#{type}' is not found"
-            throw new exceptions.ValueError(message)
+            if type == PRIMARY
+              throw new errors.PrimaryAdapterNotFound(cls)
+            # else
+            #   throw new errors.AdapterNotFound(cls, type)
           return adapter
+
         # Define adapter setter
         if not adapter.support(cls)
           logger.error "Adapter #{adapter.name} is not available."
           return cls
         # Provide constant string for adapter type. e.g. Blog.SERVER = "server"
         cls[text.underscore(type).toUpperCase()] or= type
-        adapter = meta.adapters[type] = new adapter(cls)
+        adapter = meta.adapters[type] = new adapter(options)
         if options and options.primary
           meta.adapters.primary = adapter
         cls
@@ -177,7 +182,7 @@ kopi.module("kopi.db.models")
         # Check if primary key field is duplicately defined
         if options.primary
           if meta.pk and meta.pk != name
-            throw new errors.DuplicatePrimaryKeyError(name)
+            throw new errors.PrimaryKeyDuplicated(name)
           # Set primary key field
           meta.pk = name
 

@@ -80,7 +80,7 @@ kopi.module("kopi.utils.object")
       type == "object"
 
     keys = Object.keys or= (obj) ->
-      key for own key, val of obj
+      (key for own key, val of obj)
 
     exports.ObjectProto = ObjectProto
     exports.accessor = accessor

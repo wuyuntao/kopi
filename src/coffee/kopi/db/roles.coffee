@@ -51,7 +51,7 @@ kopi.module("kopi.db.roles")
 
       constructor: (roles={}) ->
         cls = this.constructor
-        meta = cls._meta
+        meta = cls._meta or= {}
         for own name, role of roles
           if name of meta and role instanceof meta[name]
             this[name] = role

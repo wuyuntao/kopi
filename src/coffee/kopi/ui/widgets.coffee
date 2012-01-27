@@ -100,7 +100,7 @@ kopi.module("kopi.ui.widgets")
         if not value
           this.prefix or= text.underscore(this.name, '-')
           value = this.prefix
-          value = value + "-" + prefix if prefix
+          value = prefix + "-" + value if prefix
           value = settings.kopi.ui.prefix + "-" + value if settings.kopi.ui.prefix
           value = value + "-" + action if action
           this._cssClasses[key] = value
@@ -295,6 +295,7 @@ kopi.module("kopi.ui.widgets")
         if self._options.element
           return $(self._options.element)
         if self._options.template
+          # FIXME Use template adapter instead jQuery template plugin
           return $(self._options.template).tmpl(self)
         $(document.createElement(self._options.tagName))
 

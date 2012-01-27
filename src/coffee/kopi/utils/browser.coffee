@@ -5,9 +5,10 @@ kopi.module("kopi.utils.browser")
     nav = navigator
     av = nav.appVersion
     ua = nav.userAgent
+    all = ["webkit", "opera", "msie", "mozilla", "android", "iphone", "ipad"]
 
+    exports.all = all
     object.extend exports, $.browser,
       android:  (/android/gi).test(av)
       iphone:   (/ipod|iphone/gi).test(av)
       ipad:     (/ipad/gi).test(av)
-      idevice:  (/ipod|iphone|ipad/gi).test(av)

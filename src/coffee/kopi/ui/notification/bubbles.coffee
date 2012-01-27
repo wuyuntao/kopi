@@ -6,8 +6,7 @@ kopi.module("kopi.ui.notification.bubbles")
     class Bubble extends widgets.Widget
 
       constructor: (overlay) ->
-        super
-        this.hidden = true
+        super()
         this._overlay = overlay
 
       onskeleton: ->

@@ -27,7 +27,7 @@ kopi.module("kopi.ui.notification.dialogs")
       kls.CLOSE_EVENT = "close"
 
       constructor: (overlay) ->
-        super
+        super()
         this._overlay = overlay
 
       title: (title) ->

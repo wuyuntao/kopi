@@ -7,7 +7,8 @@ kopi.module("kopi.ui.notification.overlays")
     class Overlay extends widgets.Widget
 
       onskeleton: ->
-        $(this.element).bind "click", (e) -> return false
+        # TODO Ignore touch events too
+        this.element.bind "click", (e) -> return false
         super
 
       show: (transparent=false) ->
@@ -15,7 +16,9 @@ kopi.module("kopi.ui.notification.overlays")
         self = this
         return self if not self.hidden
         self.hidden = false
-        self.element.removeClass(cls.hideClass()).addClass(cls.showClass())
+        self.element
+          .removeClass(cls.hideClass())
+          .addClass(cls.showClass())
         self.element.addClass(cls.transparentClass()) if transparent
         self
 

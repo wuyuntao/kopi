@@ -7,6 +7,7 @@ kopi.module("kopi.ui.viewport")
   .define (exports, settings, logging, browser, widgets, notification) ->
 
     win = $(window)
+    logger = logging.logger(exports.name)
 
     ###
     视区
@@ -26,8 +27,12 @@ kopi.module("kopi.ui.viewport")
 
       this.RESIZE_EVENT = "resize"
 
+      this.configure
+        lockWhenResizing: true
+
       constructor: ->
-        super("body", {})
+        super()
+        this._options.element or= "body"
         this.width = null
         this.height = null
 
@@ -35,17 +40,20 @@ kopi.module("kopi.ui.viewport")
         cls = this.constructor
         self = this
         self._browser()
-        self.emit(cls.RESIZE_EVENT)
+        self._resize(false)
         # TODO Use thottle resize event of window
         win.bind cls.RESIZE_EVENT, -> self.emit(cls.RESIZE_EVENT)
 
       onresize: ->
+        this._resize(this._options.lockWhenResizing)
+
+      _resize: (lock=false) ->
         self = this
         [width, height] = [win.width(), win.height()]
         return unless width > 0 and height > 0 and self.isSizeChanged(width, height)
 
-        logging.info("Resize viewport to #{width}x#{height}")
-        notification.loading()
+        logger.info("Resize viewport to #{width}x#{height}")
+        notification.loading() if lock
         self.lock()
         self.element.width(width).height(height)
         self.width = width
@@ -53,7 +61,7 @@ kopi.module("kopi.ui.viewport")
         # TODO Notify widgets to resize and keep lock until
         # all widgets have finished resizing
         self.unlock()
-        notification.loaded()
+        notification.loaded() if lock
 
       ###
       Check if size is different from last time
@@ -65,8 +73,8 @@ kopi.module("kopi.ui.viewport")
       Add browser identify classes to viewport element
       ###
       _browser: ->
-        classes = (key for key of browser when key != "version").join(" ")
-        logging.debug("Add viewport classes: #{classes}")
+        classes = (key for key in browser.all when browser[key]).join(" ")
+        logger.debug("Add viewport classes: #{classes}")
         this.element.addClass(classes)
 
     exports.Viewport = Viewport
