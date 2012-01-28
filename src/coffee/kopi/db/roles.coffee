@@ -15,13 +15,16 @@ kopi.module("kopi.db.roles")
           this.user.name == "admin"
 
       user = new User()
-      admin = Admin.apply(user)
+      admin = Admin.proxy(user)
     ###
     class Role
 
       this.model = (model) -> this._modelClass = model
 
-      this.apply = (model) -> new this(model)
+      this.proxy = (model) ->
+        cls = this
+        role = new cls(model)
+        role
 
       constructor: (model) -> this.model = model
 
