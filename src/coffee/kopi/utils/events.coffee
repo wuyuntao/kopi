@@ -10,6 +10,7 @@ kopi.module("kopi.utils.events")
     exports.MOUSE_OUT_EVENT = "mouseleave"
 
     exports.ORIENTATION_CHANGE_EVENT = "orientationchange"
+    exports.RESIZE_EVENT = "resize"
     exports.THROTTLED_RESIZE_EVENT = "throttledresize"
 
     exports.LEFT_BUTTON = 1
@@ -36,3 +37,36 @@ kopi.module("kopi.utils.events")
     # TODO Check on mobile devices
     exports.isRightClick = (event) ->
       event.which == exports.RIGHT_BUTTON
+
+    ###
+    Throttled resize event
+    ###
+    throttle = 250
+    now = null
+    delta = null
+    last = 0
+    interval = null
+    onResize = ->
+      now = new Date.getTime()
+      delta = now - last
+      if delta >= throttle
+        last = now
+        $(this).trigger(exports.THROTTLED_RESIZE_EVENT)
+      else
+        clearTimeout(interval) if interval
+        interval = setTimeout(onResize, throttle - delta)
+      return
+    $.event.special.throttledresize =
+      setup: ->
+        $(this).bind(exports.RESIZE_EVENT, onResize)
+      teardown: ->
+        $(this).unbind(exports.RESIZE_EVENT, onResize)
+
+    ###
+    Add new event shortcuts
+    ###
+    defineMethod = (name) ->
+      $.fn[name] = (fn) ->
+        if fn then this.bind(name, fn) else this.trigger(name)
+    for name in [exports.THROTTLED_RESIZE_EVENT]
+      defineMethod(name)

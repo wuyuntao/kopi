@@ -76,7 +76,7 @@ kopi.module("kopi.app")
       Launch the application
 
       ###
-      start: ->
+      start: (fn) ->
         cls = this.constructor
         self = this
         if self.started
@@ -89,6 +89,7 @@ kopi.module("kopi.app")
         # Set singleton of application
         appInstance = self
         # Ensure layout elements
+        self.container = $("body")
         self.viewport = new viewport.Viewport()
         self.viewport.skeleton().render()
         self.emit(cls.START_EVENT)
@@ -96,12 +97,16 @@ kopi.module("kopi.app")
         # self.load(self._options.startURL or uri.current())
         self._listenToURLChange()
         self.started = true
+        fn() if fn
         self
 
-      stop: ->
-        this._stopListenToURLChange()
+      stop: (fn) ->
+        self = this
+        self._stopListenToURLChange()
         self.started = false
         appInstance = null
+        fn() if fn
+        self
 
       ###
       load URL

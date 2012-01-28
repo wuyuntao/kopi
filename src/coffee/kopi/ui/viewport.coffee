@@ -74,7 +74,6 @@ kopi.module("kopi.ui.viewport")
       ###
       _browser: ->
         classes = (key for key in browser.all when browser[key]).join(" ")
-        logger.debug("Add viewport classes: #{classes}")
         this.element.addClass(classes)
 
     exports.Viewport = Viewport
