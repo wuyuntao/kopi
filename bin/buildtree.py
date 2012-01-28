@@ -114,10 +114,13 @@ if __name__ == '__main__':
     p = OptionParser()
     p.add_option('--base-path', '-p', default='.')
     p.add_option('--base-uri', '-u', default='')
-    p.add_option('--output-format', '-o', default='sprockets')
+    p.add_option('--output-format', '-o', default='sprockets',
+            help="Default: sprockets")
     p.add_option('--output-file', '-O')
-    p.add_option('--ext-names', '-e', default='js,coffee')
-    p.add_option('--extra-scripts', '-E', default='jquery,qunit,kopi')
+    p.add_option('--ext-names', '-e', default='js,coffee',
+            help="Default: js,coffee")
+    p.add_option('--extra-scripts', '-E', default='jquery,kopi',
+            help="Default: jquery,qunit,kopi")
     opts, args = p.parse_args()
 
     kwargs = {
