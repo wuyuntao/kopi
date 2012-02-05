@@ -56,6 +56,7 @@ kopi.module("kopi.ui.scrollable")
         onresize: null
         snap: false
         snapThreshold: 1
+        throttle: 250
 
       klass.accessor kls.prototype, "scroller"
 
@@ -77,29 +78,46 @@ kopi.module("kopi.ui.scrollable")
           duration: duration or 0
         self._steps.push(step)
         self._animate()
+        self
 
       onskeleton: ->
         cls = this.constructor
         self = this
-        # self.element.css('overflow', 'hidden')
-
-        self._scroller = self._ensureScroller()
-        # Set default styles to element
-        styles = {}
-        styles[TRANSITION_PROPERTY] = cls.TRANSITION_PROPERTY_STYLE
-        styles[TRANSITION_TIMING_FUNCTION] = cls.TRANSITION_TIMING_FUNCTION_STYLE
-        styles[TRANSFORM_ORIGIN] = cls.TRANSFORM_ORIGIN_STYLE
-        self._scroller
-          .css(styles)
-          .duration(0)
-          .translate(0, 0)
+        self._container = self._ensureWrapper("container")
         super
 
       onrender: ->
         self = this
         cls = this.constructor
-        self.emit(cls.RESIZE_EVENT)
         super
+
+      onresize: ->
+        cls = this.constructor
+        self = this
+        self._elementWidth = self.element.innerWidth()
+        self._elementHeight = self.element.innerHeight()
+        elementOffset = self.element.offset()
+        self._elementOffsetLeft = -elementOffset.left
+        self._elementOffsetTop = -elementOffset.top
+
+        self._size()
+
+        self._containerWidth = math.max(self._container.outerWidth(), self._elementWidth)
+        self._containerHeight = math.max(self._container.outerHeight(), self._elementHeight)
+
+        self._minScrollX = 0
+        self._minScrollY = 0
+        self._maxScrollX = self._elementWidth - self._containerWidth
+        self._maxScrollY = self._elementHeight - self._containerHeight
+
+        self._scrollX = self._options.scrollX and self._maxScrollX < self._minScrollX
+        self._scrollY = self._options.scrollY and self._maxScrollY < self._minScrollY
+
+        self._directionX = 0
+        self._directionY = 0
+
+        self._duration(0)
+        self._callback(cls.RESIZE_EVENT, arguments)
 
       ontouchstart: (e, event) ->
         cls = this.constructor
@@ -119,9 +137,9 @@ kopi.module("kopi.ui.scrollable")
         self._duration(0)
 
         if self._options.momentum
-          matrix = self._scroller.parseMatrix()
+          matrix = self._container.parseMatrix()
           if matrix.x != self._x or matrix.y != self._y
-            self._scroller.unbind(events.WEBKIT_TRANSITION_END_EVENT)
+            self._container.unbind(events.WEBKIT_TRANSITION_END_EVENT)
             self._steps = []
             self._position(matrix.x, matrix.y)
         super
@@ -144,7 +162,7 @@ kopi.module("kopi.ui.scrollable")
         self._directionY = if deltaY == 0 then 0 else -deltaY / math.abs(deltaY)
 
         # Slow down If outside of the boundaries
-        if self._minScrollX < newX or newX < self._maxScrollX
+        if self._minScrollX? and self._maxScrollX? and (self._minScrollX < newX or newX < self._maxScrollX)
           newX = if options.bounce
               self._x + deltaX * options.damping
             else if newX >= self._minScrollX and self._maxScrollX >= self._maxScrollX
@@ -152,7 +170,7 @@ kopi.module("kopi.ui.scrollable")
             else
               self._maxScrollX
 
-        if self._minScrollY < newY or newY < self._maxScrollY
+        if self._minScrollY? and self._maxScrollY? and (self._minScrollY < newY or newY < self._maxScrollY)
           newY = if options.bounce
               self._y + deltaY * options.damping
             else if newY >= self._minScrollY and self._maxScrollY >= self._minScrollY
@@ -164,7 +182,7 @@ kopi.module("kopi.ui.scrollable")
         self._position(newX, newY)
 
         # Reset start time and position if mouse or finger stops for a while
-        if timestamp - self._startTime > 300
+        if timestamp - self._startTime > options.throttle
           self._startTime = timestamp
           self._startX = self._x
           self._startY = self._y
@@ -175,17 +193,6 @@ kopi.module("kopi.ui.scrollable")
         point = self._points(event)
         return if support.touch and point isnt null
 
-        options = self._options
-        momentumX =
-          dist: 0
-          time: 0
-        momentumY =
-          dist: 0
-          time: 0
-        duration = (point.timeStamp or new Date().getTime()) - self._startTime
-        newX = self._x
-        newY = self._y
-
         if not self._moved
           # TODO Find last touched element and trigger click event for it
           return
@@ -193,37 +200,39 @@ kopi.module("kopi.ui.scrollable")
         event.preventDefault()
         event.stopPropagation()
 
-        if duration < 300 and options.momentum
-          momentumX = if not newX then momentumX else
-            self._momentum(newX - self._startX
-              , duration
-              , -self._x
-              , self._scrollerWidth - self._elementWidth + self._x
-              , if options.bounce then self._elementWidth else 0)
-          momentumY = if not newY then momentumY else
-            self._momentum(newY - self._startY
-              , duration
-              , -self._y
-              , self._scrollerHeight - self._elementHeight + self._y
-              , if options.bounce then self._elementHeight else 0)
+        options = self._options
+        momentum =
+          distX: 0
+          distY: 0
+          duration: 0
+        duration = (point.timeStamp or new Date().getTime()) - self._startTime
+        newX = self._x
+        newY = self._y
 
-          newX = self._x + momentumX.dist
-          newY = self._y + momentumY.dist
+        if duration < options.throttle and options.momentum
+          momentum = self._momentum(newX - self._startX
+            , newY - self._startY
+            , duration
+            , (if self._minScrollX? then self._minScrollX - self._x else null)
+            , (if self._maxScrollX? then self._x - self._maxScrollX else null)
+            , (if self._minScrollY? then self._minScrollY - self._y else null)
+            , (if self._maxScrollY? then self._y - self._maxScrollY else null)
+            , (if options.bounce then self._elementWidth else 0)
+            , (if options.bounce then self._elementHeight else 0))
+          newX = self._x + momentum.distX
+          newY = self._y + momentum.distY
 
           if (self._x > self._minScrollX and newX > self._minScrollX) or (self.x < self._maxScrollX and newX < self._maxScrollX)
-            momentumX =
-              dist: 0
-              time: 0
+            momentum.distX = 0
           if (self._y > self._minScrollY and newY > self._minScrollY) or (self._y < self._maxScrollY and newY < self._maxScrollY)
-            momentumY =
-              dist: 0
-              time: 0
+            momentum.distY = 0
 
         super
 
-        if momentumX.dist or momentumY.dist
-          newDuration = math.max(momentumX.time, momentumY.time, 10)
+        if momentum.distX or momentum.distY
+          newDuration = math.max(momentum.duration, 10)
           if options.snap
+            # TODO Should we switch to `newDuration`
             self._snapPosition(newX, newY, duration)
             return
 
@@ -243,76 +252,54 @@ kopi.module("kopi.ui.scrollable")
       ontransitionend: (e, event) ->
         cls = this.constructor
         self = this
-        self._scroller.unbind(events.WEBKIT_TRANSITION_END_EVENT)
+        self._container.unbind(events.WEBKIT_TRANSITION_END_EVENT)
         self._animate()
         self._callback(cls.TRANSITION_END_EVENT, arguments)
 
-      onresize: ->
-        cls = this.constructor
-        self = this
-        self._elementWidth = self.element.innerWidth()
-        self._elementHeight = self.element.innerHeight()
-        elementOffset = self.element.offset()
-        self._elementOffsetLeft = -elementOffset.left
-        self._elementOffsetTop = -elementOffset.top
-
-        self._size()
-
-        self._scrollerWidth = math.max(self._scroller.outerWidth(), self._elementWidth)
-        self._scrollerHeight = math.max(self._scroller.outerHeight(), self._elementHeight)
-
-        self._minScrollX = 0
-        self._minScrollY = 0
-        self._maxScrollX = self._elementWidth - self._scrollerWidth
-        self._maxScrollY = self._elementHeight - self._scrollerHeight
-
-        self._scrollX = self._options.scrollX and self._maxScrollX < self._minScrollX
-        self._scrollY = self._options.scrollY and self._maxScrollY < self._minScrollY
-
-        self._directionX = 0
-        self._directionY = 0
-
-        self._duration(0)
-        self._callback(cls.RESIZE_EVENT, arguments)
-
       ###
-      Calculate width and height of scroller
+      Calculate width and height of container
       ###
       _size: ->
         self = this
-        children = self._scroller.children()
+        children = self._container.children()
         if children.length > 0
 
           # Set total width
           if self._options.scrollX
-            scrollerWidth = 0
+            containerWidth = 0
             for child in children
               child = $(child)
-              scrollerWidth += child.outerWidth()
-            self._scroller.width(scrollerWidth)
+              containerWidth += child.outerWidth()
+            self._container.width(containerWidth)
 
           # Set total height
           if self._options.scrollY
-            scrollerHeight = 0
+            containerHeight = 0
             for child in children
               child = $(child)
-              scrollerHeight += child.outerHeight()
-            self._scroller.height(scrollerHeight)
+              containerHeight += child.outerHeight()
+            self._container.height(containerHeight)
 
       _position: (x, y) ->
         cls = this.constructor
         self = this
         x = if self._scrollX then x else 0
         y = if self._scrollY then y else 0
-        self._scroller.translate(x, y)
+        self._container.translate(x, y)
         self._x = x
         self._y = y
         self
 
       _resetPosition: (duration=0) ->
         self = this
-        resetX = number.threshold(self._x, self._maxScrollX, self._minScrollX)
-        resetY = number.threshold(self._y, self._maxScrollY, self._minScrollY)
+        if self._minScrollX? and self._maxScrollX?
+          resetX = number.threshold(self._x, self._maxScrollX, self._minScrollX)
+        else
+          resetX = self._x
+        if self._minScrollY? and self._maxScrollY?
+          resetY = number.threshold(self._y, self._maxScrollY, self._minScrollY)
+        else
+          resetY = self._y
 
         if resetX == self._x and resetY == self._y
           if self._moved
@@ -350,7 +337,7 @@ kopi.module("kopi.ui.scrollable")
             e.preventDefault()
             e.stopPropagation()
             self.emit cls.TRANSITION_END_EVENT
-          self._scroller.bind events.WEBKIT_TRANSITION_END_EVENT, transitionEndFn
+          self._container.bind events.WEBKIT_TRANSITION_END_EVENT, transitionEndFn
         else
           self._resetPosition(0)
         self
@@ -374,38 +361,59 @@ kopi.module("kopi.ui.scrollable")
       _snap: (x, y) ->
         throw new exceptions.NotImplementedError()
 
-      # Thx iScroll
-      _momentum: (dist, time, maxDistUpper, maxDistLower, size) ->
-        deceleration = this._options.deceleration
-        speed = math.abs(dist) / time
-        newDist = (speed * speed) / (2 * deceleration)
-        newTime = 0
-        outsideDist = 0
+      ###
+      Calculate momentum distance and duration
+      ###
+      _momentum: (distX, distY, duration, minDistX, maxDistX, minDistY, maxDistY, sizeX, sizeY) ->
+        self = this
+        # Calculate speed
+        speedX = math.abs(distX) / duration
+        speedY = math.abs(distY) / duration
+        speed = math.sqrt(math.pow(speedX, 2) + math.pow(speedY, 2))
+        maxSpeed = math.sqrt(math.pow(self._containerWidth, 2) + math.pow(self._containerHeight, 2)) / 1000
+        if speed > maxSpeed
+          newSpeed = maxSpeed
+          speedX = newSpeed / speed * speedX
+          speedY = newSpeed / speed * speedY
+          speed = newSpeed
+        # Calculate distance
+        deceleration = self._options.deceleration
+        newDistX = math.pow(speedX, 2) / (2 * deceleration)
+        newDistY = math.pow(speedY, 2) / (2 * deceleration)
+        outsideDistX = 0
 
-        # Proportinally reduce speed if we are outside of the boundaries
-        if dist > 0 and newDist > maxDistUpper
-          outsideDist = size / (6 / (newDist / speed * deceleration))
-          maxDistUpper = maxDistUpper + outsideDist
-          speed = speed * maxDistUpper / newDist
-          newDist = maxDistUpper
-        else if dist < 0 and newDist > maxDistLower
-          outsideDist = size / (6 / (newDist / speed * deceleration))
-          maxDistLower = maxDistLower + outsideDist
-          speed = speed * maxDistLower / newDist
-          newDist = maxDistLower
+        if minDistX? and distX > 0 and newDistX > minDistX
+          [speedX, newDistX] = self._outside(newDistX, speedX, sizeX, minDistX, deceleration)
+        if maxDistX? and distX < 0 and newDistX > maxDistX
+          [speedX, newDistX] = self._outside(newDistX, speedX, sizeX, maxDistX, deceleration)
+        if minDistY? and distY > 0 and newDistY > minDistY
+          [speedY, newDistY] = self._outside(newDistY, speedY, sizeY, minDistY, deceleration)
+        if maxDistY? and distY < 0 and newDistY > maxDistY
+          [speedY, newDistY] = self._outside(newDistY, speedY, sizeY, maxDistY, deceleration)
 
         # FIXME Here is a workaround to fix negative duration problem
-        speed = math.min(1, math.abs(speed))
-        newDist = math.min(200, newDist)
-        newDist = newDist * (if dist < 0 then -1 else 1)
-        newTime = math.min(speed / deceleration, 1000)
+        newDistX = math.min(200, newDistX) * (if distX < 0 then -1 else 1)
+        newDistY = math.min(200, newDistY) * (if distY < 0 then -1 else 1)
+        speed = math.min(1, math.sqrt(math.pow(speedX, 2) + math.pow(speedY, 2)))
+        newDuration = math.min(speed / deceleration, 1000)
 
-        dist: newDist
-        time: math.round(newTime)
+        distX: newDistX
+        distY: newDistY
+        duration: newDuration
+
+      ###
+      Re-calculate speed and distance if target is outside container
+      ###
+      _outside: (distance, speed, size, maxDistance, deceleration) ->
+        outsideDistance = size / (6 / (distance / speed * deceleration))
+        maxDistance = maxDistance + outsideDistance
+        speed = speed * maxDistance / distance
+        distance = maxDistance
+        [speed, distance]
 
       # Set transition duration for scroller
       _duration: (duration) ->
-        this._scroller.duration(duration)
+        this._container.duration(duration)
         this
 
     exports.Scrollable = Scrollable
