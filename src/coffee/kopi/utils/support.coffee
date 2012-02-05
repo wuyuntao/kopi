@@ -7,19 +7,35 @@ kopi.module("kopi.utils.support")
     win = window
     hist = win.history
     doc = document
+    docElem = doc.documentElement
     docMode = doc.documentMode
 
     fakeBody = $("<body>").prependTo("html")
     fbCSS = fakeBody[0].style
-    vendors = ["webkit", "moz", "o"]
+    cssPrefixes = ["-webkit-", "-moz-", "-o-", "-ms-", "-khtml-"]
+    domPrefixes = ["Webkit", "Moz", "O", "ms", "Khtml"]
 
-    # thx Modernizr
-    propExists = (prop) ->
-      ucProp = prop.charAt(0).toUpperCase() + prop.substr(1)
-      props = (prop + " " + vendors.join(ucProp + " ") + ucProp).split(" ")
-      for value of props
-        return true if fbCSS[value] isnt undefined
+    ###
+    testProps is a generic CSS / DOM property test; if a browser supports
+      a certain property, it won't return undefined for it.
+      A supported CSS property returns empty string when its not yet set.
+    ###
+    testProps = (props) ->
+      for prop in props
+        if fbCSS[prop] isnt undefined
+          return true
       false
+
+    ###
+    testPropsAll tests a list of DOM properties we want to check against.
+      We specify literally ALL possible (known and/or likely) properties
+      on the element including the non-vendor prefixed one, for forward-
+      compatibility.
+    ###
+    testPropsAll = (prop) ->
+      ucProp = prop.charAt(0).toUpperCase() + prop.substr(1)
+      props = (prop + " " + domPrefixes.join(ucProp + " ") + ucProp).split(" ")
+      testProps(props)
 
     object.extend exports, $.support,
       # Does the browser support window.onhashchange? Note that IE8 running in
@@ -52,11 +68,10 @@ kopi.module("kopi.utils.support")
 
       cssMatrix: "WebKitCSSMatrix" of win and "m11" of new WebKitCSSMatrix()
 
-      # TODO 加入 Firefox 和 Opera 的判断
-      cssTransform: "webkitTransform" of doc.documentElement.style
+      cssTransform: testProps(['transformProperty', 'WebkitTransform', 'MozTransform', 'OTransform', 'msTransform'])
 
-      # 是否支持 CSS 动画
-      # TODO 加入 Firefox 和 Opera 的判断
-      cssTransition: "WebKitTransitionEvent" of win
+      cssTransform3d: testProps(['perspectiveProperty', 'WebkitPerspective', 'MozPerspective', 'OPerspective', 'msPerspective'])
+
+      cssTransition: testPropsAll("transitionProperty")
 
     fakeBody.remove()

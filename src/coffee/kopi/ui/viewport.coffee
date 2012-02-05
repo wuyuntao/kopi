@@ -1,27 +1,24 @@
 kopi.module("kopi.ui.viewport")
+  .require("kopi.exceptions")
   .require("kopi.settings")
   .require("kopi.logging")
   .require("kopi.utils.browser")
   .require("kopi.ui.widgets")
   .require("kopi.ui.notification")
-  .define (exports, settings, logging, browser, widgets, notification) ->
+  .define (exports, exceptions, settings, logging, browser, widgets, notification) ->
 
     win = $(window)
     logger = logging.logger(exports.name)
+    viewportInstance = null
 
     ###
-    视区
+    Viewport is reponsive to size changes of window
 
-    主要用来响应窗口的大小变化
-
-    所有需要根据窗口大小重新布局的 Widget 应该向 Viewport 注册
-    当窗口大小发生变化视，视区锁屏，向所有已注册的 Widget 发送事件
-    Widget 响应事件被在完成后向 Viewport 发送完成时间
-    当所有 Widget 全部完成后，Viewport 将视区解锁
+    Q: 是否只是向激活的 Widget 发送事件，那如果重新载入非激活的 Widget 的时候 怎么办？
+    A: It should be leaved to widget itself to determine
 
     TODO
-    是否只是向激活的 Widget 发送事件，那如果重新载入非激活的 Widget 的时候 怎么办？
-
+    Q: Should we refactor register() and unregister() to some widget, e.g. Resizable?
     ###
     class Viewport extends widgets.Widget
 
@@ -31,10 +28,27 @@ kopi.module("kopi.ui.viewport")
         lockWhenResizing: true
 
       constructor: ->
+        if viewportInstance
+          throw new exceptions.SingletonError(this.constructor)
+          return self
+
+        viewportInstance = this
         super()
         this._options.element or= "body"
         this.width = null
         this.height = null
+        this._widgets = {}
+
+      ###
+
+      @param {kopi.ui.Widget} widget
+      @param {Boolean}        emit   Trigger resize event right after widget is registered
+      ###
+      register: (widget) ->
+        this._widgets[widget.guid] = widget
+
+      unregister: (widget) ->
+        delete this._widgets[widget.guid]
 
       onskeleton: ->
         cls = this.constructor
@@ -45,10 +59,19 @@ kopi.module("kopi.ui.viewport")
         win.bind cls.RESIZE_EVENT, -> self.emit(cls.RESIZE_EVENT)
 
       onresize: ->
-        this._resize(this._options.lockWhenResizing)
+        self = this
+        cls = this.constructor
+        self._resize(self._options.lockWhenResizing)
 
+      ###
+      所有需要根据窗口大小重新布局的 Widget 应该向 Viewport 注册
+      当窗口大小发生变化视，视区锁屏，向所有已注册的 Widget 发送事件
+      Widget 响应事件被在完成后向 Viewport 发送完成时间
+      当所有 Widget 全部完成后，Viewport 将视区解锁
+      ###
       _resize: (lock=false) ->
         self = this
+        cls = this.constructor
         [width, height] = [win.width(), win.height()]
         return unless width > 0 and height > 0 and self.isSizeChanged(width, height)
 
@@ -58,8 +81,10 @@ kopi.module("kopi.ui.viewport")
         self.element.width(width).height(height)
         self.width = width
         self.height = height
-        # TODO Notify widgets to resize and keep lock until
-        # all widgets have finished resizing
+        # Notify registered widgets to apply new size
+        for guid, widget of self._widgets
+          # TODO Keep lock until all widgets have finished resizing
+          widget.emit(cls.RESIZE_EVENT)
         self.unlock()
         notification.loaded() if lock
 
@@ -77,3 +102,4 @@ kopi.module("kopi.ui.viewport")
         this.element.addClass(classes)
 
     exports.Viewport = Viewport
+    exports.instance = -> viewportInstance or new Viewport()

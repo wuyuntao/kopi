@@ -29,7 +29,12 @@ kopi.module("kopi.exceptions")
     ###
     class ValueError extends Exception
 
+    class SingletonError extends Exception
+      constructor: (klass) ->
+        super("#{klass.name} is a singleton class. Can not be initialized twice.")
+
     exports.Exception = Exception
     exports.NoSuchElementError = NoSuchElementError
     exports.NotImplementedError = NotImplementedError
     exports.ValueError = ValueError
+    exports.SingletonError = SingletonError

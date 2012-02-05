@@ -20,7 +20,6 @@ kopi.module("kopi.app")
     loc = location
     baseURL = uri.current()
     logger = logging.logger(exports.name)
-    appSettings = settings.kopi.app
     appInstance = null
 
     ###
@@ -70,7 +69,7 @@ kopi.module("kopi.app")
         self._views = []
         self._interval = null
 
-        self.configure appSettings, options
+        self.configure settings.kopi.app, options
 
       ###
       Launch the application
@@ -90,12 +89,12 @@ kopi.module("kopi.app")
         appInstance = self
         # Ensure layout elements
         self.container = $("body")
-        self.viewport = new viewport.Viewport()
+        self.viewport = viewport.instance()
         self.viewport.skeleton().render()
         self.emit(cls.START_EVENT)
-        # Load current URL
-        # self.load(self._options.startURL or uri.current())
         self._listenToURLChange()
+        # Load current URL
+        self.load(self._options.startURL or uri.current())
         self.started = true
         fn() if fn
         self

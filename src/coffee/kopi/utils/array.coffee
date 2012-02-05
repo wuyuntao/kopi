@@ -3,6 +3,8 @@ kopi.module("kopi.utils.array")
   .require("kopi.utils")
   .define (exports, utils) ->
 
+    math = Math
+
     # Establish the object that gets thrown to break out of a loop iteration.
     # `StopIteration` is SOP on Mozilla.
     breaker = if typeof(StopIteration) is 'undefined' then '__break__' else StopIteration
@@ -96,6 +98,17 @@ kopi.module("kopi.utils.array")
         array[i] = iteration.call(context, v, i, array)
       results
 
+    ###
+    Pick a random item from array
+
+    TODO Pick more than one item from array?
+
+    @param  {Array}     array
+    @return {Object}    A random item in array
+    ###
+    random = (array) ->
+      if array.length > 1 then array[math.floor(math.random() * array.length)] else array[0]
+
     remove = (array, obj) ->
       i = indexOf(array, obj)
       if i >= 0 then removeAt(array, obj) else false
@@ -165,6 +178,7 @@ kopi.module("kopi.utils.array")
     exports.isEmpty = isEmpty
     exports.last = last
     exports.map = map
+    exports.random = random
     exports.remove = remove
     exports.removeAt = removeAt
     exports.rotate = rotate

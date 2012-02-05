@@ -1,2 +1,9 @@
 @import 'compass/css3';
 @import "compass/utilities";
+
+@mixin unselectable {
+  @include experimental("user-select", none,
+    -moz, -webkit, not -o, not -ms, not -khtml, official);
+  @include experimental("user-drag", none,
+    -moz, -webkit, not -o, not -ms, not -khtml, official);
+}
