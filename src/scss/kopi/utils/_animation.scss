@@ -1,4 +1,5 @@
-@import 'kopi/base';
+@import 'compass/css3';
+@import "compass/utilities";
 
 @mixin animation-duration($value) {
   @include experimental("animation-duration", $value,

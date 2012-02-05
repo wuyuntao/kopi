@@ -15,7 +15,7 @@
     .kopi-notifier-indicator (1300)
  */
 
-@mixin kopi-viewport {
+body.kopi-viewport {
   margin: 0;
   padding:0;
   position: fixed;

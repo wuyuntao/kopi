@@ -101,7 +101,7 @@ kopi.module("kopi.ui.widgets")
           this.prefix or= text.underscore(this.name, '-')
           value = this.prefix
           value = prefix + "-" + value if prefix
-          value = settings.kopi.ui.prefix + "-" + value if settings.kopi.ui.prefix
+          value = (this._options.prefix or settings.kopi.ui.prefix) + "-" + value
           value = value + "-" + action if action
           this._cssClasses[key] = value
         value

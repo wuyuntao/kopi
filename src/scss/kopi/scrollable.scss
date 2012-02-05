@@ -1,0 +1,30 @@
+@import "compass/utilities";
+
+.kopi-scrollable {
+  position: relative;
+  overflow: hidden;
+}
+
+.kopi-scrollable-container {
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  // TODO Is it possible use experimental to generate vendor specific attributes
+  -webkit-transition-property: -webkit-transform,top,left;
+  -moz-transition-property: -moz-transform,top,left;
+  transition-property: transform,top,left;
+
+  @include experimental("transition-duration", 0ms,
+    -moz, -webkit, not not -o, not -ms, not -khtml, official);
+  @include experimental("transition-timing-function", cubic-bezier(0.33,0.66,0.66,1),
+    -moz, -webkit, not -o, not -ms, not -khtml, official);
+  @include experimental("transform-origin", 0 0,
+    -moz, -webkit, not not -o, not -ms, not -khtml, official);
+  @include experimental("transform", translate(0, 0),
+    -moz, -webkit, not not -o, not -ms, not -khtml, official);
+  @include experimental("transform", translate3d(0, 0, 0),
+    -moz, -webkit, not not -o, not -ms, not -khtml, official);
+}

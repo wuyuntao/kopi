@@ -19,8 +19,6 @@ kopi.module("kopi.ui.scrollable")
     TRANSFORM_ORIGIN = css.experimental("transform-origin")
     TRANSFORM = css.experimental("transform")
 
-    RE_MATRIX = /[^0-9-.,]/g
-
     ###
     TODO Support legacy animation
 
