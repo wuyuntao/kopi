@@ -26,6 +26,7 @@ kopi.module("kopi.utils.structs.weakmap")
         i = this.keys.length if i < 0
         this.keys[i] = key
         this.values[i] = value
+        this
 
       ###
       Returns a boolean asserting whether a value has been associated to the key object
@@ -42,6 +43,9 @@ kopi.module("kopi.utils.structs.weakmap")
         if i >= 0
           this.keys.splice(i, 1)
           this.values.splice(i, 1)
+          true
+        else
+          false
 
       ###
       Iterate over the map
@@ -51,5 +55,6 @@ kopi.module("kopi.utils.structs.weakmap")
           for key, i in this.keys
             value = this.values[i]
             iterator.call(this, key, value)
+        this
 
     exports.WeakMap = WeakMap

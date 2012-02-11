@@ -21,6 +21,7 @@ kopi.module("kopi.ui.scrollable")
 
     ###
     TODO Support legacy animation
+    TODO Do not calculate data on axis not scrollable
 
     ###
     class Scrollable extends touchable.Touchable
@@ -92,32 +93,12 @@ kopi.module("kopi.ui.scrollable")
         super
 
       onresize: ->
-        cls = this.constructor
-        self = this
-        self._elementWidth = self.element.innerWidth()
-        self._elementHeight = self.element.innerHeight()
-        elementOffset = self.element.offset()
-        self._elementOffsetLeft = -elementOffset.left
-        self._elementOffsetTop = -elementOffset.top
-
-        self._size()
-
-        self._containerWidth = math.max(self._container.outerWidth(), self._elementWidth)
-        self._containerHeight = math.max(self._container.outerHeight(), self._elementHeight)
-
-        self._minScrollX = 0
-        self._minScrollY = 0
-        self._maxScrollX = self._elementWidth - self._containerWidth
-        self._maxScrollY = self._elementHeight - self._containerHeight
-
-        self._scrollX = self._options.scrollX and self._maxScrollX < self._minScrollX
-        self._scrollY = self._options.scrollY and self._maxScrollY < self._minScrollY
-
-        self._directionX = 0
-        self._directionY = 0
-
-        self._duration(0)
-        self._callback(cls.RESIZE_EVENT, arguments)
+        this
+          ._elementSize()
+          ._containerSize()
+          ._scrollSize()
+          ._duration(0)
+        this._callback(this.constructor.RESIZE_EVENT, arguments)
 
       ontouchstart: (e, event) ->
         cls = this.constructor
@@ -165,7 +146,7 @@ kopi.module("kopi.ui.scrollable")
         if self._minScrollX? and self._maxScrollX? and (self._minScrollX < newX or newX < self._maxScrollX)
           newX = if options.bounce
               self._x + deltaX * options.damping
-            else if newX >= self._minScrollX and self._maxScrollX >= self._maxScrollX
+            else if newX >= self._minScrollX or self._maxScrollX >= self._minScrollX
               self._minScrollX
             else
               self._maxScrollX
@@ -173,7 +154,7 @@ kopi.module("kopi.ui.scrollable")
         if self._minScrollY? and self._maxScrollY? and (self._minScrollY < newY or newY < self._maxScrollY)
           newY = if options.bounce
               self._y + deltaY * options.damping
-            else if newY >= self._minScrollY and self._maxScrollY >= self._minScrollY
+            else if newY >= self._minScrollY or self._maxScrollY >= self._minScrollY
               self._minScrollY
             else
               self._maxScrollY
@@ -257,9 +238,21 @@ kopi.module("kopi.ui.scrollable")
         self._callback(cls.TRANSITION_END_EVENT, arguments)
 
       ###
-      Calculate width and height of container
+      Get size of element
       ###
-      _size: ->
+      _elementSize: ->
+        self = this
+        self._elementWidth = self.element.innerWidth()
+        self._elementHeight = self.element.innerHeight()
+        elementOffset = self.element.offset()
+        self._elementOffsetLeft = -elementOffset.left
+        self._elementOffsetTop = -elementOffset.top
+        self
+
+      ###
+      Calculate size of container
+      ###
+      _containerSize: ->
         self = this
         children = self._container.children()
         if children.length > 0
@@ -279,6 +272,27 @@ kopi.module("kopi.ui.scrollable")
               child = $(child)
               containerHeight += child.outerHeight()
             self._container.height(containerHeight)
+
+        self._containerWidth = math.max(self._container.outerWidth(), self._elementWidth)
+        self._containerHeight = math.max(self._container.outerHeight(), self._elementHeight)
+        self
+
+      ###
+      Calculate scroll size
+      ###
+      _scrollSize: ->
+        self = this
+        self._minScrollX = 0
+        self._minScrollY = 0
+        self._maxScrollX = self._elementWidth - self._containerWidth
+        self._maxScrollY = self._elementHeight - self._containerHeight
+
+        self._scrollX = self._options.scrollX and self._maxScrollX < self._minScrollX
+        self._scrollY = self._options.scrollY and self._maxScrollY < self._minScrollY
+
+        self._directionX = 0
+        self._directionY = 0
+        self
 
       _position: (x, y) ->
         cls = this.constructor
