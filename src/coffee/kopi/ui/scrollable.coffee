@@ -27,6 +27,7 @@ kopi.module("kopi.ui.scrollable")
     class Scrollable extends touchable.Touchable
 
       kls = this
+
       kls.RESIZE_EVENT = "resize"
       kls.TRANSITION_END_EVENT = "transitionend"
 
@@ -59,7 +60,12 @@ kopi.module("kopi.ui.scrollable")
         snapThreshold: 1
         throttle: 250
 
-      klass.accessor kls.prototype, "scroller"
+      proto = kls.prototype
+      klass.reader proto, "container"
+      klass.reader proto, "containerWidth"
+      klass.reader proto, "containerHeight"
+      klass.reader proto, "elementWidth"
+      klass.reader proto, "elementHeight"
 
       constructor: ->
         super
@@ -322,13 +328,6 @@ kopi.module("kopi.ui.scrollable")
 
         self.scrollTo(resetX, resetY, duration)
 
-      _ensureScroller: ->
-        children = this.element.children()
-        scroller = this._ensureWrapper("scroller")
-        if children.length > 0
-          children.appendTo(scroller)
-        scroller
-
       _animate: ->
         cls = this.constructor
         self = this
@@ -363,7 +362,7 @@ kopi.module("kopi.ui.scrollable")
         this
 
       ###
-      Get position where scroller should snap to
+      Get position where container should snap to
 
       ###
       _snapPosition: (x, y, duration, reset=false) ->
@@ -425,7 +424,7 @@ kopi.module("kopi.ui.scrollable")
         distance = maxDistance
         [speed, distance]
 
-      # Set transition duration for scroller
+      # Set transition duration for container
       _duration: (duration) ->
         this._container.duration(duration)
         this

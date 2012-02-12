@@ -120,22 +120,30 @@ kopi.module("kopi.ui.groups")
       TODO Insert child according to its index
       ###
       _appendChild: (child) ->
-        if this.initialized
-          child.skeleton().element.appendTo(this._wrapper())
+        self = this
+        if self.initialized
+          child.skeleton().element.appendTo(self._wrapper())
         if self.rendered
           child.render()
 
       _key: (child) -> child.guid
 
       onskeleton: ->
+        this._skeletonChildren()
         super
-        for child in this._children
-          child.skeleton().element.appendTo(this._wrapper())
 
       onrender: ->
+        this._renderChildren()
         super
+
+      _skeletonChildren: ->
+        wrapper = this._wrapper()
         for child in this._children
-          child.render
+          child.skeleton().element.appendTo(wrapper)
+
+      _renderChildren: ->
+        for child in this._children
+          child.render()
 
       ###
       Return the element which child elements should be appended to

@@ -54,7 +54,28 @@ kopi.module("kopi.utils.klass")
           property.set.apply(this, arguments)
       return
 
+    ###
+    Define jQuery-esque property read-only accessor
+
+    @param  {Object}  klass     class owns the accessor
+    @param  {String}  method    name of accessor
+    @param  {Object}  property  defines default Value, property name, getter and setter.
+    ###
+    reader = (klass, method, property={}) ->
+      return if method of klass
+      name = property.name or "_#{method}"
+      # Set default getter and setter for property
+      property.get or= ->
+        this[name] or= property.value
+      klass.reader or= (method, property) ->
+        reader this, method, property
+        this
+      klass[method] or= ->
+        property.get.apply(this, arguments)
+      return
+
     exports.extend = extend
     exports.include = include
     exports.configure = configure
     exports.accessor = accessor
+    exports.reader = reader

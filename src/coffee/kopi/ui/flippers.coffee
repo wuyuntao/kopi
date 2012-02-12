@@ -38,7 +38,7 @@ kopi.module("kopi.ui.flippers")
         self = this
         self._pagesX = []
         self._pagesY = []
-        wrapperOffset = self._scroller.position()
+        wrapperOffset = self._container.position()
         for page, i in self._flipper.children()
           pageOffset = page.element.position()
           left = - pageOffset.left + wrapperOffset.left
@@ -47,7 +47,7 @@ kopi.module("kopi.ui.flippers")
           self._pagesY[i] = if top < self._maxScrollY then self._maxScrollY else top
 
       ###
-      Get position where scroller should snap to
+      Get position where container should snap to
 
       ###
       _snapPosition: (x, y, duration, reset=false) ->
@@ -131,7 +131,7 @@ kopi.module("kopi.ui.flippers")
         this._flippable.destroy()
         super
 
-      _wrapper: -> this._flippable.scroller()
+      _wrapper: -> this._flippable.container()
 
     exports.Page = Page
     exports.Flipper = Flipper
