@@ -57,6 +57,11 @@ kopi.module("kopi.utils.support")
       # 是否支持 HTML5 WebSQL 数据库
       websql: "openDatabase" of win
 
+      # Vendors had inconsistent prefixing with the experimental Indexed DB:
+      # - Webkit's implementation is accessible through webkitIndexedDB
+      # - Firefox shipped moz_indexedDB before FF4b9, but since then has been mozIndexedDB
+      indexedDB: testPropsAll("indexedDB")
+
       # 在某些设备（如 HTC Desire）上，orientationchange 事件工作不正常，
       # 事件被触发时，window 的大小还没有改变
       # 参考
