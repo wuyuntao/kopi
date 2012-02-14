@@ -73,11 +73,10 @@ kopi.module("kopi.db.adapters.restful")
       ###
       Build URL from given query object
       ###
-      _url: (query) ->
+      _url: (query, url) ->
         pk = query.pk()
-        if pk
-          this._options.memberURL.replace ":pk", pk
-        else
-          this._options.collectionURL
+        options = this._options
+        url or= if pk then options.memberURL.replace(":pk", pk) else options.collectionURL
+        super(query, url)
 
     exports.RESTfulAdapter = RESTfulAdapter

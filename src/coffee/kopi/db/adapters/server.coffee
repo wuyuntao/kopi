@@ -34,9 +34,10 @@ kopi.module("kopi.db.adapters.server")
       proto[action] = requestFn for action in kls.ACTIONS
 
       # Build URL for query
-      _url: (query) ->
-        url = this._options["#{query.action()}URL"]
-        throw new exceptions.ValueError("#{query.action()} URL is not defined.") if not url
+      _url: (query, url) ->
+        url or= this._options["#{query.action()}URL"]
+        for name, value of query.criteria().where
+          url = url.replace(":#{name}", value.eq) if value.eq
         url
 
       _method: (query) ->
@@ -63,7 +64,7 @@ kopi.module("kopi.db.adapters.server")
           fn(null, message)
         failFn = (xhr, text, error) ->
           error = self._parseError(xhr, text, error)
-          fn(true, error)
+          fn(error)
         # TODO Use some wrapper of $.ajax to queue delayed requests or retry failed requests
         $.ajax
           url: url
