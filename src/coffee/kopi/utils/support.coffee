@@ -60,7 +60,12 @@ kopi.module("kopi.utils.support")
       # Vendors had inconsistent prefixing with the experimental Indexed DB:
       # - Webkit's implementation is accessible through webkitIndexedDB
       # - Firefox shipped moz_indexedDB before FF4b9, but since then has been mozIndexedDB
-      indexedDB: testPropsAll("indexedDB")
+      indexedDB: (->
+        for prefix in domPrefixes
+          if win[prefix.toLowerCase() + "IndexedDB"]
+            return true
+        false
+      )()
 
       # 在某些设备（如 HTC Desire）上，orientationchange 事件工作不正常，
       # 事件被触发时，window 的大小还没有改变

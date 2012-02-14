@@ -52,10 +52,7 @@ kopi.module("kopi.db.adapters.kv")
         if isKeyExists
           fn(true, "Primary key already exists.") if fn
           return self
-        self._set(key, self._stringify(attrs, model.meta().names))
-        message =
-          ok: true
-          pk: pk
+        self._set(key, self._serialize(attrs, model.meta().names))
         fn(null) if fn
         self
 
@@ -70,7 +67,7 @@ kopi.module("kopi.db.adapters.kv")
         value = self._get(key)
         if value
           try
-            value = self._parse(value, model.meta().names)
+            value = self._deserialize(value, model.meta().names)
             message =
               ok: true
               entries: [value]
@@ -96,7 +93,7 @@ kopi.module("kopi.db.adapters.kv")
           value = message.entries[0]
           if value
             object.extend value, query.attrs()
-            self._set(key, self._stringify(value, model.meta().names))
+            self._set(key, self._serialize(value, model.meta().names))
             fn(null) if fn
           else
             fn(true, "Entry not found") if fn
@@ -141,34 +138,37 @@ kopi.module("kopi.db.adapters.kv")
       ###
       Get value from db. Implement in subclasses
       ###
-      _get: (key, value) ->
+      _get: (store, key, value, fn) ->
         throw new exceptions.NotImplementedError()
 
       ###
       Set value to db. Implement in subclasses
       ###
-      _set: (key, value) ->
+      _set: (store, key, value, fn) ->
         throw new exceptions.NotImplementedError()
 
-      _remove: (key) ->
+      ###
+      Remove value from db. Implement in subclasses
+      ###
+      _remove: (store, key, fn) ->
         throw new exceptions.NotImplementedError()
 
       ###
       Convert json to string.
       ###
-      _stringify: (obj, fields) ->
+      _serialize: (obj, fields, stringify=false) ->
         self = this
         if fields
           for own key, value of obj
             obj[key] = self._adapterValue(value, fields[key])
-        JSON.stringify(obj)
+        if stringify then JSON.stringify(obj) else obj
 
       ###
       Convert string to json.
       ###
-      _parse: (string, fields) ->
+      _deserialize: (string, fields, parse=false) ->
         self = this
-        obj = JSON.parse(string)
+        obj = if parse then JSON.parse(string) else string
         if fields
           for own key, value of obj
             obj[key] = self._modelValue(value, fields[key])

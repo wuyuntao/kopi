@@ -30,6 +30,8 @@ kopi.module("kopi.db.adapters.base")
       constructor: (options={}) ->
         this.configure(options)
 
+      init: (model, fn) -> this
+
       ###
       Convert model value to adapter value.
       Could be overriden for specific adapter.

@@ -37,7 +37,7 @@ kopi.module("kopi.db.models")
       meta = {}
 
       this.get = (model) ->
-        name = model.name
+        name = model.modelName()
         m = meta[name]
         if m
           if m.model != model
@@ -139,7 +139,18 @@ kopi.module("kopi.db.models")
 
     ###
     class Model extends events.EventEmitter
+
       kls = this
+
+      klass.accessor kls, "modelName",
+        get: -> this._modelName or= this.name
+      klass.accessor kls, "dbName",
+        get: ->
+          meta = this.meta()
+          meta.dbName or= this.modelName() or this.name
+        set: (name) ->
+          meta = this.meta()
+          meta.dbName = name
 
       kls.adapter = (type=PRIMARY, adapter, options) ->
         cls = this
@@ -353,6 +364,18 @@ kopi.module("kopi.db.models")
         cls
 
       ###
+      Initialize database if neccessary
+      @param {Function} fn
+      @param {String}   type
+
+      @return {kopi.db.models.Model}
+      ###
+      kls.init = (fn, type) ->
+        cls = this
+        cls.prepare().adapter(type).init(cls, fn)
+        cls
+
+      ###
       Create model from attributes
 
       @param {Hash}     attrs
@@ -446,13 +469,13 @@ kopi.module("kopi.db.models")
       constructor: (attrs={}) ->
         self = this
         cls = this.constructor
-        cls.prefix or= text.underscore(cls.name)
+        cls.prefix or= text.underscore(cls.modelName())
         cls.prepare() if not cls._prepared
 
         self._meta = cls.meta()
         self.guid = utils.guid(cls.prefix)
         self._new = true
-        self._type = cls.name
+        self._type = cls.modelName()
         self._data = {}
         self._dirty = {}
         self._belongsTo = {}
@@ -532,7 +555,7 @@ kopi.module("kopi.db.models")
         self
 
       toString: ->
-        "[#{this.constructor.name} #{this.pk() or "null"}"
+        "[#{this.constructor.modelName()} #{this.pk() or "null"}"
 
       ###
       Return a copy of model's attributes

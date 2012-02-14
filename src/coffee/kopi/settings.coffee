@@ -75,6 +75,9 @@ kopi.module("kopi.settings")
         # @type {Boolean} Support iOS native interface
         ios: true
 
+      db:
+        indexedDB:
+          name: "kopi"
 
     # Read settings from localStorage
     load = ->
