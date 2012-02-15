@@ -27,16 +27,17 @@ kopi.module("kopi.db.adapters.indexeddb")
         if self._db
           fn(null, self._db) if fn
           return self
-        request = indexedDB.open(settings.kopi.db.indexedDB.name, self._options.version)
+        version = self._options.version
+        request = indexedDB.open(settings.kopi.db.indexedDB.name, version)
         request.onsuccess = (e) ->
-          self._db = request.result
-          self._db.onerror = (e) ->
+          db = self._db = request.result
+          db.onerror = (e) ->
           # For lagacy API with setVersion() available (on earlier version of Chrome)
-          if self._db.setVersion?
-            setVersionRequest = self._db.setVersion(self._options.version)
+          if db.setVersion? and db.version != version
+            setVersionRequest = db.setVersion(version)
             setVersionRequest.onsuccess = (e) ->
               self.migrate(model)
-              fn(null, self._db) if fn
+              fn(null, db) if fn
             setVersionRequest.onfailure = (e) ->
               fn(e.target.errorCode) if fn
           else
