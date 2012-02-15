@@ -32,6 +32,20 @@ kopi.module("kopi.db.adapters.base")
 
       init: (model, fn) -> this
 
+      _adapterObject: (obj, fields) ->
+        self = this
+        if fields
+          for own key, value of obj
+            obj[key] = self._adapterValue(value, fields[key])
+        obj
+
+      _modelObject: (obj, fields) ->
+        self = this
+        if fields
+          for own key, value of obj
+            obj[key] = self._modelValue(value, fields[key])
+        obj
+
       ###
       Convert model value to adapter value.
       Could be overriden for specific adapter.

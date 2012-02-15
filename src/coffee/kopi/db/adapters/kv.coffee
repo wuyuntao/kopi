@@ -52,7 +52,7 @@ kopi.module("kopi.db.adapters.kv")
         if isKeyExists
           fn(true, "Primary key already exists.") if fn
           return self
-        self._set(key, self._serialize(attrs, model.meta().names))
+        self._set(key, self._adapterObject(attrs, model.meta().names))
         fn(null) if fn
         self
 
@@ -67,7 +67,7 @@ kopi.module("kopi.db.adapters.kv")
         value = self._get(key)
         if value
           try
-            value = self._deserialize(value, model.meta().names)
+            value = self._modelObject(value, model.meta().names)
             message =
               ok: true
               entries: [value]
@@ -93,7 +93,7 @@ kopi.module("kopi.db.adapters.kv")
           value = message.entries[0]
           if value
             object.extend value, query.attrs()
-            self._set(key, self._serialize(value, model.meta().names))
+            self._set(key, self._adapterObject(value, model.meta().names))
             fn(null) if fn
           else
             fn(true, "Entry not found") if fn
@@ -152,26 +152,5 @@ kopi.module("kopi.db.adapters.kv")
       ###
       _remove: (store, key, fn) ->
         throw new exceptions.NotImplementedError()
-
-      ###
-      Convert json to string.
-      ###
-      _serialize: (obj, fields, stringify=false) ->
-        self = this
-        if fields
-          for own key, value of obj
-            obj[key] = self._adapterValue(value, fields[key])
-        if stringify then JSON.stringify(obj) else obj
-
-      ###
-      Convert string to json.
-      ###
-      _deserialize: (string, fields, parse=false) ->
-        self = this
-        obj = if parse then JSON.parse(string) else string
-        if fields
-          for own key, value of obj
-            obj[key] = self._modelValue(value, fields[key])
-        obj
 
     exports.KeyValueAdapter = KeyValueAdapter

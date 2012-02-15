@@ -40,7 +40,7 @@ kopi.module("kopi.db.adapters.webstorage")
           when models.DATETIME
             return value.getTime()
           when models.JSON
-            return self._serialize(value)
+            return self._adapterObject(value)
           else
             super
 
@@ -50,15 +50,16 @@ kopi.module("kopi.db.adapters.webstorage")
           when models.DATETIME
             new Date(value)
           when models.JSON
-            self._deserialize(value)
+            self._modelObject(value)
           else
             super
 
       ###
       Save as string in local storage
       ###
-      _serialize: (obj, fields) -> super(obj, fields, true)
+      _adapterObject: (obj, fields) ->
+        JSON.stringify(super(obj, fields))
 
-      _deserialize: (string, fields) -> super(string, fields, true)
+      _modelObject: (string, fields) -> super(JSON.parse(string), fields)
 
     exports.StorageAdapater = StorageAdapater
