@@ -84,4 +84,11 @@ kopi.module("kopi.utils.support")
 
       cssTransition: testPropsAll("transitionProperty")
 
+    ###
+    Expose verdor-specific IndexedDB objects
+    ###
+    win.indexedDB or= win.webkitIndexedDB or win.mozIndexedDB or win.msIndexedDB
+    win.IDBTransaction or= win.webkitIDBTransaction
+    win.IDBKeyRange or= win.webkitIDBKeyRange
+
     fakeBody.remove()

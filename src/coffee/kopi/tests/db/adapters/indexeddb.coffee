@@ -5,10 +5,6 @@ kopi.module("kopi.tests.db.adapters.indexeddb")
   .require("kopi.db.adapters.indexeddb")
   .define (exports, q, settings, fixtures, indexeddb) ->
 
-    # TODO Move to kopi.utils.browser or kopi.utils.support
-    win = window
-    indexedDB = indexeddb.indexedDB
-
     User = fixtures.User
 
     User.adapter "client", indexeddb.IndexedDBAdapter, primary: true

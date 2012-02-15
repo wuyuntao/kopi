@@ -60,6 +60,7 @@ kopi.module("kopi.db.adapters.webstorage")
       _adapterObject: (obj, fields) ->
         JSON.stringify(super(obj, fields))
 
-      _modelObject: (string, fields) -> super(JSON.parse(string), fields)
+      _modelObject: (string, fields) ->
+        super(JSON.parse(string), fields)
 
     exports.StorageAdapater = StorageAdapater

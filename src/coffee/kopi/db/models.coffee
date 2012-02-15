@@ -47,6 +47,7 @@ kopi.module("kopi.db.models")
 
       constructor: (model) ->
         this.model = model
+        this.dbName = null
         this.pk = null
         this.fields = []
         this.names = {}
@@ -59,6 +60,8 @@ kopi.module("kopi.db.models")
         this.defaultAdapterType = null
 
       prepare: ->
+        this.dbName or= this.model.dbName()
+
         for field in this.fields
           # Add field to name-field hash
           this.names[field.name] = field
