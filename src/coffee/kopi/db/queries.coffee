@@ -1,10 +1,11 @@
 kopi.module("kopi.db.queries")
   .require("kopi.exceptions")
   .require("kopi.utils")
+  .require("kopi.utils.klass")
   .require("kopi.utils.number")
   .require("kopi.utils.object")
   .require("kopi.db.collections")
-  .define (exports, exceptions, utils, number, object, collections) ->
+  .define (exports, exceptions, utils, klass, number, object, collections) ->
 
     CREATE = "create"
     RETRIEVE = "retrieve"
@@ -29,6 +30,7 @@ kopi.module("kopi.db.queries")
     EQ = "eq"
     NE = "ne"
     IN = "in"
+    NIN = "nin"
     IS = "IS"
     LIKE = "LIKE"
     ILIKE = "ILIKE"
@@ -48,6 +50,20 @@ kopi.module("kopi.db.queries")
         .skip(10)
         .limit(10)
 
+    Define a query with advanced condition filters
+
+      query = new RetrieveQuery(Book)
+        .where
+          userId:
+            in: [1, 3, 5]
+          registerAt:
+            lte: new Date(2011, 12, 1)
+            gt: new Date(2011, 11, 1)
+          lastName:
+            like: /smith|johnson/
+          firstName:
+            ne: "josh"
+
     Define a query to create a comment of a book
       query = new CreateQuery(Comment)
         .attrs(bookId: book.sid, body: "Then again")
@@ -62,6 +78,9 @@ kopi.module("kopi.db.queries")
 
       this.METHODS = []
 
+      proto = this.prototype
+      klass.accessor proto "action"
+
       constructor: (model, criteria) ->
         cls = this.constructor
         self = this
@@ -74,8 +93,6 @@ kopi.module("kopi.db.queries")
         if criteria
           for method in cls.METHODS
             self[method](criteria[method]) if method of criteria
-
-      action: -> this._action
 
       clone: -> throw new exceptions.NotImplementedError()
 
@@ -90,7 +107,7 @@ kopi.module("kopi.db.queries")
         self = this
         criteria = {}
         for method in cls.METHODS
-          value = self["_#{method}"]
+          value = self[method]()
           criteria[method] = value if value
         criteria
 
@@ -102,17 +119,15 @@ kopi.module("kopi.db.queries")
 
     class CreateQuery extends BaseQuery
 
-      constructor: (model, attrs={}) ->
-        this._action = CREATE
-        this._attrs = attrs
-        super(model)
-
-      attrs: (attrs) ->
-        if attrs
+      proto = this.prototype
+      klass.accessor proto, "attrs",
+        value: {}
+        set: (attrs) ->
           object.extend this._attrs, attrs
-          this
-        else
-          this._attrs
+
+      constructor: (model, attrs={}) ->
+        this.action(CREATE).attrs(attrs)
+        super(model)
 
       params: -> {attrs: JSON.stringify(this._attrs)}
 
@@ -126,41 +141,43 @@ kopi.module("kopi.db.queries")
 
       kls = this
       kls.METHODS = [WHERE, SKIP, LIMIT]
-      kls.OPERATIONS = [LT, LTE, GT, GTE, EQ, NE, IN, IS, LIKE, ILIKE]
+      kls.OPERATIONS = [LT, LTE, GT, GTE, EQ, NE, IN, NIN, IS, LIKE, ILIKE]
 
-      constructor: (model, criteria) ->
-        self = this
-        self._where = {}
-        self._skip = null
-        self._limit = null
-        super(model, criteria)
-
-      where: (where) ->
-        if where
+      proto = this.prototype
+      klass.accessor proto, "where",
+        value: {}
+        set: (where) ->
           for field, operations of where
             this._where[field] or= {}
             unless this._isOpertions(operations)
               operations =
                 eq: operations
             object.extend this._where[field], operations
-        this
 
-      # TODO Need to optimize performance
+      klass.accessor proto, "skip"
+        set: (skip) ->
+          this._skip = skip if number.isNumber(skip)
+
+      klass.accessor proto, "limit"
+        set: (limit) ->
+          this._limit = limit if number.isNumber(limit)
+
+      constructor: (model, criteria) ->
+        self = this
+        super(model, criteria)
+
+      ###
+      If value is an hash and all keys are operation keywords,
+      value is considered as a operation hash
+
+      TODO Need to optimize performance?
+      ###
       _isOpertions: (obj) ->
         if object.isObject(obj)
-          for operation in this.constructor.OPERATIONS
-            return true if operation of obj
-        false
-
-      skip: (skip) ->
-        if number.isNumber(skip)
-          this._skip = skip
-        this
-
-      limit: (limit) ->
-        if number.isNumber(limit)
-          this._limit = limit
-        this
+          for key, value of obj
+            unless key in this.constructor.OPERATIONS
+              return false
+        true
 
       clone: ->
         cls = this.constructor
@@ -184,23 +201,21 @@ kopi.module("kopi.db.queries")
       this.METHODS = [ONLY, WHERE, SORT, SKIP, LIMIT]
       this.ALL = this.METHODS.concat [COUNT, ONE, ALL]
 
+      proto = this.prototype
+      klass.accessor proto, "only",
+        set: ->
+          this._only = arguments
+
+      klass.accessor proto, "sort",
+        value: {}
+        set: ->
+          object.extend this._sort, sort
+
       constructor: (model, criteria) ->
         self = this
-        self._action = RETRIEVE
-        self._only = null
-        self._sort = null
+        self.action(RETRIEVE)
         self._count = false
         super(model, criteria)
-
-      only: ->
-        if arguments.length
-          this._only = arguments
-        this
-
-      sort: (sort) ->
-        if sort
-          object.extend this._sort, sort
-        this
 
       count: (fn, type) ->
         self = this
@@ -247,17 +262,15 @@ kopi.module("kopi.db.queries")
 
     class UpdateQuery extends BaseRetriveQuery
 
-      constructor: (model, criteria, attrs={}) ->
-        this._action = UPDATE
-        this._attrs = attrs
-        super(model, criteria)
-
-      attrs: (attrs) ->
-        if attrs
+      proto = this.prototype
+      klass.accessor proto, "attrs",
+        value: {}
+        set: (attrs) ->
           object.extend this._attrs, attrs
-          this
-        else
-          this._attrs
+
+      constructor: (model, criteria, attrs={}) ->
+        this.action(UPDATE).attrs(attrs)
+        super(model, criteria)
 
       clone: ->
         cls = this.constructor
@@ -267,17 +280,19 @@ kopi.module("kopi.db.queries")
     class DestroyQuery extends BaseRetriveQuery
 
       constructor: (model, criteria) ->
-        this._action = DESTROY
+        this.action(DESTROY)
         super(model, criteria)
 
     class RawQuery extends BaseQuery
 
+      klass.accessor this.prototype, "args"
+
       constructor: (model, args...) ->
-        this._action = RAW
-        this._args = args
+        this.action(RAW)
+        this.args(args)
         super(model)
 
-      clone: -> new this.constructor(this.model, this._args...)
+      clone: -> new this.constructor(this.model, this.args()...)
 
     exports.CREATE = CREATE
     exports.RETRIEVE = RETRIEVE

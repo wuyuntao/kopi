@@ -35,15 +35,17 @@ kopi.module("kopi.db.adapters.base")
       _adapterObject: (obj, fields) ->
         self = this
         if fields
-          for own key, value of obj
-            obj[key] = self._adapterValue(value, fields[key])
+          for own key, field of fields
+            obj[key] = field.default if typeof obj[key] is 'undefined'
+          obj[key] = self._adapterValue(obj[key], field)
         obj
 
       _modelObject: (obj, fields) ->
         self = this
         if fields
-          for own key, value of obj
-            obj[key] = self._modelValue(value, fields[key])
+          for own key, field of fields
+            obj[key] = field.default if typeof obj[key] is 'undefined'
+          obj[key] = self._modelValue(obj[key], field)
         obj
 
       ###
