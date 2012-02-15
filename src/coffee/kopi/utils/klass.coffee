@@ -43,7 +43,6 @@ kopi.module("kopi.utils.klass")
         this[name] or= property.value
       property.set or= (value) ->
         this[name] = value
-        this
       klass.accessor or= (method, property) ->
         accessor this, method, property
         this
@@ -52,6 +51,7 @@ kopi.module("kopi.utils.klass")
           property.get.call(this)
         else
           property.set.apply(this, arguments)
+          this
       return
 
     ###

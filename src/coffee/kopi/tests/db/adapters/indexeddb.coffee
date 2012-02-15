@@ -46,14 +46,20 @@ kopi.module("kopi.tests.db.adapters.indexeddb")
       q.test "retrieve count of user", ->
 
       q.test "retrieve one user", ->
-        registerAt = new Date(2012, 2, 1, 20)
+        registerAt = new Date(2012, 2, 2, 20)
+        user = new fixtures.User
+          id: 3
+          name: "Delta"
+          email: "delta@gmail.com"
+          registerAt: registerAt
         q.stop()
-        User.where(id: 1).one (error, user) ->
-          q.equals user.id, 1
-          q.equals user.name, "Alpha"
-          q.equals user.email, "alpha@gmail.com"
-          q.equals user.registerAt.getTime(), registerAt.getTime()
-          q.start()
+        user.save (error, obj) ->
+          User.where(id: 3).one (error, user) ->
+            q.equals user.id, 3
+            q.equals user.name, "Delta"
+            q.equals user.email, "delta@gmail.com"
+            q.equals user.registerAt.getTime(), registerAt.getTime()
+            q.start()
 
       q.test "retrieve all users", ->
 

@@ -79,7 +79,7 @@ kopi.module("kopi.db.queries")
       this.METHODS = []
 
       proto = this.prototype
-      klass.accessor proto "action"
+      klass.accessor proto, "action"
 
       constructor: (model, criteria) ->
         cls = this.constructor
@@ -123,7 +123,7 @@ kopi.module("kopi.db.queries")
       klass.accessor proto, "attrs",
         value: {}
         set: (attrs) ->
-          object.extend this._attrs, attrs
+          if this._attrs then object.extend(this._attrs, attrs) else this._attrs = attrs
 
       constructor: (model, attrs={}) ->
         this.action(CREATE).attrs(attrs)
@@ -147,6 +147,7 @@ kopi.module("kopi.db.queries")
       klass.accessor proto, "where",
         value: {}
         set: (where) ->
+          this._where or= {}
           for field, operations of where
             this._where[field] or= {}
             unless this._isOpertions(operations)
@@ -154,11 +155,11 @@ kopi.module("kopi.db.queries")
                 eq: operations
             object.extend this._where[field], operations
 
-      klass.accessor proto, "skip"
+      klass.accessor proto, "skip",
         set: (skip) ->
           this._skip = skip if number.isNumber(skip)
 
-      klass.accessor proto, "limit"
+      klass.accessor proto, "limit",
         set: (limit) ->
           this._limit = limit if number.isNumber(limit)
 
@@ -177,7 +178,8 @@ kopi.module("kopi.db.queries")
           for key, value of obj
             unless key in this.constructor.OPERATIONS
               return false
-        true
+          return true
+        false
 
       clone: ->
         cls = this.constructor
@@ -266,7 +268,7 @@ kopi.module("kopi.db.queries")
       klass.accessor proto, "attrs",
         value: {}
         set: (attrs) ->
-          object.extend this._attrs, attrs
+          if this._attrs then object.extend(this._attrs, attrs) else this._attrs = attrs
 
       constructor: (model, criteria, attrs={}) ->
         this.action(UPDATE).attrs(attrs)

@@ -80,7 +80,7 @@ kopi.module("kopi.db.adapters.indexeddb")
         request.onsuccess = (e) ->
           message =
             ok: true
-            entries: [self._modelObject(request.result, meta.names)]
+            entries: if request.result then [self._modelObject(request.result, meta.names)] else []
           fn(null, message) if fn
         request.onerror = (e) ->
           fn(request.errorCode) if fn
