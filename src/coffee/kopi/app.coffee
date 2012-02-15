@@ -94,7 +94,7 @@ kopi.module("kopi.app")
         self.emit(cls.START_EVENT)
         self._listenToURLChange()
         # Load current URL
-        self.load(self._options.startURL or uri.current())
+        self.load(self._options.startURL or self.getCurrentURL())
         self.started = true
         fn() if fn
         self
@@ -107,11 +107,17 @@ kopi.module("kopi.app")
         fn() if fn
         self
 
+      getCurrentURL: ->
+        url = uri.parse(location.href)
+        uri.absolute((if url.fragment then url.fragment.substr(1) else ""), url.urlNoQuery)
+
       ###
       load URL
 
+      @param {String} url   URL must be an absolute path without query string and fragment
       ###
       load: (url) ->
+        logger.info "Load URL: #{url}"
         cls = this.constructor
         self = this
         url = uri.parse uri.absolute(url)

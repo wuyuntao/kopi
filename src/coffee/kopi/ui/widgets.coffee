@@ -248,6 +248,12 @@ kopi.module("kopi.ui.widgets")
       # }}}
 
       # {{{ Helper methods
+      defineMethod = (proto, method) ->
+        proto[method] = ->
+          this.element[method](arguments...)
+          this
+      for method in ["appendTo", "prependTo"]
+        defineMethod(proto, method)
       ###
       Check if widgets are same
       ###

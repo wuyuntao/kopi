@@ -1,8 +1,9 @@
 kopi.module("kopi.utils.uri")
   .require("kopi.exceptions")
   .require("kopi.utils.array")
+  .require("kopi.utils.object")
   .require("kopi.utils.text")
-  .define (exports, exceptions, array, text) ->
+  .define (exports, exceptions, array, object, text) ->
 
     doc = document
     loc = location
@@ -61,7 +62,7 @@ kopi.module("kopi.utils.uri")
       path = path.concat [cur, options.format] if options.format?
 
       if options.params?
-        if $.type(options.params) is 'object'
+        if object.isObject(options.params)
           options.params = "?#{$.param(options.params)}"
         path.push(options.params)
 
@@ -169,8 +170,8 @@ kopi.module("kopi.utils.uri")
           break
 
       relative = array.fill(par, basePath.length - count).concat(path[count...path.length])
-      relative.push(filename) if filename
-      return cur if not relative.length
+      # Restore last slash if filename is empty
+      relative.push(filename)
 
       url.scheme = ""
       url.authority = ""
