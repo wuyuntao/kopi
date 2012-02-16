@@ -58,6 +58,7 @@ kopi.module("kopi.db.models")
         this.hasAndBelongsToMany = []
         this.adapters = {}
         this.defaultAdapterType = null
+        this.indexes = []
 
       prepare: ->
         this.dbName or= this.model.dbName()
@@ -240,8 +241,8 @@ kopi.module("kopi.db.models")
       ###
       kls.index = (field) ->
         meta = this.meta()
-        meta.indices or= []
-        meta.indices.push(field)
+        meta.indexes or= []
+        meta.indexes.push(field)
         this._prepared = false
         this
 

@@ -14,6 +14,7 @@ kopi.module("kopi.utils.support")
     fbCSS = fakeBody[0].style
     cssPrefixes = ["-webkit-", "-moz-", "-o-", "-ms-", "-khtml-"]
     domPrefixes = ["Webkit", "Moz", "O", "ms", "Khtml"]
+    lowerDomPrefixes = ["webkit", "moz", "o", "ms", "khtml"]
 
     ###
     testProps is a generic CSS / DOM property test; if a browser supports
@@ -36,6 +37,21 @@ kopi.module("kopi.utils.support")
       ucProp = prop.charAt(0).toUpperCase() + prop.substr(1)
       props = (prop + " " + domPrefixes.join(ucProp + " ") + ucProp).split(" ")
       testProps(props)
+
+    getProp = (prop, target=win) ->
+      ucProp = prop.charAt(0).toUpperCase() + prop.substr(1)
+      props = (prop + " " + lowerDomPrefixes.join(ucProp + " ") + ucProp).split(" ")
+      for prop in props
+        if target[prop] isnt undefined
+          return target[prop]
+
+    ###
+    Expose verdor-specific IndexedDB objects
+    ###
+    win.indexedDB or= getProp("indexedDB")
+    win.IDBTransaction or= getProp("IDBTransaction")
+    win.IDBKeyRange or= getProp("IDBKeyRange")
+    win.IDBCursor or= getProp("IDBCursor")
 
     object.extend exports, $.support,
       # Does the browser support window.onhashchange? Note that IE8 running in
@@ -60,12 +76,7 @@ kopi.module("kopi.utils.support")
       # Vendors had inconsistent prefixing with the experimental Indexed DB:
       # - Webkit's implementation is accessible through webkitIndexedDB
       # - Firefox shipped moz_indexedDB before FF4b9, but since then has been mozIndexedDB
-      indexedDB: (->
-        for prefix in domPrefixes
-          if win[prefix.toLowerCase() + "IndexedDB"]
-            return true
-        false
-      )()
+      indexedDB: !!win.indexedDB
 
       # 在某些设备（如 HTC Desire）上，orientationchange 事件工作不正常，
       # 事件被触发时，window 的大小还没有改变
@@ -84,11 +95,6 @@ kopi.module("kopi.utils.support")
 
       cssTransition: testPropsAll("transitionProperty")
 
-    ###
-    Expose verdor-specific IndexedDB objects
-    ###
-    win.indexedDB or= win.webkitIndexedDB or win.mozIndexedDB or win.msIndexedDB
-    win.IDBTransaction or= win.webkitIDBTransaction
-    win.IDBKeyRange or= win.webkitIDBKeyRange
+    exports.prop = getProp
 
     fakeBody.remove()

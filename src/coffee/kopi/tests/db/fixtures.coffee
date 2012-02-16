@@ -14,6 +14,10 @@ kopi.module("kopi.tests.db.fixtures")
       this.hasMany "kopi.tests.db.fixtures.Blog"
       this.hasMany "kopi.tests.db.fixtures.Article"
 
+      this.index "name"
+      this.index "email"
+      this.index "registerAt"
+
     class Tag extends models.Model
 
       this.field "id",
@@ -22,6 +26,8 @@ kopi.module("kopi.tests.db.fixtures")
       this.field "name"
 
       this.hasMany "kopi.tests.db.fixtures.Article"
+
+      this.index "name"
 
     class Article extends models.Model
 
@@ -40,6 +46,8 @@ kopi.module("kopi.tests.db.fixtures")
       this.belongsTo User, name: "author"
       this.hasMany Tag, name: "categories"
 
+      this.index "title"
+
     class Blog extends models.Model
 
       this.field "id",
@@ -50,6 +58,8 @@ kopi.module("kopi.tests.db.fixtures")
 
       this.belongsTo User, name: "owner"
       this.hasMany Article
+
+      this.index "title"
 
     exports.User = User
     exports.Tag = Tag

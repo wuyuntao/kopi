@@ -7,6 +7,11 @@ kopi.module("kopi.db.queries")
   .require("kopi.db.collections")
   .define (exports, exceptions, utils, klass, number, object, collections) ->
 
+    ###
+    Some query related exception
+    ###
+    class QueryError extends exceptions.Exception
+
     CREATE = "create"
     RETRIEVE = "retrieve"
     UPDATE = "update"
@@ -200,8 +205,8 @@ kopi.module("kopi.db.queries")
 
     class RetrieveQuery extends BaseRetriveQuery
 
-      this.METHODS = [ONLY, WHERE, SORT, SKIP, LIMIT]
-      this.ALL = this.METHODS.concat [COUNT, ONE, ALL]
+      this.METHODS = [ONLY, WHERE, SORT, SKIP, LIMIT, COUNT]
+      this.ALL = this.METHODS.concat [ONE, ALL]
 
       proto = this.prototype
       klass.accessor proto, "only",
@@ -210,7 +215,8 @@ kopi.module("kopi.db.queries")
 
       klass.accessor proto, "sort",
         value: {}
-        set: ->
+        set: (sort) ->
+          this._sort or= {}
           object.extend this._sort, sort
 
       constructor: (model, criteria) ->
@@ -221,23 +227,21 @@ kopi.module("kopi.db.queries")
 
       count: (fn, type) ->
         self = this
-        retrieveFn = (error, message) ->
-          if not error
-            message = message.count
-          fn(error, message) if fn
-        self.execute(retrieveFn, type)
+        return self._count if not arguments.length
+        self._count = true
+        self.execute(fn, type)
 
       one: (fn, type) ->
         self = this
         # Force limit to 1
         self._limit = 1
-        retrieveFn = (error, message) ->
+        retrieveFn = (error, result) ->
           if error
-            fn(error, message) if fn
+            fn(error, result) if fn
             return
           # Build model
-          if message.entries.length > 0
-            model = new self.model(message.entries[0])
+          if result.length > 0
+            model = new self.model(result[0])
             model.isNew = false
           else
             model = null
@@ -246,16 +250,14 @@ kopi.module("kopi.db.queries")
 
       all: (fn, type) ->
         self = this
-        # Force limit to 1
-        self._limit = 1
-        retrieveFn = (error, message) ->
+        retrieveFn = (error, result) ->
           if error
-            fn(error, message) if fn
+            fn(error, result) if fn
             return
           # Build collection
-          collection = new Collection(self.model)
-          if message.entries.length > 0
-            for entry, i in message.entries
+          collection = []
+          if result.length > 0
+            for entry, i in result
               model = new self.model(entry)
               model.isNew = false
               collection.push(model)
@@ -302,6 +304,18 @@ kopi.module("kopi.db.queries")
     exports.DESTROY = DESTROY
     exports.RAW = RAW
     exports.ACTIONS = ACTIONS
+
+    exports.LT = LT
+    exports.LTE = LTE
+    exports.GT = GT
+    exports.GTE = GTE
+    exports.EQ = EQ
+    exports.NE = IN
+    exports.IN = IN
+    exports.NIN = NIN
+    exports.IS = IS
+    exports.LIKE = LIKE
+    exports.ILIKE = ILIKE
 
     exports.CreateQuery = CreateQuery
     exports.RetrieveQuery = RetrieveQuery

@@ -77,7 +77,7 @@ kopi.module("kopi.settings")
 
       db:
         indexedDB:
-          name: "kopi"
+          name: "kopi_db"
 
     # Read settings from localStorage
     load = ->
