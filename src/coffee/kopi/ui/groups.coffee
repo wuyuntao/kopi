@@ -17,10 +17,14 @@ kopi.module("kopi.ui.groups")
         this._keys = []
         # @type {Array} list of child views
         this._children = []
-        # @type {kopi.ui.widgets.Widget} active child
-        this._currentChild = null
 
       children: -> this._children
+
+      ###
+      Return child which is at index
+      ###
+      getAt: (index) ->
+        this._children[index]
 
       ###
       If a child widget is in the group
@@ -58,15 +62,13 @@ kopi.module("kopi.ui.groups")
       Removes the child at the specified position in the group.
       ###
       removeAt: (index) ->
-        if index < 0 or index >= this._keys.length
+        unless 0 <= index < this._keys.length
           # TODO Add custom exception
           throw new exceptions.ValueError("Child view does not exist")
-        child = this._children[index]
-        if this._key(child) == this._key(this._currentChild)
-          throw new exceptions.ValueError("Can not remove current view.")
         child.destroy()
         array.removeAt(this._keys, index)
         array.removeAt(this._children, index)
+        this
 
       ###
       Remove all child widgets
@@ -77,42 +79,6 @@ kopi.module("kopi.ui.groups")
           child.destroy()
         array.empty(this._keys)
         array.empty(this._children)
-
-      ###
-      Return currently displayed child.
-      ###
-      current: ->
-        this._currentChild
-
-      ###
-      Manually shows the next child.
-      ###
-      next: ->
-        if this._currentChild
-          index = array.indexOf(this._keys, this._key(this._currentChild))
-          if index + 1 < this._keys.length
-            return this._children[index + 1]
-
-      ###
-      Manually shows the previous child.
-      ###
-      previous: ->
-        if this._currentChild
-          index = array.indexOf(this._keys, this._key(this._currentChild))
-          if index - 1 >= 0
-            return this._children[index - 1]
-
-      ###
-      Manually shows the child.
-      ###
-      show: (child) ->
-        throw new exceptions.NotImplementedError()
-
-      ###
-      Manually shows the child at the specified position in the group.
-      ###
-      showAt: (index) ->
-        throw new exceptions.NotImplementedError()
 
       ###
       Append child to wrapper element

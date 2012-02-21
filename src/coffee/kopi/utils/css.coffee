@@ -55,7 +55,8 @@ kopi.module("kopi.utils.css")
     $.fn.parseMatrix = ->
       # TODO What if browser does not support transform matrix?
       matrix = this.css(transform).replace(reMatrix, "").split(",")
-      x: parseInt(matrix[4])
-      y: parseInt(matrix[5])
+      if matrix.length >= 6
+        x: parseInt(matrix[4])
+        y: parseInt(matrix[5])
 
     exports.experimental = experimental

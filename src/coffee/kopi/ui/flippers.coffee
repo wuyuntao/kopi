@@ -20,21 +20,23 @@ kopi.module("kopi.ui.flippers")
 
       constructor: (flipper, options) ->
         super(options)
-        this._flipper = flipper
-        this._currentPageX = 0
-        this._currentPageY = 0
+        self = this
+        self._flipper = flipper
+        self._currentPageX = 0
+        self._currentPageY = 0
         # Make sure snap is set to `true`
-        if not this._options.snap
+        if not self._options.snap
           logger.warn("Make sure option 'snap' is set to true")
-          this._options.snap = true
+          self._options.snap = true
+
+      onresize: ->
+        super
+        this.pages()
 
       ###
       Get snapping pages
       ###
-      _size: ->
-        # TODO Rewrite super._size() method
-        super
-
+      pages: ->
         self = this
         self._pagesX = []
         self._pagesY = []
@@ -132,6 +134,22 @@ kopi.module("kopi.ui.flippers")
         super
 
       _wrapper: -> this._flippable.container()
+
+      # Recalculate pages when adding or removing child pages
+      addAt: ->
+        child = super
+        this._flippable.pages() if this._flippable.rendered
+        child
+
+      removeAt: ->
+        super
+        this._flippable.pages() if this._flippable.rendered
+        this
+
+      empty: ->
+        super
+        this._flippable.pages() if this._flippable.rendered
+        this
 
     exports.Page = Page
     exports.Flipper = Flipper

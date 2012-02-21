@@ -51,33 +51,34 @@
         display: none;
       }
     </style>
-    <script type="text/javascript" src="../lib/js/jquery.js"></script>
-    <script type="text/javascript" src="../build/js/kopi.js"></script>
-    <script type="text/javascript" src="../build/js/kopi/exceptions.js"></script>
-    <script type="text/javascript" src="../build/js/kopi/utils.js"></script>
-    <script type="text/javascript" src="../build/js/kopi/utils/array.js"></script>
-    <script type="text/javascript" src="../build/js/kopi/utils/html.js"></script>
-    <script type="text/javascript" src="../build/js/kopi/utils/jquery.js"></script>
-    <script type="text/javascript" src="../build/js/kopi/utils/text.js"></script>
-    <script type="text/javascript" src="../build/js/kopi/utils/func.js"></script>
-    <script type="text/javascript" src="../build/js/kopi/utils/number.js"></script>
-    <script type="text/javascript" src="../build/js/kopi/utils/object.js"></script>
-    <script type="text/javascript" src="../build/js/kopi/utils/klass.js"></script>
-    <script type="text/javascript" src="../build/js/kopi/events.js"></script>
-    <script type="text/javascript" src="../build/js/kopi/settings.js"></script>
-    <script type="text/javascript" src="../build/js/kopi/ui/widgets.js"></script>
-    <script type="text/javascript" src="../build/js/kopi/ui/groups.js"></script>
-    <script type="text/javascript" src="../build/js/kopi/utils/browser.js"></script>
-    <script type="text/javascript" src="../build/js/kopi/utils/support.js"></script>
-    <script type="text/javascript" src="../build/js/kopi/utils/events.js"></script>
-    <script type="text/javascript" src="../build/js/kopi/utils/css.js"></script>
-    <script type="text/javascript" src="../build/js/kopi/ui/touchable.js"></script>
-    <script type="text/javascript" src="../build/js/kopi/logging.js"></script>
-    <script type="text/javascript" src="../build/js/kopi/ui/scrollable.js"></script>
-    <script type="text/javascript" src="../build/js/kopi/ui/flippers.js"></script>
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    <script type="text/javascript" src="/js/kopi.js"></script>
+    <script type="text/javascript" src="/js/kopi/exceptions.js"></script>
+    <script type="text/javascript" src="/js/kopi/utils.js"></script>
+    <script type="text/javascript" src="/js/kopi/utils/array.js"></script>
+    <script type="text/javascript" src="/js/kopi/utils/html.js"></script>
+    <script type="text/javascript" src="/js/kopi/utils/jquery.js"></script>
+    <script type="text/javascript" src="/js/kopi/utils/text.js"></script>
+    <script type="text/javascript" src="/js/kopi/utils/func.js"></script>
+    <script type="text/javascript" src="/js/kopi/utils/number.js"></script>
+    <script type="text/javascript" src="/js/kopi/utils/object.js"></script>
+    <script type="text/javascript" src="/js/kopi/utils/klass.js"></script>
+    <script type="text/javascript" src="/js/kopi/events.js"></script>
+    <script type="text/javascript" src="/js/kopi/settings.js"></script>
+    <script type="text/javascript" src="/js/kopi/ui/widgets.js"></script>
+    <script type="text/javascript" src="/js/kopi/ui/groups.js"></script>
+    <script type="text/javascript" src="/js/kopi/utils/browser.js"></script>
+    <script type="text/javascript" src="/js/kopi/utils/support.js"></script>
+    <script type="text/javascript" src="/js/kopi/utils/events.js"></script>
+    <script type="text/javascript" src="/js/kopi/utils/css.js"></script>
+    <script type="text/javascript" src="/js/kopi/ui/touchable.js"></script>
+    <script type="text/javascript" src="/js/kopi/logging.js"></script>
+    <script type="text/javascript" src="/js/kopi/ui/scrollable.js"></script>
+    <script type="text/javascript" src="/js/kopi/ui/flippers.js"></script>
     <script type="text/javascript">
       $(function() {
         var flipper = new kopi.ui.flippers.Flipper({
+          flippableOptions: {scrollY: false},
         });
         var page1 = new kopi.ui.flippers.Page();
         page1.skeleton(".page-1")
@@ -96,12 +97,12 @@
           .add(page4).end()
           .add(page5).end()
           .skeleton(".flipper")
-          .render()
+          .render();
       });
     </script>
   </head>
   <body>
-    <div id="#flipper" class="flipper"> </div>
+    <div id="flipper" class="flipper"> </div>
     <div class="hidden">
       <div class="page-1"></div>
       <div class="page-2"></div>

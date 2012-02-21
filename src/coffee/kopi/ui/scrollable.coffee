@@ -125,7 +125,7 @@ kopi.module("kopi.ui.scrollable")
 
         if self._options.momentum
           matrix = self._container.parseMatrix()
-          if matrix.x != self._x or matrix.y != self._y
+          if matrix and (matrix.x != self._x or matrix.y != self._y)
             self._container.unbind(events.WEBKIT_TRANSITION_END_EVENT)
             self._steps = []
             self._position(matrix.x, matrix.y)
