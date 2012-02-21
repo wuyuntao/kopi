@@ -1,91 +1,91 @@
-kopi.module("kopi.utils.object")
-  .require("kopi.utils.func")
-  .require("kopi.utils.number")
-  .require("kopi.utils.text")
-  .define (exports, func, number, text) ->
+define (require, exports, module) ->
 
-    ObjectProto = Object.prototype
+  func = require "kopi/utils/func"
+  number = require "kopi/utils/number"
+  text = require "kopi/utils/text"
 
-    ###
-    Define jQuery-esque hash accessor
+  ObjectProto = Object.prototype
 
-    ###
-    accessor = (klass, method, property) ->
-      property or= "_#{method}"
-      klass[method] or= (name, value) ->
-        obj = this[property] or= {}
-        switch arguments.length
-          when 0 then return obj
-          when 1 then return obj[name]
-          else return obj[name] = value
-      return
+  ###
+  Define jQuery-esque hash accessor
 
-    clone = (obj) -> extend {}, obj
+  ###
+  accessor = (klass, method, property) ->
+    property or= "_#{method}"
+    klass[method] or= (name, value) ->
+      obj = this[property] or= {}
+      switch arguments.length
+        when 0 then return obj
+        when 1 then return obj[name]
+        else return obj[name] = value
+    return
 
-    # Define custom property. e.g.
-    # get: book.title
-    # set: book.title = 1
-    defineProperty = Object.defineProperty or= (obj, field, property={}) ->
-      if property.get
-        obj.__defineGetter__ field, -> property.get.call(this)
-      if property.set
-        obj.__defineSetter__ field, (value) ->
-          property.set.call(this, value)
-          value
-      obj
+  clone = (obj) -> extend {}, obj
 
-    ###
-    Define asynchronous property.
+  # Define custom property. e.g.
+  # get: book.title
+  # set: book.title = 1
+  defineProperty = Object.defineProperty or= (obj, field, property={}) ->
+    if property.get
+      obj.__defineGetter__ field, -> property.get.call(this)
+    if property.set
+      obj.__defineSetter__ field, (value) ->
+        property.set.call(this, value)
+        value
+    obj
 
-    Usage
+  ###
+  Define asynchronous property.
 
-      defineAsyncProperty book,
-        get: (fn) ->
-          asyncGetTitle (error, title) ->
-            fn(error, title) if fn
-        set: (title, fn) ->
-          asyncSetTitle title, (error, title) ->
-            fn(error, title) if fn
+  Usage
 
-    Get book title asynchronously
+    defineAsyncProperty book,
+      get: (fn) ->
+        asyncGetTitle (error, title) ->
+          fn(error, title) if fn
+      set: (title, fn) ->
+        asyncSetTitle title, (error, title) ->
+          fn(error, title) if fn
 
-      book.getTitle (error, title) -> console.log(error, title)
+  Get book title asynchronously
 
-    Set book title asynchronously
+    book.getTitle (error, title) -> console.log(error, title)
 
-      book.setTitle title, (error, title) -> console.log(error, title)
+  Set book title asynchronously
 
-    ###
-    defineAsyncProperty = (obj, field, property={}) ->
-      field = text.capitalize(field)
-      if property.get
-        obj["get" + field] = ->
-          property.get.apply(this, arguments)
-          obj
-      if property.set
-        obj["set" + field] = ->
-          property.set.apply(this, arguments)
-          obj
-      obj
+    book.setTitle title, (error, title) -> console.log(error, title)
 
-    # Extend a given object with all of the properties in a source object.
-    extend = (obj, mixins...) ->
-      for mixin in mixins when mixin
-        for name, method of mixin
-          obj[name] = method
-      obj
+  ###
+  defineAsyncProperty = (obj, field, property={}) ->
+    field = text.capitalize(field)
+    if property.get
+      obj["get" + field] = ->
+        property.get.apply(this, arguments)
+        obj
+    if property.set
+      obj["set" + field] = ->
+        property.set.apply(this, arguments)
+        obj
+    obj
 
-    isObject = (obj) ->
-      type = typeof obj
-      type == "object"
+  # Extend a given object with all of the properties in a source object.
+  extend = (obj, mixins...) ->
+    for mixin in mixins when mixin
+      for name, method of mixin
+        obj[name] = method
+    obj
 
-    keys = Object.keys or= (obj) ->
-      (key for own key, val of obj)
+  isObject = (obj) ->
+    type = typeof obj
+    type == "object"
 
-    exports.ObjectProto = ObjectProto
-    exports.accessor = accessor
-    exports.clone = clone
-    exports.defineProperty = defineProperty
-    exports.extend = extend
-    exports.isObject = isObject
-    exports.keys = keys
+  keys = Object.keys or= (obj) ->
+    (key for own key, val of obj)
+
+  ObjectProto: ObjectProto
+  accessor: accessor
+  clone: clone
+  defineProperty: defineProperty
+  extend: extend
+  isObject: isObject
+  keys: keys

@@ -5,19 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" />
     <title>kopi.utils.uri</title>
     <link href="css/qunit.css" media="screen" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/kopi.js"></script>
-    <script type="text/javascript" src="js/qunit.js"></script>
-    <script type="text/javascript" src="js/kopi/tests/base.js"></script>
-    <script type="text/javascript" src="js/kopi/exceptions.js"></script>
-    <script type="text/javascript" src="js/kopi/utils.js"></script>
-    <script type="text/javascript" src="js/kopi/utils/array.js"></script>
-    <script type="text/javascript" src="js/kopi/utils/text.js"></script>
-    <script type="text/javascript" src="js/kopi/utils/func.js"></script>
-    <script type="text/javascript" src="js/kopi/utils/number.js"></script>
-    <script type="text/javascript" src="js/kopi/utils/object.js"></script>
-    <script type="text/javascript" src="js/kopi/utils/uri.js"></script>
-    <script type="text/javascript" src="js/kopi/tests/utils/uri.js"></script>
+    <script type="text/javascript" src="js/sea.js"></script>
+    <script type="text/javascript">
+      seajs.config({base: "/js/"});
+      seajs.use(["kopi/tests/utils/uri"]);
+    </script>
   </head>
   <body>
     <h1 id="qunit-header">kopi.utils.uri</h1>

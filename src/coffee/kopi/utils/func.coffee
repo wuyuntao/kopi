@@ -1,14 +1,14 @@
-kopi.module("kopi.utils.func")
-  .require("kopi.utils.text")
-  .define (exports) ->
+define (require, exports, module) ->
 
-    # Is the given value a function?
-    isFunction = (fn) ->
-      !!(fn and fn.constructor and fn.call and fn.apply)
+  text = require "kopi/utils/text"
 
-    send = (fn, context, args...) ->
-      return fn unless isFunction(fn)
-      fn.apply(context, args)
+  # Is the given value a function?
+  isFunction = (fn) ->
+    !!(fn and fn.constructor and fn.call and fn.apply)
 
-    exports.isFunction = isFunction
-    exports.send = send
+  send = (fn, context, args...) ->
+    return fn unless isFunction(fn)
+    fn.apply(context, args)
+
+  exports.isFunction = isFunction
+  exports.send = send
