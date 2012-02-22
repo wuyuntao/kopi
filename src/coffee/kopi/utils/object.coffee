@@ -76,8 +76,7 @@ define "kopi/utils/object", (require, exports, module) ->
     obj
 
   isObject = (obj) ->
-    type = typeof obj
-    type == "object"
+    typeof obj == "object"
 
   keys = Object.keys or= (obj) ->
     (key for own key, val of obj)

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head lang="zh">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" />
+    <title>kopi</title>
+    <link href="/css/qunit.css" media="screen" rel="stylesheet" />
+    <script src="/js/kopi.js"></script>
+    <script src="/js/jquery.js"></script>
+    <script src="/js/qunit.js"></script>
+    <script src="/js/kopi/utils.js"></script>
+    <script>
+      define("kopi/tests", function(require, exports, module) {
+        q = require("qunit");
+        utils = require("kopi/utils");
+
+        q.module("kopi");
+
+        q.test("module", function() {
+          q.equals(module.id, "kopi/tests");
+          q.ok(!!utils.guid);
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">kopi</h1>
+    <h2 id="qunit-banner"></h2>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="main"></div>
+    <div id="container"></div>
+  </body>
+</html>
