@@ -163,7 +163,7 @@ define "kopi/app/router", (require, exports, module) ->
     route: (route, option) ->
       router.add(route, view, option)
       this
-    end: -> exports
+    end: -> module.exports
 
   instance: instance
   match: match

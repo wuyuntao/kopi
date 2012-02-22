@@ -132,8 +132,8 @@ if __name__ == '__main__':
     p.add_option('--output-file', '-O')
     p.add_option('--ext-names', '-e', default='js,coffee',
             help="Default: js,coffee")
-    p.add_option('--extra-scripts', '-E', default='jquery,kopi',
-            help="Default: jquery,qunit,kopi")
+    p.add_option('--extra-scripts', '-E', default='kopi',
+            help="Default: kopi")
     opts, args = p.parse_args()
 
     kwargs = {

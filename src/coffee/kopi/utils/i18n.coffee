@@ -45,5 +45,7 @@ define "kopi/utils/i18n", (require, exports, module) ->
     return
 
   TranslationError: TranslationError
-  translate: t: translate
-  define: d: define
+  translate: translate
+  t: translate
+  define: define
+  d: define

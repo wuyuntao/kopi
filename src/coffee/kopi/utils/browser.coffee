@@ -8,8 +8,8 @@ define "kopi/utils/browser", (require, exports, module) ->
   ua = nav.userAgent
   all = ["webkit", "opera", "msie", "mozilla", "android", "iphone", "ipad"]
 
-  all: all
   object.extend exports, $.browser,
-    android:  (/android/gi).test(av)
-    iphone:   (/ipod|iphone/gi).test(av)
-    ipad:     (/ipad/gi).test(av)
+    android: (/android/gi).test(av)
+    iphone: (/ipod|iphone/gi).test(av)
+    ipad: (/ipad/gi).test(av)
+    all: all
