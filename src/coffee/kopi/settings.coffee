@@ -69,13 +69,13 @@ define "kopi/settings", (require, exports, module) ->
         indicator: '#kopi-notification-indicator'
         overlay: '#kopi-notification-overlay'
 
-    native:
+    clients:
       # @type {Boolean} Support Android native interface
-      android: true
+      android: false
       # @type {Boolean} Support Chromium native interface
-      chromium: true
+      chromium: false
       # @type {Boolean} Support iOS native interface
-      ios: true
+      ios: false
 
     db:
       indexedDB:

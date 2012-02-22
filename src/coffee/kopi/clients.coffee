@@ -1,22 +1,22 @@
-define "kopi/native", (require, exports, module) ->
+define "kopi/clients", (require, exports, module) ->
 
   exceptions = require "kopi/exceptions"
   settings = require "kopi/settings"
-  android = require "kopi/native/android"
-  chromium = require "kopi/native/chromium"
-  ios = require "kopi/native/ios"
+  android = require "kopi/clients/android"
+  chromium = require "kopi/clients/chromium"
+  ios = require "kopi/clients/ios"
 
   class NativeClientNotSupported extends exceptions.Exception
 
   ###
-  When some native client is ready
+  When some clients client is ready
   ###
   ready = (fn) ->
     return unless fn
-    # Get enabled native clients
-    for platform, support of settings.native
+    # Get enabled clients clients
+    for platform, support of settings.kopi.clients
       if support
-        module = kopi.native[platform]
+        module = eval(platform)
         throw new NativeClientNotSupported(platform) if not module
         module.ready fn
     return
