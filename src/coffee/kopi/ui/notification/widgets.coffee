@@ -1,37 +1,37 @@
-kopi.module("kopi.ui.notification.widgets")
-  .require("kopi.settings")
-  .require("kopi.utils.text")
-  .require("kopi.ui.widgets")
-  .define (exports, settings, text, widgets) ->
+define "kopi/ui/notification/widgets", (require, exports, module) ->
 
-    class Widget extends widgets.Widget
+  settings = require "kopi/settings"
+  text = require "kopi/utils/text"
+  widgets = require "kopi/ui/widgets"
 
-      kls = this
+  class Widget extends widgets.Widget
 
-      kls.SHOW = "show"
-      kls.HIDE = "hide"
-      kls.TRANSPARENT = "transparent"
-      kls.NOTIFICATION = "notification"
+    kls = this
 
-      kls.configure
-        autoSkeleton: true
+    kls.SHOW = "show"
+    kls.HIDE = "hide"
+    kls.TRANSPARENT = "transparent"
+    kls.NOTIFICATION = "notification"
 
-      actions = [kls.SHOW, kls.HIDE, kls.TRANSPARENT]
+    kls.configure
+      autoSkeleton: true
 
-      defineMethod = (action) ->
-        kls["#{action}Class"] = ->
-          this["_#{action}Class"] or= this.cssClass(action, this.NOTIFICATION)
+    actions = [kls.SHOW, kls.HIDE, kls.TRANSPARENT]
 
-      for action in actions
-        defineMethod(action)
+    defineMethod = (action) ->
+      kls["#{action}Class"] = ->
+        this["_#{action}Class"] or= this.cssClass(action, this.NOTIFICATION)
 
-      constructor: (options) ->
-        super(options)
+    for action in actions
+      defineMethod(action)
 
-        this._options.element or= settings.kopi.ui.notification[this.constructor.prefix]
-        this.hidden = true
+    constructor: (options) ->
+      super(options)
 
-      # show: ->
-      # hidden: ->
+      this._options.element or= settings.kopi.ui.notification[this.constructor.prefix]
+      this.hidden = true
 
-    exports.Widget = Widget
+    # show: ->
+    # hidden: ->
+
+  Widget: Widget

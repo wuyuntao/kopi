@@ -1,7 +1,7 @@
-kopi.module("kopi.ui.lists.paginations")
-  .require("kopi.ui.lists.items")
-  .define (exports, items) ->
+define "kopi/ui/lists/paginations", (require, exports, module) ->
 
-    class ListPagination extends items.ListItem
+  items = require "kopi/ui/lists/items"
 
-    exports.ListPagination = ListPagination
+  class ListPagination extends items.ListItem
+
+  ListPagination: ListPagination

@@ -1,6 +1,5 @@
-kopi.module("kopi.ui.animation.animations")
-  .define (exports) ->
+define "kopi/ui/animation/animations", (require, exports, module) ->
 
-    class Animation
+  class Animation
 
-    exports.Animation = Animation
+  Animation: Animation

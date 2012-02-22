@@ -1,57 +1,56 @@
-kopi.module("kopi.jsonrpc")
-  .require("kopi.exceptions")
-  .request("kopi.utils")
-  .define (exports, exceptions, utils) ->
+define "kopi/jsonrpc", (require, exports, module) ->
 
-    ###
-    A lightweight JSON-RPC message wrapper
-    ###
-    MESSAGE_PREFIX = "kopi-message"
-    JSON_RPC_VERSION = "2.0"
+  exceptions = require "kopi/exceptions"
+  utils = require "kopi/utils"
 
-    ###
-    Build a request
-    ###
-    request = (id, method, params={}) ->
-      if not method
-        throw new exceptions.ValueError("`method` is required.")
+  ###
+  A lightweight JSON-RPC message wrapper
+  ###
+  MESSAGE_PREFIX = "kopi-message"
+  JSON_RPC_VERSION = "2.0"
 
-      id: id
-      method: method
-      params: params
-      jsonrpc: JSON_RPC_VERSION
+  ###
+  Build a request
+  ###
+  request = (id, method, params={}) ->
+    if not method
+      throw new exceptions.ValueError("`method` is required.")
 
-    ###
-    Build a notification
-    ###
-    notification = (method, params={}) ->
-      request(null, method, params)
+    id: id
+    method: method
+    params: params
+    jsonrpc: JSON_RPC_VERSION
 
-    ###
-    Build a response
-    ###
-    response = (id, error, result) ->
-      unless error? or result?
-        throw new exceptions.ValueError("Either `error` or `result` is required.")
+  ###
+  Build a notification
+  ###
+  notification = (method, params={}) ->
+    request(null, method, params)
 
-      id: id
-      error: error
-      result: result
-      jsonrpc: JSON_RPC_VERSION
+  ###
+  Build a response
+  ###
+  response = (id, error, result) ->
+    unless error? or result?
+      throw new exceptions.ValueError("Either `error` or `result` is required.")
 
-    ###
-    Build a success response
-    ###
-    success = (id, result) -> response(id, null, result)
+    id: id
+    error: error
+    result: result
+    jsonrpc: JSON_RPC_VERSION
 
-    ###
-    Build a error response
-    ###
-    error = (id, error) -> response(id, error)
+  ###
+  Build a success response
+  ###
+  success = (id, result) -> response(id, null, result)
 
-    exports.request = request
-    exports.notification = notification
+  ###
+  Build a error response
+  ###
+  error = (id, error) -> response(id, error)
 
-    exports.response = response
-    exports.success = success
-    exports.error = error
+  request: request
+  notification: notification
+  response: response
+  success: success
+  error: error

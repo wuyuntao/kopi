@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0;" />
+    <title>kopi/ui/tabs</title>
+    <style type="text/css" media="screen">
+      body {
+        background: black;
+        -webkit-user-select: none;
+      }
+
+      .container {
+        position: relative;
+        display: inline-block;
+        background: gray;
+        margin: 20px;
+        width: 320px;
+        height: 480px;
+        overflow: hidden;
+        -webkit-user-select: none;
+      }
+
+      .tabbar, .stabbar {
+        background: white;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+
+      .tabbar .kopi-tab, .stabbar .kopi-tab {
+        -webkit-transition: all 0.5s ease-out 0s;
+        -webkit-user-select: none;
+        background: yellow;
+        display: inline-block;
+        height: 45px;
+        padding: 5px 0;
+      }
+
+      img {
+        -webkit-user-select: none;
+        -webkit-user-drag: none;
+      }
+
+      .tabbar .kopi-tab-hover, .stabbar .kopi-tab-hover {
+        background: red;
+      }
+
+      .tabbar .kopi-tab-active, .stabbar .kopi-tab-active {
+        background: green;
+      }
+
+      .tabbar .kopi-tab-selected, .stabbar .kopi-tab-selected {
+        background: blue;
+      }
+
+      .tabbar .kopi-tab .kopi-tab-icon, .stabbar .kopi-tab .kopi-tab-icon {
+        display: block;
+        /* width: 24px; */
+        height: 24px;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+      }
+
+      .tabbar .kopi-tab .kopi-tab-icon img, .stabbar .kopi-tab .kopi-tab-icon img {
+        width: 24px;
+        height: 24px;
+        border-width: 0;
+      }
+
+      .tabbar .kopi-tab .kopi-tab-text, .stabbar .kopi-tab .kopi-tab-text {
+        margin-top: 5px;
+        display: block;
+        font-size: 12px;
+        line-height: 16px;
+        height: 16px;
+        text-align: center;
+      }
+
+    </style>
+    <script type="text/javascript" src="/js/sea.js"></script>
+    <script type="text/javascript">
+      seajs.use(["kopi/tests/ui/tabs"]);
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="tabbar"> </div>
+    </div>
+
+    <div class="container">
+      <div class="stabbar"> </div>
+    </div>
+  </body>
+</html>

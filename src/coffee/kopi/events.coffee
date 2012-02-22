@@ -1,34 +1,35 @@
-kopi.module("kopi.events")
-  .define (exports) ->
+define "kopi/events", (require, exports, module) ->
 
-    ###
-    用 jQuery Events API 实现的类 NodeJS 事件机制
+  $ = require "jquery"
 
-    TODO Use EventEmitter of NodeJS?
+  ###
+  用 jQuery Events API 实现的类 NodeJS 事件机制
 
-    EventEmitter.on tests, 'done', -> alert('all tests done')
+  TODO Use EventEmitter of NodeJS?
 
-    ###
-    class EventEmitter
+  EventEmitter.on tests, 'done', -> alert('all tests done')
 
-      on: ->
-        this._emitter or= $(this)
-        this._emitter.bind(arguments...)
-        this
+  ###
+  class EventEmitter
 
-      off: ->
-        this._emitter or= $(this)
-        this._emitter.unbind(arguments...)
-        this
+    on: ->
+      this._emitter or= $(this)
+      this._emitter.bind(arguments...)
+      this
 
-      emit: ->
-        this._emitter or= $(this)
-        this._emitter.triggerHandler(arguments...)
-        this
+    off: ->
+      this._emitter or= $(this)
+      this._emitter.unbind(arguments...)
+      this
 
-      once: ->
-        this._emitter or= $(this)
-        this._emitter.one(arguments...)
-        this
+    emit: ->
+      this._emitter or= $(this)
+      this._emitter.triggerHandler(arguments...)
+      this
 
-    exports.EventEmitter = EventEmitter
+    once: ->
+      this._emitter or= $(this)
+      this._emitter.one(arguments...)
+      this
+
+  EventEmitter: EventEmitter

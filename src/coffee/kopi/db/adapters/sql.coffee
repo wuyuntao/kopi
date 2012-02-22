@@ -1,64 +1,65 @@
-kopi.module("kopi.db.adapters.sql")
-  .require("kopi.db.queries")
-  .require("kopi.db.adapters.client")
-  .define (exports, queries, client) ->
+define "kopi/db/adapters/sql", (require, exports, module) ->
 
-    class SQLAdapter extends client.ClientAdapter
+  exceptions = require "kopi/exceptions"
+  queries = require "kopi/db/queries"
+  client = require "kopi/db/adapters/client"
 
-      create: (query, fn) ->
+  class SQLAdapter extends client.ClientAdapter
 
-      retrieve: (query, fn) ->
+    create: (query, fn) ->
 
-      update: (query, fn) ->
+    retrieve: (query, fn) ->
 
-      destroy: (query, fn) ->
+    update: (query, fn) ->
 
-      executeSql: (sql, args, fn) ->
+    destroy: (query, fn) ->
 
-      ###
-      Build sql from query
-      ###
-      _sql: (query) ->
-        self = this
-        switch query.action
-          when queries.RETRIEVE
-            return self._select(query)
-          when queries.CREATE
-            return self._create(query)
-          when queries.UPDATE
-            return self._update(query)
-          when queries.DESTROY
-            return self._destroy(query)
-          else
-            throw new exceptions.ValueError("query action not correct.")
+    executeSql: (sql, args, fn) ->
 
-      _select: (query) ->
-        model = query.model
-        table = model.tableName()
-        select = "SELECT #{} FROM #{table}"
-        sql = [select]
-        params = []
+    ###
+    Build sql from query
+    ###
+    _sql: (query) ->
+      self = this
+      switch query.action
+        when queries.RETRIEVE
+          return self._select(query)
+        when queries.CREATE
+          return self._create(query)
+        when queries.UPDATE
+          return self._update(query)
+        when queries.DESTROY
+          return self._destroy(query)
+        else
+          throw new exceptions.ValueError("query action not correct.")
 
-      _create: (query) ->
+    _select: (query) ->
+      model = query.model
+      table = model.tableName()
+      select = "SELECT #{} FROM #{table}"
+      sql = [select]
+      params = []
 
-      _update: (query) ->
+    _create: (query) ->
 
-      _delete: (query) ->
+    _update: (query) ->
 
-      _columns: (query) ->
-        return '*' if not query.only()
-        query.only.join(", ")
+    _delete: (query) ->
 
-      ###
-      Build where sql from where object
+    _columns: (query) ->
+      return '*' if not query.only()
+      query.only.join(", ")
 
-      @return {Array} sql and params
-      ###
-      _where: (where) ->
+    ###
+    Build where sql from where object
 
-      _createTable: (model, safe=true) ->
-        table = model.tableName()
-        fields = []
-        # for field in model.fields()
+    @return {Array} sql and params
+    ###
+    _where: (where) ->
 
-    exports.SQLAdapter = SQLAdapter
+    _createTable: (model, safe=true) ->
+      table = model.tableName()
+      fields = []
+      # for field in model.fields()
+
+  SQLAdapter: SQLAdapter

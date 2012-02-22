@@ -1,9 +1,11 @@
-kopi.module("kopi.tests.ui.touchable")
-  .require("kopi.ui.touchable")
-  .define (exports, touchable) ->
+define "kopi/tests/ui/touchable", (require, exports, module) ->
 
-    class TestTouchable extends touchable.Touchable
+  $ = require "jquery"
+  q = require "qunit"
+  touchable = require "kopi/ui/touchable"
 
-    $ ->
+  class TestTouchable extends touchable.Touchable
 
-      module "kopi.ui.touchable"
+  $ ->
+
+    q.module "kopi.ui.touchable"

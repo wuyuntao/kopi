@@ -1,15 +1,15 @@
-kopi.module("kopi.ui.lists")
-  .require("kopi.ui.widgets")
-  .define (exports, widgets) ->
+define "kopi/ui/lists", (require, exports, module) ->
 
-    class List extends widgets.Widget
+  widgets = require "kopi/ui/widgets"
 
-      append: (item) ->
+  class List extends widgets.Widget
 
-      prepend: (item) ->
+    append: (item) ->
 
-      remove: (item) ->
+    prepend: (item) ->
 
-      skeleton: (item) ->
+    remove: (item) ->
 
-    exports.List = List
+    skeleton: (item) ->
+
+  List: List

@@ -1,42 +1,42 @@
-kopi.module("kopi.db.indexes")
-  .require("kopi.events")
-  .require("kopi.exceptions")
-  .require("kopi.utils.array")
-  .define (exports, events, exceptions, array) ->
+define "kopi/db/indexes", (require, exports, module) ->
 
-    class DuplicateIndexError extends exceptions.Exception
+  events = require "kopi/events"
+  exceptions = require "kopi/exceptions"
+  array = require "kopi/utils/array"
 
-    ###
-    模型的索引对象
-    ###
-    class Index extends events.EventEmitter
+  class DuplicateIndexError extends exceptions.Exception
 
-      constructor: (model, field) ->
-        this.model = model
-        # @type {Object<value, id>}
-        this.field = field
-        this.reset()
+  ###
+  模型的索引对象
+  ###
+  class Index extends events.EventEmitter
 
-      build: (collection) ->
-        this.reset()
-        self = this
-        collection.forEach (model, i) ->
-          key = "" + model[self.field]
-          if key of self._index
-            throw new DuplicateIndexError("Key '#{key}' already exists")
-          self._index[key] = model
-        self
+    constructor: (model, field) ->
+      this.model = model
+      # @type {Object<value, id>}
+      this.field = field
+      this.reset()
 
-      get: (key) -> this._index["" + key]
+    build: (collection) ->
+      this.reset()
+      self = this
+      collection.forEach (model, i) ->
+        key = "" + model[self.field]
+        if key of self._index
+          throw new DuplicateIndexError("Key '#{key}' already exists")
+        self._index[key] = model
+      self
 
-      reset: ->
-        this._index = {}
+    get: (key) -> this._index["" + key]
+
+    reset: ->
+      this._index = {}
 
 
-    class PrimaryIndex extends Index
+  class PrimaryIndex extends Index
 
-      constructor: (model) ->
-        super(model, "id")
+    constructor: (model) ->
+      super(model, "id")
 
-    exports.Index = Index
-    exports.PrimaryIndex = PrimaryIndex
+  Index: Index
+  PrimaryIndex: PrimaryIndex

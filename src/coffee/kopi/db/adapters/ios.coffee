@@ -1,7 +1,7 @@
-kopi.module("kopi.db.adapters.ios")
-  .require("kopi.db.adapters.sql")
-  .define (exports, sql) ->
+define "kopi/db/adapters/ios", (require, exports, module) ->
 
-    class IOSSQLAdapter extends sql.SQLAdapter
+  sql = require "kopi/db/adapters/sql"
 
-    exports.IOSSQLAdapter = IOSSQLAdapter
+  class IOSSQLAdapter extends sql.SQLAdapter
+
+  IOSSQLAdapter: IOSSQLAdapter

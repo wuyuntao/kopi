@@ -1,4 +1,4 @@
-define (require, exports, module) ->
+define "kopi/utils/text", (require, exports, module) ->
 
   StringProto = String.prototype
 

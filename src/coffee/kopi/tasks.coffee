@@ -1,86 +1,86 @@
-kopi.module("kopi.tasks.workers")
-  .require("kopi.events")
-  .require("kopi.exceptions")
-  .require("kopi.logging")
-  .require("kopi.utils.structs.queue")
-  .require("kopi.utils.text")
-  .define (exports, events, exceptions, logging, queue, text) ->
+define "kopi/tasks/workers", (require, exports, module) ->
 
-    class TaskError extends exception.Exception
+  events = require "kopi/events"
+  exceptions = require "kopi/exceptions"
+  logging = require "kopi/logging"
+  queue = require "kopi/utils/structs/queue"
+  text = require "kopi/utils/text"
 
-    class Queue extends queue.Queue
+  class TaskError extends exception.Exception
 
-      enqueue: (task, data) ->
-        if not text.isString(task)
-          task = task.toString()
-        if not text.isString(data)
-          data = JSON.stringify(data)
-        super([task, data])
+  class Queue extends queue.Queue
 
-    class Task
-      this.perform = (data, fn) ->
-        throw new exceptions.NotImplementedError()
+    enqueue: (task, data) ->
+      if not text.isString(task)
+        task = task.toString()
+      if not text.isString(data)
+        data = JSON.stringify(data)
+      super([task, data])
 
-    class Worker extends events.EventEmitter
+  class Task
+    this.perform = (data, fn) ->
+      throw new exceptions.NotImplementedError()
 
-      constructor: (queue, interval=1000) ->
-        this.queue = queue
-        this.running = false
-        this.interval = interval
+  class Worker extends events.EventEmitter
 
-      ###
-      Public: Tracks the worker in Redis and starts polling.
-      ###
-      start: ->
-        return if this.running
-        self = this
-        onInterval = -> self._poll()
-        this.running = setInterval onInterval, this.interval
+    constructor: (queue, interval=1000) ->
+      this.queue = queue
+      this.running = false
+      this.interval = interval
 
-      ###
-      Public: Stops polling and purges this Worker's stats from Redis.
-      ###
-      stop: ->
-        return unless this.running
-        clearInterval this.running
-        this.running = false
+    ###
+    Public: Tracks the worker in Redis and starts polling.
+    ###
+    start: ->
+      return if this.running
+      self = this
+      onInterval = -> self._poll()
+      this.running = setInterval onInterval, this.interval
 
-      ###
-      Polls the next queue for a task.
-      ###
-      _poll: ->
-        this.emit "poll", this, this.queue
-        unless this.queue.isEmpty()
-          [task, data] = this.queue.dequeue()
-          try
-            this._perform(task, data)
-          catch e
-            if e instanceof TaskError
-              logging.error "TaskError: #{e.message}"
-              this.emit "error", [e]
-        return
+    ###
+    Public: Stops polling and purges this Worker's stats from Redis.
+    ###
+    stop: ->
+      return unless this.running
+      clearInterval this.running
+      this.running = false
 
-      ###
-      Handles the actual running of the task.
-      ###
-      _perform: (task, data) ->
-        self = this
+    ###
+    Polls the next queue for a task.
+    ###
+    _poll: ->
+      this.emit "poll", this, this.queue
+      unless this.queue.isEmpty()
+        [task, data] = this.queue.dequeue()
         try
-          task = text.constantize(task) if text.isString(task)
+          this._perform(task, data)
         catch e
-          throw new TaskError("Task class can not be constantized: #{task}")
+          if e instanceof TaskError
+            logging.error "TaskError: #{e.message}"
+            this.emit "error", [e]
+      return
 
-        try
-          data = JSON.parse(data)
-        catch e
-          throw new TaskError("Failed to parse task data: #{data}")
+    ###
+    Handles the actual running of the task.
+    ###
+    _perform: (task, data) ->
+      self = this
+      try
+        task = text.constantize(task) if text.isString(task)
+      catch e
+        throw new TaskError("Task class can not be constantized: #{task}")
 
-        eventData = [self, task, data]
-        self.emit "perform", eventData
-        task.perform data, (error) ->
-          self.emit (if error then "success" else "error"), eventData
-        return
+      try
+        data = JSON.parse(data)
+      catch e
+        throw new TaskError("Failed to parse task data: #{data}")
 
-    exports.TaskError = TaskError
-    exports.Worker = Worker
-    exports.Queue = Queue
+      eventData = [self, task, data]
+      self.emit "perform", eventData
+      task.perform data, (error) ->
+        self.emit (if error then "success" else "error"), eventData
+      return
+
+  TaskError: TaskError
+  Worker: Worker
+  Queue: Queue

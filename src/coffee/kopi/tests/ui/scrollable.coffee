@@ -1,9 +1,6 @@
-kopi.module("kopi.tests.ui.scrollable")
-  .require("kopi.ui.scrollable")
-  .define (exports, scrollable) ->
+define "kopi/tests/ui/scrollable", (require, exports, module) ->
 
-    class TestScrollable extends scrollable.Scrollable
+  scrollable = require "kopi/ui/scrollable"
 
-    $ ->
-
-      module "kopi.ui.scrollable"
+  s = new scrollable.Scrollable(scrollX: false, damping: 0.5)
+  s.skeleton(".scrollable").render()

@@ -1,3 +1,3 @@
-kopi.module("kopi.utils.client")
-  .require("kopi.utils.object")
-  .define (exports, object) ->
+define "kopi/utils/client", (require, exports, module) ->
+
+  object = require "kopi/utils/object"

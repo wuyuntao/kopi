@@ -1,3 +1,3 @@
-kopi.module("kopi.ui.pagination")
-  .require("kopi.ui.widgets")
-  .define (exports, widgets) ->
+define "kopi/ui/pagination", (require, exports, module) ->
+
+  widgets = require "kopi/ui/widgets"

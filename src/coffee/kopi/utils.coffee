@@ -1,4 +1,6 @@
-define (require, exports, module) ->
+define "kopi/utils", (require, exports, module) ->
+
+  $ = require "jquery"
 
   ###
   产生唯一 ID
@@ -30,6 +32,6 @@ define (require, exports, module) ->
   # Is the given value a regular expression?
   isRegExp    = (obj) -> !!(obj and obj.exec and (obj.ignoreCase or obj.ignoreCase is false))
 
-  exports.guid = guid
-  exports.isPromise = isPromise
-  exports.isRegExp = isRegExp
+  guid: guid
+  isPromise: isPromise
+  isRegExp: isRegExp

@@ -1,67 +1,66 @@
-kopi.module("kopi.tests.db.fixtures")
-  .require("kopi.db.models")
-  .define (exports, models) ->
+define "kopi/tests/db/fixtures", (require, exports, module) ->
 
-    class User extends models.Model
-      this.field "id",
+  models = require "kopi/db/models"
+
+  class User extends models.Model
+    this.field "id",
+      type: models.INTEGER
+      primary: true
+    this.field "name"
+    this.field "email"
+    this.field "registerAt",
+      type: models.DATETIME
+
+    this.hasMany "Blog", module: "kopi/tests/db/fixtures"
+    this.hasMany "Article", module: "kopi/tests/db/fixtures"
+
+    this.index "name"
+    this.index "email"
+    this.index "registerAt"
+
+  class Tag extends models.Model
+
+    this.field "id",
         type: models.INTEGER
         primary: true
-      this.field "name"
-      this.field "email"
-      this.field "registerAt",
-        type: models.DATETIME
+    this.field "name"
 
-      this.hasMany "kopi.tests.db.fixtures.Blog"
-      this.hasMany "kopi.tests.db.fixtures.Article"
+    this.hasMany "Article", module: "kopi/tests/db/fixtures"
 
-      this.index "name"
-      this.index "email"
-      this.index "registerAt"
+    this.index "name"
 
-    class Tag extends models.Model
+  class Article extends models.Model
 
-      this.field "id",
-          type: models.INTEGER
-          primary: true
-      this.field "name"
+    this.field "id",
+      type: models.INTEGER
+      primary: true
+    this.field "title"
+    this.field "body"
+      type: models.TEXT
+    this.field "publishedAt"
+      type: models.DATETIME
+    this.field "updatedAt"
+      type: models.DATETIME
 
-      this.hasMany "kopi.tests.db.fixtures.Article"
+    this.belongsTo "Blog", module: "kopi/tests/db/fixtures"
+    this.belongsTo User, name: "author"
+    this.hasMany Tag, name: "categories"
 
-      this.index "name"
+    this.index "title"
 
-    class Article extends models.Model
+  class Blog extends models.Model
 
-      this.field "id",
-        type: models.INTEGER
-        primary: true
-      this.field "title"
-      this.field "body"
-        type: models.TEXT
-      this.field "publishedAt"
-        type: models.DATETIME
-      this.field "updatedAt"
-        type: models.DATETIME
+    this.field "id",
+      type: models.INTEGER
+      primary: true
+    this.field "title",
+      type: models.STRING
 
-      this.belongsTo "kopi.tests.db.fixtures.Blog"
-      this.belongsTo User, name: "author"
-      this.hasMany Tag, name: "categories"
+    this.index "title"
 
-      this.index "title"
+  Article.belongsTo Blog
 
-    class Blog extends models.Model
-
-      this.field "id",
-        type: models.INTEGER
-        primary: true
-      this.field "title",
-        type: models.STRING
-
-      this.belongsTo User, name: "owner"
-      this.hasMany Article
-
-      this.index "title"
-
-    exports.User = User
-    exports.Tag = Tag
-    exports.Article = Article
-    exports.Blog = Blog
+  User: User
+  Tag: Tag
+  Article: Article
+  Blog: Blog

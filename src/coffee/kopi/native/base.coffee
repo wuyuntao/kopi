@@ -1,8 +1,8 @@
-kopi.module("kopi.native.base")
-  .require("kopi.exceptions")
-  .require("kopi.settings")
-  .define (exports, exceptions, settings) ->
+define "kopi/native/base", (require, exports, module) ->
 
-    class BaseClient
+  exceptions = require "kopi/exceptions"
+  settings = require "kopi/settings"
 
-    exports.BaseClient = BaseClient
+  class BaseClient
+
+  BaseClient: BaseClient

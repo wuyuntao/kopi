@@ -1,9 +1,9 @@
-define (require, exports, module) ->
+define "kopi/tests/utils/uri", (require, exports, module) ->
 
   q = require "qunit"
   uri = require "kopi/utils/uri"
 
-  q.module "kopi.utils.uri"
+  q.module "kopi/utils/uri"
 
   q.test "parse url ", ->
     url = uri.parse 'http://www.google.com:80/path?q=query#fragmento'

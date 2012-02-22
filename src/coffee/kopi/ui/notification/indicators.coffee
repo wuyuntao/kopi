@@ -1,32 +1,32 @@
-kopi.module("kopi.ui.notification.indicators")
-  .require("kopi.settings")
-  .require("kopi.utils.i18n")
-  .require("kopi.ui.notification.widgets")
-  .require("kopi.ui.notification.overlays")
-  .define (exports, settings, i18n, widgets, overlays) ->
+define "kopi/ui/notification/indicators", (require, exports, module) ->
 
-    class Indicator extends widgets.Widget
+  settings = require "kopi/settings"
+  i18n = require "kopi/utils/i18n"
+  widgets = require "kopi/ui/notification/widgets"
+  overlays = require "kopi/ui/notification/overlays"
 
-      constructor: (overlay) ->
-        super()
-        this._overlay = overlay
+  class Indicator extends widgets.Widget
 
-      show: ->
-        cls = this.constructor
-        self = this
-        return self if not self.hidden
-        self.hidden = false
-        self._overlay.show()
-        self.element.removeClass(cls.hideClass()).addClass(cls.showClass())
-        self
+    constructor: (overlay) ->
+      super()
+      this._overlay = overlay
 
-      hide: ->
-        cls = this.constructor
-        self = this
-        return self if self.hidden
-        self.hidden = true
-        self._overlay.hide()
-        self.element.addClass(cls.hideClass()).removeClass(cls.showClass())
-        self
+    show: ->
+      cls = this.constructor
+      self = this
+      return self if not self.hidden
+      self.hidden = false
+      self._overlay.show()
+      self.element.removeClass(cls.hideClass()).addClass(cls.showClass())
+      self
 
-    exports.Indicator = Indicator
+    hide: ->
+      cls = this.constructor
+      self = this
+      return self if self.hidden
+      self.hidden = true
+      self._overlay.hide()
+      self.element.addClass(cls.hideClass()).removeClass(cls.showClass())
+      self
+
+  Indicator: Indicator

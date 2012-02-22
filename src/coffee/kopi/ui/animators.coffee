@@ -1,16 +1,16 @@
-kopi.module("kopi.ui.animators")
-  .require("kopi.utils.klass")
-  .require("kopi.ui.switchers")
-  .define (exports, klass, switchers) ->
+define "kopi/ui/animators", (require, exports, module) ->
 
-    class Animator extends switchers.Switcher
+  klass = require "kopi/utils/klass"
+  switchers = require "kopi/ui/switchers"
 
-      klass.accessor this.prototype, "animation"
+  class Animator extends switchers.Switcher
 
-      resetAnimation: -> this.animation(null)
+    klass.accessor this.prototype, "animation"
 
-      _show: (child) ->
+    resetAnimation: -> this.animation(null)
 
-      _hide: (child) ->
+    _show: (child) ->
 
-    exports.Animator = Animator
+    _hide: (child) ->
+
+  Animator: Animator

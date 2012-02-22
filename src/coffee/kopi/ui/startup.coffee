@@ -1,11 +1,12 @@
-kopi.module("kopi.ui.startup")
-  .require("kopi.ui.widgets")
-  .define (exports, widgets) ->
+define "kopi/ui/startup", (require, exports, module) ->
 
-    class SplashScreen extends widgets.Widget
+  $ = require "jquery"
+  widgets = require "kopi/ui/widgets"
 
-      onskeleton: ->
-        $(this.element).bind "click", (e) -> return false
-        super
+  class SplashScreen extends widgets.Widget
 
-    exports.SplashScreen = SplashScreen
+    onskeleton: ->
+      $(this.element).bind "click", (e) -> return false
+      super
+
+  SplashScreen: SplashScreen

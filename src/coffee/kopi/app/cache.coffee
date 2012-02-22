@@ -1,53 +1,54 @@
-kopi.module("kopi.app.cache")
-  .require("kopi.logging")
-  .require("kopi.settings")
-  .require("kopi.utils.i18n")
-  .require("kopi.utils.support")
-  .require("kopi.ui.notification")
-  .define (exports, logging, settings, i18n, notification) ->
+define "kopi/app/cache", (require, exports, module) ->
 
-    ###
-    刷新缓存
-    ###
-    swapCache = ->
-      try
-        applicationCache.swapCache() if support.cache
-      catch e
-        # Do nothing if encounter an INVALID_STATE_ERR error
-        logging.error("Failed to swap application cahe. Error: #{e}")
+  $ = require "jquery"
+  logging = require "kopi/logging"
+  settings = require "kopi/settings"
+  i18n = require "kopi/utils/i18n"
+  support = require "kopi/utils/support"
+  notification = require "kopi/ui/notification"
 
-    ###
-    重新载入页面
+  ###
+  刷新缓存
+  ###
+  swapCache = ->
+    try
+      applicationCache.swapCache() if support.cache
+    catch e
+      # Do nothing if encounter an INVALID_STATE_ERR error
+      logging.error("Failed to swap application cahe. Error: #{e}")
 
-    ###
-    reloadPage = ->
-      # TODO 提示重新载入页面的信息
-      location.reload()
+  ###
+  重新载入页面
 
-    ###
-    弹出提示对话框
-    ###
-    showDialog = ->
-      # TODO 弹出对话框，让用户选择是否要刷新
+  ###
+  reloadPage = ->
+    # TODO 提示重新载入页面的信息
+    location.reload()
 
-    onError = (e) ->
-      logging.error("Failed to update application cache. Error: #{error}")
-      swapCache()
+  ###
+  弹出提示对话框
+  ###
+  showDialog = ->
+    # TODO 弹出对话框，让用户选择是否要刷新
 
-    onUpdateReady = (e) ->
-      swapCache()
-      if settings.kopi.cache.autoRefresh
-        reloadPage()
-      else if settings.kopi.cache.notifyRefresh
-        showDialog()
+  onError = (e) ->
+    logging.error("Failed to update application cache. Error: #{error}")
+    swapCache()
 
-    ###
-    打开 applicationCache 的事件监听
-    ###
-    listen = ->
-      if support.cache
-        $(applicationCache)
-          .bind("error", onError)
-          .bind("updateready", onUpdateReady)
+  onUpdateReady = (e) ->
+    swapCache()
+    if settings.kopi.cache.autoRefresh
+      reloadPage()
+    else if settings.kopi.cache.notifyRefresh
+      showDialog()
 
-    exports.listen = listen
+  ###
+  打开 applicationCache 的事件监听
+  ###
+  listen = ->
+    if support.cache
+      $(applicationCache)
+        .bind("error", onError)
+        .bind("updateready", onUpdateReady)
+
+  listen: listen

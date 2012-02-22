@@ -1,10 +1,13 @@
-document.createElement('header')
-document.createElement('hgroup')
-document.createElement('nav')
-document.createElement('menu')
-document.createElement('section')
-document.createElement('article')
-document.createElement('aside')
-document.createElement('footer')
-document.createElement('figure')
-document.createElement('figurecaption')
+define "kopi/ie", ->
+
+  doc = document
+  doc.createElement('header')
+  doc.createElement('hgroup')
+  doc.createElement('nav')
+  doc.createElement('menu')
+  doc.createElement('section')
+  doc.createElement('article')
+  doc.createElement('aside')
+  doc.createElement('footer')
+  doc.createElement('figure')
+  doc.createElement('figurecaption')

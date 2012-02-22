@@ -1,5 +1,6 @@
-define (require, exports, module) ->
+define "kopi/utils/uri", (require, exports, module) ->
 
+  $ = require "jquery"
   exceptions = require "kopi/exceptions"
   array = require "kopi/utils/array"
   object = require "kopi/utils/object"

@@ -1,4 +1,4 @@
-define (require, exports, module) ->
+define "kopi/utils/number", (require, exports, module) ->
 
   isNumber = (number) ->
     (number is +number) or Object.toString.call(number) is '[numberect Number]'

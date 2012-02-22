@@ -1,91 +1,91 @@
-kopi.module("kopi.db.adapters.server")
-  .require("kopi.db.adapters.base")
-  .require("kopi.exceptions")
-  .define (exports, base, exceptions) ->
+define "kopi/db/adapters/server", (require, exports, module) ->
 
-    class ServerAdapter extends base.BaseAdapter
+  $ = require "jquery"
+  base = require "kopi/db/adapters/base"
 
-      kls = this
-      kls.configure
-        # createURL: "/api/users/create/"
-        # retrieveURL: "/api/users/retrieve/"
-        # updateURL: "/api/users/update/"
-        # destroyURL: "/api/users/destroy/"
+  class ServerAdapter extends base.BaseAdapter
 
-        createMethod: "POST"
-        retrieveMethod: "GET"
-        updateMethod: "PUT"
-        destroyMethod: "DELETE"
+    kls = this
+    kls.configure
+      # createURL: "/api/users/create/"
+      # retrieveURL: "/api/users/retrieve/"
+      # updateURL: "/api/users/update/"
+      # destroyURL: "/api/users/destroy/"
 
-        onlyParam: "only"
-        whereParam: "where"
-        sortParam: "sort"
-        skipParam: "skip"
-        limitParam: "limit"
-        attrsParam: "attrs"
-        countParam: "count"
+      createMethod: "POST"
+      retrieveMethod: "GET"
+      updateMethod: "PUT"
+      destroyMethod: "DELETE"
 
-        format: "JSON"
-        # 30 seconds
-        timeout: 30000
+      onlyParam: "only"
+      whereParam: "where"
+      sortParam: "sort"
+      skipParam: "skip"
+      limitParam: "limit"
+      attrsParam: "attrs"
+      countParam: "count"
 
-      requestFn = -> this._request(arguments...)
-      proto = kls.prototype
-      proto[action] = requestFn for action in kls.ACTIONS
+      format: "JSON"
+      # 30 seconds
+      timeout: 30000
 
-      # Build URL for query
-      _url: (query, url) ->
-        url or= this._options["#{query.action()}URL"]
-        for name, value of query.criteria().where
-          url = url.replace(":#{name}", value.eq) if value.eq
-        url
+    requestFn = -> this._request(arguments...)
+    proto = kls.prototype
+    proto[action] = requestFn for action in kls.ACTIONS
 
-      _method: (query) ->
-        method = this._options["#{query.action()}Method"]
-        method
+    # Build URL for query
+    _url: (query, url) ->
+      url or= this._options["#{query.action()}URL"]
+      for name, value of query.criteria().where
+        url = url.replace(":#{name}", value.eq) if value.eq
+      url
 
-      # Build request params
-      # {
-      #   where: "{sid: 1}"
-      #   sort: "{createdAt: true}"
-      # }
-      _params: (query) ->
-        query.params()
+    _method: (query) ->
+      method = this._options["#{query.action()}Method"]
+      method
 
-      # Send request to server
-      _request: (query, fn) ->
-        self = this
-        options = self._options
-        method = self._method(query)
-        url = self._url(query)
-        params = self._params(query)
-        doneFn = (response) ->
-          message = self._parse(response)
-          fn(null, message)
-        failFn = (xhr, text, error) ->
-          error = self._parseError(xhr, text, error)
-          fn(error)
-        # TODO Use some wrapper of $.ajax to queue delayed requests or retry failed requests
-        $.ajax
-          url: url
-          type: method
-          data: params
-          dataType: options.format
-          timeout: options.timeout
-          success: doneFn
-          error: failFn
+    # Build request params
+    # {
+    #   where: "{sid: 1}"
+    #   sort: "{createdAt: true}"
+    # }
+    _params: (query) ->
+      query.params()
 
-      _parse: (response) ->
-        this["_parse#{this._options.format}"](response)
+    # Send request to server
+    _request: (query, fn) ->
+      self = this
+      options = self._options
+      method = self._method(query)
+      url = self._url(query)
+      params = self._params(query)
+      doneFn = (response) ->
+        message = self._parse(response)
+        fn(null, message)
+      failFn = (xhr, text, error) ->
+        error = self._parseError(xhr, text, error)
+        fn(error)
+      # TODO Use some wrapper of $.ajax to queue delayed requests or retry failed requests
+      $.ajax
+        url: url
+        type: method
+        data: params
+        dataType: options.format
+        timeout: options.timeout
+        success: doneFn
+        error: failFn
 
-      _parseError: (response) ->
-        this["_parseError#{this._options.format}"](response)
+    _parse: (response) ->
+      this["_parse#{this._options.format}"](response)
 
-      _parseJSON: (json) ->
-        # TODO Verify if response JSON is formatted correctly
-        json
+    _parseError: (response) ->
+      this["_parseError#{this._options.format}"](response)
 
-      _parseErrorJSON: (xhr, text, error) ->
-        {error: error or true, message: text}
+    _parseJSON: (json) ->
+      # TODO Verify if response JSON is formatted correctly
+      json
 
-    exports.ServerAdapter = ServerAdapter
+    _parseErrorJSON: (xhr, text, error) ->
+      {error: error or true, message: text}
+
+  ServerAdapter: ServerAdapter

@@ -1,4 +1,4 @@
-define (require, exports, module) ->
+define "kopi/utils/object", (require, exports, module) ->
 
   func = require "kopi/utils/func"
   number = require "kopi/utils/number"

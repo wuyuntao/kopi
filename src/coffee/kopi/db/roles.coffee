@@ -1,65 +1,65 @@
-kopi.module("kopi.db.roles")
-  .require("kopi.exceptions")
-  .require("kopi.db.models")
-  .require("kopi.utils.object")
-  .define (exports, exceptions, models, object) ->
+define "kopi/db/roles", (require, exports, module) ->
 
-    ###
-    The `Role` class is bound to exactly one model object during any given use case enactment
+  exceptions = require "kopi/exceptions"
+  models = require "kopi/db/models"
+  object = require "kopi/utils/object"
 
-    Usage
+  ###
+  The `Role` class is bound to exactly one model object during any given use case enactment
 
-      class Admin extends Role
+  Usage
 
-        isAdmin: ->
-          this.user.name == "admin"
+    class Admin extends Role
 
-      user = new User()
-      admin = Admin.proxy(user)
-    ###
-    class Role
+      isAdmin: ->
+        this.user.name == "admin"
 
-      this.model = (model) -> this._modelClass = model
+    user = new User()
+    admin = Admin.proxy(user)
+  ###
+  class Role
 
-      this.proxy = (model) ->
-        cls = this
-        role = new cls(model)
-        role
+    this.model = (model) -> this._modelClass = model
 
-      constructor: (model) -> this.model = model
+    this.proxy = (model) ->
+      cls = this
+      role = new cls(model)
+      role
 
-    ###
-    The `Context` class includes the roles for a given algorithm, scenario, or use case.
+    constructor: (model) -> this.model = model
 
-    Usage
+  ###
+  The `Context` class includes the roles for a given algorithm, scenario, or use case.
 
-      class DestroyBlog
-        this.roles
-          owner: Admin
-          blog: Blog
+  Usage
 
-        do: ->
-          if this.owner.isAdmin()
-            this.blog.destroy()
+    class DestroyBlog
+      this.roles
+        owner: Admin
+        blog: Blog
 
-      context = new DestroyBlog owner: owner, blog: blog
-      context.do()
+      do: ->
+        if this.owner.isAdmin()
+          this.blog.destroy()
 
-    ###
-    class Context
+    context = new DestroyBlog owner: owner, blog: blog
+    context.do()
 
-      this.roles = (roles={}) ->
-        this._meta or= {}
-        this._meta = object.extend {}, this._meta, roles
+  ###
+  class Context
 
-      constructor: (roles={}) ->
-        cls = this.constructor
-        meta = cls._meta or= {}
-        for own name, role of roles
-          if name of meta and role instanceof meta[name]
-            this[name] = role
-          else
-            throw new exceptions.ValueError("Unknown role for #{cls.name}: ['#{name}', #{role}]")
+    this.roles = (roles={}) ->
+      this._meta or= {}
+      this._meta = object.extend {}, this._meta, roles
 
-    exports.Role = Role
-    exports.Context = Context
+    constructor: (roles={}) ->
+      cls = this.constructor
+      meta = cls._meta or= {}
+      for own name, role of roles
+        if name of meta and role instanceof meta[name]
+          this[name] = role
+        else
+          throw new exceptions.ValueError("Unknown role for #{cls.name}: ['#{name}', #{role}]")
+
+  Role: Role
+  Context: Context

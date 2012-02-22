@@ -1,6 +1,5 @@
-kopi.module("kopi.utils.structs.map")
-  .define (exports) ->
+define "kopi/utils/structs/map", (require, exports, module) ->
 
-    class Map
+  class Map
 
-    exports.Map = Map
+  Map: Map

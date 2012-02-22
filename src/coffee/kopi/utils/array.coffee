@@ -1,4 +1,4 @@
-define (require, exports, module) ->
+define "kopi/utils/array", (require, exports, module) ->
 
   exceptions = require "kopi/exceptions"
   utils = require "kopi/utils"

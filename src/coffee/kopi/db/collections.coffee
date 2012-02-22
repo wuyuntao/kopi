@@ -1,101 +1,101 @@
-kopi.module("kopi.db.collections")
-  .require("kopi.events")
-  .require("kopi.exceptions")
-  .require("kopi.utils.array")
-  .define (exports, events, exceptions, array) ->
+define "kopi/db/collections", (require, exports, module) ->
 
-    ###
-    Collection of model objects
+  events = require "kopi/events"
+  exceptions = require "kopi/exceptions"
+  array = require "kopi/utils/array"
 
-    ###
-    class Collection extends events.EventEmitter
+  ###
+  Collection of model objects
 
-      constructor: (model) ->
-        this.model = model
-        this._collection = []
+  ###
+  class Collection extends events.EventEmitter
 
-      # {{{ Public methods
-      add: (models, options) ->
-        if array.isArray(models)
-          for model in models
-            this._add(model, options)
-        else
-          this._add(models, options)
-        this
+    constructor: (model) ->
+      this.model = model
+      this._collection = []
 
-      remove: (models, options) ->
-        if array.isArray(models)
-          for model in models
-            this._remove(model, options)
-        else
-          this._remove(models, options)
-        this
+    # {{{ Public methods
+    add: (models, options) ->
+      if array.isArray(models)
+        for model in models
+          this._add(model, options)
+      else
+        this._add(models, options)
+      this
 
-      create: (model) ->
+    remove: (models, options) ->
+      if array.isArray(models)
+        for model in models
+          this._remove(model, options)
+      else
+        this._remove(models, options)
+      this
 
-      update: (attr) ->
-        for model in this._collection
-          model.update(attr)
-        this
+    create: (model) ->
 
-      get: () ->
+    update: (attr) ->
+      for model in this._collection
+        model.update(attr)
+      this
 
-      find: () ->
+    get: () ->
 
-      fetch: ->
+    find: () ->
 
-      count: ->
-        this._collection.length
+    fetch: ->
 
-      where: ->
-        this
+    count: ->
+      this._collection.length
 
-      sort: ->
-        this
+    where: ->
+      this
 
-      desc: ->
-        this
+    sort: ->
+      this
 
-      asc: ->
-        this
+    desc: ->
+      this
 
-      limit: (n) ->
-        this
+    asc: ->
+      this
 
-      getOrCreateBy: (filter, fn) ->
-        self = this
-        created = false
-        saveDoneFn = (chapter) ->
-          fn(null, chapter, created) if fn
-        saveFailFn = (error) ->
-          fn(error) if fn
-        saveThenFn = (error, chapter) ->
-          if error then saveFailFn(error) else saveDoneFn(chapter)
-        queryDoneFn = (chapter) ->
-          if not chapter
-            chapter = new self.model(filter)
-            created = true
-          chapter.save saveThenFn
-        queryFailFn = (error) ->
-          fn(error) if fn
-        queryThenFn = (error, chapter) ->
-          if error then queryFailFn(error) else queryDoneFn(chapter)
-        self.where(filter).one queryThenFn
+    limit: (n) ->
+      this
 
-      # }}}
+    getOrCreateBy: (filter, fn) ->
+      self = this
+      created = false
+      saveDoneFn = (chapter) ->
+        fn(null, chapter, created) if fn
+      saveFailFn = (error) ->
+        fn(error) if fn
+      saveThenFn = (error, chapter) ->
+        if error then saveFailFn(error) else saveDoneFn(chapter)
+      queryDoneFn = (chapter) ->
+        if not chapter
+          chapter = new self.model(filter)
+          created = true
+        chapter.save saveThenFn
+      queryFailFn = (error) ->
+        fn(error) if fn
+      queryThenFn = (error, chapter) ->
+        if error then queryFailFn(error) else queryDoneFn(chapter)
+      self.where(filter).one queryThenFn
 
-      # {{{ Private methods
-      _add: (model) ->
-        if not model instanceof self.model
-          throw new exceptions.ValueError("Model must be an instance of #{self.model.name}")
-        this._collection.push(model)
+    # }}}
 
-      _remove: (model) ->
-        array.remove(this._collection, model)
+    # {{{ Private methods
+    _add: (model) ->
+      if not model instanceof self.model
+        throw new exceptions.ValueError("Model must be an instance of #{self.model.name}")
+      this._collection.push(model)
 
-      _reset: ->
-        this._collection = []
+    _remove: (model) ->
+      array.remove(this._collection, model)
 
-      # }}}
+    _reset: ->
+      this._collection = []
 
-    exports.Collection = Collection
+    # }}}
+
+  Collection: Collection

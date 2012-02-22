@@ -1,4 +1,4 @@
-define (require, exports, module) ->
+define "kopi/exceptions", (require, exports, module) ->
 
   ###
   异常的基类
@@ -32,8 +32,8 @@ define (require, exports, module) ->
     constructor: (klass) ->
       super("#{klass.name} is a singleton class. Can not be initialized twice.")
 
-  exports.Exception = Exception
-  exports.NoSuchElementError = NoSuchElementError
-  exports.NotImplementedError = NotImplementedError
-  exports.ValueError = ValueError
-  exports.SingletonError = SingletonError
+  Exception: Exception
+  NoSuchElementError: NoSuchElementError
+  NotImplementedError: NotImplementedError
+  ValueError: ValueError
+  SingletonError: SingletonError

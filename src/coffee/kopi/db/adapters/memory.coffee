@@ -1,23 +1,23 @@
-kopi.module("kopi.db.adapters.memory")
-  .require("kopi.utils.storage")
-  .require("kopi.db.adapters.webstorage")
-  .define (exports, storage) ->
+define "kopi/db/adapters/memory", (require, exports, module) ->
 
-    storage = storage.memoryStorage
+  storage = require "kopi/utils/storage"
+  webstorage = require "kopi/db/adapters/webstorage"
 
-    class MemoryAdapter extends kv.KeyValueAdapter
+  storage = storage.memoryStorage
 
-      support: -> !!storage
+  class MemoryAdapter extends kv.KeyValueAdapter
 
-      _get: (key, value) ->
-        storage.getItem(key) or value
-        this
+    support: -> !!storage
 
-      _set: (key, value) ->
-        storage.setItem(key, value)
+    _get: (key, value) ->
+      storage.getItem(key) or value
+      this
 
-      _remove: (key) ->
-        storage.removeItem(key)
-        this
+    _set: (key, value) ->
+      storage.setItem(key, value)
 
-    exports.MemoryAdapter = MemoryAdapter
+    _remove: (key) ->
+      storage.removeItem(key)
+      this
+
+  MemoryAdapter: MemoryAdapter

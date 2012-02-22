@@ -1,7 +1,7 @@
-kopi.module("kopi.db.adapters.android")
-  .require("kopi.db.adapters.sql")
-  .define (exports, sql) ->
+define "kopi/db/adapters/android", (require, exports, module) ->
 
-    class AndroidSQLAdapter extends sql.SQLAdapter
+  sql = require "kopi/db/adapters/sql"
 
-    exports.AndroidSQLAdapter = AndroidSQLAdapter
+  class AndroidSQLAdapter extends sql.SQLAdapter
+
+  AndroidSQLAdapter: AndroidSQLAdapter

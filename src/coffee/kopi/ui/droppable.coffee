@@ -1,11 +1,11 @@
-kopi.module("kopi.ui.droppable")
-  .require("kopi.ui.touchable")
-  .define (exports, touchable) ->
+define "kopi/ui/droppable", (require, exports, module) ->
 
-    ###
-    A widget can be dragged by mouse or finger
+  touchable = require "kopi/ui/touchable"
 
-    ###
-    class Droppable extends touchable.Touchable
+  ###
+  A widget can be dragged by mouse or finger
 
-    exports.Droppable = Droppable
+  ###
+  class Droppable extends touchable.Touchable
+
+  Droppable: Droppable

@@ -1,156 +1,156 @@
-kopi.module("kopi.db.adapters.kv")
-  .require("kopi.utils.text")
-  .require("kopi.utils.object")
-  .require("kopi.db.adapters.client")
-  .define (exports, text, object, client) ->
+define "kopi/db/adapters/kv", (require, exports, module) ->
 
-    ###
-    Adapter for Key/Value Databases like local storage, memcached, redis, etc.
+  text = require "kopi/utils/text"
+  object = require "kopi/utils/object"
+  client = require "kopi/db/adapters/client"
 
-    Model definition
+  ###
+  Adapter for Key/Value Databases like local storage, memcached, redis, etc.
 
-      class app.user.User extends Model
-        cls = this
-        cls.fields
-          sid:
-            type: Model.INTEGER
-            primary: true
-          login:
-            type: Model.STRING
-            index: true
-          avatar:
-            type: Model.STRING
+  Model definition
 
-    Data Structure
+    class app.user.User extends Model
+      cls = this
+      cls.fields
+        sid:
+          type: Model.INTEGER
+          primary: true
+        login:
+          type: Model.STRING
+          index: true
+        avatar:
+          type: Model.STRING
 
-      == key ==                   == value ==
-      kopi:user:1                 {"sid":1,"login":"kobe","avatar":null}
-      kopi:user:2                 {"sid":2,"login":"kd35","avatar":"/avatars/kd35.jpg"}
-      kopi:user:index:login       {"kopi":1,"kd35":2}
+  Data Structure
 
-    TODO
-      Support non-pk fields querying
-      support multiple fields querying
-      support non-unique index
-    ###
-    class KeyValueAdapter extends client.ClientAdapter
+    == key ==                   == value ==
+    kopi:user:1                 {"sid":1,"login":"kobe","avatar":null}
+    kopi:user:2                 {"sid":2,"login":"kd35","avatar":"/avatars/kd35.jpg"}
+    kopi:user:index:login       {"kopi":1,"kd35":2}
 
-      this.configure
-        keyPrefix: "kopi"
-        keyDelimiter: ":"
+  TODO
+    Support non-pk fields querying
+    support multiple fields querying
+    support non-unique index
+  ###
+  class KeyValueAdapter extends client.ClientAdapter
 
-      create: (query, fn) ->
-        self = this
-        model = query.model
-        attrs = query.attrs()
-        pk = query.pk()
-        if not pk
-          fn(true, "Must provide primary key") if fn
-          return self
-        key = self._keyForModel(model, pk)
-        isKeyExists = !!self._get(key)
-        if isKeyExists
-          fn(true, "Primary key already exists.") if fn
-          return self
-        self._set(key, self._adapterObject(attrs, model.meta().names))
-        fn(null) if fn
-        self
+    this.configure
+      keyPrefix: "kopi"
+      keyDelimiter: ":"
 
-      retrieve: (query, fn) ->
-        self = this
-        model = query.model
-        pk = query.pk()
-        if not pk
-          fn(true, "Must provide primary key") if fn
-          return self
-        key = self._keyForModel(model, pk)
-        value = self._get(key)
-        if value
-          try
-            value = self._modelObject(value, model.meta().names)
-            message =
-              ok: true
-              entries: [value]
-          catch e
-            message =
-              error: true
-              message: "Failed to parse value: #{e}"
-        else
+    create: (query, fn) ->
+      self = this
+      model = query.model
+      attrs = query.attrs()
+      pk = query.pk()
+      if not pk
+        fn(true, "Must provide primary key") if fn
+        return self
+      key = self._keyForModel(model, pk)
+      isKeyExists = !!self._get(key)
+      if isKeyExists
+        fn(true, "Primary key already exists.") if fn
+        return self
+      self._set(key, self._adapterObject(attrs, model.meta().names))
+      fn(null) if fn
+      self
+
+    retrieve: (query, fn) ->
+      self = this
+      model = query.model
+      pk = query.pk()
+      if not pk
+        fn(true, "Must provide primary key") if fn
+        return self
+      key = self._keyForModel(model, pk)
+      value = self._get(key)
+      if value
+        try
+          value = self._modelObject(value, model.meta().names)
           message =
             ok: true
-            entries: []
-        fn(message.error, message) if fn
-        self
+            entries: [value]
+        catch e
+          message =
+            error: true
+            message: "Failed to parse value: #{e}"
+      else
+        message =
+          ok: true
+          entries: []
+      fn(message.error, message) if fn
+      self
 
-      update: (query, fn) ->
-        self = this
-        retrieveFn = (error, message) ->
-          if error
-            fn(error, message) if fn
-            return
-          model = query.model
-          key = self._keyForModel(model, query.pk())
-          value = message.entries[0]
-          if value
-            object.extend value, query.attrs()
-            self._set(key, self._adapterObject(value, model.meta().names))
-            fn(null) if fn
-          else
-            fn(true, "Entry not found") if fn
-
-        self.retrieve(query, retrieveFn)
-        self
-
-      destroy: (query, fn) ->
-        self = this
+    update: (query, fn) ->
+      self = this
+      retrieveFn = (error, message) ->
+        if error
+          fn(error, message) if fn
+          return
         model = query.model
-        pk = query.pk()
-        if not pk
-          fn(true, "pk not found") if fn
-          return self
-        key = self._keyForModel(model, pk)
-        self._remove(key)
-        fn(null) if fn
-        self
+        key = self._keyForModel(model, query.pk())
+        value = message.entries[0]
+        if value
+          object.extend value, query.attrs()
+          self._set(key, self._adapterObject(value, model.meta().names))
+          fn(null) if fn
+        else
+          fn(true, "Entry not found") if fn
 
-      ###
-      Build key for model instance
-      ###
-      _keyForModel: (model, pk) ->
-        self = this
-        unless self._keyForModelTmpl
-          prefix = self._options.keyPrefix
-          delimiter = self._options.keyDelimiter
-          self._keyForModelTmpl = "#{prefix}#{delimiter}{model}#{delimiter}#{pk}"
-        text.format(self._keyForModelTmpl, model: text.underscore(model.name), pk: pk)
+      self.retrieve(query, retrieveFn)
+      self
 
-      ###
-      Build key for model index
-      ###
-      _keyForIndex: (model, index="pk") ->
-        self = this
-        unless self._keyForIndexTmpl
-          prefix = self._options.keyPrefix
-          delimiter = self._options.delimiter
-          self._keyForIndexTmpl = "#{prefix}#{delimiter}{model}#{delimiter}index#{delimiter}{index}"
-        text.format(self._keyForModelTmpl, model: model, index: index)
+    destroy: (query, fn) ->
+      self = this
+      model = query.model
+      pk = query.pk()
+      if not pk
+        fn(true, "pk not found") if fn
+        return self
+      key = self._keyForModel(model, pk)
+      self._remove(key)
+      fn(null) if fn
+      self
 
-      ###
-      Get value from db. Implement in subclasses
-      ###
-      _get: (store, key, value, fn) ->
-        throw new exceptions.NotImplementedError()
+    ###
+    Build key for model instance
+    ###
+    _keyForModel: (model, pk) ->
+      self = this
+      unless self._keyForModelTmpl
+        prefix = self._options.keyPrefix
+        delimiter = self._options.keyDelimiter
+        self._keyForModelTmpl = "#{prefix}#{delimiter}{model}#{delimiter}#{pk}"
+      text.format(self._keyForModelTmpl, model: text.underscore(model.name), pk: pk)
 
-      ###
-      Set value to db. Implement in subclasses
-      ###
-      _set: (store, key, value, fn) ->
-        throw new exceptions.NotImplementedError()
+    ###
+    Build key for model index
+    ###
+    _keyForIndex: (model, index="pk") ->
+      self = this
+      unless self._keyForIndexTmpl
+        prefix = self._options.keyPrefix
+        delimiter = self._options.delimiter
+        self._keyForIndexTmpl = "#{prefix}#{delimiter}{model}#{delimiter}index#{delimiter}{index}"
+      text.format(self._keyForModelTmpl, model: model, index: index)
 
-      ###
-      Remove value from db. Implement in subclasses
-      ###
-      _remove: (store, key, fn) ->
-        throw new exceptions.NotImplementedError()
+    ###
+    Get value from db. Implement in subclasses
+    ###
+    _get: (store, key, value, fn) ->
+      throw new exceptions.NotImplementedError()
 
-    exports.KeyValueAdapter = KeyValueAdapter
+    ###
+    Set value to db. Implement in subclasses
+    ###
+    _set: (store, key, value, fn) ->
+      throw new exceptions.NotImplementedError()
+
+    ###
+    Remove value from db. Implement in subclasses
+    ###
+    _remove: (store, key, fn) ->
+      throw new exceptions.NotImplementedError()
+
+  KeyValueAdapter: KeyValueAdapter

@@ -1,36 +1,36 @@
-kopi.module("kopi.ui.notification.overlays")
-  .require("kopi.settings")
-  .require("kopi.utils.i18n")
-  .require("kopi.ui.notification.widgets")
-  .define (exports, settings, i18n, widgets) ->
+define "kopi/ui/notification/overlays", (require, exports, module) ->
 
-    class Overlay extends widgets.Widget
+  settings = require "kopi/settings"
+  i18n = require "kopi/utils/i18n"
+  widgets = require "kopi/ui/notification/widgets"
 
-      onskeleton: ->
-        # TODO Ignore touch events too
-        this.element.bind "click", (e) -> return false
-        super
+  class Overlay extends widgets.Widget
 
-      show: (transparent=false) ->
-        cls = this.constructor
-        self = this
-        return self if not self.hidden
-        self.hidden = false
-        self.element
-          .removeClass(cls.hideClass())
-          .addClass(cls.showClass())
-        self.element.addClass(cls.transparentClass()) if transparent
-        self
+    onskeleton: ->
+      # TODO Ignore touch events too
+      this.element.bind "click", (e) -> return false
+      super
 
-      hide: ->
-        cls = this.constructor
-        self = this
-        return self if self.hidden
-        self.hidden = true
-        self.element
-          .addClass(cls.hideClass())
-          .removeClass("#{cls.showClass()} #{cls.transparentClass()}")
-        self
+    show: (transparent=false) ->
+      cls = this.constructor
+      self = this
+      return self if not self.hidden
+      self.hidden = false
+      self.element
+        .removeClass(cls.hideClass())
+        .addClass(cls.showClass())
+      self.element.addClass(cls.transparentClass()) if transparent
+      self
 
-    # Singleton
-    exports.Overlay = Overlay
+    hide: ->
+      cls = this.constructor
+      self = this
+      return self if self.hidden
+      self.hidden = true
+      self.element
+        .addClass(cls.hideClass())
+        .removeClass("#{cls.showClass()} #{cls.transparentClass()}")
+      self
+
+  # Singleton
+  Overlay: Overlay

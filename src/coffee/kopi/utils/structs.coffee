@@ -1,2 +1,1 @@
-kopi.module("kopi.utils.structs")
-  .define (exports) ->
+define "kopi/utils/structs", (require, exports, module) ->

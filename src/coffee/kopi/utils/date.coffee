@@ -1,11 +1,10 @@
-kopi.module("kopi.utils.date")
-  .define (exports) ->
+define "kopi/utils/date", (require, exports, module) ->
 
-    isDate = (date) -> !!(date and date.getFullYear)
+  isDate = (date) -> !!(date and date.getFullYear)
 
-    # ES5 15.9.4.4
-    # https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date/now
-    now = Date.now or= -> +new Date()
+  # ES5 15.9.4.4
+  # https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date/now
+  now = Date.now or= -> +new Date()
 
-    exports.isDate = isDate
-    exports.now = now
+  isDate: isDate
+  now: now

@@ -1,120 +1,121 @@
-kopi.module("kopi.tests.db.models")
-  .require("kopi.tests.db.fixtures")
-  .require("kopi.db.models")
-  .require("kopi.db.errors")
-  .define (exports, fixtures, models, errors) ->
+define "kopi/tests/db/models", (require, exports, module) ->
 
-    authorAlpha = new fixtures.User
-      id: 1
-      name: "Alpha"
-      email: "alpha@gmail.com"
-      registerAt: new Date(2012, 2, 1, 20)
+  q = require "qunit"
+  fixtures = require "kopi/tests/db/fixtures"
+  models = require "kopi/db/models"
+  errors = require "kopi/db/errors"
 
-    authorTheta = new fixtures.User
-      id: 2
-      name: "Theta"
-      email: "theta@gmail.com"
-      registerAt: new Date(2012, 2, 5, 10)
+  authorAlpha = new fixtures.User
+    id: 1
+    name: "Alpha"
+    email: "alpha@gmail.com"
+    registerAt: new Date(2012, 2, 1, 20)
 
-    tagBeta = new fixtures.Tag
-      id: 1
-      name: "Beta"
+  authorTheta = new fixtures.User
+    id: 2
+    name: "Theta"
+    email: "theta@gmail.com"
+    registerAt: new Date(2012, 2, 5, 10)
 
-    tagGamma = new fixtures.Tag
-      id: 2
-      name: "Gamma"
+  tagBeta = new fixtures.Tag
+    id: 1
+    name: "Beta"
 
-    articleDelta = new fixtures.Article
-      id: 1
-      title: "Article Delta"
-      body: "Body of article delta"
-      author: authorAlpha
-      publishedAt: new Date(2012, 2, 1, 20)
-      updatedAt: new Date(2012, 2, 2, 10)
-      # Not supported yet
-      # categories: [tagBeta, tagGamma]
+  tagGamma = new fixtures.Tag
+    id: 2
+    name: "Gamma"
 
-    articleEpsilon = new fixtures.Article
-      id: 2
-      title: "Article Epsilon"
-      body: "Body of article epsilon"
-      author: authorAlpha
-      publishedAt: new Date(2012, 2, 2, 20)
-      updatedAt: new Date(2012, 2, 3, 10)
-
+  articleDelta = new fixtures.Article
+    id: 1
+    title: "Article Delta"
+    body: "Body of article delta"
+    author: authorAlpha
+    publishedAt: new Date(2012, 2, 1, 20)
+    updatedAt: new Date(2012, 2, 2, 10)
     # Not supported yet
-    # articleEpsilon.categories.push(tagBeta)
+    # categories: [tagBeta, tagGamma]
 
-    blogZeta = new fixtures.Blog
-      id: 1
-      title: "Blog Zeta"
-      owner: authorAlpha
+  articleEpsilon = new fixtures.Article
+    id: 2
+    title: "Article Epsilon"
+    body: "Body of article epsilon"
+    author: authorAlpha
+    publishedAt: new Date(2012, 2, 2, 20)
+    updatedAt: new Date(2012, 2, 3, 10)
 
-    blogEta = new fixtures.Blog
-      id: 2
-      title: "Blog Eta"
-      owner: authorAlpha
+  # Not supported yet
+  # articleEpsilon.categories.push(tagBeta)
 
-    module "kopi.db.models"
+  blogZeta = new fixtures.Blog
+    id: 1
+    title: "Blog Zeta"
+    owner: authorAlpha
 
-    test "primary key", ->
-      equals authorAlpha.pk(), 1
+  blogEta = new fixtures.Blog
+    id: 2
+    title: "Blog Eta"
+    owner: authorAlpha
 
-    test "fields", ->
-      equals authorAlpha.id, 1
-      equals authorAlpha.name, "Alpha"
-      equals authorAlpha.email, "alpha@gmail.com"
-      equals authorAlpha.registerAt.getTime(), new Date(2012, 2, 1, 20).getTime()
+  q.module "kopi.db.models"
 
-    test "set values for fields", ->
-      authorTheta.name = "Iota"
-      authorTheta.registerAt = new Date(2012, 2, 3, 14)
+  q.test "primary key", ->
+    q.equals authorAlpha.pk(), 1
 
-      equals authorTheta.name, "Iota"
-      equals authorTheta.registerAt.getTime(), new Date(2012, 2, 3, 14).getTime()
+  q.test "fields", ->
+    q.equals authorAlpha.id, 1
+    q.equals authorAlpha.name, "Alpha"
+    q.equals authorAlpha.email, "alpha@gmail.com"
+    q.equals authorAlpha.registerAt.getTime(), new Date(2012, 2, 1, 20).getTime()
 
-    test "many-to-one relationship", ->
-      equals blogZeta.ownerId, 1
-      equals blogZeta.owner.id, 1
-      equals blogZeta.owner.guid, authorAlpha.guid
+  q.test "set values for fields", ->
+    authorTheta.name = "Iota"
+    authorTheta.registerAt = new Date(2012, 2, 3, 14)
 
-    test "set values for many-to-one relationship", ->
-      blogZeta.ownerId = authorTheta.id
-      equals blogZeta.ownerId, 2
-      getRelatedObject = ->
-        equals blogZeta.owner.id, 2
-        equals blogZeta.owner.guid, authorTheta.guid
-      raises getRelatedObject, errors.RelatedModelNotFetched
+    q.equals authorTheta.name, "Iota"
+    q.equals authorTheta.registerAt.getTime(), new Date(2012, 2, 3, 14).getTime()
 
-      # Since ownerId is same as the id of prefetched owner
-      blogZeta.owner = authorAlpha
-      equals blogZeta.ownerId, 1
-      equals blogZeta.owner.id, 1
-      equals blogZeta.owner.guid, authorAlpha.guid
+  q.test "many-to-one relationship", ->
+    q.equals blogZeta.ownerId, 1
+    q.equals blogZeta.owner.id, 1
+    q.equals blogZeta.owner.guid, authorAlpha.guid
 
-    test "one-to-many relationship", ->
-      # Not supported yet
-      # blogs = authorAlpha.blogs
-      # equals blogs.length, 2
-      # equals blogs[0].id, 1
-      # equals blogs[1].id, 2
+  q.test "set values for many-to-one relationship", ->
+    blogZeta.ownerId = authorTheta.id
+    q.equals blogZeta.ownerId, 2
+    getRelatedObject = ->
+      q.equals blogZeta.owner.id, 2
+      q.equals blogZeta.owner.guid, authorTheta.guid
+    raises getRelatedObject, errors.RelatedModelNotFetched
 
-    test "set values for one-to-many relationship", ->
+    # Since ownerId is same as the id of prefetched owner
+    blogZeta.owner = authorAlpha
+    q.equals blogZeta.ownerId, 1
+    q.equals blogZeta.owner.id, 1
+    q.equals blogZeta.owner.guid, authorAlpha.guid
 
-    test "many-to-many field", ->
-      # Not supported yet
-      # categories = articleDelta.categories
-      # equals categories.length, 2
-      # equals categories[0].id, 1
-      # equals categories[0].name, "Beta"
-      # equals categories[1].id, 2
-      # equals categories[1].name, "Gamma"
+  q.test "one-to-many relationship", ->
+    # Not supported yet
+    # blogs = authorAlpha.blogs
+    # q.equals blogs.length, 2
+    # q.equals blogs[0].id, 1
+    # q.equals blogs[1].id, 2
 
-      # articles = tagBeta.articles
-      # equals articles.length, 2
-      # equals articles[0].id, 1
-      # equals articles[0].title, "Article Delta"
-      # equals articles[1].id, 2
-      # equals articles[1].name, "Article Epsilon"
+  q.test "set values for one-to-many relationship", ->
 
-    test "set values for many-to-many fields", ->
+  q.test "many-to-many field", ->
+    # Not supported yet
+    # categories = articleDelta.categories
+    # q.equals categories.length, 2
+    # q.equals categories[0].id, 1
+    # q.equals categories[0].name, "Beta"
+    # q.equals categories[1].id, 2
+    # q.equals categories[1].name, "Gamma"
+
+    # articles = tagBeta.articles
+    # q.equals articles.length, 2
+    # q.equals articles[0].id, 1
+    # q.equals articles[0].title, "Article Delta"
+    # q.equals articles[1].id, 2
+    # q.equals articles[1].name, "Article Epsilon"
+
+  q.test "set values for many-to-many fields", ->

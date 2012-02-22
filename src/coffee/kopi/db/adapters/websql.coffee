@@ -1,10 +1,10 @@
-kopi.module("kopi.db.adapters.websql")
-  .require("kopi.utils.support")
-  .require("kopi.db.adapters.sql")
-  .define (exports, support, sql) ->
+define "kopi/db/adapters/websql", (require, exports, module) ->
 
-    class WebSQLAdapter extends sql.SQLAdapter
+  support = require "kopi/utils/support"
+  sql = require "kopi/db/adapters/sql"
 
-      this.support = -> support.websql
+  class WebSQLAdapter extends sql.SQLAdapter
 
-    exports.WebSQLAdapter = WebSQLAdapter
+    this.support = -> support.websql
+
+  WebSQLAdapter: WebSQLAdapter

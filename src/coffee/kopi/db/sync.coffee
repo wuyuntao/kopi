@@ -1,11 +1,11 @@
-kopi.module("kopi.db.sync")
-  .require("kopi.db.collections")
-  .require("kopi.db.models")
-  .define (exports, collections, models) ->
+define "kopi/db/sync", (require, exports, module) ->
 
-    ###
-    负责对模型和服务器进行同步
-    ###
-    class Sync
+  collections = require "kopi/db/collections"
+  models = require "kopi/db/models"
 
-    exports.Sync = Sync
+  ###
+  负责对模型和服务器进行同步
+  ###
+  class Sync
+
+  Sync: Sync

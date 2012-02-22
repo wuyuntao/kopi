@@ -1,42 +1,43 @@
-kopi.module("kopi.tests.app.router")
-  .require("kopi.tests.base")
-  .require("kopi.app.router")
-  .define (exports, base, router) ->
+define "kopi/tests/app/router", (require, exports, module) ->
 
-    class View
+  q = require "qunit"
+  base = require "kopi/tests/base"
+  router = require "kopi/app/router"
 
-    module("kopi.app.router")
+  class View
 
-    test "static route", ->
-      router.view(View).route('/book/')
-      request = router.match('/book/?test=false')
-      equals(request.route.route, '/book/')
-      equals(request.url.path, '/book/')
-      equals(request.url.query, '?test=false')
+  q.module("kopi.app.router")
 
-    test "dynamic route", ->
-      router.view(View).route('/book/:id/')
-      request = router.match('/book/1/?test=true')
+  q.test "static route", ->
+    router.view(View).route('/book/')
+    request = router.match('/book/?test=false')
+    q.equals(request.route.route, '/book/')
+    q.equals(request.url.path, '/book/')
+    q.equals(request.url.query, '?test=false')
 
-      equals(request.route.route, '/book/:id/')
-      equals(request.url.path, '/book/1/')
-      equals(request.url.query, '?test=true')
-      equals(request.params['id'], '1')
+  q.test "dynamic route", ->
+    router.view(View).route('/book/:id/')
+    request = router.match('/book/1/?test=true')
 
-    test "dynamic route with regex only", ->
-      router.view(View).route('/note/:#\\d+#/')
-      request = router.match('/note/2/?test=false&lang=en')
+    q.equals(request.route.route, '/book/:id/')
+    q.equals(request.url.path, '/book/1/')
+    q.equals(request.url.query, '?test=true')
+    q.equals(request.params['id'], '1')
 
-      equals(request.route.route, '/note/:#\\d+#/')
-      equals(request.url.path, '/note/2/')
-      equals(request.url.query, '?test=false&lang=en')
-      equals(request.params[0], '2')
+  q.test "dynamic route with regex only", ->
+    router.view(View).route('/note/:#\\d+#/')
+    request = router.match('/note/2/?test=false&lang=en')
 
-    test "dynamic route with name and regex", ->
-      router.view(View).route('/comment/:id#\\d+#/')
-      request = router.match('/comment/3/?test&lang=en')
+    q.equals(request.route.route, '/note/:#\\d+#/')
+    q.equals(request.url.path, '/note/2/')
+    q.equals(request.url.query, '?test=false&lang=en')
+    q.equals(request.params[0], '2')
 
-      equals(request.route.route, '/comment/:id#\\d+#/')
-      equals(request.url.path, '/comment/3/')
-      equals(request.url.query, '?test&lang=en')
-      equals(request.params['id'], '3')
+  q.test "dynamic route with name and regex", ->
+    router.view(View).route('/comment/:id#\\d+#/')
+    request = router.match('/comment/3/?test&lang=en')
+
+    q.equals(request.route.route, '/comment/:id#\\d+#/')
+    q.equals(request.url.path, '/comment/3/')
+    q.equals(request.url.query, '?test&lang=en')
+    q.equals(request.params['id'], '3')

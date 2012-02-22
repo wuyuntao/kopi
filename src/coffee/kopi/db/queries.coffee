@@ -1,324 +1,324 @@
-kopi.module("kopi.db.queries")
-  .require("kopi.exceptions")
-  .require("kopi.utils")
-  .require("kopi.utils.klass")
-  .require("kopi.utils.number")
-  .require("kopi.utils.object")
-  .require("kopi.db.collections")
-  .define (exports, exceptions, utils, klass, number, object, collections) ->
+define "kopi/db/queries", (require, exports, module) ->
 
-    ###
-    Some query related exception
-    ###
-    class QueryError extends exceptions.Exception
+  exceptions = require "kopi/exceptions"
+  utils = require "kopi/utils"
+  klass = require "kopi/utils/klass"
+  number = require "kopi/utils/number"
+  object = require "kopi/utils/object"
+  collections = require "kopi/db/collections"
 
-    CREATE = "create"
-    RETRIEVE = "retrieve"
-    UPDATE = "update"
-    DESTROY = "destroy"
-    RAW = "raw"
-    ACTIONS = [CREATE, RETRIEVE, UPDATE, DESTROY, RAW]
+  ###
+  Some query related exception
+  ###
+  class QueryError extends exceptions.Exception
 
-    ONLY = "only"
-    WHERE = "where"
-    SORT = "sort"
-    SKIP = "skip"
-    LIMIT = "limit"
-    COUNT = "count"
-    ONE = "one"
-    ALL = "all"
+  CREATE = "create"
+  RETRIEVE = "retrieve"
+  UPDATE = "update"
+  DESTROY = "destroy"
+  RAW = "raw"
+  ACTIONS = [CREATE, RETRIEVE, UPDATE, DESTROY, RAW]
 
-    LT = "lt"
-    LTE = "lte"
-    GT = "gt"
-    GTE = "gte"
-    EQ = "eq"
-    NE = "ne"
-    IN = "in"
-    NIN = "nin"
-    IS = "IS"
-    LIKE = "LIKE"
-    ILIKE = "ILIKE"
+  ONLY = "only"
+  WHERE = "where"
+  SORT = "sort"
+  SKIP = "skip"
+  LIMIT = "limit"
+  COUNT = "count"
+  ONE = "one"
+  ALL = "all"
 
-    ###
-    Kopi provides a query API similar to MongoDB.
+  LT = "lt"
+  LTE = "lte"
+  GT = "gt"
+  GTE = "gte"
+  EQ = "eq"
+  NE = "ne"
+  IN = "in"
+  NIN = "nin"
+  IS = "IS"
+  LIKE = "LIKE"
+  ILIKE = "ILIKE"
 
-    Define a query to retrieve books which are collected by some user
+  ###
+  Kopi provides a query API similar to MongoDB.
 
-      base = new RetrieveQuery(Book)
-        .only("sid", "title")
-        .where(userId: user.sid)
-        .sort(collectedAt: false)
-      count = base.clone()
-        .count(true)
-      query = base.clone()
-        .skip(10)
-        .limit(10)
+  Define a query to retrieve books which are collected by some user
 
-    Define a query with advanced condition filters
+    base = new RetrieveQuery(Book)
+      .only("sid", "title")
+      .where(userId: user.sid)
+      .sort(collectedAt: false)
+    count = base.clone()
+      .count(true)
+    query = base.clone()
+      .skip(10)
+      .limit(10)
 
-      query = new RetrieveQuery(Book)
-        .where
-          userId:
-            in: [1, 3, 5]
-          registerAt:
-            lte: new Date(2011, 12, 1)
-            gt: new Date(2011, 11, 1)
-          lastName:
-            like: /smith|johnson/
-          firstName:
-            ne: "josh"
+  Define a query with advanced condition filters
 
-    Define a query to create a comment of a book
-      query = new CreateQuery(Comment)
-        .attrs(bookId: book.sid, body: "Then again")
+    query = new RetrieveQuery(Book)
+      .where
+        userId:
+          in: [1, 3, 5]
+        registerAt:
+          lte: new Date(2011, 12, 1)
+          gt: new Date(2011, 11, 1)
+        lastName:
+          like: /smith|johnson/
+        firstName:
+          ne: "josh"
 
-    Define a query to update multiple comments
-      query = new UpdateQuery(Comment)
-        .where(userId: user.sid, bookId: book.sid)
-        .attrs(privacy: Comment.PRIVACY_PUBLIC)
+  Define a query to create a comment of a book
+    query = new CreateQuery(Comment)
+      .attrs(bookId: book.sid, body: "Then again")
 
-    ###
-    class BaseQuery
+  Define a query to update multiple comments
+    query = new UpdateQuery(Comment)
+      .where(userId: user.sid, bookId: book.sid)
+      .attrs(privacy: Comment.PRIVACY_PUBLIC)
 
-      this.METHODS = []
+  ###
+  class BaseQuery
 
-      proto = this.prototype
-      klass.accessor proto, "action"
+    this.METHODS = []
 
-      constructor: (model, criteria) ->
-        cls = this.constructor
-        self = this
-        if not model
-          throw new exceptions.ValueError("Model must be a subclass of kopi.db.models.Model")
+    proto = this.prototype
+    klass.accessor proto, "action"
 
-        # Set default values
-        self.model = model
+    constructor: (model, criteria) ->
+      cls = this.constructor
+      self = this
+      if not model
+        throw new exceptions.ValueError("Model must be a subclass of kopi.db.models.Model")
 
-        if criteria
-          for method in cls.METHODS
-            self[method](criteria[method]) if method of criteria
+      # Set default values
+      self.model = model
 
-      clone: -> throw new exceptions.NotImplementedError()
-
-      # Generate AJAX params
-      params: -> throw new exceptions.NotImplementedError()
-
-      # Generate SQL statements
-      sql: -> throw new exceptions.NotImplementedError()
-
-      criteria: ->
-        cls = this.constructor
-        self = this
-        criteria = {}
+      if criteria
         for method in cls.METHODS
-          value = self[method]()
-          criteria[method] = value if value
-        criteria
+          self[method](criteria[method]) if method of criteria
 
-      execute: (fn, type) ->
-        self = this
-        adapter = self.model.prepare().adapter(type)
-        adapter[self._action](self, fn)
-        this
+    clone: -> throw new exceptions.NotImplementedError()
 
-    class CreateQuery extends BaseQuery
+    # Generate AJAX params
+    params: -> throw new exceptions.NotImplementedError()
 
-      proto = this.prototype
-      klass.accessor proto, "attrs",
-        value: {}
-        set: (attrs) ->
-          if this._attrs then object.extend(this._attrs, attrs) else this._attrs = attrs
+    # Generate SQL statements
+    sql: -> throw new exceptions.NotImplementedError()
 
-      constructor: (model, attrs={}) ->
-        this.action(CREATE).attrs(attrs)
-        super(model)
+    criteria: ->
+      cls = this.constructor
+      self = this
+      criteria = {}
+      for method in cls.METHODS
+        value = self[method]()
+        criteria[method] = value if value
+      criteria
 
-      params: -> {attrs: JSON.stringify(this._attrs)}
+    execute: (fn, type) ->
+      self = this
+      adapter = self.model.prepare().adapter(type)
+      adapter[self._action](self, fn)
+      this
 
-      clone: -> new this.constructor(this.model, this._attrs)
+  class CreateQuery extends BaseQuery
 
-      pk: ->
-        self = this
-        self._attrs[self.model.meta().pk]
+    proto = this.prototype
+    klass.accessor proto, "attrs",
+      value: {}
+      set: (attrs) ->
+        if this._attrs then object.extend(this._attrs, attrs) else this._attrs = attrs
 
-    class BaseRetriveQuery extends BaseQuery
+    constructor: (model, attrs={}) ->
+      this.action(CREATE).attrs(attrs)
+      super(model)
 
-      kls = this
-      kls.METHODS = [WHERE, SKIP, LIMIT]
-      kls.OPERATIONS = [LT, LTE, GT, GTE, EQ, NE, IN, NIN, IS, LIKE, ILIKE]
+    params: -> {attrs: JSON.stringify(this._attrs)}
 
-      proto = this.prototype
-      klass.accessor proto, "where",
-        value: {}
-        set: (where) ->
-          this._where or= {}
-          for field, operations of where
-            this._where[field] or= {}
-            unless this._isOpertions(operations)
-              operations =
-                eq: operations
-            object.extend this._where[field], operations
+    clone: -> new this.constructor(this.model, this._attrs)
 
-      klass.accessor proto, "skip",
-        set: (skip) ->
-          this._skip = skip if number.isNumber(skip)
+    pk: ->
+      self = this
+      self._attrs[self.model.meta().pk]
 
-      klass.accessor proto, "limit",
-        set: (limit) ->
-          this._limit = limit if number.isNumber(limit)
+  class BaseRetriveQuery extends BaseQuery
 
-      constructor: (model, criteria) ->
-        self = this
-        super(model, criteria)
+    kls = this
+    kls.METHODS = [WHERE, SKIP, LIMIT]
+    kls.OPERATIONS = [LT, LTE, GT, GTE, EQ, NE, IN, NIN, IS, LIKE, ILIKE]
 
-      ###
-      If value is an hash and all keys are operation keywords,
-      value is considered as a operation hash
+    proto = this.prototype
+    klass.accessor proto, "where",
+      value: {}
+      set: (where) ->
+        this._where or= {}
+        for field, operations of where
+          this._where[field] or= {}
+          unless this._isOpertions(operations)
+            operations =
+              eq: operations
+          object.extend this._where[field], operations
 
-      TODO Need to optimize performance?
-      ###
-      _isOpertions: (obj) ->
-        if object.isObject(obj)
-          for key, value of obj
-            unless key in this.constructor.OPERATIONS
-              return false
-          return true
-        false
+    klass.accessor proto, "skip",
+      set: (skip) ->
+        this._skip = skip if number.isNumber(skip)
 
-      clone: ->
-        cls = this.constructor
-        self = this
-        new cls(self.model, self.criteria())
+    klass.accessor proto, "limit",
+      set: (limit) ->
+        this._limit = limit if number.isNumber(limit)
 
-      pk: ->
-        self = this
-        criteria = self.criteria()
+    constructor: (model, criteria) ->
+      self = this
+      super(model, criteria)
+
+    ###
+    If value is an hash and all keys are operation keywords,
+    value is considered as a operation hash
+
+    TODO Need to optimize performance?
+    ###
+    _isOpertions: (obj) ->
+      if object.isObject(obj)
+        for key, value of obj
+          unless key in this.constructor.OPERATIONS
+            return false
+        return true
+      false
+
+    clone: ->
+      cls = this.constructor
+      self = this
+      new cls(self.model, self.criteria())
+
+    pk: ->
+      self = this
+      criteria = self.criteria()
+      try
+        pk = criteria.pk.eq
+      catch e
         try
-          pk = criteria.pk.eq
+          pk = criteria.where[self.model.meta().pk].eq
         catch e
-          try
-            pk = criteria.where[self.model.meta().pk].eq
-          catch e
-            pk = null
-        pk
+          pk = null
+      pk
 
-    class RetrieveQuery extends BaseRetriveQuery
+  class RetrieveQuery extends BaseRetriveQuery
 
-      this.METHODS = [ONLY, WHERE, SORT, SKIP, LIMIT, COUNT]
-      this.ALL = this.METHODS.concat [ONE, ALL]
+    this.METHODS = [ONLY, WHERE, SORT, SKIP, LIMIT, COUNT]
+    this.ALL = this.METHODS.concat [ONE, ALL]
 
-      proto = this.prototype
-      klass.accessor proto, "only",
-        set: ->
-          this._only = arguments
+    proto = this.prototype
+    klass.accessor proto, "only",
+      set: ->
+        this._only = arguments
 
-      klass.accessor proto, "sort",
-        value: {}
-        set: (sort) ->
-          this._sort or= {}
-          object.extend this._sort, sort
+    klass.accessor proto, "sort",
+      value: {}
+      set: (sort) ->
+        this._sort or= {}
+        object.extend this._sort, sort
 
-      constructor: (model, criteria) ->
-        self = this
-        self.action(RETRIEVE)
-        self._count = false
-        super(model, criteria)
+    constructor: (model, criteria) ->
+      self = this
+      self.action(RETRIEVE)
+      self._count = false
+      super(model, criteria)
 
-      count: (fn, type) ->
-        self = this
-        return self._count if not arguments.length
-        self._count = true
-        self.execute(fn, type)
+    count: (fn, type) ->
+      self = this
+      return self._count if not arguments.length
+      self._count = true
+      self.execute(fn, type)
 
-      one: (fn, type) ->
-        self = this
-        # Force limit to 1
-        self._limit = 1
-        retrieveFn = (error, result) ->
-          if error
-            fn(error, result) if fn
-            return
-          # Build model
-          if result.length > 0
-            model = new self.model(result[0])
+    one: (fn, type) ->
+      self = this
+      # Force limit to 1
+      self._limit = 1
+      retrieveFn = (error, result) ->
+        if error
+          fn(error, result) if fn
+          return
+        # Build model
+        if result.length > 0
+          model = new self.model(result[0])
+          model.isNew = false
+        else
+          model = null
+        fn(error, model) if fn
+      self.execute(retrieveFn, type)
+
+    all: (fn, type) ->
+      self = this
+      retrieveFn = (error, result) ->
+        if error
+          fn(error, result) if fn
+          return
+        # Build collection
+        collection = []
+        if result.length > 0
+          for entry, i in result
+            model = new self.model(entry)
             model.isNew = false
-          else
-            model = null
-          fn(error, model) if fn
-        self.execute(retrieveFn, type)
+            collection.push(model)
+        fn(error, collection) if fn
+      self.execute(retrieveFn, type)
 
-      all: (fn, type) ->
-        self = this
-        retrieveFn = (error, result) ->
-          if error
-            fn(error, result) if fn
-            return
-          # Build collection
-          collection = []
-          if result.length > 0
-            for entry, i in result
-              model = new self.model(entry)
-              model.isNew = false
-              collection.push(model)
-          fn(error, collection) if fn
-        self.execute(retrieveFn, type)
+  class UpdateQuery extends BaseRetriveQuery
 
-    class UpdateQuery extends BaseRetriveQuery
+    proto = this.prototype
+    klass.accessor proto, "attrs",
+      value: {}
+      set: (attrs) ->
+        if this._attrs then object.extend(this._attrs, attrs) else this._attrs = attrs
 
-      proto = this.prototype
-      klass.accessor proto, "attrs",
-        value: {}
-        set: (attrs) ->
-          if this._attrs then object.extend(this._attrs, attrs) else this._attrs = attrs
+    constructor: (model, criteria, attrs={}) ->
+      this.action(UPDATE).attrs(attrs)
+      super(model, criteria)
 
-      constructor: (model, criteria, attrs={}) ->
-        this.action(UPDATE).attrs(attrs)
-        super(model, criteria)
+    clone: ->
+      cls = this.constructor
+      self = this
+      new cls(self.model, self.criteria(), self._attrs)
 
-      clone: ->
-        cls = this.constructor
-        self = this
-        new cls(self.model, self.criteria(), self._attrs)
+  class DestroyQuery extends BaseRetriveQuery
 
-    class DestroyQuery extends BaseRetriveQuery
+    constructor: (model, criteria) ->
+      this.action(DESTROY)
+      super(model, criteria)
 
-      constructor: (model, criteria) ->
-        this.action(DESTROY)
-        super(model, criteria)
+  class RawQuery extends BaseQuery
 
-    class RawQuery extends BaseQuery
+    klass.accessor this.prototype, "args"
 
-      klass.accessor this.prototype, "args"
+    constructor: (model, args...) ->
+      this.action(RAW)
+      this.args(args)
+      super(model)
 
-      constructor: (model, args...) ->
-        this.action(RAW)
-        this.args(args)
-        super(model)
+    clone: -> new this.constructor(this.model, this.args()...)
 
-      clone: -> new this.constructor(this.model, this.args()...)
+  CREATE: CREATE
+  RETRIEVE: RETRIEVE
+  UPDATE: UPDATE
+  DESTROY: DESTROY
+  RAW: RAW
+  ACTIONS: ACTIONS
 
-    exports.CREATE = CREATE
-    exports.RETRIEVE = RETRIEVE
-    exports.UPDATE = UPDATE
-    exports.DESTROY = DESTROY
-    exports.RAW = RAW
-    exports.ACTIONS = ACTIONS
+  LT: LT
+  LTE: LTE
+  GT: GT
+  GTE: GTE
+  EQ: EQ
+  NE: IN
+  IN: IN
+  NIN: NIN
+  IS: IS
+  LIKE: LIKE
+  ILIKE: ILIKE
 
-    exports.LT = LT
-    exports.LTE = LTE
-    exports.GT = GT
-    exports.GTE = GTE
-    exports.EQ = EQ
-    exports.NE = IN
-    exports.IN = IN
-    exports.NIN = NIN
-    exports.IS = IS
-    exports.LIKE = LIKE
-    exports.ILIKE = ILIKE
-
-    exports.CreateQuery = CreateQuery
-    exports.RetrieveQuery = RetrieveQuery
-    exports.UpdateQuery = UpdateQuery
-    exports.DestroyQuery = DestroyQuery
-    exports.RawQuery = RawQuery
+  CreateQuery: CreateQuery
+  RetrieveQuery: RetrieveQuery
+  UpdateQuery: UpdateQuery
+  DestroyQuery: DestroyQuery
+  RawQuery: RawQuery

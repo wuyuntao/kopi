@@ -1,3 +1,3 @@
-kopi.module("kopi.db.migrations")
-  .require("kopi.utils")
-  .define (exports, utils) ->
+define "kopi/db/migrations", (require, exports, module) ->
+
+  utils = require "kopi/utils"

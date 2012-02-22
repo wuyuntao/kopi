@@ -1,2 +1,2 @@
-kopi.module("kopi.tests.base")
-  .define (exports) ->
+define "kopi/tests/base", (require, exports, module) ->
+

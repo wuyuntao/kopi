@@ -1,20 +1,21 @@
-kopi.module("kopi.tests.utils.text")
-  .require("kopi.tests.base")
-  .require("kopi.utils.text")
-  .define (exports, base, text) ->
+define "kopi/tests/utils/text", (require, exports, module) ->
 
-    module "kopi.utils.text"
+  q = require "qunit"
+  base = require "kopi/tests/base"
+  text = require "kopi/utils/text"
 
-    test "pluralize", ->
-      equal text.pluralize(''), ''
-      equal text.pluralize('goose'), 'geese'
-      equal text.pluralize('dolly'), 'dollies'
-      equal text.pluralize('genius'), 'genii'
-      equal text.pluralize('jones'), 'joneses'
-      equal text.pluralize('pass'), 'passes'
-      equal text.pluralize('zero'), 'zeros'
-      equal text.pluralize('casino'), 'casinos'
-      equal text.pluralize('hero'), 'heroes'
-      equal text.pluralize('church'), 'churches'
-      equal text.pluralize('x'), 'xs'
-      equal text.pluralize('car'), 'cars'
+  q.module "kopi.utils.text"
+
+  q.test "pluralize", ->
+    q.equals text.pluralize(''), ''
+    q.equals text.pluralize('goose'), 'geese'
+    q.equals text.pluralize('dolly'), 'dollies'
+    q.equals text.pluralize('genius'), 'genii'
+    q.equals text.pluralize('jones'), 'joneses'
+    q.equals text.pluralize('pass'), 'passes'
+    q.equals text.pluralize('zero'), 'zeros'
+    q.equals text.pluralize('casino'), 'casinos'
+    q.equals text.pluralize('hero'), 'heroes'
+    q.equals text.pluralize('church'), 'churches'
+    q.equals text.pluralize('x'), 'xs'
+    q.equals text.pluralize('car'), 'cars'

@@ -1,7 +1,7 @@
-kopi.module("kopi.ui.zoomable")
-  .require("kopi.ui.touchable")
-  .define (exports, touchable) ->
+define "kopi/ui/zoomable", (require, exports, module) ->
 
-    class Zoomable extends touchable.Touchable
+  touchable = require "kopi/ui/touchable"
 
-    exports.Zoomable = Zoomable
+  class Zoomable extends touchable.Touchable
+
+  Zoomable: Zoomable

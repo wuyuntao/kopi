@@ -1,14 +1,15 @@
-kopi.module("kopi.utils.browser")
-  .require("kopi.utils.object")
-  .define (exports, object) ->
+define "kopi/utils/browser", (require, exports, module) ->
 
-    nav = navigator
-    av = nav.appVersion
-    ua = nav.userAgent
-    all = ["webkit", "opera", "msie", "mozilla", "android", "iphone", "ipad"]
+  $ = require "jquery"
+  object = require "kopi/utils/object"
 
-    exports.all = all
-    object.extend exports, $.browser,
-      android:  (/android/gi).test(av)
-      iphone:   (/ipod|iphone/gi).test(av)
-      ipad:     (/ipad/gi).test(av)
+  nav = navigator
+  av = nav.appVersion
+  ua = nav.userAgent
+  all = ["webkit", "opera", "msie", "mozilla", "android", "iphone", "ipad"]
+
+  all: all
+  object.extend exports, $.browser,
+    android:  (/android/gi).test(av)
+    iphone:   (/ipod|iphone/gi).test(av)
+    ipad:     (/ipad/gi).test(av)

@@ -1,7 +1,7 @@
-kopi.module("kopi.native.chromium")
-  .require("kopi.native.base")
-  .define (exports, base) ->
+define "kopi/native/chromium", (require, exports, module) ->
 
-    class ChromiumClient extends base.BaseClient
+  base = require "kopi/native/base"
 
-    exports.ChromiumClient = ChromiumClient
+  class ChromiumClient extends base.BaseClient
+
+  ChromiumClient: ChromiumClient

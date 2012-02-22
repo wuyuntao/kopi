@@ -1,41 +1,42 @@
-kopi.module("kopi.ui.notification.bubbles")
-  .require("kopi.utils.i18n")
-  .require("kopi.ui.notification.widgets")
-  .define (exports, i18n, widgets) ->
+define "kopi/ui/notification/bubbles", (require, exports, module) ->
 
-    class Bubble extends widgets.Widget
+  $ = require "jquery"
+  i18n = require "kopi/utils/i18n"
+  widgets = require "kopi/ui/notification/widgets"
 
-      constructor: (overlay) ->
-        super()
-        this._overlay = overlay
+  class Bubble extends widgets.Widget
 
-      onskeleton: ->
-        this._content = $("p", this.element)
-        super
+    constructor: (overlay) ->
+      super()
+      this._overlay = overlay
 
-      content: (text) ->
-        this._content.text(text)
+    onskeleton: ->
+      this._content = $("p", this.element)
+      super
 
-      show: (lock=false) ->
-        cls = this.constructor
-        self = this
-        return self if not self.hidden
-        self._overlay.show() if lock
-        self.hidden = false
-        self.element
-          .addClass(cls.showClass())
-          .removeClass(cls.hideClass())
-        self
+    content: (text) ->
+      this._content.text(text)
 
-      hide: ->
-        cls = this.constructor
-        self = this
-        return self if self.hidden
-        self.hidden = true
-        self._overlay.hide()
-        self.element
-          .addClass(cls.hideClass())
-          .removeClass(cls.showClass())
-        self
+    show: (lock=false) ->
+      cls = this.constructor
+      self = this
+      return self if not self.hidden
+      self._overlay.show() if lock
+      self.hidden = false
+      self.element
+        .addClass(cls.showClass())
+        .removeClass(cls.hideClass())
+      self
 
-    exports.Bubble = Bubble
+    hide: ->
+      cls = this.constructor
+      self = this
+      return self if self.hidden
+      self.hidden = true
+      self._overlay.hide()
+      self.element
+        .addClass(cls.hideClass())
+        .removeClass(cls.showClass())
+      self
+
+  Bubble: Bubble

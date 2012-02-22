@@ -1,4 +1,4 @@
-define (require, exports, module) ->
+define "kopi/utils/func", (require, exports, module) ->
 
   text = require "kopi/utils/text"
 
@@ -10,5 +10,5 @@ define (require, exports, module) ->
     return fn unless isFunction(fn)
     fn.apply(context, args)
 
-  exports.isFunction = isFunction
-  exports.send = send
+  isFunction: isFunction
+  send: send

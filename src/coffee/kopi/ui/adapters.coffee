@@ -1,8 +1,7 @@
-kopi.module("kopi.ui.adapters")
-  .require("kopi.events")
-  .define (exports, events) ->
+define "kopi/ui/adapters", (require, exports, module) ->
 
-    class Adapter extends events.EventEmitter
+  events = require "kopi/events"
 
+  class Adapter extends events.EventEmitter
 
-    exports.Adapter = Adapter
+  Adapter: Adapter

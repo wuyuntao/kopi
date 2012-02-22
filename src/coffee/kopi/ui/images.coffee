@@ -1,58 +1,59 @@
-kopi.module("kopi.ui.images")
-  .require("kopi.ui.widgets")
-  .define (exports, widgets) ->
+define "kopi/ui/images", (require, exports, module) ->
 
-    IMG_TAG = "<img></img>"
-    SRC = "src"
+  $ = require "jquery"
+  widgets = require "kopi/ui/widgets"
 
-    ###
-    A optimized image widget has following features.
-    ###
-    class Image extends widgets.Widget
+  IMG_TAG = "<img></img>"
+  SRC = "src"
 
-      this.configure
-        tagName: "figure"
-        height: ""
-        width: ""
-        src: ""
-        loaderSrc: ""
-        fallbackSrc: ""
+  ###
+  A optimized image widget has following features.
+  ###
+  class Image extends widgets.Widget
 
-      constructor: ->
-        super
-        this._src = this._options.src
+    this.configure
+      tagName: "figure"
+      height: ""
+      width: ""
+      src: ""
+      loaderSrc: ""
+      fallbackSrc: ""
 
-      image: (src) ->
-        self = this
-        self._src = src
-        self.update() if self.rendered
-        self
+    constructor: ->
+      super
+      this._src = this._options.src
 
-      onskeleton: ->
-        self = this
-        options = self._options
-        self._image = $ IMG_TAG,
-          src: options.loaderSrc,
-          height: options.height
-          width: options.width
-        self.element.html(self._image)
-        super
+    image: (src) ->
+      self = this
+      self._src = src
+      self.update() if self.rendered
+      self
 
-      onrender: ->
-        this._draw()
-        super
+    onskeleton: ->
+      self = this
+      options = self._options
+      self._image = $ IMG_TAG,
+        src: options.loaderSrc,
+        height: options.height
+        width: options.width
+      self.element.html(self._image)
+      super
 
-      onupdate: ->
-        this._draw()
-        super
+    onrender: ->
+      this._draw()
+      super
 
-      # TODO Show loader or default image when resource is not ready
-      # TODO Allow to retry if download fails
-      # TODO Image resources can be cached in db or localstorage as base64 string
-      # TODO Simple process image with canvas?
-      # TODO Do not subtitute image when page is scrolling
-      _draw: ->
-        self = this
-        self._image.attr SRC, self._src
+    onupdate: ->
+      this._draw()
+      super
 
-    exports.Image = Image
+    # TODO Show loader or default image when resource is not ready
+    # TODO Allow to retry if download fails
+    # TODO Image resources can be cached in db or localstorage as base64 string
+    # TODO Simple process image with canvas?
+    # TODO Do not subtitute image when page is scrolling
+    _draw: ->
+      self = this
+      self._image.attr SRC, self._src
+
+  Image: Image

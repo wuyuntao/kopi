@@ -1,7 +1,7 @@
-kopi.module("kopi.native.android")
-  .require("kopi.native.base")
-  .define (exports, base) ->
+define "kopi/native/android", (require, exports, module) ->
 
-    class AndroidClient extends base.BaseClient
+  base = require "kopi/native/base"
 
-    exports.AndroidClient = AndroidClient
+  class AndroidClient extends base.BaseClient
+
+  AndroidClient: AndroidClient

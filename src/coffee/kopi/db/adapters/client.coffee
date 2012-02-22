@@ -1,7 +1,7 @@
-kopi.module("kopi.db.adapters.client")
-  .require("kopi.db.adapters.base")
-  .define (exports, base) ->
+define "kopi/db/adapters/client", (require, exports, module) ->
 
-    class ClientAdapter extends base.BaseAdapter
+  base = require "kopi/db/adapters/base"
 
-    exports.ClientAdapter = ClientAdapter
+  class ClientAdapter extends base.BaseAdapter
+
+  ClientAdapter: ClientAdapter

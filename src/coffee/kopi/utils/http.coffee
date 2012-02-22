@@ -1,13 +1,14 @@
-kopi.module("kopi.utils.http")
-  .define (exports) ->
+define "kopi/utils/http", (require, exports, module) ->
 
-    ###
-    Provide some high-level wrappers around $.ajax
+  $ = require "jquery"
 
-    TODO Retry when error happens
-    TODO Add Delayed requests to task queue
-    ###
-    request = (options) ->
-      $.ajax(options)
+  ###
+  Provide some high-level wrappers around $.ajax
 
-    exports.request = request
+  TODO Retry when error happens
+  TODO Add Delayed requests to task queue
+  ###
+  request = (options) ->
+    $.ajax(options)
+
+  request: request

@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
+    <title>Scrollable</title>
+    <style type="text/css" media="screen">
+      body {
+        background: black;
+        -webkit-user-select: none;
+      }
+
+      .draggable {
+        width: 200px;
+        height: 200px;
+        background: gray;
+      }
+    </style>
+    <script type="text/javascript" src="/js/sea.js"></script>
+    <script type="text/javascript">
+      seajs.use(["kopi/tests/ui/draggable"]);
+    </script>
+  </head>
+  <body>
+    <div class="draggable"></div>
+  </body>
+</html>

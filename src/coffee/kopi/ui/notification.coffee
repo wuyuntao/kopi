@@ -1,63 +1,60 @@
-kopi.module("kopi.ui.notification")
-  .require("kopi.utils.i18n")
-  .require("kopi.exceptions")
-  .require("kopi.ui.notification.bubbles")
-  .require("kopi.ui.notification.dialogs")
-  .require("kopi.ui.notification.indicators")
-  .require("kopi.ui.notification.overlays")
-  .define (exports, i18n, exceptions, bubbles, dialogs, indicators, overlays) ->
+define "kopi/ui/notification", (require, exports, module) ->
 
-    ###
-    当对话框或其他组建被重复激活时报错
-    ###
-    class DuplicateNotificationError extends exceptions.Exception
+  i18n = require "kopi/utils/i18n"
+  exceptions = require "kopi/exceptions"
+  bubbles = require "kopi/ui/notification/bubbles"
+  dialogs = require "kopi/ui/notification/dialogs"
+  indicators = require "kopi/ui/notification/indicators"
+  overlays = require "kopi/ui/notification/overlays"
 
-    # Notification widget instances (singleton)
-    bubbleInstance = null
-    dialogInstance = null
-    indicatorInstance = null
-    overlayInstance = null
+  ###
+  当对话框或其他组建被重复激活时报错
+  ###
+  class DuplicateNotificationError extends exceptions.Exception
 
-    overlay = ->
-      overlayInstance or= new overlays.Overlay().skeleton().render()
+  # Notification widget instances (singleton)
+  bubbleInstance = null
+  dialogInstance = null
+  indicatorInstance = null
+  overlayInstance = null
 
-    dialog = ->
-      overlayInstance or= overlay()
-      dialogInstance or= new dialogs.Dialog(overlayInstance).skeleton().render()
-      dialogInstance
+  overlay = ->
+    overlayInstance or= new overlays.Overlay().skeleton().render()
 
-    indicator = ->
-      overlayInstance or= overlay()
-      indicatorInstance or= new indicators.Indicator(overlayInstance).skeleton().render()
+  dialog = ->
+    overlayInstance or= overlay()
+    dialogInstance or= new dialogs.Dialog(overlayInstance).skeleton().render()
+    dialogInstance
 
-    bubble = ->
-      overlayInstance or= overlay()
-      bubbleInstance or= new bubbles.Bubble(overlayInstance).skeleton().render()
+  indicator = ->
+    overlayInstance or= overlay()
+    indicatorInstance or= new indicators.Indicator(overlayInstance).skeleton().render()
 
-    lock = (transparent=false) ->
-      overlay().show(transparent)
+  bubble = ->
+    overlayInstance or= overlay()
+    bubbleInstance or= new bubbles.Bubble(overlayInstance).skeleton().render()
 
-    unlock = ->
-      overlay().hide()
+  lock = (transparent=false) ->
+    overlay().show(transparent)
 
-    loading = (transparent=false) ->
-      indicator().show(transparent)
+  unlock = ->
+    overlay().hide()
 
-    loaded = ->
-      indicator().hide()
+  loading = (transparent=false) ->
+    indicator().show(transparent)
 
-    message = (text) ->
-      bubble().content(text).show()
+  loaded = ->
+    indicator().hide()
 
-    # Factory methods
-    exports.overlay = overlay
-    exports.bubble = bubble
-    exports.dialog = dialog
-    exports.indicator = indicator
+  message = (text) ->
+    bubble().content(text).show()
 
-    # Shortcut methods
-    exports.lock = lock
-    exports.unlock = unlock
-    exports.loading = loading
-    exports.loaded = loaded
-    exports.message = message
+  overlay: overlay
+  bubble: bubble
+  dialog: dialog
+  indicator: indicator
+  lock: lock
+  unlock: unlock
+  loading: loading
+  loaded: loaded
+  message: message
