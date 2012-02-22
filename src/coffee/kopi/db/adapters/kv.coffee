@@ -61,24 +61,17 @@ define "kopi/db/adapters/kv", (require, exports, module) ->
       model = query.model
       pk = query.pk()
       if not pk
-        fn(true, "Must provide primary key") if fn
+        fn("Must provide primary key") if fn
         return self
       key = self._keyForModel(model, pk)
       value = self._get(key)
       if value
         try
-          value = self._modelObject(value, model.meta().names)
-          message =
-            ok: true
-            entries: [value]
+          fn(null, [self._modelObject(value, model.meta().names)]) if fn
         catch e
-          message =
-            error: true
-            message: "Failed to parse value: #{e}"
+          fn("Failed to parse value: #{e}") if fn
       else
-        message =
-          ok: true
-          entries: []
+        fn(null, []) if fn
       fn(message.error, message) if fn
       self
 

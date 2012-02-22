@@ -15,6 +15,8 @@ import re
 import os
 from optparse import OptionParser
 
+modules = {}
+
 class DepTree(object):
 
     # Old style definition
@@ -49,16 +51,24 @@ class DepTree(object):
             requires = self.RE_REQUIRE.findall(content)
             print("found %s required modules: %s" % (len(requires), ", ".join(requires)))
             for module in requires:
-                path = self.find_module_path(module)
-                tree = DepTree(path, self._path, self._uri, self._extensions)
-                tree.build()
+                if module in modules:
+                    tree = modules[module]
+                else:
+                    path = self.find_module_path(module)
+                    if path:
+                        tree = DepTree(path, self._path, self._uri, self._extensions)
+                        tree.build()
+                    else:
+                        tree = DepTree(module, self._path, self._uri, self._extensions)
+                        tree.name = module
+                    modules[module] = tree
                 self.require_names.append(module)
                 self.requires.append(tree)
         else:
             print("no matching module in %s" % self._file)
 
     def find_module_path(self, module):
-        modules = module.split(".")
+        modules = module.split("/")
         path = os.path.join(self._path, *modules[:-1])
         files = ["%s.%s" % (modules[-1], ext) for ext in self._extensions]
         for dir_name in os.listdir(path):
@@ -66,7 +76,6 @@ class DepTree(object):
                 if dir_name == file_name:
                     modules[-1] = file_name
                     return os.path.join(self._path, *modules)
-        raise ValueError("Module not found. %s" % module)
 
     def output(self, file, format, extra_scripts=""):
         extra_scripts = extra_scripts.split(",")
@@ -78,7 +87,7 @@ class DepTree(object):
             raise ValueError("Unknown output format: %s" % format)
 
     def uri(self):
-        return os.path.join(self._uri, *self.name.split("."))
+        return os.path.join(self._uri, *self.name.split("/"))
 
     def module_list(self, mod_list):
         for module in self.requires:

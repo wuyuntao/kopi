@@ -158,7 +158,7 @@ define "kopi/ui/widgets", (require, exports, module) ->
       cls = this.constructor
       self = this
       return self if self.initialized or self.locked
-      self.element = self._ensureElement(element)
+      self.element or= self._ensureElement(element)
       self.element.attr('id', self.guid)
       cssClass = cls.cssClass()
       if not self.element.hasClass(cssClass)

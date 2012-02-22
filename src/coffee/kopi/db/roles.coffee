@@ -28,6 +28,8 @@ define "kopi/db/roles", (require, exports, module) ->
 
     constructor: (model) -> this.model = model
 
+    pk: -> this.model.pk()
+
   ###
   The `Context` class includes the roles for a given algorithm, scenario, or use case.
 
