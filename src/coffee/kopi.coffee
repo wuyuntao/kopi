@@ -62,5 +62,8 @@ define = (id, deps, factory) ->
 
   module
 
+define.amd =
+  jQuery: true
+
 # Export define method
 this.define = define
