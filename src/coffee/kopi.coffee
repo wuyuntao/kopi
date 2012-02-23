@@ -53,7 +53,7 @@ define = (id, deps, factory) ->
   if id of modules
     throw new Error("module is double defined!")
 
-  modules[id] = module
+  modules[id] = module if id
   if isObject(factory)
     module.exports = factory
   else if factory
@@ -67,3 +67,4 @@ define.amd =
 
 # Export define method
 this.define = define
+this.require = require
