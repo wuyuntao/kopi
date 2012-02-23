@@ -7,41 +7,41 @@ define "kopi/utils/structs/weakmap", (require, exports, module) ->
   class WeakMap
 
     constructor: ->
-      this.keys = []
-      this.values = []
+      this._keys = []
+      this._values = []
 
     ###
     Returns the value associated to the key object, defaultValue if there is none.
     ###
     get: (key, defaultValue) ->
-      i = this.keys.indexOf(key)
-      if i < 0 then defaultValue else this.values[i]
+      i = this._keys.indexOf(key)
+      if i < 0 then defaultValue else this._values[i]
 
     ###
     Set the value for the key object in WeakMap
     ###
     set: (key, value) ->
-      i = this.keys.indexOf(key)
-      i = this.keys.length if i < 0
-      this.keys[i] = key
-      this.values[i] = value
+      i = this._keys.indexOf(key)
+      i = this._keys.length if i < 0
+      this._keys[i] = key
+      this._values[i] = value
       this
 
     ###
     Returns a boolean asserting whether a value has been associated to the key object
     in WeakMap or not
     ###
-    has: (key) -> this.keys.indexOf(key) >= 0
+    has: (key) -> this._keys.indexOf(key) >= 0
 
     ###
     Removes any value associated to the key object. After such a call, WeakMap.has(key)
     will return false.
     ###
     remove: (key) ->
-      i = this.keys.indexOf(key)
+      i = this._keys.indexOf(key)
       if i >= 0
-        this.keys.splice(i, 1)
-        this.values.splice(i, 1)
+        this._keys.splice(i, 1)
+        this._values.splice(i, 1)
         true
       else
         false
@@ -51,8 +51,8 @@ define "kopi/utils/structs/weakmap", (require, exports, module) ->
     ###
     forEach: (iterator) ->
       if iterator
-        for key, i in this.keys
-          value = this.values[i]
+        for key, i in this._keys
+          value = this._values[i]
           iterator.call(this, key, value)
       this
 
