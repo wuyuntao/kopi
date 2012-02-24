@@ -1,7 +1,7 @@
 define "kopi/exceptions", (require, exports, module) ->
 
   ###
-  异常的基类
+  Base class of all exceptions
   ###
   class Exception extends Error
     constructor: (message="") ->
@@ -9,7 +9,7 @@ define "kopi/exceptions", (require, exports, module) ->
       this.message = message
 
   ###
-  Can not find element
+  Error raised when HTML element can not be found
   ###
   class NoSuchElementError extends Exception
     constructor: (element) ->
@@ -17,20 +17,23 @@ define "kopi/exceptions", (require, exports, module) ->
       super(message)
 
   ###
-  方法未实现
+  Error raised when a method is not ready to use
   ###
   class NotImplementedError extends Exception
     constructor: (message="Not implemented yet.") ->
       super
 
   ###
-  数值错误
+  Error raised when value is not correct
   ###
   class ValueError extends Exception
 
+  ###
+  Error raised when a singleton class initialized more than once.
+  ###
   class SingletonError extends Exception
     constructor: (klass) ->
-      super("#{klass.name} is a singleton class. Can not be initialized twice.")
+      super("#{klass.name} is a singleton class.")
 
   Exception: Exception
   NoSuchElementError: NoSuchElementError

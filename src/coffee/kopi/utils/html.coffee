@@ -4,10 +4,8 @@ define "kopi/utils/html", (require, exports, module) ->
   exceptions = require "kopi/exceptions"
 
   ###
-  根据不同 HTML Element 类型，获取 MicroData 数据，参考
-  http://diveintohtml5.org/extensibility.html#property-values
-
-  如果存在 itemattr 属性，则提取 itemattr 指定的属性
+  Get micro data property from HTML elements.
+  Ref: http://diveintohtml5.org/extensibility.html#property-values
 
   @param  {HTML Element}  element
   @return {String}
@@ -27,7 +25,7 @@ define "kopi/utils/html", (require, exports, module) ->
       else element.html()
 
   ###
-  从 HTML5 定义 MicroData 格式中获取数据
+  Get micro data from HTML elements
   ###
   scope = (element) ->
     element = $(element)
@@ -39,6 +37,9 @@ define "kopi/utils/html", (require, exports, module) ->
       el = $(this)
       data[el.attr('itemprop')] = prop(el)
 
+  ###
+  Replace specified CSS class for the set of matched elements
+  ###
   replaceClass = (element, regexp, replacement) ->
     element = $(element)
     throw new exceptions.NoSuchElementError(element) unless element.length
@@ -47,6 +48,9 @@ define "kopi/utils/html", (require, exports, module) ->
         elem.className = elem.className.replace(regexp, replacement)
     return
 
+  ###
+  A fast method to remove CSS class from elemtn
+  ###
   removeClass = (element, regexp) ->
     replaceClass(element, regexp, "")
 

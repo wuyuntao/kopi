@@ -3,8 +3,9 @@ define "kopi/utils/structs/set", (require, exports, module) ->
   map = require "kopi/utils/structs/map"
 
   class Set
-    constructor: () ->
+    constructor: (set) ->
       this._map = new map.Map()
+      this.add(item) for item in set
 
     has: (key) -> this._map.has(key)
 

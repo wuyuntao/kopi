@@ -17,6 +17,10 @@ define "kopi/db/adapters/indexeddb", (require, exports, module) ->
       this.code = code
       this.message = message
 
+  ###
+  Adapter for IndexedDB
+
+  ###
   class IndexedDBAdapter extends client.ClientAdapter
 
     this.support = -> !!support.indexedDB
@@ -26,7 +30,7 @@ define "kopi/db/adapters/indexeddb", (require, exports, module) ->
       this._options.version or= "1"
 
     ###
-    Open a database
+    Open a database and migrate to current version
 
     @param {String} name
     ###
@@ -39,10 +43,6 @@ define "kopi/db/adapters/indexeddb", (require, exports, module) ->
       request = indexedDB.open(settings.kopi.db.indexedDB.name, version)
       request.onsuccess = (e) ->
         db = self._db = request.result
-        db.onerror = (e) ->
-          # Chrome uses webkitErrorMessage alias
-          # logger.error("IDBError: #{support.prop("errorMessage", e.target)}" )
-
         # For lagacy API with setVersion() available (on earlier version of Chrome)
         if db.setVersion? and db.version != version
           setVersionRequest = db.setVersion(version)
@@ -69,7 +69,9 @@ define "kopi/db/adapters/indexeddb", (require, exports, module) ->
       self
 
     ###
-    Implement as an event
+
+
+    TODO Implement as an event
     ###
     migrate: (model) ->
       meta = model.meta()
@@ -126,9 +128,6 @@ define "kopi/db/adapters/indexeddb", (require, exports, module) ->
             result += 1
           else
             value = cursor.value
-            # if only and only.length
-            #   for field in only
-            #     delete value[field]
             result.push(self._modelObject(value, fields))
           cursor.continue()
         else

@@ -13,7 +13,7 @@ define "kopi/ui/widgets", (require, exports, module) ->
   ON = "on"
 
   ###
-  UI 组件的基类
+  Base class of all UI components
 
   Life-cycle of a widget
 
@@ -207,7 +207,7 @@ define "kopi/ui/widgets", (require, exports, module) ->
       self = this
       return self if self.locked
       cls = this.constructor
-      # TODO 从 Event 层禁止，考虑如果子类也在 element 上绑定时间的情况
+      # TODO Disable events too?
       self.element.addClass(self.constructor.cssClass("lock"))
       self.emit(cls.LOCK_EVENT)
 

@@ -17,7 +17,7 @@ define "kopi/utils/jquery", (require, exports, module) ->
     this
 
   ###
-  把 Widget 类转换成 jQuery Plugin，参考 jQuery UI 的 $.widget.bridge 方法
+  Convert widget class to a jQUery-UI-style plugin
 
   ###
   bridge = (widget) ->

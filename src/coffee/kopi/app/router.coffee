@@ -143,6 +143,7 @@ define "kopi/app/router", (require, exports, module) ->
   Return a view object to add route
 
   Usage:
+
     router
       .view(BookListView)
         .route("/book", name: "book-list")

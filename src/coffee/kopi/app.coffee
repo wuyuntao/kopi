@@ -10,7 +10,6 @@ define "kopi/app", (require, exports, module) ->
   text = require "kopi/utils/text"
   array = require "kopi/utils/array"
   klass = require "kopi/utils/klass"
-  cache = require "kopi/app/cache"
   router = require "kopi/app/router"
   viewport = require "kopi/ui/viewport"
 

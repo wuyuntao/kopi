@@ -9,11 +9,9 @@ define "kopi/views", (require, exports, module) ->
   text = require "kopi/utils/text"
 
   ###
-  View 的基类
+  Base class of views
 
-  视图的载入应该越快越好，所以 AJAX 和数据库等 IO 操作不应该阻塞视图的显示
-
-  Life cycle:
+  Life cycle of a view:
 
   Constructor -> Create -> Start (-> Update) -> Stop -> Destroy (-> Create -> ...)
 
@@ -73,11 +71,11 @@ define "kopi/views", (require, exports, module) ->
       self.url = url
       self.params = params
 
-      # type  #{Boolean}  created   视图是否已创建
+      # type  #{Boolean}  created   Is the view is created?
       self.created = false
-      # type  #{Boolean}  started   视图是否已启动
+      # type  #{Boolean}  started   Is the view is started?
       self.started = false
-      # type  #{Boolean}  started   视图是否允许操作
+      # type  #{Boolean}  locked    Is the view is locked?
       self.locked = false
 
     ###
@@ -175,7 +173,7 @@ define "kopi/views", (require, exports, module) ->
       self
 
     ###
-    事件的模板方法
+    Template methods of view events
     ###
     oncreate: (e) ->
       cls = this.constructor

@@ -11,16 +11,20 @@ define "kopi/logging", (require, exports, module) ->
   loggers = {}
 
   ###
-  日志
+  Improve original console with tag, time and extra handlers
+
+  # TODO Implement logging handler mechanism like Python
   ###
   class Logger
-    # @type {Date}    起始时间
+
+    # @type {Date}    Start time of logger
     start = new Date()
-    # @type {Hash}    计时器
+
+    # @type {Hash}    Log timers
     timers = {}
-    # @type {Hash}    累加器
+    # @type {Hash}    Log accumulators
     accumulators = {}
-    # @type {Hash}    日志级别
+    # @type {Hash}    Log level
     levels =
       log:    0
       debug:  1
@@ -31,12 +35,12 @@ define "kopi/logging", (require, exports, module) ->
     console = window.console
 
     ###
-    记录日志
+    send log to logging handler
 
-    @param  {String}  name      name of logger
-    @param  {String}  level     日志级别
-    @param  {String}  message   日志内容
-    @param  {Hash}    options   为单条日志做的特殊设置
+    @param  {String}  name
+    @param  {String}  level
+    @param  {String}  message
+    @param  {Hash}    options
     ###
     send = (name, level, message, options={}) ->
       throw new LoggerError("Invalid logger level: #{level}") unless (level of levels)
@@ -46,7 +50,7 @@ define "kopi/logging", (require, exports, module) ->
       seconds = Math.round(new Date() - start) / 1000
 
       if options.console and console
-        # MSIE 不支持 console.debug() 方法，所以替换成 console.log()
+        # Provide an alternate method since level might not be supported in some browser
         action = if level of console then level else "log"
         if options.raw
           console[action]("[#{seconds}s] [#{name}]")
@@ -54,51 +58,75 @@ define "kopi/logging", (require, exports, module) ->
         else
           console[action]("[#{seconds}s] [#{name}] #{message}")
 
+    ###
+    Constructor for logger
+
+    @constructor
+    @param {String} name
+    ###
     constructor: (name) ->
       throw new LoggerError("Logger must have a name") unless name
       this._name = name
       this._disabled = false
       loggers[name] = this
 
+    ###
+    Return name of logger
+    ###
     name: -> this._name
 
+    ###
+    Enable logger
+    ###
     enable: ->
       this._disabled = false
       this
 
+    ###
+    Disable logger
+    ###
     disable: ->
       this._disabled = true
       this
 
     ###
-    计算花费的时间
+    Start a timer under the given name
 
-    @param  {String}  name        行动名
-    @param  {Hash}    options     额外的参数
+    @param  {String}  name
+    @param  {Hash}    options
 
     ###
     time: (name, options={}) ->
       return this if this._disabled
       key = "#{this._name}:#{name}"
       timer = timers[key]
-      if timer
-        # stop timer
-        time = new Date() - timer
-        message = "#{name} stoped. spent #{time}ms."
-        if options.accumulate
-          accumulators[key].push(time)
-          message += " total #{array.sum(accumulators[key])}ms. average #{array.average(accumulators[key])}ms."
-        send(this._name, "debug", message)
-        timers[key] = null
-
-      else
-        # start timer
-        send(this._name, "debug", "#{name} started.")
-        timers[key] = new Date()
-        accumulators[key] or= [] if options.accumulate
+      return if timer
+      send(this._name, "debug", "#{name} started.")
+      timers[key] = new Date()
+      accumulators[key] or= [] if options.accumulate
       this
 
-    # 定义 debug, info, warn & error 方法
+    ###
+    Stop a timer created by a call to Logger.time(name)
+
+    @param  {String}  name
+    @param  {Hash}    options
+
+    ###
+    timeEnd: (name, options={}) ->
+      key = "#{this._name}:#{name}"
+      timer = timers[key]
+      return if not timer
+      time = new Date() - timer
+      message = "#{name} stoped. spent #{time}ms."
+      if options.accumulate
+        accumulators[key].push(time)
+        message += " total #{array.sum(accumulators[key])}ms. average #{array.average(accumulators[key])}ms."
+      send(this._name, "debug", message)
+      timers[key] = null
+      this
+
+    # Define debug, info, warn & error methods
     proto = this.prototype
     defineMethod = (level) ->
       proto[level] = (message, options) ->

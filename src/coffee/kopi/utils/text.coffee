@@ -7,7 +7,8 @@ define "kopi/utils/text", (require, exports, module) ->
   upperCaseFn = (c) -> c.toUpperCase(c)
   lowerCaseFn = (c) -> c.toLowerCase(c)
   ###
-  把字符串转换成类名格式，参考 Rails 同名方法
+  Convert string to UpperCamelCase.
+  If `upperCase` is set to true, produce lowerCamelCase
 
   @param    {String}  word        要转换的字符串
   @param    {Boolean} upperCase   第一个字母是否大写
@@ -26,7 +27,7 @@ define "kopi/utils/text", (require, exports, module) ->
     word.replace(reFirstLetter, upperCaseFn)
 
   ###
-  将字符串转换成对象
+  Try to find a constant with the name specified
 
   @param  {String}  name
   @param  {Object}  scope
@@ -36,15 +37,15 @@ define "kopi/utils/text", (require, exports, module) ->
     scope
 
   ###
-  字符串是否包含某些字符
+  If value in the string
   ###
   contains = (string, sub) -> string.indexOf(sub) >= 0
 
   ###
-  格式化字符串
+  Simple text template
 
-  @param  {String}  string      待格式化的字符串
-  @param  {Hash}    params      格式化字符串的参数
+  @param  {String}  string
+  @param  {Hash}    params
   ###
   format = (string, params) ->
     return string unless params

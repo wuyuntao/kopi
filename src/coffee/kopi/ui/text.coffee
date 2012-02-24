@@ -29,29 +29,21 @@ define "kopi/ui/text", (require, exports, module) ->
   ###
   class EllipsisText extends Text
 
-    # 文本垂直对齐的方式
-    this.VALIGN_NONE   = 0  # 不对齐
-    this.VALIGN_TOP    = 1  # 向上对齐
-    this.VALIGN_BOTTOM = 2  # 向下对齐
-    this.VALIGN_MIDDLE = 3  # 居中对齐
+    # Text align methods
+    this.VALIGN_NONE   = 0
+    this.VALIGN_TOP    = 1
+    this.VALIGN_BOTTOM = 2
+    this.VALIGN_MIDDLE = 3
 
     this.configure
       tagName: 'p'
-      ###
-      单行高度
-      ###
+      # @type  {Integer} Height of single line
       lineHeight: 18
-      ###
-      最多显示的行数
-      ###
+      # @type  {Integer} Max line for truncated text
       lines: 3
-      ###
-      @type {String}  对齐方式
-      ###
+      # @type  {Enum}    Align type
       valign: this.ALIGN_NONE
-      ###
-      Truncate text 时最多尝试的次数
-      ###
+      # @type  {Integer} Max try to run binary search
       maxTries: 30
 
     constructor: (element, options, text="") ->
@@ -93,20 +85,20 @@ define "kopi/ui/text", (require, exports, module) ->
       min = 0
       max = self._text.length - 1
       text = self._text
-      # 用二分法加速计算过程
+      # Binary search for find best poistion to truncate text
       for i in [0..self._options.maxTries]
         break if max < min
         middle = Math.floor((min + max) / 2)
         subtext = text.substr(0, middle)
         element.text(subtext + '...')
         height = element.height()
-        # 确定行数
+        # Get right row number
         if height > self._maxHeight
           max = middle
         else if height < self._maxHeight
           min = middle
         else
-          # 确定具体列数
+          # Get right column number
           subtext2 = text.substr(0, middle + 1)
           element.text(subtext2 + '...')
           if element.height() > self._maxHeight
@@ -118,7 +110,6 @@ define "kopi/ui/text", (require, exports, module) ->
 
     _margin: ->
       self = this
-      # 填补 margin
       margin = self._maxHeight - element.height()
       if margin > 0
         switch self._options.valign

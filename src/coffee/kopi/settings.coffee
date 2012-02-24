@@ -24,61 +24,31 @@ define "kopi/settings", (require, exports, module) ->
       # @type  {Boolean}        Do page redirect if no matched route is found
       redirectWhenNoRouteFound: false
 
-    cache:
-      # 是否自动绑定 applicationCache 事件
-      enable: false
-      # 当 applicationCache 更新成功后，是否自动刷新页面
-      autoRefresh: false
-      # 当 applicationCache 更新成功后，是否弹出对话框提示用户刷新
-      # （仅在 autoRefresh 为 false 的情况下游戏）
-      notifyRefresh: false
-
     i18n:
-      # @type {LocaleString}      当前应用使用的语言
+      # @type {LocaleString}    Translation is currently used
       locale: "en"
-      # @type {LocaleString}      如果找不到翻译是的默认语言
+      # @type {LocaleString}    A fallback when current transition is missing
       fallback: "en"
 
     logging:
-      # 默认的日志等级
+      # @type  {Integer}        Default log level
       level:    0
-      # 是否启用控制台日志
+      # @type  {Boolean}        Write logs to console
       console:  true
-      # # 是否在页面上显示日志（暂不支持）
+      # @type  {Boolean}        Write logs to HTML element (not supported yet)
       # html:     false
-      # # 是否数据库记录日志（暂不支持）
+      # @type  {Boolean}        Write logs to database (not supported yet)
       # database: false
-      # # 是否向远程服务器发送日志（暂不支持）
+      # @type  {Boolean}        Send logs to server (not supported yet)
       # remote:   false
 
     ui:
+      # @type  {String}         CSS class prefix added to widgets
       prefix: "kopi"
-      viewport: "body"
-
-      layout:
-        navbar: "#kopi-navbar"
-        panel: "#kopi-content-panel"
-
-      notification:
-        bubble: '#kopi-notification-bubble'
-        dialog: '#kopi-notification-dialog'
-        dialogTitle: '#kopi-notification-dialog-title'
-        dialogContent: '#kopi-notification-dialog-content p'
-        dialogAction: '#kopi-notification-dialog-action'
-        dialogClose: '#kopi-notification-dialog-close'
-        indicator: '#kopi-notification-indicator'
-        overlay: '#kopi-notification-overlay'
-
-    clients:
-      # @type {Boolean} Support Android native interface
-      android: false
-      # @type {Boolean} Support Chromium native interface
-      chromium: false
-      # @type {Boolean} Support iOS native interface
-      ios: false
 
     db:
       indexedDB:
+        # @type  {String}       Default database name for indexed db
         name: "kopi_db"
 
   # Read settings from localStorage

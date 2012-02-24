@@ -3,7 +3,7 @@ define "kopi/utils", (require, exports, module) ->
   $ = require "jquery"
 
   ###
-  产生唯一 ID
+  Generate unique ID
 
   @param  {String}  prefix  前缀
   ###
@@ -11,7 +11,7 @@ define "kopi/utils", (require, exports, module) ->
   guid = (prefix='kopi') -> prefix + '-' + counter++
 
   ###
-  判断对象是否为 Promise 对象
+  Is the given value a promise object?
 
   @param  {Object}  obj
   ###

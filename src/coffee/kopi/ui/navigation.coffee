@@ -7,7 +7,7 @@ define "kopi/ui/navigation", (require, exports, module) ->
   i18n = require "kopi/utils/i18n"
 
   ###
-  管理 导航栏 的容器
+  A toolbar manages all navs
   ###
   class Navbar extends widgets.Widget
 

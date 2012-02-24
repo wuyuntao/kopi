@@ -8,7 +8,7 @@ define "kopi/ui/notification", (require, exports, module) ->
   overlays = require "kopi/ui/notification/overlays"
 
   ###
-  当对话框或其他组建被重复激活时报错
+  Error raised when dialog or other components are double activated
   ###
   class DuplicateNotificationError extends exceptions.Exception
 

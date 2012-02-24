@@ -1,6 +1,7 @@
 define "kopi/extras/ga", (require, exports, module) ->
 
   $ = require "jquery"
+  logger = logging.logger(module.id)
 
   # An Adapter for Google Analytics
   #
@@ -13,13 +14,17 @@ define "kopi/extras/ga", (require, exports, module) ->
   # tracker.event("book", "download_apk", )
   class Tracker
 
-    # GA Tracker 对象
+    ###
+    @constructor
+    ###
     constructor: ->
       this.account = null
       this.domain = null
       this.tracker = null
 
-    # 脚本是否加载完成
+    ###
+    Whether GA script is loaded
+    ###
     isLoaded: -> typeof win._gat isnt "undefined"
 
     # 加载 Google Analytics 脚本
@@ -48,9 +53,8 @@ define "kopi/extras/ga", (require, exports, module) ->
       host = if location.protocol is "https:" then "https://ssl." else "http://www."
       script = host + "google-analytics.com/" + (if this.debug then "u/ga_debug.js" else "ga.js")
 
-    # 设置 Tracker
+    # setup Tracker
     #
-    # 参数：
     # account: "UA-xxxxx-x"
     # domain: "zuikong.com"
     setup: (options) ->

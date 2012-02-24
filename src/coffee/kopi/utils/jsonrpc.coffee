@@ -5,6 +5,7 @@ define "kopi/jsonrpc", (require, exports, module) ->
 
   ###
   A lightweight JSON-RPC message wrapper
+
   ###
   MESSAGE_PREFIX = "kopi-message"
   JSON_RPC_VERSION = "2.0"

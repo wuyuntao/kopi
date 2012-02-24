@@ -60,18 +60,14 @@ define "kopi/utils/support", (require, exports, module) ->
     # though the event isn"t supported, so also test document.documentMode.
     hash: "onhashchange" of win and (docMode == undefined or docMode > 7)
 
-    # 是否支持 HTML5 历史
     history: "pushState" of hist and "replaceState" of hist
 
-    # pageShow: "onpageshow" in win and "onpagehide" in win
+    # pageShow: "onpageshow" of win and "onpagehide" of win
 
-    # 是否支持 本地 Key/Value 存储
     storage: "localStorage" of win
 
-    # 是否支持 HTML5 离线缓存
     cache: "applicationCache" of win
 
-    # 是否支持 HTML5 WebSQL 数据库
     websql: "openDatabase" of win
 
     # Vendors had inconsistent prefixing with the experimental Indexed DB:
@@ -79,11 +75,7 @@ define "kopi/utils/support", (require, exports, module) ->
     # - Firefox shipped moz_indexedDB before FF4b9, but since then has been mozIndexedDB
     indexedDB: !!win.indexedDB
 
-    # 在某些设备（如 HTC Desire）上，orientationchange 事件工作不正常，
-    # 事件被触发时，window 的大小还没有改变
-    # 参考
-    # https://github.com/jquery/jquery-mobile/issues/793
-    orientation: false
+    orientation: "onorientationchange" of win
 
     # 是否支持原生触摸事件
     touch: "ontouchend" of doc

@@ -2,7 +2,6 @@ define "kopi/ui/viewport", (require, exports, module) ->
 
   $ = require "jquery"
   exceptions = require "kopi/exceptions"
-  settings = require "kopi/settings"
   logging = require "kopi/logging"
   browser = require "kopi/utils/browser"
   widgets = require "kopi/ui/widgets"
@@ -15,11 +14,6 @@ define "kopi/ui/viewport", (require, exports, module) ->
   ###
   Viewport is reponsive to size changes of window
 
-  Q: 是否只是向激活的 Widget 发送事件，那如果重新载入非激活的 Widget 的时候 怎么办？
-  A: It should be leaved to widget itself to determine
-
-  TODO
-  Q: Should we refactor register() and unregister() to some widget, e.g. Resizable?
   ###
   class Viewport extends widgets.Widget
 

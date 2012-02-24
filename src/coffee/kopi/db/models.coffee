@@ -10,7 +10,6 @@ define "kopi/db/models", (require, exports, module) ->
   object = require "kopi/utils/object"
   text = require "kopi/utils/text"
   date = require "kopi/utils/date"
-  collections = require "kopi/db/collections"
   queries = require "kopi/db/queries"
   errors = require "kopi/db/errors"
 

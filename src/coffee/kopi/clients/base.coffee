@@ -1,7 +1,6 @@
 define "kopi/clients/base", (require, exports, module) ->
 
-  exceptions = require "kopi/exceptions"
-  settings = require "kopi/settings"
+  clients = require "kopi/clients"
 
   class BaseClient
 

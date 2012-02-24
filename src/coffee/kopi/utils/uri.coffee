@@ -28,7 +28,7 @@ define "kopi/utils/uri", (require, exports, module) ->
     unjoin(baseURL, url)
 
   ###
-  获取当前页面 baseURI
+  Get baseURI of current page
   ###
   baseURI = null
   base = ->
@@ -51,10 +51,10 @@ define "kopi/utils/uri", (require, exports, module) ->
   decode = (value) -> if value then decodeURIComponent(value) else emp
 
   reHost = /^([^:\/#\?]+):\/\//
-  ###
-  生成类似 Rails Router 的路由
 
-  TODO 更好的 path 格式
+  ###
+  Build path similar to Rails router
+
   ###
   build = (path, options={}) ->
     unless Array.isArray(path) and path.length >= 1

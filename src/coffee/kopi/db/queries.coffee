@@ -5,7 +5,6 @@ define "kopi/db/queries", (require, exports, module) ->
   klass = require "kopi/utils/klass"
   number = require "kopi/utils/number"
   object = require "kopi/utils/object"
-  collections = require "kopi/db/collections"
 
   ###
   Some query related exception

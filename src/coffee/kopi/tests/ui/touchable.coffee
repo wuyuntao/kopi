@@ -6,6 +6,4 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
 
   class TestTouchable extends touchable.Touchable
 
-  $ ->
-
-    q.module "kopi.ui.touchable"
+  q.module "kopi.ui.touchable"

@@ -11,3 +11,5 @@ define "kopi/ie", ->
   doc.createElement('footer')
   doc.createElement('figure')
   doc.createElement('figurecaption')
+
+  return

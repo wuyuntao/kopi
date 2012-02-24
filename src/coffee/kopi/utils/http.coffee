@@ -1,6 +1,9 @@
 define "kopi/utils/http", (require, exports, module) ->
 
   $ = require "jquery"
+  logging = require "kopi/logging"
+
+  logger = logging.logger(module.id)
 
   ###
   Provide some high-level wrappers around $.ajax
