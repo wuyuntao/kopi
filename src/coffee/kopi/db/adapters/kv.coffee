@@ -115,7 +115,7 @@ define "kopi/db/adapters/kv", (require, exports, module) ->
         prefix = self._options.keyPrefix
         delimiter = self._options.keyDelimiter
         self._keyForModelTmpl = "#{prefix}#{delimiter}{model}#{delimiter}#{pk}"
-      text.format(self._keyForModelTmpl, model: text.underscore(model.name), pk: pk)
+      text.format(self._keyForModelTmpl, model: text.dasherize(model.name), pk: pk)
 
     ###
     Build key for model index

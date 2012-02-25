@@ -9,7 +9,7 @@ define "kopi/db/adapters/indexeddb", (require, exports, module) ->
   client = require "kopi/db/adapters/client"
 
   win = window
-  logger = logging.logger(exports.name)
+  logger = logging.logger(module.id)
 
   class IndexedDBError extends exceptions.Exception
 

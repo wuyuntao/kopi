@@ -40,12 +40,12 @@ define "kopi/db/roles", (require, exports, module) ->
         owner: Admin
         blog: Blog
 
-      do: ->
+      run: ->
         if this.owner.isAdmin()
           this.blog.destroy()
 
     context = new DestroyBlog owner: owner, blog: blog
-    context.do()
+    context.run()
 
   ###
   class Context

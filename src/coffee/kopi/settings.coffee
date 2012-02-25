@@ -46,6 +46,12 @@ define "kopi/settings", (require, exports, module) ->
       # @type  {String}         CSS class prefix added to widgets
       prefix: "kopi"
 
+      notification:
+        bubble: '#kopi-notification-bubble'
+        dialog: '#kopi-notification-dialog'
+        indicator: '#kopi-notification-indicator'
+        overlay: '#kopi-notification-overlay'
+
     db:
       indexedDB:
         # @type  {String}       Default database name for indexed db

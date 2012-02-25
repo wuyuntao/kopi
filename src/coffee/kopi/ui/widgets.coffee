@@ -99,7 +99,7 @@ define "kopi/ui/widgets", (require, exports, module) ->
       key = "#{action},#{prefix}"
       value = this._cssClasses[key]
       if not value
-        this.prefix or= text.underscore(this.name, '-')
+        this.prefix or= text.dasherize(this.name, '-')
         value = this.prefix
         value = prefix + "-" + value if prefix
         value = (this._options.prefix or settings.kopi.ui.prefix) + "-" + value
@@ -131,7 +131,7 @@ define "kopi/ui/widgets", (require, exports, module) ->
     constructor: (options={}) ->
       self = this
       # @type {String}
-      self.constructor.prefix or= text.underscore(self.constructor.name, '-')
+      self.constructor.prefix or= text.dasherize(self.constructor.name)
       # @type {String}
       self.guid = utils.guid(self.constructor.prefix)
       # @type {Object}
@@ -325,7 +325,7 @@ define "kopi/ui/widgets", (require, exports, module) ->
     _readOptions: ->
       return this unless this.element.length > 0
       for name, value of this._options
-        value = this.element.data(text.underscore(name, '-'))
+        value = this.element.data(text.dasherize(name))
         this._options[name] = value if value isnt undefined
       this
 

@@ -6,7 +6,7 @@ define "kopi/ui/flippers", (require, exports, module) ->
   scrollable = require "kopi/ui/scrollable"
   widgets = require "kopi/ui/widgets"
 
-  logger = logging.logger(exports.name)
+  logger = logging.logger(module.id)
 
   math = Math
 

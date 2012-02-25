@@ -12,7 +12,7 @@ define "kopi/ui/scrollable", (require, exports, module) ->
   touchable = require "kopi/ui/touchable"
 
   math = Math
-  logger = logging.logger(exports.name)
+  logger = logging.logger(module.id)
 
   TRANSITION_PROPERTY = css.experimental("transition-property")
   TRANSITION_TIMING_FUNCTION = css.experimental("transition-timing-function")

@@ -5,7 +5,7 @@ define "kopi/ui/switchers", (require, exports, module) ->
   klass = require "kopi/utils/klass"
   groups = require "kopi/ui/groups"
 
-  logger = logging.logger(exports.name)
+  logger = logging.logger(module.id)
 
   HIDE = "hide"
   SHOW = "show"

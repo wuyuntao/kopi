@@ -13,7 +13,7 @@ define "kopi/db/models", (require, exports, module) ->
   queries = require "kopi/db/queries"
   errors = require "kopi/db/errors"
 
-  logger = logging.logger(exports.name)
+  logger = logging.logger(module.id)
 
   # Enum of field types
   INTEGER = 0
@@ -472,7 +472,7 @@ define "kopi/db/models", (require, exports, module) ->
     constructor: (attrs={}) ->
       self = this
       cls = this.constructor
-      cls.prefix or= text.underscore(cls.modelName())
+      cls.prefix or= text.dasherize(cls.modelName())
       cls.prepare() if not cls._prepared
 
       self._meta = cls.meta()

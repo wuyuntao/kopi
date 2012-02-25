@@ -5,7 +5,7 @@ define "kopi/db/adapters/webstorage", (require, exports, module) ->
   kv = require "kopi/db/adapters/kv"
   models = require "kopi/db/models"
 
-  logger = logging.logger(exports.name)
+  logger = logging.logger(module.id)
   storage = localStorage
 
   class StorageAdapater extends kv.KeyValueAdapter

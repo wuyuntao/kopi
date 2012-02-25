@@ -82,6 +82,9 @@ define "kopi/utils/array", (require, exports, module) ->
         return i if v == obj
       -1
 
+  has = (array, obj) ->
+    indexOf(array, obj) != -1
+
   insertAt = (array, index, obj) ->
     array.splice(index, 0, obj)
 
@@ -173,6 +176,7 @@ define "kopi/utils/array", (require, exports, module) ->
   empty: empty
   fill: fill
   indexOf: indexOf
+  has: has
   insertAt: insertAt
   isArray: isArray
   isEmpty: isEmpty

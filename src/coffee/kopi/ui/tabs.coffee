@@ -10,7 +10,7 @@ define "kopi/ui/tabs", (require, exports, module) ->
   widgets = require "kopi/ui/widgets"
   scrollable = require "kopi/ui/scrollable"
 
-  logger = logging.logger(exports.name)
+  logger = logging.logger(module.id)
 
   ###
   Tab errors

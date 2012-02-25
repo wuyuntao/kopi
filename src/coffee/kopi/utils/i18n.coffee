@@ -5,7 +5,7 @@ define "kopi/utils/i18n", (require, exports, module) ->
   settings = require "kopi/settings"
   utils = require "kopi/utils"
   text = require "kopi/utils/text"
-  set = require "kopi/utils/set"
+  set = require "kopi/utils/structs/set"
 
   # @type {Array}             All languages we support
   locales = new set.Set(["en", "zh_CN"])

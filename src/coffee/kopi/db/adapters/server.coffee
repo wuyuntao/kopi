@@ -2,6 +2,9 @@ define "kopi/db/adapters/server", (require, exports, module) ->
 
   $ = require "jquery"
   base = require "kopi/db/adapters/base"
+  logging = require "kopi/logging"
+
+  logger = logging.logger(module.id)
 
   class ServerAdapter extends base.BaseAdapter
 
@@ -65,6 +68,8 @@ define "kopi/db/adapters/server", (require, exports, module) ->
       failFn = (xhr, text, error) ->
         error = self._parseError(xhr, text, error)
         fn(error)
+
+      logger.info "Request URL: #{url}"
       # TODO Use some wrapper of $.ajax to queue delayed requests or retry failed requests
       $.ajax
         url: url

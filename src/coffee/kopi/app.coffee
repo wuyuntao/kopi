@@ -17,7 +17,7 @@ define "kopi/app", (require, exports, module) ->
   hist = history
   loc = location
   baseURL = uri.current()
-  logger = logging.logger(exports.name)
+  logger = logging.logger(module.id)
   appInstance = null
 
   ###

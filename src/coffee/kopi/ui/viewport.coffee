@@ -8,7 +8,7 @@ define "kopi/ui/viewport", (require, exports, module) ->
   notification = require "kopi/ui/notification"
 
   win = $(window)
-  logger = logging.logger(exports.name)
+  logger = logging.logger(module.id)
   viewportInstance = null
 
   ###
@@ -41,9 +41,11 @@ define "kopi/ui/viewport", (require, exports, module) ->
     ###
     register: (widget) ->
       this._widgets[widget.guid] = widget
+      this
 
     unregister: (widget) ->
       delete this._widgets[widget.guid]
+      this
 
     onskeleton: ->
       cls = this.constructor

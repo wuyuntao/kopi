@@ -5,6 +5,7 @@ define "kopi/db/queries", (require, exports, module) ->
   klass = require "kopi/utils/klass"
   number = require "kopi/utils/number"
   object = require "kopi/utils/object"
+  array = require "kopi/utils/array"
 
   ###
   Some query related exception
@@ -101,7 +102,7 @@ define "kopi/db/queries", (require, exports, module) ->
     clone: -> throw new exceptions.NotImplementedError()
 
     # Generate AJAX params
-    params: -> throw new exceptions.NotImplementedError()
+    params: -> ''
 
     # Generate SQL statements
     sql: -> throw new exceptions.NotImplementedError()
@@ -239,8 +240,9 @@ define "kopi/db/queries", (require, exports, module) ->
           fn(error, result) if fn
           return
         # Build model
-        if result.length > 0
-          model = new self.model(result[0])
+        result = result[0] if array.isArray(result)
+        if result
+          model = new self.model(result)
           model.isNew = false
         else
           model = null

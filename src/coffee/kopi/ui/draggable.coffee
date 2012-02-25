@@ -7,7 +7,7 @@ define "kopi/ui/draggable", (require, exports, module) ->
   touchable = require "kopi/ui/touchable"
 
   math = Math
-  logger = logging.logger(exports.name)
+  logger = logging.logger(module.id)
 
   TRANSITION_PROPERTY = css.experimental("transition-property")
   TRANSITION_DURATION = css.experimental("transition-duration")

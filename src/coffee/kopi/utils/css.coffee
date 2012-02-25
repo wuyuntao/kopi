@@ -27,7 +27,7 @@ define "kopi/utils/css", (require, exports, module) ->
   Generate vender-specified style names
   ###
   experimental = (name) ->
-    vendorPrefix + text.underscore(name, '-')
+    vendorPrefix + text.dasherize(name)
 
   ###
   Some extra jQuery utilities for CSS-related properties

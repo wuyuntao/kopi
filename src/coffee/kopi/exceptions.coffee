@@ -21,7 +21,7 @@ define "kopi/exceptions", (require, exports, module) ->
   ###
   class NotImplementedError extends Exception
     constructor: (message="Not implemented yet.") ->
-      super
+      super(message)
 
   ###
   Error raised when value is not correct
