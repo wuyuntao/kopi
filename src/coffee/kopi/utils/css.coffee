@@ -19,9 +19,13 @@ define "kopi/utils/css", (require, exports, module) ->
   if support.cssTransform3d
     translateOpen = "translate3d("
     translateClose = ",0)"
+    scaleOpen = "scale3d("
+    scaleClose = ",0)"
   else
     translateOpen = "translate("
     translateClose = ")"
+    scaleOpen = "scale("
+    scaleClose = ")"
 
   ###
   Generate vender-specified style names
@@ -48,6 +52,12 @@ define "kopi/utils/css", (require, exports, module) ->
       this.css transform, text.format(translate, x: x, y: y)
     else
       this.css left: x, top: y
+
+  scale = "#{scaleOpen}{x},{y}#{scaleClose}"
+  $.fn.scale = (x=1, y=1) ->
+    if support.cssTransform
+      this.css transform, text.format(scale, x: x, y: y)
+    this
 
   ###
   Parse css Matrix from element

@@ -22,6 +22,7 @@ define "kopi/ui/scrollable", (require, exports, module) ->
   ###
   TODO Support legacy animation
   TODO Do not calculate data on axis not scrollable
+  TODO Handle animation of X axis and Y axis independently
 
   ###
   class Scrollable extends touchable.Touchable
@@ -90,7 +91,7 @@ define "kopi/ui/scrollable", (require, exports, module) ->
     onskeleton: ->
       cls = this.constructor
       self = this
-      self._container = self._ensureWrapper("container")
+      self._container or= self._ensureWrapper("container")
       super
 
     onrender: ->
@@ -104,6 +105,7 @@ define "kopi/ui/scrollable", (require, exports, module) ->
         ._containerSize()
         ._scrollSize()
         ._duration(0)
+        ._resetPosition(100)
       this._callback(this.constructor.RESIZE_EVENT, arguments)
 
     ontouchstart: (e, event) ->
@@ -383,7 +385,7 @@ define "kopi/ui/scrollable", (require, exports, module) ->
       speedX = math.abs(distX) / duration
       speedY = math.abs(distY) / duration
       speed = math.sqrt(math.pow(speedX, 2) + math.pow(speedY, 2))
-      maxSpeed = math.sqrt(math.pow(self._containerWidth, 2) + math.pow(self._containerHeight, 2)) / 1000
+      maxSpeed = math.sqrt(math.pow(self._containerWidth, 2) + math.pow(self._containerHeight, 2)) / 500
       if speed > maxSpeed
         newSpeed = maxSpeed
         speedX = newSpeed / speed * speedX

@@ -1,4 +1,5 @@
 @import "compass/utilities";
+@import "utils";
 
 .kopi-scrollable {
   position: relative;
@@ -6,6 +7,7 @@
 }
 
 .kopi-scrollable-container {
+  @include unselectable;
   position: absolute;
   top: 0;
   left: 0;
@@ -25,4 +27,8 @@
     -moz, -webkit, not -o, not -ms, not -khtml, official);
   @include experimental("transform", translate3d(0, 0, 0),
     -moz, -webkit, not -o, not -ms, not -khtml, official);
+
+  img {
+    @include unselectable;
+  }
 }
