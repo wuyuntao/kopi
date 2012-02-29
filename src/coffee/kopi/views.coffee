@@ -1,6 +1,7 @@
 define "kopi/views", (require, exports, module) ->
 
   exceptions = require "kopi/exceptions"
+  klass = require "kopi/utils/klass"
   settings = require "kopi/settings"
   events = require "kopi/events"
   logging = require "kopi/logging"
@@ -61,11 +62,14 @@ define "kopi/views", (require, exports, module) ->
     kls.LOCK_EVENT = "lock"
     kls.UNLOCK_EVENT = "unlock"
 
+    klass.accessor kls, "viewName",
+      get: -> this._viewName or= this.name
+
     constructor: (app, url, params={}) ->
       if not app
         throw new exceptions.ValueError("app must be instance of Application")
       self = this
-      self.constructor.prefix or= text.dasherize(self.constructor.name)
+      self.constructor.prefix or= text.dasherize(self.constructor.viewName())
       self.guid = utils.guid(self.constructor.prefix)
       self.app = app
       self.url = url

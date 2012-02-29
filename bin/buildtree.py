@@ -130,7 +130,7 @@ if __name__ == '__main__':
     p.add_option('--output-format', '-o', default='sprockets',
             help="Default: sprockets")
     p.add_option('--output-file', '-O')
-    p.add_option('--ext-names', '-e', default='js,coffee',
+    p.add_option('--ext-names', '-e', default='js,coffee,js.erb,coffee.erb',
             help="Default: js,coffee")
     p.add_option('--extra-scripts', '-E', default='kopi',
             help="Default: kopi")

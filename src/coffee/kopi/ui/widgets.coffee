@@ -86,6 +86,9 @@ define "kopi/ui/widgets", (require, exports, module) ->
     # }}}
 
     # {{{ Accessors
+    klass.accessor kls, "widgetName",
+      get: -> this._widgetName or= this.name
+
     proto = kls.prototype
     klass.accessor proto, "end"
     # }}}
@@ -99,7 +102,7 @@ define "kopi/ui/widgets", (require, exports, module) ->
       key = "#{action},#{prefix}"
       value = this._cssClasses[key]
       if not value
-        this.prefix or= text.dasherize(this.name, '-')
+        this.prefix or= text.dasherize(this.widgetName(), '-')
         value = this.prefix
         value = prefix + "-" + value if prefix
         value = (this._options.prefix or settings.kopi.ui.prefix) + "-" + value
@@ -111,7 +114,7 @@ define "kopi/ui/widgets", (require, exports, module) ->
       this._eventNames or= {}
       value = this._eventNames[name]
       if not value
-        this.namespace or= "." + this.name.toLowerCase()
+        this.namespace or= "." + this.widgetName().toLowerCase()
         value = name + this.namespace
         this._eventNames[name] = value
       value
@@ -131,7 +134,7 @@ define "kopi/ui/widgets", (require, exports, module) ->
     constructor: (options={}) ->
       self = this
       # @type {String}
-      self.constructor.prefix or= text.dasherize(self.constructor.name)
+      self.constructor.prefix or= text.dasherize(self.constructor.widgetName())
       # @type {String}
       self.guid = utils.guid(self.constructor.prefix)
       # @type {Object}
@@ -268,7 +271,7 @@ define "kopi/ui/widgets", (require, exports, module) ->
       this.element
 
     toString: ->
-      "[#{this.constructor.name} #{this.guid}]"
+      "[#{this.constructor.widgetName()} #{this.guid}]"
 
     ###
     Add or update state class and data attribute to element
@@ -336,6 +339,20 @@ define "kopi/ui/widgets", (require, exports, module) ->
       fn = this._options[ON + event]
       fn(args...) if fn
       this
+
+    ###
+    Extract options with specfic prefix
+    ###
+    _extractOptions: (prefix) ->
+      return self._options if not prefix
+
+      self = this
+      options = {}
+      for name, value of self._options
+        if text.startsWith(name, prefix)
+          name = text.lowercase(name.replace(prefix, ""))
+          options[name] = value
+      options
 
     # }}}
 

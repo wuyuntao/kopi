@@ -23,21 +23,20 @@ define "kopi/utils/events", (require, exports, module) ->
     exports.TOUCH_MOVE_EVENT = "touchmove"
     exports.TOUCH_END_EVENT = "touchend"
     exports.TOUCH_CANCEL_EVENT = "touchcancel"
+
+    exports.isLeftClick = (event) -> true
+    exports.isRightClick = (event) -> false
   else
     exports.TOUCH_START_EVENT = exports.MOUSE_DOWN_EVENT
     exports.TOUCH_MOVE_EVENT = exports.MOUSE_MOVE_EVENT
     exports.TOUCH_END_EVENT = exports.MOUSE_UP_EVENT
     exports.TOUCH_CANCEL_EVENT = exports.MOUSE_OUT_EVENT
 
+    exports.isLeftClick = (event) -> event.which == exports.LEFT_BUTTON
+    exports.isRightClick = (event) -> event.which == exports.RIGHT_BUTTON
+
+
   exports.WEBKIT_TRANSITION_END_EVENT = "webkitTransitionEnd"
-
-  # TODO Check on mobile devices
-  exports.isLeftClick = (event) ->
-    event.which == exports.LEFT_BUTTON
-
-  # TODO Check on mobile devices
-  exports.isRightClick = (event) ->
-    event.which == exports.RIGHT_BUTTON
 
   ###
   Throttled resize event
@@ -48,7 +47,7 @@ define "kopi/utils/events", (require, exports, module) ->
   last = 0
   interval = null
   onResize = ->
-    now = new Date.getTime()
+    now = (new Date()).getTime()
     delta = now - last
     if delta >= throttle
       last = now

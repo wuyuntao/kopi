@@ -72,9 +72,9 @@ define "kopi/db/models", (require, exports, module) ->
           model = relation.model = module[model]
 
         # Generate model name if not specified
-        name = relation.name
+        name = relation.modelName()
         if not name
-          name = relation.name = text.camelize(model.name, false)
+          name = relation.modelName() = text.camelize(model.modelName(), false)
 
         # Add primary key to model fields
         modelMeta = model.meta()
@@ -96,9 +96,9 @@ define "kopi/db/models", (require, exports, module) ->
           model = relation.model = module[model]
 
         # Generate model name if not specified
-        name = relation.name
+        name = relation.modelName()
         if not name
-          name = relation.name = text.camelize(text.pluralize(model.name), false)
+          name = relation.modelName() = text.camelize(text.pluralize(model.modelName()), false)
         this.hasManyNames[name] = relation
 
       if not this.pk
@@ -147,10 +147,11 @@ define "kopi/db/models", (require, exports, module) ->
 
     klass.accessor kls, "modelName",
       get: -> this._modelName or= this.name
+
     klass.accessor kls, "dbName",
       get: ->
         meta = this.meta()
-        meta.dbName or= this.modelName() or this.name
+        meta.dbName or= this.modelName()
       set: (name) ->
         meta = this.meta()
         meta.dbName = name
@@ -305,7 +306,7 @@ define "kopi/db/models", (require, exports, module) ->
         book.author = author2       # returns [Author 2]
       ###
       defineProp = (relation) ->
-        name = relation.name
+        name = relation.modelName()
         pkName = relation.pkName
 
         getterFn = ->
@@ -348,7 +349,7 @@ define "kopi/db/models", (require, exports, module) ->
         author.books
       ###
       defineProp = (relation) ->
-        name = relation.name
+        name = relation.modelName()
         getterFn = ->
           collection = this._hasMany[name] or= []
           collection if collection

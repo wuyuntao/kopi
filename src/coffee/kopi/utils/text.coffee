@@ -27,6 +27,13 @@ define "kopi/utils/text", (require, exports, module) ->
     word.replace(reFirstLetter, upperCaseFn)
 
   ###
+  Convert a copy of string which first letter lowercased
+
+  ###
+  lowercase = (word) ->
+    word.replace(reFirstLetter, lowerCaseFn)
+
+  ###
   Try to find a constant with the name specified
 
   @param  {String}  name
@@ -229,3 +236,4 @@ define "kopi/utils/text", (require, exports, module) ->
   truncate: truncate
   underscore: underscore
   dasherize: dasherize
+  lowercase: lowercase

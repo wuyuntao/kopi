@@ -17,6 +17,8 @@ define "kopi/ui/buttons", (require, exports, module) ->
     # kls.ICON_POS_CHOICES = [kls.ICON_TOP, kls.ICON_RIGHT, kls.ICON_BOTTOM, kls.ICON_LEFT]
 
     kls.configure
+      preventDefault: true
+      stopPropagation: true
       # @type   {Boolean}   hasIcon   if show icon
       hasIcon: true
       # @type   {Boolean}   hasText   if show text
@@ -26,9 +28,7 @@ define "kopi/ui/buttons", (require, exports, module) ->
       # @type   {String}    cssClass  extra css class added to button
       cssClass: ""
       iconClass: images.Image
-      iconOptions: {}
       textClass: text.Text
-      textOptions: {}
 
     proto = kls.prototype
     # TODO Icon must be an instance of Image class
@@ -48,13 +48,15 @@ define "kopi/ui/buttons", (require, exports, module) ->
       self = this
       options = self._options
       if options.hasIcon
-        options.iconOptions.extraClass or= ""
-        options.iconOptions.extraClass += " #{cls.cssClass("icon")}"
-        self._icon = new options.iconClass(options.iconOptions)
+        iconOptions = self._extractOptions("icon")
+        iconOptions.extraClass or= ""
+        iconOptions.extraClass += " #{cls.cssClass("icon")}"
+        self._icon = new options.iconClass(iconOptions)
       if options.hasText
-        options.textOptions.extraClass or= ""
-        options.textOptions.extraClass += " #{cls.cssClass("text")}"
-        self._text = new options.textClass(options.textOptions)
+        textOptions = self._extractOptions("text")
+        textOptions.extraClass or= ""
+        textOptions.extraClass += " #{cls.cssClass("text")}"
+        self._text = new options.textClass(textOptions)
 
     onskeleton: ->
       self = this

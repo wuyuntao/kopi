@@ -29,6 +29,7 @@ define "kopi/ui/scrollable", (require, exports, module) ->
 
     kls = this
 
+    kls.CLICK_EVENT = "click"
     kls.RESIZE_EVENT = "resize"
     kls.TRANSITION_END_EVENT = "transitionend"
 
@@ -178,12 +179,13 @@ define "kopi/ui/scrollable", (require, exports, module) ->
       super
 
     ontouchend: (e, event) ->
+      cls = this.constructor
       self = this
       point = self._points(event)
-      return if support.touch and point isnt null
+      # return if support.touch and event.touches.length
 
       if not self._moved
-        # TODO Find last touched element and trigger click event for it
+        self.emit(cls.CLICK_EVENT, [event])
         return
 
       event.preventDefault()
