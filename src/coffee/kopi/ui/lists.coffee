@@ -1,15 +1,29 @@
 define "kopi/ui/lists", (require, exports, module) ->
 
-  widgets = require "kopi/ui/widgets"
+  groups = require "kopi/ui/groups"
+  QueueAdapter = require("kopi/ui/list/adapters").QueueAdapter
+  items = require "kopi/ui/lists/items"
+  klass = require "kopi/utils/klass"
 
-  class List extends widgets.Widget
+  class List extends groups.Group
 
-    append: (item) ->
+    kls = this
+    kls.configure
+      childClass: items.ListItem
 
-    prepend: (item) ->
+    proto = kls.prototype
+    ###
+    Accessor for adapter
 
-    remove: (item) ->
-
-    skeleton: (item) ->
+    When changing adapter, redraw whole list
+    ###
+    klass.accessor proto, "adapter",
+      set: (adapter) ->
+        self = this
+        if self._adapter and self._adapter instanceof QueueAdapter
+          self._adapter.off(QueueAdapter.CHANGE_EVENT)
+        if adapter and adapter instanceof QueueAdapter
+          changeFn = (e) -> self.draw()
+          adapter.on(QueueAdapter.CHANGE_EVENT, changeFn)
 
   List: List
