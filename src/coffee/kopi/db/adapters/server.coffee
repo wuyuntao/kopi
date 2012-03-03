@@ -63,11 +63,11 @@ define "kopi/db/adapters/server", (require, exports, module) ->
       url = self._url(query)
       params = self._params(query)
       doneFn = (response) ->
-        message = self._parse(response)
-        fn(null, message)
+        args = self._parse(response)
+        fn(args[0], args[1])
       failFn = (xhr, text, error) ->
         error = self._parseError(xhr, text, error)
-        fn(error)
+        fn(error[0])
 
       logger.info "Request URL: #{url}"
       # TODO Use some wrapper of $.ajax to queue delayed requests or retry failed requests
@@ -88,9 +88,9 @@ define "kopi/db/adapters/server", (require, exports, module) ->
 
     _parseJSON: (json) ->
       # TODO Verify if response JSON is formatted correctly
-      json
+      if json and json.ok then [null, json.result] else [json.error or true]
 
     _parseErrorJSON: (xhr, text, error) ->
-      {error: error or true, message: text}
+      [error or true]
 
   ServerAdapter: ServerAdapter
