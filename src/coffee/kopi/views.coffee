@@ -9,6 +9,8 @@ define "kopi/views", (require, exports, module) ->
   html = require "kopi/utils/html"
   text = require "kopi/utils/text"
 
+  logger = logging.logger(module.id)
+
   ###
   Base class of views
 
@@ -91,7 +93,7 @@ define "kopi/views", (require, exports, module) ->
       if self.created or self.locked
         logger.warn "View is already created or locked."
         return self
-      logging.info("Create view. #{self.guid}")
+      logger.info("Create view. #{self.guid}")
       self.lock()
       self.on(cls.CREATED_EVENT, (e) -> fn(false, self)) if fn
       self.emit(cls.CREATE_EVENT)
@@ -106,7 +108,7 @@ define "kopi/views", (require, exports, module) ->
       if self.started or self.locked
         logger.warn "View is already started or locked."
         return self
-      logging.info("Start view. #{self.guid}")
+      logger.info("Start view. #{self.guid}")
       self.lock()
       self.on(cls.STARTED_EVENT, (e) -> fn(false, self)) if fn
       self.emit(cls.START_EVENT)
@@ -122,7 +124,7 @@ define "kopi/views", (require, exports, module) ->
       if self.locked
         logger.warn "View is locked."
         return self
-      logging.info("Update view. #{self.guid}")
+      logger.info("Update view. #{self.guid}")
       self.on(cls.UPDATED_EVENT, (e) -> fn(false, this)) if fn
       self.emit(cls.UPDATE_EVENT)
 
@@ -136,7 +138,7 @@ define "kopi/views", (require, exports, module) ->
       if not self.started or self.locked
         logger.warn "View is already stopped or locked."
         return self
-      logging.info("Stop view. #{self.guid}")
+      logger.info("Stop view. #{self.guid}")
       self.lock()
       self.on(cls.STOPPED_EVENT, (e) -> fn(false, self)) if fn
       self.emit(cls.STOP_EVENT)
@@ -151,7 +153,7 @@ define "kopi/views", (require, exports, module) ->
       if not self.created or self.locked
         logger.warn "View is already destroyed or locked."
         return self
-      logging.info("Destroy view. #{self.guid}")
+      logger.info("Destroy view. #{self.guid}")
       self.lock()
       self.on(cls.DESTROYED_EVENT, (e) -> fn(false, self)) if fn
       self.emit(cls.DESTROY_EVENT)
@@ -160,7 +162,7 @@ define "kopi/views", (require, exports, module) ->
       cls = this.constructor
       self = this
       return self if self.locked
-      logging.info("Lock view. #{self.guid}")
+      logger.info("Lock view. #{self.guid}")
       self.locked = true
       self.emit cls.LOCK_EVENT
       fn(false, self) if fn
@@ -170,7 +172,7 @@ define "kopi/views", (require, exports, module) ->
       cls = this.constructor
       self = this
       return self unless self.locked
-      logging.info("Unlock view. #{self.guid}")
+      logger.info("Unlock view. #{self.guid}")
       self.locked = false
       self.emit cls.UNLOCK_EVENT
       fn(false, self) if fn
@@ -184,7 +186,7 @@ define "kopi/views", (require, exports, module) ->
       self = this
       self.created = true
       self.unlock()
-      logging.info("View created. #{self.guid}")
+      logger.info("View created. #{self.guid}")
       self.emit cls.CREATED_EVENT
 
     onstart: (e) ->
@@ -192,13 +194,13 @@ define "kopi/views", (require, exports, module) ->
       self = this
       self.started = true
       self.unlock()
-      logging.info("View started. #{self.guid}")
+      logger.info("View started. #{self.guid}")
       self.emit cls.STARTED_EVENT
 
     onupdate: (e) ->
       cls = this.constructor
       self = this
-      logging.info("View updated. #{self.guid}")
+      logger.info("View updated. #{self.guid}")
       self.emit cls.UPDATED_EVENT
 
     onstop: (e) ->
@@ -206,7 +208,7 @@ define "kopi/views", (require, exports, module) ->
       self = this
       self.started = false
       self.unlock()
-      logging.info("View stopped. #{self.guid}")
+      logger.info("View stopped. #{self.guid}")
       self.emit cls.STOPPED_EVENT
 
     ondestroy: (e) ->
@@ -214,7 +216,7 @@ define "kopi/views", (require, exports, module) ->
       self = this
       self.created = false
       self.unlock()
-      logging.info("View destroyed. #{self.guid}")
+      logger.info("View destroyed. #{self.guid}")
       self.emit cls.DESTROYED_EVENT
 
     onlock: (e) ->

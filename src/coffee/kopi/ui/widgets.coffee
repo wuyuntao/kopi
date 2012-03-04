@@ -171,6 +171,9 @@ define "kopi/ui/widgets", (require, exports, module) ->
         self.element.addClass(self._options.extraClass)
       self.emit(cls.SKELETON_EVENT)
 
+    skeletonTo: (element) ->
+      this.skeleton().appendTo(element)
+
     delegate: ->
       this.emit("delegate")
 
