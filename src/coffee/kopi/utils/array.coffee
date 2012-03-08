@@ -11,6 +11,8 @@ define "kopi/utils/array", (require, exports, module) ->
 
   ArrayProto = Array.prototype
 
+  clone = (array) -> array.slice(0)
+
   count = (array, iterator, context) ->
     n = 0
     for v, i in array
@@ -98,7 +100,7 @@ define "kopi/utils/array", (require, exports, module) ->
   map = (array, iterator, context) ->
     results = []
     forEach array, (v, i) ->
-      array[i] = iteration.call(context, v, i, array)
+      array[i] = iterator.call(context, v, i, array)
     results
 
   ###
@@ -169,6 +171,7 @@ define "kopi/utils/array", (require, exports, module) ->
     set
 
   ArrayProto: ArrayProto
+  clone: clone
   count: count
   forEach: forEach
   asyncForEach: asyncForEach

@@ -26,6 +26,9 @@ define "kopi/ui/groups", (require, exports, module) ->
     getAt: (index) ->
       this._children[index]
 
+    indexOf: (child) ->
+      array.indexOf(this._keys, this._key(child))
+
     ###
     If a child widget is in the group
     ###
@@ -88,7 +91,7 @@ define "kopi/ui/groups", (require, exports, module) ->
     _appendChild: (child) ->
       self = this
       if self.initialized
-        child.skeleton().element.appendTo(self._wrapper())
+        child.skeletonTo(self._wrapper())
       if self.rendered
         child.render()
 

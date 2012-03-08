@@ -28,6 +28,8 @@ define "kopi/utils/structs/queue", (require, exports, module) ->
 
     length: -> this._queue.length
 
+    forEach: (fn) -> array.forEach(this._queue, fn, this)
+
   ###
   Class for FIFO Queue data structure with events.
 
@@ -71,6 +73,8 @@ define "kopi/utils/structs/queue", (require, exports, module) ->
     isEmpty: -> array.isEmpty(this._queue)
 
     length: -> this._queue.length
+
+    forEach: (fn) -> array.forEach(this._queue, fn, this)
 
   Queue: Queue
   EventQueue: EventQueue

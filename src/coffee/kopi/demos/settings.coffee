@@ -3,7 +3,7 @@ define "kopi/demos/settings", (require, exports, module) ->
   settings = require "kopi/settings"
 
   settings.kopi.demos =
-    list:
+    list: [
       "item1"
       "item2"
       "item3"
@@ -14,3 +14,4 @@ define "kopi/demos/settings", (require, exports, module) ->
       "item8"
       "item9"
       "item10"
+    ]

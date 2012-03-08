@@ -7,3 +7,9 @@
   @include experimental("user-drag", none,
     -moz, -webkit, not -o, not -ms, not -khtml, official);
 }
+
+@mixin transition {
+  @include transition-property(all);
+  @include transition-duration(300ms);
+  @include transition-timing-function(ease-out);
+}

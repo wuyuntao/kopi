@@ -9,6 +9,7 @@ define "kopi/ui/widgets", (require, exports, module) ->
   events = require "kopi/events"
   exceptions = require "kopi/exceptions"
   settings = require "kopi/settings"
+  map = require "kopi/utils/structs/map"
 
   ON = "on"
 
@@ -230,22 +231,32 @@ define "kopi/ui/widgets", (require, exports, module) ->
 
     # {{{ Event template methods
     onskeleton: ->
-      this.delegate()
-      this.initialized = true
+      self = this
+      self.delegate()
+      if self._widgets
+        self._widgets.forEach (name, widget) ->
+          widget.skeletonTo(self.element)
+      self.initialized = true
 
     ondelegate: ->
 
     onrender: ->
       this.resize()
+      if this._widgets
+        this._widgets.forEach (name, widget) ->
+          widget.render()
       this.rendered = true
 
     onupdate: ->
 
     ondestroy: ->
+      if this._widgets
+        this._widgets.forEach (name, widget) ->
+          widget.destroy()
       this.initialized = false
       this.rendered = false
 
-    onsizechange: ->
+    onresize: ->
 
     onlock: ->
       this.locked = true
@@ -296,6 +307,44 @@ define "kopi/ui/widgets", (require, exports, module) ->
       this.element
         .removeAttr("data-#{name}")
         .replaceClass(this.constructor.stateRegExp(name), "")
+
+    ###
+    Create a child widget which is initialized, rendered and destroyed
+    when parent widget is doing so
+
+    ###
+    register: (name, widgetClass, options) ->
+      self = this
+      self._widgets or= new map.Map()
+      # Create widget instance
+      widgetOptions = self._extractOptions(name)
+      object.extend(widgetOptions, options) if options
+      widget = new widgetClass(widgetOptions).end(self)
+      # Create accessor for widget
+      self["_" + name] = widget
+      klass.accessor self, name
+      # Add child widget stack
+      self._widgets.set(name, widget)
+      self
+
+    ###
+    Remove a child widget with the given name
+
+    ###
+    unregister: (name) ->
+      self = this
+      return if not self._widgets
+      widget = self._widgets.get(name)
+      if name and widget
+        # Remove child widget from stack
+        self._widgets.remove(name)
+        # Remove accessor
+        delete self[name]
+        delete self["_" + name]
+        # Destroy widget
+        widget.destroy()
+      self
+
     # }}}
 
     # {{{ Private methods

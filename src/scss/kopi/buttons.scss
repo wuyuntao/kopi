@@ -1,0 +1,61 @@
+
+
+/* {{{ Button
+ *
+ * div.kopi-button
+ *   span.kopi-button-text
+ */
+$kopi-button-background: rgba(33, 33, 33, 0.7) !default;
+$kopi-button-hover-background: rgba(66, 33, 33, 0.7) !default;
+$kopi-button-active-background: rgba(99, 66, 66, 0.7) !default;
+$kopi-button-hold-background: rgba(133, 66, 66, 0.7) !default;
+
+$kopi-button-color: #ccc !default;
+$kopi-button-hover-color: #fcc !default;
+$kopi-button-active-color: #fdd !default;
+$kopi-button-hold-color: #fee !default;
+$kopi-button-text-shadow: 0 -1px 0 #000 !default;
+$kopi-button-hover-text-shadow: 0 -1px 0 #300 !default;
+$kopi-button-active-text-shadow: 0 -1px 0 #600 !default;
+$kopi-button-hold-text-shadow: 0 -1px 0 #900 !default;
+
+.kopi-button {
+  @include transition;
+  background: $kopi-button-background;
+
+  span.kopi-button-text {
+    @include inline-block;
+
+    color: $kopi-button-color;
+    text-shadow: $kopi-button-text-shadow;
+  }
+}
+
+.kopi-button-hover {
+  background: $kopi-button-hover-background;
+
+  span.kopi-button-text {
+    color: $kopi-button-hover-color;
+    text-shadow: $kopi-button-hover-text-shadow;
+  }
+}
+
+.kopi-button-active {
+  background: $kopi-button-active-background;
+
+  span.kopi-button-text {
+    color: $kopi-button-active-color;
+    text-shadow: $kopi-button-active-text-shadow;
+  }
+}
+
+// Not supported yet
+// .kopi-button-hold {
+//   background: $kopi-button-hold-background;
+//
+//   span.kopi-button-text {
+//     color: $kopi-button-hold-color;
+//     text-shadow: $kopi-button-hold-text-shadow;
+//   }
+// }
+// }}}

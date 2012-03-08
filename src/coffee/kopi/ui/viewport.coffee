@@ -32,7 +32,7 @@ define "kopi/ui/viewport", (require, exports, module) ->
       this._options.element or= "body"
       this.width = null
       this.height = null
-      this._widgets = {}
+      this._listeners = {}
 
     ###
 
@@ -40,11 +40,11 @@ define "kopi/ui/viewport", (require, exports, module) ->
     @param {Boolean}        emit   Trigger resize event right after widget is registered
     ###
     register: (widget) ->
-      this._widgets[widget.guid] = widget
+      this._listeners[widget.guid] = widget
       this
 
     unregister: (widget) ->
-      delete this._widgets[widget.guid]
+      delete this._listeners[widget.guid]
       this
 
     onskeleton: ->
@@ -54,6 +54,7 @@ define "kopi/ui/viewport", (require, exports, module) ->
       self._resize(false)
       # TODO Use thottle resize event of window
       win.bind cls.RESIZE_EVENT, -> self.emit(cls.RESIZE_EVENT)
+      super
 
     onresize: ->
       self = this
@@ -79,7 +80,7 @@ define "kopi/ui/viewport", (require, exports, module) ->
       self.width = width
       self.height = height
       # Notify registered widgets to apply new size
-      for guid, widget of self._widgets
+      for guid, widget of self._listeners
         # TODO Keep lock until all widgets have finished resizing
         widget.emit(cls.RESIZE_EVENT)
       self.unlock()

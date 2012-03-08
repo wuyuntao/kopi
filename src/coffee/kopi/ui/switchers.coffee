@@ -1,5 +1,6 @@
 define "kopi/ui/switchers", (require, exports, module) ->
 
+  exceptions = require "kopi/exceptions"
   logging = require "kopi/logging"
   array = require "kopi/utils/array"
   klass = require "kopi/utils/klass"
@@ -59,7 +60,7 @@ define "kopi/ui/switchers", (require, exports, module) ->
     showAt: (index) ->
       self = this
       unless 0 <= index < self._children.length
-        throw new exceptions.ValueError("Invalid index of child")
+        throw new exceptions.ValueError("Invalid index of child #{index} of #{self._children.length}")
 
       # Do nothing if index is referring to current child
       currentAt = self.currentAt()
@@ -68,13 +69,13 @@ define "kopi/ui/switchers", (require, exports, module) ->
         return self
 
       self.lock()
+      child = self._children[index]
 
       # Shows child directly if there is no current child
       if not currentAt >= 0
         self._show(child)
         return self
 
-      child = self._children[index]
       currentChild = self._children[currentAt]
       hidden = false
       shown = false
@@ -89,6 +90,12 @@ define "kopi/ui/switchers", (require, exports, module) ->
         shown = true
         doneFn()
       self._hide(currentChild, hideFn)._show(child, showFn)
+
+    ###
+    Manually show the child
+    ###
+    show: (child) ->
+      this.showAt(this.indexOf(child))
 
     ###
     Show the child.

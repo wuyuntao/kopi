@@ -1,5 +1,6 @@
 define "kopi/ui/lists/adapters", (require, exports, module) ->
 
+  array = require "kopi/utils/array"
   events = require "kopi/events"
   queue = require "kopi/utils/structs/queue"
 
@@ -9,7 +10,7 @@ define "kopi/ui/lists/adapters", (require, exports, module) ->
   class BaseAdapter extends events.EventEmitter
 
     # constructor: ->
-    # items: ->
+    # forEach: (fn) ->
     # length: ->
 
   class ArrayAdapter extends BaseAdapter
@@ -17,7 +18,7 @@ define "kopi/ui/lists/adapters", (require, exports, module) ->
     constructor: (array=[]) ->
       this._array = array
 
-    items: -> this._array
+    forEach: (fn) -> array.forEach(this._array, fn)
 
     length: -> this._array.length
 
@@ -31,12 +32,12 @@ define "kopi/ui/lists/adapters", (require, exports, module) ->
       changeFn = (e, obj) ->
         self.emit(cls.CHANGE_EVENT, [obj])
       self._queue = queue
-      queue.on(queue.Queue.ENQUEUE_EVENT, changeFn)
-      queue.on(queue.Queue.DNQUEUE_EVENT, changeFn)
+      queue.on(queue.EventQueue.ENQUEUE_EVENT, changeFn)
+      queue.on(queue.EventQueue.DNQUEUE_EVENT, changeFn)
 
-    items: -> this._queue
+    forEach: (fn) ->
 
-    length: this._queue.length()
+    length: -> this._queue.length()
 
   BaseAdapter: BaseAdapter
   ArrayAdapter: ArrayAdapter

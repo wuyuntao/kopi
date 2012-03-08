@@ -217,7 +217,6 @@ define "kopi/ui/tabs", (require, exports, module) ->
     kls = this
     kls.configure
       scrollableClass :scrollable.Scrollable
-      scrollableOptions: {}
 
     proto = kls.prototype
     klass.accessor proto, "scrollable"
@@ -226,7 +225,8 @@ define "kopi/ui/tabs", (require, exports, module) ->
       super
       self = this
       options = self._options
-      self._scrollable = new options.scrollableClass(options.scrollableOptions).end(self)
+      scrollableOptions = self._extractOptions("scrollable")
+      self._scrollable = new options.scrollableClass(scrollableOptions).end(self)
 
     onskeleton: ->
       this._scrollable.skeleton()

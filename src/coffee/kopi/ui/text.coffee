@@ -16,6 +16,10 @@ define "kopi/ui/text", (require, exports, module) ->
         this.update() if update and this.rendered
         this
 
+    constructor: ->
+      super
+      this._text or= this._options.text
+
     onrender: ->
       this._draw()
       super

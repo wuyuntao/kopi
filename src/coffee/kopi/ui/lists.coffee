@@ -1,7 +1,8 @@
 define "kopi/ui/lists", (require, exports, module) ->
 
+  exceptions = require "kopi/exceptions"
   groups = require "kopi/ui/groups"
-  QueueAdapter = require("kopi/ui/list/adapters").QueueAdapter
+  QueueAdapter = require("kopi/ui/lists/adapters").QueueAdapter
   items = require "kopi/ui/lists/items"
   klass = require "kopi/utils/klass"
 
@@ -20,10 +21,35 @@ define "kopi/ui/lists", (require, exports, module) ->
     klass.accessor proto, "adapter",
       set: (adapter) ->
         self = this
+        # Remove event listeners if previous adapter is a queue adapter
         if self._adapter and self._adapter instanceof QueueAdapter
           self._adapter.off(QueueAdapter.CHANGE_EVENT)
+
+        self._adapter = adapter
+        # Add event listeners if current adapter is a queue adapter
         if adapter and adapter instanceof QueueAdapter
-          changeFn = (e) -> self.draw()
+          changeFn = (e) -> self.renderItems()
           adapter.on(QueueAdapter.CHANGE_EVENT, changeFn)
+
+    onrender: ->
+      this.renderItems()
+      super
+
+    ###
+    Render all items included in the adapter
+    ###
+    renderItems: ->
+      self = this
+      if not self._adapter
+        throw new exceptions.ValueError("Missing adapter")
+      # Remove old items
+      while self._children.length
+        self.removeAt(0)
+      # Create from adapter
+      itemClass = self._options.childClass
+      self._adapter.forEach (data, i) ->
+        item = new itemClass(self, data)
+        self.addAt(item, i)
+      self
 
   List: List
