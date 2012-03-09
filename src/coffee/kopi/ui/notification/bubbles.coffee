@@ -3,6 +3,7 @@ define "kopi/ui/notification/bubbles", (require, exports, module) ->
   $ = require "jquery"
   i18n = require "kopi/utils/i18n"
   widgets = require "kopi/ui/notification/widgets"
+  overlays = require "kopi/ui/notification/overlays"
 
   class Bubble extends widgets.Widget
 
@@ -39,4 +40,9 @@ define "kopi/ui/notification/bubbles", (require, exports, module) ->
         .removeClass(cls.showClass())
       self
 
+  # Singleton instance of bubble
+  bubbleInstance = null
+
+  instance: ->
+    bubbleInstance or= new Bubble(overlays.instance()).skeleton().render()
   Bubble: Bubble

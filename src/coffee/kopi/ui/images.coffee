@@ -3,18 +3,24 @@ define "kopi/ui/images", (require, exports, module) ->
   $ = require "jquery"
   widgets = require "kopi/ui/widgets"
 
+  doc = document
   IMG_TAG = "<img></img>"
   SRC = "src"
 
   ###
   A optimized image widget has following features.
+
+  TODO Allow to retry if download fails
+  TODO Image resources can be cached in db or localstorage as base64 string
+  TODO Simple process image with canvas?
+  TODO Do not subtitute image when page is scrolling
   ###
   class Image extends widgets.Widget
 
     this.configure
       tagName: "figure"
-      height: ""
-      width: ""
+      height: null
+      width: null
       src: ""
       loaderSrc: ""
       fallbackSrc: ""
@@ -31,12 +37,15 @@ define "kopi/ui/images", (require, exports, module) ->
 
     onskeleton: ->
       self = this
+      cls = this.constructor
       options = self._options
-      self._image = $ IMG_TAG,
-        src: options.loaderSrc,
-        height: options.height
-        width: options.width
-      self.element.html(self._image)
+      # Show loader or default image when resource is not ready
+      if options.loaderSrc
+        self._image = $ IMG_TAG, src: options.loaderSrc
+        self.element.addClass cls.cssClass("loading")
+      else
+        self._image = $ IMG_TAG, src: options.src
+      self.element.width(options.width).height(options.height).html(self._image)
       super
 
     onrender: ->
@@ -47,13 +56,39 @@ define "kopi/ui/images", (require, exports, module) ->
       this._draw()
       super
 
-    # TODO Show loader or default image when resource is not ready
-    # TODO Allow to retry if download fails
-    # TODO Image resources can be cached in db or localstorage as base64 string
-    # TODO Simple process image with canvas?
-    # TODO Do not subtitute image when page is scrolling
+    ###
+    Redraw image with given `src`
+    ###
     _draw: ->
       self = this
-      self._image.attr SRC, self._src
+      cls = this.constructor
+      options = this._options
+      element = self.element
+      image = self._image
+      if options.loaderSrc
+        loadingClass = cls.cssClass("loading")
+        fallbackClass = cls.cssClass("fallback")
+
+        element.addClass(loadingClass)
+        element.removeClass(fallbackClass) if options.fallbackSrc
+        image.attr(SRC, options.loaderSrc)
+
+        img = doc.createElement("img")
+        img.onload = (e) ->
+          element.removeClass(loadingClass)
+          image
+            .height(options.height)
+            .width(options.width)
+            .attr(SRC, self._src)
+        img.onerror = (e) ->
+          element.removeClass(loadingClass)
+          if options.fallbackSrc
+            element.addClass(fallbackClass)
+            image.attr(SRC, options.fallbackSrc)
+          else
+            image.attr(SRC, self._src)
+        img.src = self._src
+      else
+        self._image.attr SRC, self._src
 
   Image: Image

@@ -4,6 +4,7 @@ define "kopi/ui/notification/dialogs", (require, exports, module) ->
   exceptions = require "kopi/exceptions"
   i18n = require "kopi/utils/i18n"
   widgets = require "kopi/ui/notification/widgets"
+  overlays = require "kopi/ui/notification/overlays"
   en = require "kopi/ui/notification/messages/en"
   zh_CN = require "kopi/ui/notification/messages/zh_CN"
 
@@ -115,4 +116,9 @@ define "kopi/ui/notification/dialogs", (require, exports, module) ->
     onclose: ->
       this.hide()
 
+  # Singleton instance of dialog
+  dialogInstance = null
+
+  instance: ->
+    dialogInstance or= new Dialog(overlays.instance()).skeleton().render()
   Dialog: Dialog

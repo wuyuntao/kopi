@@ -12,49 +12,14 @@ define "kopi/ui/notification", (require, exports, module) ->
   ###
   class DuplicateNotificationError extends exceptions.Exception
 
-  # Notification widget instances (singleton)
-  bubbleInstance = null
-  dialogInstance = null
-  indicatorInstance = null
-  overlayInstance = null
-
-  overlay = ->
-    overlayInstance or= new overlays.Overlay().skeleton().render()
-
-  dialog = ->
-    overlayInstance or= overlay()
-    dialogInstance or= new dialogs.Dialog(overlayInstance).skeleton().render()
-    dialogInstance
-
-  indicator = ->
-    overlayInstance or= overlay()
-    indicatorInstance or= new indicators.Indicator(overlayInstance).skeleton().render()
-
-  bubble = ->
-    overlayInstance or= overlay()
-    bubbleInstance or= new bubbles.Bubble(overlayInstance).skeleton().render()
-
-  lock = (transparent=false) ->
-    overlay().show(transparent)
-
-  unlock = ->
-    overlay().hide()
-
-  loading = (transparent=false) ->
-    indicator().show(transparent)
-
-  loaded = ->
-    indicator().hide()
-
-  message = (text) ->
-    bubble().content(text).show()
-
-  overlay: overlay
-  bubble: bubble
-  dialog: dialog
-  indicator: indicator
-  lock: lock
-  unlock: unlock
-  loading: loading
-  loaded: loaded
-  message: message
+  # Get singleton instances of notification widgets
+  overlay: -> overlays.instance()
+  dialog: -> dialogs.instance()
+  indicator: -> indicators.instance()
+  bubble: -> bubbles.instance()
+  # Shortcut methods for notification widgets
+  lock: (transparent=false) -> overlay().show(transparent)
+  unlock: -> overlay().hide()
+  loading: (transparent=false) -> indicator().show(transparent)
+  loaded: -> indicator().hide()
+  message: (text) -> bubble().content(text).show()

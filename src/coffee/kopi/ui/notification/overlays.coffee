@@ -6,6 +6,8 @@ define "kopi/ui/notification/overlays", (require, exports, module) ->
 
   class Overlay extends widgets.Widget
 
+    this.widgetName "Overlay"
+
     onskeleton: ->
       # TODO Ignore touch events too
       this.element.bind "click", (e) -> return false
@@ -33,4 +35,8 @@ define "kopi/ui/notification/overlays", (require, exports, module) ->
       self
 
   # Singleton
+  overlayInstance = null
+
+  instance: ->
+    overlayInstance or= new Overlay().skeleton().render()
   Overlay: Overlay

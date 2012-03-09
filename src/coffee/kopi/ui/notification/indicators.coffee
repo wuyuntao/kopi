@@ -29,4 +29,10 @@ define "kopi/ui/notification/indicators", (require, exports, module) ->
       self.element.addClass(cls.hideClass()).removeClass(cls.showClass())
       self
 
+
+  # Singleton instance of indicator
+  indicatorInstance = null
+
+  instance: ->
+    indicatorInstance or= new Indicator(overlays.instance()).skeleton().render()
   Indicator: Indicator

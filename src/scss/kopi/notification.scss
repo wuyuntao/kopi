@@ -150,10 +150,6 @@ $kopi-notification-bubble-height: 100px !default;
   right: $kopi-notification-dialog-button-margin;
 }
 
-.kopi-notification-dialog-show {
-  display: block;
-}
-
 .kopi-notification-indicator {
   position: fixed;
   top: 50%;
@@ -164,10 +160,6 @@ $kopi-notification-bubble-height: 100px !default;
   margin-left: $kopi-notification-indicator-width / -2;
   display: none;
   z-index: 1300;
-}
-
-.kopi-notification-indicator-show {
-  @extend .kopi-notification-dialog-show;
 }
 
 .kopi-notification-overlay {
@@ -187,10 +179,6 @@ $kopi-notification-bubble-height: 100px !default;
   display: none;
 }
 
-.kopi-notification-overlay-show {
-  @extend .kopi-notification-dialog-show;
-}
-
 .kopi-notification-bubble {
   @include opacity($kopi-notification-bubble-opacity);
   background-color: $kopi-notification-bubble-background-color;
@@ -205,6 +193,9 @@ $kopi-notification-bubble-height: 100px !default;
   display: none;
 }
 
+.kopi-notification-dialog-show,
+.kopi-notification-indicator-show,
+.kopi-notification-overlay-show,
 .kopi-notification-bubble-show {
-  @extend .kopi-notification-dialog-show;
+  display: block;
 }

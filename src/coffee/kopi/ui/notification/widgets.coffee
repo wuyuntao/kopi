@@ -4,6 +4,9 @@ define "kopi/ui/notification/widgets", (require, exports, module) ->
   text = require "kopi/utils/text"
   widgets = require "kopi/ui/widgets"
 
+  ###
+  Base class for notification widgets
+  ###
   class Widget extends widgets.Widget
 
     kls = this
