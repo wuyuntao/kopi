@@ -325,6 +325,9 @@ define "kopi/ui/widgets", (require, exports, module) ->
       klass.accessor self, name
       # Add child widget stack
       self._widgets.set(name, widget)
+      # TODO Auto emit resize event for child widgets when parent widget size changes?
+      # if options.resize
+      #   self.on cls.RESIZE_EVENT, -> widget.emit cls.RESIZE_EVENT
       self
 
     ###

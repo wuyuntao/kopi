@@ -18,8 +18,8 @@ define "kopi/ui/notification", (require, exports, module) ->
   indicator: -> indicators.instance()
   bubble: -> bubbles.instance()
   # Shortcut methods for notification widgets
-  lock: (transparent=false) -> overlay().show(transparent)
-  unlock: -> overlay().hide()
-  loading: (transparent=false) -> indicator().show(transparent)
-  loaded: -> indicator().hide()
-  message: (text) -> bubble().content(text).show()
+  lock: (transparent=false) -> overlays.instance().show(transparent)
+  unlock: -> overlays.instance().hide()
+  loading: (transparent=false) -> indicators.instance().show(transparent)
+  loaded: -> indicators.instance().hide()
+  message: (text) -> bubbles.instance().content(text).show()
