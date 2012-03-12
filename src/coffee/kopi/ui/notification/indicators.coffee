@@ -7,17 +7,23 @@ define "kopi/ui/notification/indicators", (require, exports, module) ->
 
   class Indicator extends widgets.Widget
 
-    constructor: (overlay) ->
-      super()
-      this._overlay = overlay
+    this.widgetName "Indicator"
 
-    show: ->
+    constructor: ->
+      super()
+      this._overlay = overlays.instance()
+
+    onskeleton: ->
+      super
+
+    show: (options={}) ->
       cls = this.constructor
       self = this
       return self if not self.hidden
+      options.lock = true if typeof options.lock is 'undefined'
       self.hidden = false
-      self._overlay.show()
-      self.element.removeClass(cls.hideClass()).addClass(cls.showClass())
+      self._overlay.show(options.transparent) if options.lock
+      self.element.addClass(cls.showClass())
       self
 
     hide: ->
@@ -26,13 +32,21 @@ define "kopi/ui/notification/indicators", (require, exports, module) ->
       return self if self.hidden
       self.hidden = true
       self._overlay.hide()
-      self.element.addClass(cls.hideClass()).removeClass(cls.showClass())
+      self.element.removeClass(cls.showClass())
       self
-
 
   # Singleton instance of indicator
   indicatorInstance = null
 
-  instance: ->
-    indicatorInstance or= new Indicator(overlays.instance()).skeleton().render()
+  # Factory method for singleton instance of indicator
+  instance = ->
+    indicatorInstance or= new Indicator().skeletonTo(document.body).render()
+
+  # Shortcut methods to toggle indicator
+  show = -> instance().show()
+  hide = -> instance().hide()
+
+  instance: instance
+  show: show
+  hide: hide
   Indicator: Indicator

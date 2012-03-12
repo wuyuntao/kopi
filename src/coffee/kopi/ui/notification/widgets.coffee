@@ -17,21 +17,20 @@ define "kopi/ui/notification/widgets", (require, exports, module) ->
     kls.NOTIFICATION = "notification"
 
     kls.configure
+      prefix: "kopi-notification"
       autoSkeleton: true
 
     actions = [kls.SHOW, kls.HIDE, kls.TRANSPARENT]
 
     defineMethod = (action) ->
       kls["#{action}Class"] = ->
-        this["_#{action}Class"] or= this.cssClass(action, this.NOTIFICATION)
+        this["_#{action}Class"] or= this.cssClass(action)
 
     for action in actions
       defineMethod(action)
 
     constructor: (options) ->
       super(options)
-
-      this._options.element or= settings.kopi.ui.notification[this.constructor.prefix]
       this.hidden = true
 
     # show: ->

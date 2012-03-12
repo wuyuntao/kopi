@@ -11,7 +11,7 @@ define "kopi/ui/text", (require, exports, module) ->
 
     proto = kls.prototype
     klass.accessor proto, "text",
-      set: (text, update=false) ->
+      set: (text, update=true) ->
         this._text = text
         this.update() if update and this.rendered
         this
@@ -24,63 +24,72 @@ define "kopi/ui/text", (require, exports, module) ->
       this._draw()
       super
 
+    onupdate: ->
+      this._draw()
+      super
+
     _draw: ->
       self = this
       self.element.text(self._text) if self._text
+      self
 
   ###
-  A text view support truncate multi-line text
+  A text view support multi-line text truncation
   ###
   class EllipsisText extends Text
 
+    kls = this
     # Text align methods
-    this.VALIGN_NONE   = 0
-    this.VALIGN_TOP    = 1
-    this.VALIGN_BOTTOM = 2
-    this.VALIGN_MIDDLE = 3
+    kls.VALIGN_NONE   = 0
+    kls.VALIGN_TOP    = 1
+    kls.VALIGN_BOTTOM = 2
+    kls.VALIGN_MIDDLE = 3
 
-    this.configure
+    kls.configure
       tagName: 'p'
       # @type  {Integer} Height of single line
       lineHeight: 18
       # @type  {Integer} Max line for truncated text
       lines: 3
       # @type  {Enum}    Align type
-      valign: this.ALIGN_NONE
+      valign: kls.VALIGN_NONE
       # @type  {Integer} Max try to run binary search
       maxTries: 30
 
-    constructor: (element, options, text="") ->
-      super(element, options)
+    constructor: (options, text="") ->
+      super(options)
 
       options = this._options
       this._text = text
       this._maxHeight = options.lineHeight * options.lines
       this._fullHeight = null
 
-    onskeleton: (element) ->
+    onskeleton: ->
       self = this
       options = self._options
       self._maxHeight = options.lineHeight * options.lines
       css =
         overflow: 'hidden'
-        lineHeight: options.lineHeight
-        maxHeight: self._.maxHeight
+        lineHeight: parseInt(options.lineHeight) + 'px'
+        maxHeight: parseInt(self._maxHeight) + 'px'
       self.element.css(css)
       super
 
+    onresize: ->
+      this.update()
+      super
+
     onrender: ->
-      this.update(arguments...)
+      this.update()
       super
 
     onupdate: ->
-      self = this
-      self._fill()
-      self._truncate()
+      this._fill()._truncate()._padding()
       super
 
     _fill: ->
-      this.element.text(this._text)
+      this.element.css('padding', 0).text(this._text)
+      this
 
     _truncate: ->
       cls = this.constructor
@@ -89,13 +98,17 @@ define "kopi/ui/text", (require, exports, module) ->
       min = 0
       max = self._text.length - 1
       text = self._text
+      # Handle short text
+      if element.innerHeight() <= self._maxHeight
+        return self
+
       # Binary search for find best poistion to truncate text
       for i in [0..self._options.maxTries]
         break if max < min
         middle = Math.floor((min + max) / 2)
         subtext = text.substr(0, middle)
         element.text(subtext + '...')
-        height = element.height()
+        height = element.innerHeight()
         # Get right row number
         if height > self._maxHeight
           max = middle
@@ -105,27 +118,30 @@ define "kopi/ui/text", (require, exports, module) ->
           # Get right column number
           subtext2 = text.substr(0, middle + 1)
           element.text(subtext2 + '...')
-          if element.height() > self._maxHeight
+          if element.innerHeight() > self._maxHeight
             element.text(subtext + '...')
             break
           else
             break if min is middle
             min = middle
+      self
 
-    _margin: ->
+    _padding: ->
+      cls = this.constructor
       self = this
-      margin = self._maxHeight - element.height()
-      if margin > 0
+      element = self.element
+      padding = self._maxHeight - element.innerHeight()
+      if padding > 0
         switch self._options.valign
           when cls.VALIGN_TOP
-            element.css("marginBottom", margin + element.css("marginBottom"))
+            element.css("paddingBottom", padding + "px")
           when cls.VALIGN_BOTTOM
-            element.css("marginTop", margin + element.css("marginTop"))
+            element.css("paddingTop", padding + "px")
           when cls.VALIGN_MIDDLE
-            margin /= 2
+            padding /= 2
             element.css
-              marginTop: margin + element.css("marginTop")
-              marginBottom: margin + element.css("marginBottom")
+              paddingTop: padding + "px"
+              paddingBottom: padding + "px"
       self
 
     # Get height when display full text

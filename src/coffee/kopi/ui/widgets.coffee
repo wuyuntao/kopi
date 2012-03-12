@@ -235,7 +235,7 @@ define "kopi/ui/widgets", (require, exports, module) ->
       self.delegate()
       if self._widgets
         self._widgets.forEach (name, widget) ->
-          widget.skeletonTo(self.element)
+          widget.skeletonTo(self.element) if widget.options().autoSkeleton isnt false
       self.initialized = true
 
     ondelegate: ->
@@ -244,7 +244,7 @@ define "kopi/ui/widgets", (require, exports, module) ->
       this.resize()
       if this._widgets
         this._widgets.forEach (name, widget) ->
-          widget.render()
+          widget.render() if widget.options().autoRender isnt false
       this.rendered = true
 
     onupdate: ->
@@ -252,7 +252,7 @@ define "kopi/ui/widgets", (require, exports, module) ->
     ondestroy: ->
       if this._widgets
         this._widgets.forEach (name, widget) ->
-          widget.destroy()
+          widget.destroy() if widget.options().autoDestroy isnt false
       this.initialized = false
       this.rendered = false
 
