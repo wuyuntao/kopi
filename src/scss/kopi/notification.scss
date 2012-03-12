@@ -5,7 +5,7 @@
 // {{{ Indicator
 $kopi-notification-indicator-height: 24px !default;
 $kopi-notification-indicator-width: 24px !default;
-$kopi-notification-indicator-url: "/images/kopi/loader.gif" !default;
+$kopi-notification-indicator-url: image-url("kopi/loader.gif") !default;
 
 .kopi-notification-indicator {
   position: fixed;
