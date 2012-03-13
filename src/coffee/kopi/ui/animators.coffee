@@ -10,7 +10,9 @@ define "kopi/ui/animators", (require, exports, module) ->
     resetAnimation: -> this.animation(null)
 
     _show: (child) ->
+      super
 
     _hide: (child) ->
+      super
 
   Animator: Animator

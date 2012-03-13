@@ -101,7 +101,7 @@ define "kopi/ui/switchers", (require, exports, module) ->
     Show the child.
     ###
     _show: (child, fn) ->
-      cls = this.constructor
+      cls = this._options.childClass
       child.element.addClass("#{cls.cssClass(SHOW)} #{cls.cssClass(CURRENT)}")
       this._currentKey = this._key(child)
       fn(null) if fn
@@ -111,7 +111,7 @@ define "kopi/ui/switchers", (require, exports, module) ->
     Hide the child.
     ###
     _hide: (child, fn) ->
-      cls = this.constructor
+      cls = this._options.childClass
       child.element.removeClass("#{cls.cssClass(SHOW)} #{cls.cssClass(CURRENT)}")
       fn(null) if fn
       this
