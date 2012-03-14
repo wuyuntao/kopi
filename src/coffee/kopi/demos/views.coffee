@@ -6,12 +6,13 @@ define "kopi/demos/views", (require, exports, module) ->
   navigation = require "kopi/ui/navigation"
   viewswitchers = require "kopi/ui/viewswitchers"
   settings = require "kopi/demos/settings"
+  Text = require("kopi/ui/text").Text
 
   class IndexView extends views.View
 
     constructor: ->
       super
-      this.nav = new navigation.Nav()
+      this.nav = new navigation.Nav(title: "Index")
       this.view = new viewswitchers.View()
       this.list = new lists.List()
 
@@ -22,6 +23,7 @@ define "kopi/demos/views", (require, exports, module) ->
 
       self.view.skeleton()
       self.app.viewSwitcher.add(self.view)
+
       self.list
         .adapter(new adapters.ArrayAdapter([
           "item1"

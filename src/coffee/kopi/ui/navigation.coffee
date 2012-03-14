@@ -2,46 +2,91 @@ define "kopi/ui/navigation", (require, exports, module) ->
 
   $ = require "jquery"
   settings = require "kopi/settings"
-  widgets = require "kopi/ui/widgets"
-  switchers = require "kopi/ui/switchers"
   utils = require "kopi/utils"
   i18n = require "kopi/utils/i18n"
+  klass = require "kopi/utils/klass"
+  text = require "kopi/utils/text"
+  Text = require("kopi/ui/text").Text
+  Widget = require("kopi/ui/widgets").Widget
+  Animator = require("kopi/ui/animators").Animator
+
+  ###
+  A standard navbar with three parts
+    1. leftButton: usually provides a backward button
+    2. title: usually provides name of view
+    3. rightButton: usually provides a tool or config button
+  ###
+  class Nav extends Widget
+
+    kls = this
+    kls.widgetName "Nav"
+
+    proto = kls.prototype
+    # Provide a method to remove items from navbar
+    defineMethod = (name) ->
+      proto["remove" + text.capitalize(name)] = ->
+        if this["_#{name}"]
+          this["_#{name}"].destroy()
+          this["_#{name}"] = null
+        this
+    # TODO Should we provide a type check for title and buttons?
+    for name in ["title", "leftButton", "rightButton"]
+      klass.accessor proto, name
+      defineMethod name
+
+    constructor: ->
+      super
+      options = this._options
+      this._title = if options.title and text.isString(options.title) then new Text(text: options.title, tagName: 'h1') else options.title
+      this._leftButton = options.leftButton
+      this._rightButton = options.rightButton
+
+    onskeleton: ->
+      # Ensure parts
+      for name in ["left", "center", "right"]
+        this["_" + name] = this._ensureWrapper(name)
+      this._title.skeletonTo(this._center) if this._title
+      this._leftButton.skeletonTo(this._left) if this._leftButton
+      this._rightButton.skeletonTo(this._right) if this._rightButton
+      super
+
+    onrender: ->
+      this._title.render() if this._title
+      this._leftButton.render() if this._leftButton
+      this._rightButton.render() if this._rightButton
+      super
+
+    ondestroy: ->
+      this._title.destroy() if this._title
+      this._leftButton.destroy() if this._leftButton
+      this._rightButton.destroy() if this._rightButton
+      super
 
   ###
   A toolbar manages all navs
   ###
-  class Navbar extends switchers.Switcher
+  class Navbar extends Animator
 
-    # onskeleton: ->
-    #   super
-      # Ensure default navbar
-      # this.nav = $('.kopi-nav', this.element)
-      # if not this.nav.length
-      #   this.nav = nav title: i18n.t("loading")
-      # this.nav = nav title: i18n.t("loading")
+    kls = this
+    kls.widgetName "Navbar"
 
-  class Nav extends widgets.Widget
+    kls.POS_NONE = "none"
+    kls.POS_TOP = "top"
+    kls.POS_TOP_FIXED = "top-fixed"
+    kls.POS_BOTTOM = "bottom"
+    kls.POS_BOTTOM_FIXED = "bottom-fixed"
 
-    this.configure
+    kls.configure
+      childClass: Nav
+      # @type  {String} position of navbar
+      position: kls.POS_NONE
 
-    parts = ["left", "center", "right"]
-
-    # skeleton: ->
-    #   super
-    #   # Ensure element
-    #   self = this
-    #   for part in parts
-    #     ((p) ->
-    #       self[p] = $(".kopi-nav-#{p}", self.element)
-    #       if not self[p].length
-    #         self[p] = $("<div></div>", class: "kopi-nav-#{p}")
-    #           .appendTo(self.element)
-    #     )(part)
-
-    #   self.title = $('.kopi-nav-title', self.center)
-    #   if not self.title.length
-    #     self.title = $("<h1></h1>", class: "kopi-nav-title")
-    #       .appendTo(self.center)
+    constructor: ->
+      super
+      cls = this.constructor
+      options = this._options
+      if options.position != cls.POS_NONE
+        options.extraClass += " #{cls.cssClass(options.position)}"
 
   Navbar: Navbar
   Nav: Nav

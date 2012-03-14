@@ -1,8 +1,8 @@
 define "kopi/demos/main", (require, exports, module) ->
 
   app = require "kopi/app"
-  navigation = require "kopi/ui/navigation"
-  viewswitchers = require "kopi/ui/viewswitchers"
+  Navbar = require("kopi/ui/navigation").Navbar
+  ViewSwitcher = require("kopi/ui/viewswitchers").ViewSwitcher
 
   require "kopi/demos/routes"
 
@@ -10,10 +10,10 @@ define "kopi/demos/main", (require, exports, module) ->
 
     onstart: ->
       super
-      this.navBar = new navigation.Navbar()
+      this.navBar = new Navbar(position: Navbar.POS_TOP_FIXED)
         .skeletonTo(this.viewport.element)
         .render()
-      this.viewSwitcher = new viewswitchers.ViewSwitcher()
+      this.viewSwitcher = new ViewSwitcher()
         .skeletonTo(this.viewport.element)
         .render()
 

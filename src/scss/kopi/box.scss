@@ -16,14 +16,14 @@ $kopi-box-font-size: 16px !default;
   // Box styles
   @include unselectable;
   @include opacity($kopi-box-opacity);
-  @include border-radius($kopi-box-border-radius);
   @include box-shadow(
     rgba(darken($background-color, 10%), 0.7) 0 5px 30px,
-    rgba($color, 0.5) 0 0 10px inset);
+    rgba($color, 0.3) 0 0 10px inset);
   background-color: rgba($background-color, 0.7);
   border: 1px solid rgba(darken($background-color, 10%), 0.7);
   margin: 0;
   padding: 0;
+  overflow: hidden;
 
   // Box font styles
   color: $color;
@@ -32,7 +32,17 @@ $kopi-box-font-size: 16px !default;
   text-shadow: 0 -1px 0 darken($background-color, 50%);
 }
 
+@mixin kopi-round-box($border-radius: 3px) {
+  @include box-sizing(border-box);
+  @include border-radius($border-radius);
+}
+
 .kopi-box {
   @include kopi-box($kopi-box-background-color, $kopi-box-color);
+}
+
+.kopi-round-box {
+  @extend .kopi-box;
+  @include kopi-round-box($kopi-box-border-radius);
 }
 // }}}

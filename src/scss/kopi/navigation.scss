@@ -1,5 +1,6 @@
 @import 'compass/css3';
 @import "compass/utilities";
+@import "kopi/box";
 
 /* {{{ Navbar
 
@@ -12,6 +13,8 @@
       div.kopi-nav
  */
 // Variables
+$kopi-navbar-background-color: black !default;
+$kopi-navbar-color: white !default;
 $kopi-navbar-height: 36px !default;
 $kopi-navbar-background: rgba(0,0,0,0.7) !default;
 $kopi-navbar-opacity: 1 !default;
@@ -19,12 +22,10 @@ $kopi-navbar-box-shadow: #000 0 0 10px !default;
 $kopi-navbar-border: 1px solid #333 !default;
 
 .kopi-navbar {
-  @include opacity($kopi-navbar-opacity);
-  @include box-shadow($kopi-navbar-box-shadow);
+  @include kopi-box($kopi-navbar-background-color, $kopi-navbar-color);
+  @include border-radius(0);
   height: $kopi-navbar-height;
   text-align: center;
-  background: $kopi-navbar-background;
-  border: $kopi-navbar-border;
   min-height: 0;
 }
 
@@ -48,7 +49,7 @@ $kopi-navbar-border: 1px solid #333 !default;
   z-index: 300;
 }
 
-.kopi-navbar-top-fixed {
+div.kopi-navbar-top-fixed {
   @extend .kopi-navbar-fixed;
   @extend .kopi-navbar-top;
 }
@@ -92,7 +93,6 @@ $kopi-nav-button-font-size: 14px !default;
 $kopi-nav-button-border-radius: 5px !default;
 
 .kopi-nav {
-  @include clearfix;
 }
 
 .kopi-nav-current {
@@ -118,20 +118,20 @@ $kopi-nav-button-border-radius: 5px !default;
 
 .kopi-nav-center {
   @extend .kopi-nav-button-wrapper;
+  left: $kopi-nav-button-width;
+  right: $kopi-nav-button-width;
   text-align: center;
-}
 
-.kopi-nav-title {
-  @include ellipsis;
-  @include text-shadow($kopi-nav-title-shadow);
-  color: $kopi-nav-title-color;
-  font-size: $kopi-nav-title-font-size;
-  font-weight: bold;
-  height: $kopi-nav-height;
-  line-height: $kopi-nav-height;
-  margin: 0 $kopi-nav-title-margin;
-  text-align: center;
-  vertical-align: middle;
+  .kopi-text {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: $kopi-nav-height;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    vertical-align: middle;
+  }
 }
 
 .kopi-nav-button {

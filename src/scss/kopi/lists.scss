@@ -1,5 +1,7 @@
 @import 'compass/css3';
 @import 'kopi/utils';
+@import "kopi/box";
+@import "kopi/buttons";
 
 /* {{{ ListItem
  *
@@ -24,53 +26,24 @@ $kopi-list-item-active-text-shadow: 0 -1px 0 #600 !default;
 $kopi-list-item-hold-text-shadow: 0 -1px 0 #900 !default;
 
 .kopi-list-item {
-  @include unselectable;
+  @extend .kopi-round-box;
 
-  width: 100%;
   height: $kopi-list-item-height;
-  margin-bottom: 1px;
+  // TODO Fix the @extend issue
+  margin-top: 3px!important;
+  margin-bottom: 3px!important;
+  margin-right: 2px!important;
+  margin-left: 2px!important;
 
   .kopi-button {
-    background: $kopi-list-item-background;
-    // Fill parent of list item
     width: 100%;
     height: 100%;
 
-    span.kopi-button-text {
-      color: $kopi-list-item-color;
-      text-shadow: $kopi-list-item-text-shadow;
+    .kopi-button-text {
+      padding: 0 10px;
       font-size: $kopi-list-item-height / 3;
-      line-height: $kopi-list-item-height / 2;
-      margin: $kopi-list-item-height / 4;
+      line-height: $kopi-list-item-height;
     }
   }
-
-  .kopi-button-hover {
-    background: $kopi-list-item-hover-background;
-
-    span.kopi-button-text {
-      color: $kopi-list-item-hover-color;
-      text-shadow: $kopi-list-item-hover-text-shadow;
-    }
-  }
-
-  .kopi-button-active {
-    background: $kopi-list-item-active-background;
-
-    span.kopi-button-text {
-      color: $kopi-list-item-active-color;
-      text-shadow: $kopi-list-item-active-text-shadow;
-    }
-  }
-
-  // Not supported yet
-  // .kopi-button-hold {
-  //   background: $kopi-list-item-hold-background;
-
-  //   span.kopi-button-text {
-  //     color: $kopi-list-item-hold-color;
-  //     text-shadow: $kopi-list-item-hold-text-shadow;
-  //   }
-  // }
 }
 // }}}

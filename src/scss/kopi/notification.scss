@@ -52,7 +52,7 @@ $kopi-notification-bubble-width: 200px !default;
 $kopi-notification-bubble-height: $kopi-notification-line-height * 5 + $kopi-box-border-radius * 4 !default;
 
 .kopi-notification-bubble {
-  @extend .kopi-box;
+  @extend .kopi-round-box;
   width: $kopi-notification-bubble-width;
   height: $kopi-notification-bubble-height;
   position: fixed;
@@ -107,7 +107,7 @@ $kopi-notification-dialog-gloss-top-background: rgba(255,255,255,0.4) !default;
 $kopi-notification-dialog-gloss-bottom-background: rgba(255,255,255,0.1) !default;
 
 .kopi-notification-dialog {
-  @extend .kopi-box;
+  @extend .kopi-round-box;
   position: fixed;
   top: 50%;
   left: 50%;
