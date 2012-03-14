@@ -1,44 +1,38 @@
 @import 'compass/css3';
+@import 'kopi/utils';
 
 // {{{ Box
+//
+// div.kopi-box
 $kopi-box-opacity: 0.8 !default;
-$kopi-box-shadow: rgba(black,0.5) 0 5px 30px !default;
-$kopi-box-inset-shadow: rgba(gray,0.5) 0 0 5px inset !default;
-$kopi-box-background-color: rgba(0,0,0,0.7) !default;
-$kopi-box-border-color: rgba(0,0,0,0.5) !default;
-$kopi-box-color: white !default;
-$kopi-box-text-shadow: 0 -1px 0 black !default;
-$kopi-box-font-size: 16px !default;
-$kopi-box-line-height: $kopi-box-font-size * 1.5 !default;
 $kopi-box-border-radius: 3px !default;
+$kopi-box-background-color: black !default;
+$kopi-box-color: white !default;
+$kopi-box-font-size: 16px !default;
 
 // Interface of box styles
-@mixin kopi-box($opacity: $kopi-box-opacity,
-                $border-radius: $kopi-box-border-radius,
-                $box-shadow: $kopi-box-shadow,
-                $box-inset-shadow: $kopi-box-inset-shadow,
-                $background-color: $kopi-box-background-color,
-                $border-color: $kopi-box-border-color,
-                $color: $kopi-box-color,
-                $text-shadow: $kopi-box-text-shadow,
-                $font-size: $kopi-box-font-size,
-                $line-height: $kopi-box-line-height) {
+@mixin kopi-box($background-color: black, $color: white) {
 
   // Box styles
-  @include opacity($opacity);
-  @include border-radius($border-radius);
-  @include box-shadow($box-shadow, $box-inset-shadow);
-  background-color: $background-color;
-  border: 1px solid $border-color;
+  @include unselectable;
+  @include opacity($kopi-box-opacity);
+  @include border-radius($kopi-box-border-radius);
+  @include box-shadow(
+    rgba(darken($background-color, 10%), 0.7) 0 5px 30px,
+    rgba($color, 0.5) 0 0 10px inset);
+  background-color: rgba($background-color, 0.7);
+  border: 1px solid rgba(darken($background-color, 10%), 0.7);
+  margin: 0;
+  padding: 0;
 
   // Box font styles
-  line-height: $line-height;
   color: $color;
-  font-size: $font-size;
-  text-shadow: $text-shadow;
+  font-size: $kopi-box-font-size;
+  line-height: $kopi-box-font-size * 1.5;
+  text-shadow: 0 -1px 0 darken($background-color, 50%);
 }
 
 .kopi-box {
-  @include kopi-box;
+  @include kopi-box($kopi-box-background-color, $kopi-box-color);
 }
 // }}}

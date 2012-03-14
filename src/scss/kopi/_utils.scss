@@ -8,8 +8,14 @@
     -moz, -webkit, not -o, not -ms, not -khtml, official);
 }
 
-@mixin transition {
+@mixin kopi-transition {
   @include transition-property(all);
   @include transition-duration(300ms);
   @include transition-timing-function(ease-out);
+}
+
+@mixin kopi-highlight-mask($color: white) {
+  @include background(linear-gradient(top,
+      rgba($color, 0.6) 0, rgba($color, 0.2) 50%,
+      rgba($color, 0) 50%, rgba($color, 0.1) 100%));
 }

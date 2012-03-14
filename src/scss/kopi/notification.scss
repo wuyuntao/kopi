@@ -1,6 +1,7 @@
 @import 'compass/css3';
 @import "compass/utilities";
 @import "kopi/box";
+@import "kopi/buttons";
 
 // {{{ Indicator
 $kopi-notification-indicator-height: 24px !default;
@@ -46,8 +47,9 @@ $kopi-notification-overlay-background-color: #000 !default;
 // }}}
 
 // {{{ Bubble
+$kopi-notification-line-height: $kopi-box-font-size * 1.5;
 $kopi-notification-bubble-width: 200px !default;
-$kopi-notification-bubble-height: $kopi-box-line-height * 5 + $kopi-box-border-radius * 4 !default;
+$kopi-notification-bubble-height: $kopi-notification-line-height * 5 + $kopi-box-border-radius * 4 !default;
 
 .kopi-notification-bubble {
   @extend .kopi-box;
@@ -66,7 +68,7 @@ $kopi-notification-bubble-height: $kopi-box-line-height * 5 + $kopi-box-border-r
     text-align: center;
     vertical-align: middle;
     padding: 0;
-    margin: $kopi-box-line-height 10px 0;
+    margin: $kopi-notification-line-height 10px 0;
   }
 }
 // }}}
@@ -110,7 +112,7 @@ $kopi-notification-dialog-gloss-bottom-background: rgba(255,255,255,0.1) !defaul
   top: 50%;
   left: 50%;
   width: $kopi-notification-dialog-width;
-  min-height: $kopi-box-line-height;
+  min-height: $kopi-notification-line-height;
   max-height: $kopi-notification-dialog-height;
   margin-left: - $kopi-notification-dialog-width / 2;
   margin-top: - $kopi-notification-dialog-height / 2;
@@ -165,30 +167,13 @@ $kopi-notification-dialog-gloss-bottom-background: rgba(255,255,255,0.1) !defaul
 }
 
 .kopi-notification-dialog-button {
-  @include ellipsis;
-  @include box-shadow($kopi-notification-dialog-button-box-shadow);
-  @include border-radius($kopi-notification-dialog-button-border-radius);
-  background-color: $kopi-notification-dialog-button-background;
-  @include transition(background 0.5s ease-out 0);
-  @include background(linear-gradient(top,
-      rgba(255,255,255,0.6) 0, rgba(255,255,255,0.2) 50%,
-      rgba(255,255,255,0) 50%, rgba(255,255,255,0.1) 100%));
+  @extend .kopi-button;
   font-size: $kopi-notification-dialog-button-font-size;
   font-weight: bold;
   position: absolute;
   height: $kopi-notification-dialog-button-height;
   line-height: $kopi-notification-dialog-button-height;
   width: $kopi-notification-dialog-button-width;
-  border: $kopi-notification-dialog-button-border;
-  cursor: pointer;
-}
-
-.kopi-notification-dialog-button:hover, .kopi-notification-dialog-button-hover {
-  background-color: $kopi-notification-dialog-button-hover-background;;
-}
-
-.kopi-notification-dialog-button:active, .kopi-notification-dialog-button-active {
-  background-color: $kopi-notification-dialog-button-active-background;
 }
 
 .kopi-notification-dialog-action {
@@ -198,9 +183,6 @@ $kopi-notification-dialog-gloss-bottom-background: rgba(255,255,255,0.1) !defaul
 
 .kopi-notification-dialog-close {
   @extend .kopi-notification-dialog-button;
-  @include background(linear-gradient(top,
-      rgba(255,255,255,0.8) 0, rgba(255,255,255,0.4) 50%,
-      rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.3) 100%));
   right: $kopi-notification-dialog-button-margin;
 }
 // }}}

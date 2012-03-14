@@ -1,53 +1,72 @@
+@import "kopi/utils";
 
+// {{{ Button
+//
+// div.kopi-button
+//   span.kopi-button-text
+$kopi-button-opacity: 0.8;
+$kopi-button-border-radius: 3px !default;
+$kopi-button-background-color: rgba(white, 0.1) !default;
+$kopi-button-color: white !default;
+$kopi-button-font-size: 16px !default;
 
-/* {{{ Button
- *
- * div.kopi-button
- *   span.kopi-button-text
- */
-$kopi-button-background: rgba(33, 33, 33, 0.7) !default;
-$kopi-button-hover-background: rgba(66, 33, 33, 0.7) !default;
-$kopi-button-active-background: rgba(99, 66, 66, 0.7) !default;
-$kopi-button-hold-background: rgba(133, 66, 66, 0.7) !default;
-
-$kopi-button-color: #ccc !default;
-$kopi-button-hover-color: #fcc !default;
-$kopi-button-active-color: #fdd !default;
-$kopi-button-hold-color: #fee !default;
-$kopi-button-text-shadow: 0 -1px 0 #000 !default;
-$kopi-button-hover-text-shadow: 0 -1px 0 #300 !default;
-$kopi-button-active-text-shadow: 0 -1px 0 #600 !default;
-$kopi-button-hold-text-shadow: 0 -1px 0 #900 !default;
-
-.kopi-button {
-  @include transition;
-  background: $kopi-button-background;
+// Define some base styles for buttons
+@mixin kopi-button() {
+  @include ellipsis;
+  @include unselectable;
+  @include kopi-transition;
+  @include opacity($kopi-button-opacity);
+  @include border-radius($kopi-button-border-radius);
+  cursor: pointer;
 
   span.kopi-button-text {
     @include inline-block;
-
-    color: $kopi-button-color;
-    text-shadow: $kopi-button-text-shadow;
+    vertical-align: middle;
   }
+}
+
+// Define color related styles for buttons
+@mixin kopi-button-color($background-color: black, $color: white) {
+  background-color: $background-color;
+  // border: 1px solid rgba(darken($background-color, 10%), 0.3);
+
+  span.kopi-button-text {
+    color: $color;
+    font-size: $kopi-button-font-size;
+    text-shadow: 0 -1px 0 darken($background-color, 50%);
+  }
+}
+
+.kopi-button {
+  @include kopi-button;
+  @include kopi-button-color($kopi-button-background-color, $kopi-button-color);
 }
 
 .kopi-button-hover {
-  background: $kopi-button-hover-background;
-
-  span.kopi-button-text {
-    color: $kopi-button-hover-color;
-    text-shadow: $kopi-button-hover-text-shadow;
-  }
+  @include kopi-button-color(rgba($kopi-button-background-color, 0.5), $kopi-button-color);
 }
 
 .kopi-button-active {
-  background: $kopi-button-active-background;
-
-  span.kopi-button-text {
-    color: $kopi-button-active-color;
-    text-shadow: $kopi-button-active-text-shadow;
-  }
+  @include kopi-button-color(darken($kopi-button-background-color, 50%), $kopi-button-color);
 }
+
+// .kopi-button-hover {
+//   background: $kopi-button-hover-background;
+//
+//   span.kopi-button-text {
+//     color: $kopi-button-hover-color;
+//     text-shadow: $kopi-button-hover-text-shadow;
+//   }
+// }
+//
+// .kopi-button-active {
+//   background: $kopi-button-active-background;
+//
+//   span.kopi-button-text {
+//     color: $kopi-button-active-color;
+//     text-shadow: $kopi-button-active-text-shadow;
+//   }
+// }
 
 // Not supported yet
 // .kopi-button-hold {
