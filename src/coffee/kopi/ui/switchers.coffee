@@ -57,7 +57,7 @@ define "kopi/ui/switchers", (require, exports, module) ->
     ###
     Manually show the child at the specified position in the group.
     ###
-    showAt: (index) ->
+    showAt: (index, options) ->
       self = this
       unless 0 <= index < self._children.length
         throw new exceptions.ValueError("Invalid index of child #{index} of #{self._children.length}")
@@ -71,17 +71,26 @@ define "kopi/ui/switchers", (require, exports, module) ->
       self.lock()
       child = self._children[index]
 
+      self._switch(self._children[currentAt], child, options)
+
+    ###
+    Manually show the child
+    ###
+    show: (child, options) ->
+      this.showAt(this.indexOf(child), options)
+
+    _switch: (fromChild, toChild, options) ->
       # Shows child directly if there is no current child
-      if not currentAt >= 0
-        self._show(child)
+      if not fromChild
+        self._show(toChild)
         return self
 
-      currentChild = self._children[currentAt]
+      self = this
       hidden = false
       shown = false
       doneFn = ->
         if hidden and shown
-          self._currentKey = self._key(child)
+          self._currentKey = self._key(toChild)
           self.unlock()
       hideFn = (error) ->
         hidden = true
@@ -89,13 +98,7 @@ define "kopi/ui/switchers", (require, exports, module) ->
       showFn = (error) ->
         shown = true
         doneFn()
-      self._hide(currentChild, hideFn)._show(child, showFn)
-
-    ###
-    Manually show the child
-    ###
-    show: (child) ->
-      this.showAt(this.indexOf(child))
+      self._hide(fromChild, hideFn)._show(toChild, showFn)
 
     ###
     Show the child.
