@@ -282,4 +282,4 @@ define "kopi/app", (require, exports, module) ->
       [view, request]
 
   App: App
-  instance: -> appInstance or new App()
+  instance: -> appInstance or= new App()

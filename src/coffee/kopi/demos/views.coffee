@@ -14,7 +14,7 @@ define "kopi/demos/views", (require, exports, module) ->
       super
       this.nav = new navigation.Nav(title: "Index")
       this.view = new viewswitchers.View()
-      this.list = new lists.List()
+      this.list = new lists.NavList()
 
     oncreate: ->
       self = this
@@ -26,9 +26,9 @@ define "kopi/demos/views", (require, exports, module) ->
 
       self.list
         .adapter(new adapters.ArrayAdapter([
-          "item1"
-          "item2"
-          "item3"
+          ["item1", "/item1/"]
+          ["item2", "/item2/"]
+          ["item3", "/item3/"]
         ])).skeletonTo(self.view.element)
       super
 

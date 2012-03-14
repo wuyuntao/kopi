@@ -8,6 +8,8 @@ define "kopi/ui/lists", (require, exports, module) ->
 
   class List extends groups.Group
 
+    this.widgetName "List"
+
     kls = this
     kls.configure
       childClass: items.ListItem
@@ -52,4 +54,10 @@ define "kopi/ui/lists", (require, exports, module) ->
         self.addAt(item, i)
       self
 
+  class NavList extends List
+
+    this.configure
+      childClass: items.NavListItem
+
   List: List
+  NavList: NavList
