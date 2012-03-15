@@ -95,12 +95,12 @@ define "kopi/ui/navigation", (require, exports, module) ->
 
       endTransitionFn = ->
         # Make sure transition is complete
-        # toElement
-        #   .addClass(cls.cssClass("show"))
-        #   .removeClass("#{toStartClass} #{toStopClass}")
-        # fromElement
-        #   .removeClass(cls.cssClass("show"))
-        #   .removeClass("#{fromStartClass} #{fromStopClass}")
+        toElement
+          .addClass(cls.cssClass("show"))
+          .removeClass("#{toStartClass} #{toStopClass}")
+        fromElement
+          .removeClass(cls.cssClass("show"))
+          .removeClass("#{fromStartClass} #{fromStopClass}")
 
       setTimeout(startTransitionFn, 100)
 
