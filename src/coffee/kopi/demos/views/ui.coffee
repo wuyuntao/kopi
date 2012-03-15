@@ -1,20 +1,18 @@
-define "kopi/demos/views", (require, exports, module) ->
+define "kopi/demos/views/ui", (require, exports, module) ->
 
-  views = require "kopi/views"
-  lists = require "kopi/ui/lists"
-  adapters = require "kopi/ui/lists/adapters"
-  navigation = require "kopi/ui/navigation"
+  View = require("kopi/views").View
+  Nav = require("kopi/ui/navigation").Nav
   viewswitchers = require "kopi/ui/viewswitchers"
-  settings = require "kopi/demos/settings"
-  Text = require("kopi/ui/text").Text
+  NavList = require("kopi/ui/lists").NavList
+  ArrayAdapter = require("kopi/ui/lists/adapters").ArrayAdapter
 
-  class IndexView extends views.View
+  class UIView extends View
 
     constructor: ->
       super
-      this.nav = new navigation.Nav(title: "Index")
+      this.nav = new Nav(title: "UI")
       this.view = new viewswitchers.View()
-      this.list = new lists.NavList()
+      this.list = new NavList()
 
     oncreate: ->
       self = this
@@ -22,11 +20,12 @@ define "kopi/demos/views", (require, exports, module) ->
       self.app.viewSwitcher.add(self.view.skeleton())
 
       self.list
-        .adapter(new adapters.ArrayAdapter([
-          ["App", "/app/"]
-          ["Model", "/model/"]
-          ["View", "/view/"]
-          ["UI", "/ui/"]
+        .adapter(new ArrayAdapter([
+          ["Buttons", "/ui/buttons/"]
+          ["Controls", "/ui/controls/"]
+          ["Dialogs", "/ui/dialogs/"]
+          ["Lists", "/ui/lists/"]
+          ["Tabs", "/ui/tabs/"]
         ])).skeletonTo(self.view.element)
       super
 
@@ -45,4 +44,4 @@ define "kopi/demos/views", (require, exports, module) ->
       self.list.destroy()
       super
 
-  IndexView: IndexView
+  UIView: UIView

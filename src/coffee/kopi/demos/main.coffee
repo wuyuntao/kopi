@@ -5,6 +5,7 @@ define "kopi/demos/main", (require, exports, module) ->
   ViewSwitcher = require("kopi/ui/viewswitchers").ViewSwitcher
 
   require "kopi/demos/routes"
+  require "kopi/demos/settings"
 
   class DemoApp extends app.App
 

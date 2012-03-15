@@ -80,12 +80,12 @@ define "kopi/ui/switchers", (require, exports, module) ->
       this.showAt(this.indexOf(child), options)
 
     _switch: (fromChild, toChild, options) ->
+      self = this
       # Shows child directly if there is no current child
       if not fromChild
         self._show(toChild)
         return self
 
-      self = this
       hidden = false
       shown = false
       doneFn = ->

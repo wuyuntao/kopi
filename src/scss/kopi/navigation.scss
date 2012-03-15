@@ -1,5 +1,6 @@
 @import 'compass/css3';
 @import "compass/utilities";
+@import "kopi/utils";
 @import "kopi/box";
 
 /* {{{ Navbar
@@ -93,6 +94,11 @@ $kopi-nav-button-font-size: 14px !default;
 $kopi-nav-button-border-radius: 5px !default;
 
 .kopi-nav {
+  display: none;
+}
+
+.kopi-nav-show {
+  display: block;
 }
 
 .kopi-nav-current {
@@ -160,5 +166,77 @@ $kopi-nav-button-border-radius: 5px !default;
 
 .kopi-nav-button-sprite {
   @extend .kopi-nav-button-text;
+}
+// }}}
+
+// {{{ Nav Transition
+.kopi-nav-from-start {
+  display: block;
+  @include kopi-transition;
+  @include opacity(1);
+
+  .kopi-nav-left {
+    @include translateX(0);
+  }
+
+  .kopi-nav-center {
+    @include translateX(0);
+  }
+
+  .kopi-nav-right {
+    @include translateX(0);
+  }
+}
+
+.kopi-nav-to-start {
+  display: block;
+  @include kopi-transition;
+  @include opacity(0);
+
+  .kopi-nav-left {
+    @include translateX($kopi-nav-button-width);
+  }
+
+  .kopi-nav-center {
+    @include translateX(30%);
+  }
+
+  .kopi-nav-right {
+    @include translateX(0);
+  }
+}
+
+.kopi-nav-from-stop {
+  display: block;
+  @include opacity(0);
+
+  .kopi-nav-left {
+    @include translateX($kopi-nav-button-width * -1);
+  }
+
+  .kopi-nav-center {
+    @include translateX(-30%);
+  }
+
+  .kopi-nav-right {
+    @include translateX(0);
+  }
+}
+
+.kopi-nav-to-stop {
+  display: block;
+  @include opacity(1);
+
+  .kopi-nav-left {
+    @include translateX(0);
+  }
+
+  .kopi-nav-center {
+    @include translateX(0);
+  }
+
+  .kopi-nav-right {
+    @include translateX(0);
+  }
 }
 // }}}

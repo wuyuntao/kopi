@@ -13,11 +13,20 @@ define "kopi/ui/animators", (require, exports, module) ->
 
     klass.accessor this.prototype, "animation"
 
+    constructor: ->
+      super
+      this._animation = new this._options.animationClass()
+
     resetAnimation: -> this._animation = null
 
     _switch: (fromChild, toChild, options) ->
-      this._animation or= new this._options.animationClass()
-      this._animation.animate(fromChild, toChild, options)
-      this
+      cls = this.constructor
+      self = this
+      animateFn = ->
+        fromChild.element.removeClass(cls.cssClass("current")) if fromChild
+        toChild.element.addClass(cls.cssClass("current"))
+        self._currentKey = self._key(toChild)
+      self._animation.animate(fromChild, toChild, options, animateFn)
+      self
 
   Animator: Animator

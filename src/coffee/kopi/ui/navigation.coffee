@@ -9,6 +9,7 @@ define "kopi/ui/navigation", (require, exports, module) ->
   Text = require("kopi/ui/text").Text
   Widget = require("kopi/ui/widgets").Widget
   Animator = require("kopi/ui/animators").Animator
+  Animation = require("kopi/ui/animators/animations").Animation
 
   ###
   A standard navbar with three parts
@@ -62,6 +63,47 @@ define "kopi/ui/navigation", (require, exports, module) ->
       this._rightButton.destroy() if this._rightButton
       super
 
+  class NavBarAnimation extends Animation
+
+    this.configure
+      duration: 1000
+
+    animate: (from, to, options={}, fn) ->
+      cls = to.constructor
+      self = this
+      # Show to widget immediately if from widget is not specified
+      if not from
+        to.element.addClass(cls.cssClass("show"))
+        fn(null) if fn
+        return
+
+      fromElement = from.element
+      toElement = to.element
+      fromStartClass = cls.cssClass("from-start")
+      toStartClass = cls.cssClass("to-start")
+      fromStopClass = cls.cssClass("from-stop")
+      toStopClass = cls.cssClass("to-stop")
+      # Prepare CSS3 transition
+      fromElement.addClass(fromStartClass)
+      toElement.addClass(toStartClass)
+
+      startTransitionFn = ->
+        # Start CSS3 transition
+        fromElement.addClass(fromStopClass)
+        toElement.addClass(toStopClass)
+        setTimeout(endTransitionFn, self._options.duration * 1.5)
+
+      endTransitionFn = ->
+        # Make sure transition is complete
+        # toElement
+        #   .addClass(cls.cssClass("show"))
+        #   .removeClass("#{toStartClass} #{toStopClass}")
+        # fromElement
+        #   .removeClass(cls.cssClass("show"))
+        #   .removeClass("#{fromStartClass} #{fromStopClass}")
+
+      setTimeout(startTransitionFn, 100)
+
   ###
   A toolbar manages all navs
   ###
@@ -69,6 +111,9 @@ define "kopi/ui/navigation", (require, exports, module) ->
 
     kls = this
     kls.widgetName "Navbar"
+
+    this.configure
+      animationClass: NavBarAnimation
 
     kls.POS_NONE = "none"
     kls.POS_TOP = "top"
