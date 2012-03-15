@@ -1,14 +1,63 @@
+@import "compass/css3";
+
+.fill-parent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
 // {{{ View Switcher
 .kopi-view-switcher {
+  @extend .fill-parent;
 }
 // }}}
 
 // {{{ View
 .kopi-view {
+  @extend .fill-parent;
   display: none;
 }
 
 .kopi-view-show {
+  display: block;
+}
+// }}}
+
+// {{{ View transition
+.kopi-view-transition {
+  -webkit-transition-property: -webkit-transform,opacity;
+  -moz-transition-property: -moz-transform,opacity;
+  transition-property: transform,opacity;
+  @include transition-duration(300ms);
+  @include transition-timing-function(ease-out);
+}
+
+.kopi-view-from-start {
+  @extend .kopi-view-transition;
+  @include opacity(1);
+  @include translateX(0);
+  display: block;
+}
+
+.kopi-view-from-stop {
+  @extend .kopi-view-transition;
+  @include opacity(0.7);
+  @include translateX(-100%);
+  display: block;
+}
+
+.kopi-view-to-start {
+  @extend .kopi-view-transition;
+  @include opacity(0.7);
+  @include translateX(100%);
+  display: block;
+}
+
+.kopi-view-to-stop {
+  @include opacity(1);
+  @include translateX(0);
   display: block;
 }
 // }}}

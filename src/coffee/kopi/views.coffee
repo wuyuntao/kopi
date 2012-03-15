@@ -87,31 +87,37 @@ define "kopi/views", (require, exports, module) ->
     ###
     Initialize UI components skeleton and append them to DOM Tree
     ###
-    create: (fn) ->
+    create: (options, fn) ->
       cls = this.constructor
       self = this
       if self.created or self.locked
         logger.warn "View is already created or locked."
         return self
+      if not fn
+        fn = options
+        options = {}
       logger.info("Create view. #{self.guid}")
       self.lock()
       self.on(cls.CREATED_EVENT, (e) -> fn(false, self)) if fn
-      self.emit(cls.CREATE_EVENT)
+      self.emit(cls.CREATE_EVENT, [options])
 
     ###
     Display UI components and then render them with data
     ###
-    start: (url, params, fn) ->
+    start: (url, params, options, fn) ->
       cls = this.constructor
       self = this
       throw new exceptions.ValueError("Must create view first.") if not self.created
       if self.started or self.locked
         logger.warn "View is already started or locked."
         return self
+      if not fn
+        fn = options
+        options = {}
       logger.info("Start view. #{self.guid}")
       self.lock()
       self.on(cls.STARTED_EVENT, (e) -> fn(false, self)) if fn
-      self.emit(cls.START_EVENT)
+      self.emit(cls.START_EVENT, [options])
 
     ###
     Update UI components when URL changes
@@ -124,39 +130,48 @@ define "kopi/views", (require, exports, module) ->
       if self.locked
         logger.warn "View is locked."
         return self
+      if not fn
+        fn = options
+        options = {}
       logger.info("Update view. #{self.guid}")
       self.on(cls.UPDATED_EVENT, (e) -> fn(false, this)) if fn
-      self.emit(cls.UPDATE_EVENT)
+      self.emit(cls.UPDATE_EVENT, [options])
 
     ###
     Hide UI components
     ###
-    stop: (fn) ->
+    stop: (options, fn) ->
       cls = this.constructor
       self = this
       throw new exceptions.ValueError("Must create view first.") if not self.created
       if not self.started or self.locked
         logger.warn "View is already stopped or locked."
         return self
+      if not fn
+        fn = options
+        options = {}
       logger.info("Stop view. #{self.guid}")
       self.lock()
       self.on(cls.STOPPED_EVENT, (e) -> fn(false, self)) if fn
-      self.emit(cls.STOP_EVENT)
+      self.emit(cls.STOP_EVENT, options)
 
     ###
     Remove UI components from DOM Tree
     ###
-    destroy: (fn) ->
+    destroy: (options, fn) ->
       cls = this.constructor
       self = this
       throw new exceptions.ValueError("Must stop view first.") if self.started
       if not self.created or self.locked
         logger.warn "View is already destroyed or locked."
         return self
+      if not fn
+        fn = options
+        options = {}
       logger.info("Destroy view. #{self.guid}")
       self.lock()
       self.on(cls.DESTROYED_EVENT, (e) -> fn(false, self)) if fn
-      self.emit(cls.DESTROY_EVENT)
+      self.emit(cls.DESTROY_EVENT, options)
 
     lock: (fn) ->
       cls = this.constructor

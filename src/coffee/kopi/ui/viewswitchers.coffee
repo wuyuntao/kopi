@@ -1,17 +1,17 @@
 define "kopi/ui/viewswitchers", (require, exports, module) ->
 
-  widgets = require "kopi/ui/widgets"
-  switchers = require "kopi/ui/switchers"
+  Widget = require("kopi/ui/widgets").Widget
+  Animator = require("kopi/ui/animators").Animator
 
   ###
   A container of widgets of view
   ###
-  class View extends widgets.Widget
+  class View extends Widget
 
   ###
   Widget switcher for views
   ###
-  class ViewSwitcher extends switchers.Switcher
+  class ViewSwitcher extends Animator
     this.configure
       childClass: View
 

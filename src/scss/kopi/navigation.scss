@@ -174,7 +174,7 @@ $kopi-nav-button-border-radius: 5px !default;
   -webkit-transition-property: -webkit-transform,opacity;
   -moz-transition-property: -moz-transform,opacity;
   transition-property: transform,opacity;
-  @include transition-duration(1s);
+  @include transition-duration(300ms);
   @include transition-timing-function(ease-out);
 }
 
@@ -220,7 +220,7 @@ $kopi-nav-button-border-radius: 5px !default;
 .kopi-nav-to-start {
   @extend .kopi-nav-transition;
   @include opacity(0);
-  display: none;
+  display: block;
 
   .kopi-nav-left {
     @extend .kopi-nav-transition;
@@ -239,9 +239,8 @@ $kopi-nav-button-border-radius: 5px !default;
 }
 
 .kopi-nav-to-stop {
-  @extend .kopi-nav-transition;
   @include opacity(1);
-  display: none;
+  display: block;
 
   .kopi-nav-left {
     @include translateX(0);

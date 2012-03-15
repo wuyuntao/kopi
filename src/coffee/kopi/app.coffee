@@ -176,6 +176,7 @@ define "kopi/app", (require, exports, module) ->
       else
         view.start(request.url, request.params)
       self.currentView = view
+      self.currentURL = url
 
     ###
     Listen to URL change events.
@@ -231,9 +232,9 @@ define "kopi/app", (require, exports, module) ->
         # Combine path and hash
         url.path = uri.absolute(url.fragment.replace(/^#/, ''), url.path)
 
-      # if not self.currentURL or url.path != self.currentURL.path
-      #   self.currentURL = url
-      #   self.emit(cls.REQUEST_EVENT, [url])
+      if not self.currentURL or url.path != self.currentURL.path
+        self.currentURL = url
+        self.emit(cls.REQUEST_EVENT, [url])
       self
 
     ###
