@@ -32,4 +32,8 @@ define "kopi/ui/animators", (require, exports, module) ->
       self._animation.animate(fromChild, toChild, options, animateFn)
       self
 
+    _appendChild: (child) ->
+      # TODO Provide layout animation like Android
+      super
+
   Animator: Animator
