@@ -26,6 +26,9 @@ define "kopi/ui/animators", (require, exports, module) ->
         fromChild.element.removeClass(cls.cssClass("current")) if fromChild
         toChild.element.addClass(cls.cssClass("current"))
         self._currentKey = self._key(toChild)
+        self.unlock()
+
+      self.lock()
       self._animation.animate(fromChild, toChild, options, animateFn)
       self
 

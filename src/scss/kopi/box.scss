@@ -21,8 +21,8 @@ $kopi-box-font-size: 16px !default;
     rgba($color, 0.3) 0 0 10px inset);
   background-color: rgba($background-color, 0.7);
   border: 1px solid rgba(darken($background-color, 10%), 0.7);
-  margin: 0;
-  padding: 0;
+  // margin: 0;
+  // padding: 0;
   overflow: hidden;
 
   // Box font styles

@@ -18,6 +18,7 @@
 .kopi-view {
   @extend .fill-parent;
   display: none;
+  @include box-sizing(border-box);
 }
 
 .kopi-view-show {

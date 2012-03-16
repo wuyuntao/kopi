@@ -18,8 +18,11 @@ define "kopi/demos/views", (require, exports, module) ->
 
     oncreate: ->
       self = this
-      self.app.navBar.add(self.nav.skeleton())
-      self.app.viewSwitcher.add(self.view.skeleton())
+      self.app.navBar.add(self.nav)
+      self.nav.skeleton()
+
+      self.app.viewSwitcher.add(self.view)
+      self.view.skeleton()
 
       self.list
         .adapter(new adapters.ArrayAdapter([

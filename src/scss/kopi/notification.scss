@@ -44,6 +44,10 @@ $kopi-notification-overlay-background-color: #000 !default;
   z-index: 1000;
   display: none;
 }
+
+.kopi-notification-overlay-transparent {
+  background: none;
+}
 // }}}
 
 // {{{ Bubble

@@ -11,29 +11,14 @@
  */
 
 $kopi-list-item-height: 48px !default;
-$kopi-list-item-background: rgba(33, 33, 33, 0.7) !default;
-$kopi-list-item-hover-background: rgba(66, 33, 33, 0.7) !default;
-$kopi-list-item-active-background: rgba(99, 66, 66, 0.7) !default;
-$kopi-list-item-hold-background: rgba(133, 66, 66, 0.7) !default;
-
-$kopi-list-item-color: #ccc !default;
-$kopi-list-item-hover-color: #fcc !default;
-$kopi-list-item-active-color: #fdd !default;
-$kopi-list-item-hold-color: #fee !default;
-$kopi-list-item-text-shadow: 0 -1px 0 #000 !default;
-$kopi-list-item-hover-text-shadow: 0 -1px 0 #300 !default;
-$kopi-list-item-active-text-shadow: 0 -1px 0 #600 !default;
-$kopi-list-item-hold-text-shadow: 0 -1px 0 #900 !default;
+$kopi-list-item-background: black !default;
+$kopi-list-item-color: white !default;
 
 .kopi-list-item {
   @extend .kopi-round-box;
 
   height: $kopi-list-item-height;
-  // TODO Fix the @extend issue
-  margin-top: 3px!important;
-  margin-bottom: 3px!important;
-  margin-right: 2px!important;
-  margin-left: 2px!important;
+  margin: 3px 2px;
 
   .kopi-button {
     width: 100%;

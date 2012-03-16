@@ -1,6 +1,7 @@
 define "kopi/ui/navigation", (require, exports, module) ->
 
   $ = require "jquery"
+  app = require "kopi/app"
   settings = require "kopi/settings"
   utils = require "kopi/utils"
   i18n = require "kopi/utils/i18n"
@@ -10,6 +11,17 @@ define "kopi/ui/navigation", (require, exports, module) ->
   Widget = require("kopi/ui/widgets").Widget
   Animator = require("kopi/ui/animators").Animator
   Animation = require("kopi/ui/animators/animations").Animation
+  Button = require("kopi/ui/buttons").Button
+
+  class NavButton extends Button
+
+    this.configure
+      hasIcon: false
+      url: null
+
+    onclick: ->
+      app.instance().load(this._options.url, this._options)
+      super
 
   ###
   A standard navbar with three parts
@@ -89,5 +101,6 @@ define "kopi/ui/navigation", (require, exports, module) ->
       if options.position != cls.POS_NONE
         options.extraClass += " #{cls.cssClass(options.position)}"
 
+  NavButton: NavButton
   Navbar: Navbar
   Nav: Nav

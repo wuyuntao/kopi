@@ -12,6 +12,7 @@ define "kopi/app", (require, exports, module) ->
   klass = require "kopi/utils/klass"
   router = require "kopi/app/router"
   viewport = require "kopi/ui/viewport"
+  overlays = require "kopi/ui/notification/overlays"
 
   win = $(window)
   hist = history
@@ -52,6 +53,9 @@ define "kopi/app", (require, exports, module) ->
     kls = this
     kls.START_EVENT = "start"
     kls.REQUEST_EVENT = "request"
+    kls.VIEW_LOAD_EVENT = "viewload"
+    kls.LOCK_EVENT = "lock"
+    kls.UNLOCK_EVENT = "unlock"
 
     klass.configure kls
 
@@ -68,6 +72,26 @@ define "kopi/app", (require, exports, module) ->
       self._interval = null
 
       self.configure settings.kopi.app, options
+
+    lock: ->
+      self = this
+      return self if self.locked
+      cls = this.constructor
+      overlays.show(transparent: true)
+      self.emit(cls.LOCK_EVENT)
+
+    unlock: ->
+      self = this
+      return self unless self.locked
+      cls = this.constructor
+      overlays.hide()
+      self.emit(cls.UNLOCK_EVENT)
+
+    onlock: ->
+      this.locked = true
+
+    onunlock: ->
+      this.locked = false
 
     ###
     Launch the application
@@ -128,9 +152,11 @@ define "kopi/app", (require, exports, module) ->
           state = "#" + uri.relative(url.urlNoQuery, baseURL)
         else
           state = url.path
-        hist.pushState(null, null, state)
+        self.once cls.VIEW_LOAD_EVENT, ->
+          hist.pushState(null, null, state)
         self.emit(cls.REQUEST_EVENT, [url])
       else if self._options.useHashChange or self._options.useInterval
+        # TODO Remove support for hashchange event?
         loc.hash = uri.relative(url.urlNoQuery, baseURL)
       self
 
@@ -150,9 +176,11 @@ define "kopi/app", (require, exports, module) ->
     onrequest: (e, url) ->
       logger.info "Receive request: #{url.path}"
       self = this
+      cls = this.constructor
       match = self._match(url)
 
       if not match
+        logger.info "No matching view found."
         if self._options.redirectWhenNoRouteFound
           url = uri.unparse url
           logger.info("Redirect to URL: #{url}")
@@ -161,10 +189,15 @@ define "kopi/app", (require, exports, module) ->
 
       [view, request] = match
 
+      loadFn = ->
+        self.currentView = view
+        self.currentURL = url
+        self.emit(cls.VIEW_LOAD_EVENT)
+
       # If views are same, update the current view
       # TODO Add to some method. e.g. view.equals(self.currentView)
-      if self.currentView and view.guid == self.currentView.guid
-        self.currentView.update(request.url, request.params)
+      if self.currentView and self.currentView.equals(view)
+        self.currentView.update(request.url, request.params, loadFn)
         return
 
       # If views are different, stop current view and start target view
@@ -172,11 +205,9 @@ define "kopi/app", (require, exports, module) ->
         self.currentView.stop()
       # If view is not created, create view then start
       if not view.created
-        view.create -> view.start(request.url, request.params)
+        view.create -> view.start(request.url, request.params, loadFn)
       else
-        view.start(request.url, request.params)
-      self.currentView = view
-      self.currentURL = url
+        view.start(request.url, request.params, loadFn)
 
     ###
     Listen to URL change events.

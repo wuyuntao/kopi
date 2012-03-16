@@ -68,9 +68,10 @@ define "kopi/ui/switchers", (require, exports, module) ->
         logger.warn("Child is already active.")
         return self
 
-      self.lock()
-      child = self._children[index]
+      if self.locked
+        return self
 
+      child = self._children[index]
       self._switch(self._children[currentAt], child, options)
 
     ###
@@ -81,6 +82,7 @@ define "kopi/ui/switchers", (require, exports, module) ->
 
     _switch: (fromChild, toChild, options) ->
       self = this
+      self.lock()
       # Shows child directly if there is no current child
       if not fromChild
         self._show(toChild)

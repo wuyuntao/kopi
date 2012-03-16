@@ -9,7 +9,7 @@ define "kopi/ui/animators/animations", (require, exports, module) ->
   class Animation
 
     klass.configure this,
-      duration: 1000
+      duration: 500
 
     constructor: (animator, options) ->
       this.animator = animator

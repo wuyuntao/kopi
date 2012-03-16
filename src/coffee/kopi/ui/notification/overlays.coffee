@@ -18,7 +18,9 @@ define "kopi/ui/notification/overlays", (require, exports, module) ->
     show: (options={}) ->
       cls = this.constructor
       self = this
-      return self if not self.hidden
+      if not self.hidden
+        self.element.toggleClass(cls.transparentClass(), options.transparent)
+        return self
       self.hidden = false
       self.element.addClass(cls.showClass())
       self.element.addClass(cls.transparentClass()) if options.transparent
@@ -40,8 +42,8 @@ define "kopi/ui/notification/overlays", (require, exports, module) ->
     overlayInstance or= new Overlay().skeletonTo(document.body).render()
 
   # A shortcut method to show or hide overlay
-  show = (transparent=false) ->
-    instance().show(transparent)
+  show = ->
+    instance().show(arguments...)
 
   hide = ->
     instance().hide()
