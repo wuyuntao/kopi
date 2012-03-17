@@ -6,6 +6,7 @@ define "kopi/ui/viewport", (require, exports, module) ->
   browser = require "kopi/utils/browser"
   widgets = require "kopi/ui/widgets"
   notification = require "kopi/ui/notification"
+  app = require "kopi/app"
 
   win = $(window)
   logger = logging.logger(module.id)
@@ -59,13 +60,18 @@ define "kopi/ui/viewport", (require, exports, module) ->
     onresize: ->
       self = this
       cls = this.constructor
+      # TODO Do not send resize events immediately when app is locked?
+      # if app.instance().locked
+      #   app.instance().once app.App.UNLOCK_EVENT, ->
+      #     self._resize(self._options.lockWhenResizing)
+      # else
+      #   self._resize(self._options.lockWhenResizing)
       self._resize(self._options.lockWhenResizing)
 
     ###
-    所有需要根据窗口大小重新布局的 Widget 应该向 Viewport 注册
-    当窗口大小发生变化视，视区锁屏，向所有已注册的 Widget 发送事件
-    Widget 响应事件被在完成后向 Viewport 发送完成时间
-    当所有 Widget 全部完成后，Viewport 将视区解锁
+    Widgets which is reponsive to window size, should register itself to viewport.
+    When viewport receives window resize event, it will pass event to registered
+    widgets properly
     ###
     _resize: (lock=false) ->
       self = this

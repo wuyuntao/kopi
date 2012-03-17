@@ -1,15 +1,21 @@
 define "kopi/ui/animators/animations", (require, exports, module) ->
 
+  EventEmitter = require("kopi/events").EventEmitter
   klass = require "kopi/utils/klass"
   exceptions = require "kopi/exceptions"
 
   ###
   Interface of animation
   ###
-  class Animation
+  class Animation extends EventEmitter
 
-    klass.configure this,
+    kls = this
+    klass.configure kls,
+      name: "animation"
       duration: 500
+
+    kls.ANIMATION_START_EVENT = "animationstart"
+    kls.ANIMATION_END_EVENT = "animationend"
 
     constructor: (animator, options) ->
       this.animator = animator
@@ -19,21 +25,29 @@ define "kopi/ui/animators/animations", (require, exports, module) ->
     Main method to animate the UI components
     ###
     animate: (from, to, options={}, fn) ->
-      cls = to.constructor
+      cls = this.constructor
       self = this
+      toClass = to.constructor
       # Show to widget immediately if from widget is not specified
       if not from
-        to.element.addClass(cls.cssClass("show"))
+        to.element.addClass(toClass.cssClass("show"))
         fn(null) if fn
         return
 
+      isReverse = options.reverse
+      animatorClass = self.animator.constructor
+      animatorElement = self.animator.element
       fromElement = from.element
       toElement = to.element
-      fromStartClass = cls.cssClass("from-start")
-      toStartClass = cls.cssClass("to-start")
-      fromStopClass = cls.cssClass("from-stop")
-      toStopClass = cls.cssClass("to-stop")
+      fromStartClass = toClass.cssClass("from-start")
+      toStartClass = toClass.cssClass("to-start")
+      fromStopClass = toClass.cssClass("from-stop")
+      toStopClass = toClass.cssClass("to-stop")
+      animationClass = animatorClass.cssClass(self._options.name)
+      animationReverseClass = animatorClass.cssClass("#{self._options.name}-reverse")
       # Prepare CSS3 transition
+      animatorElement.addClass(animationClass)
+      animatorElement.addClass(animationReverseClass) if isReverse
       fromElement.addClass(fromStartClass)
       toElement.addClass(toStartClass)
 
@@ -41,19 +55,25 @@ define "kopi/ui/animators/animations", (require, exports, module) ->
         # Start CSS3 transition
         fromElement.addClass(fromStopClass)
         toElement.addClass(toStopClass)
+        self.emit(cls.ANIMATION_START_EVENT, [from, to, options])
         setTimeout(endTransitionFn, self._options.duration * 1.5)
 
       endTransitionFn = ->
+        self.emit(cls.ANIMATION_END_EVENT, [from, to, options])
         # Make sure transition is complete
         toElement
-          .addClass(cls.cssClass("show"))
+          .addClass(toClass.cssClass("show"))
           .removeClass("#{toStartClass} #{toStopClass}")
         fromElement
-          .removeClass(cls.cssClass("show"))
+          .removeClass(toClass.cssClass("show"))
           .removeClass("#{fromStartClass} #{fromStopClass}")
+        animatorElement.removeClass("#{animationClass} #{animationReverseClass}")
         fn(null) if fn
 
       setTimeout(startTransitionFn, 100)
       self
+
+    # onanimationstart: (e, from, to, options) ->
+    # onanimationend: (e, from, to, options) ->
 
   Animation: Animation

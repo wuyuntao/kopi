@@ -36,7 +36,6 @@
 }
 
 .kopi-view-from-start {
-  @extend .kopi-view-transition;
   @include opacity(1);
   @include translateX(0);
   display: block;
@@ -50,7 +49,6 @@
 }
 
 .kopi-view-to-start {
-  @extend .kopi-view-transition;
   @include opacity(0.7);
   @include translateX(100%);
   display: block;

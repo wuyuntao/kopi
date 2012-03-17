@@ -15,7 +15,7 @@ define "kopi/ui/animators", (require, exports, module) ->
 
     constructor: ->
       super
-      this._animation = new this._options.animationClass()
+      this._animation = new this._options.animationClass(this, this._extractOptions("animation"))
 
     resetAnimation: -> this._animation = null
 
