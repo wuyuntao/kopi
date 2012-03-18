@@ -14,6 +14,7 @@ define "kopi/ui/animators/animations", (require, exports, module) ->
       name: "animation"
       duration: 500
 
+    kls.ANIMATION_READY_EVENT = "animationready"
     kls.ANIMATION_START_EVENT = "animationstart"
     kls.ANIMATION_END_EVENT = "animationend"
 
@@ -50,6 +51,7 @@ define "kopi/ui/animators/animations", (require, exports, module) ->
       animatorElement.addClass(animationReverseClass) if isReverse
       fromElement.addClass(fromStartClass)
       toElement.addClass(toStartClass)
+      self.emit(cls.ANIMATION_READY_EVENT, [from, to, options])
 
       startTransitionFn = ->
         # Start CSS3 transition
@@ -73,6 +75,7 @@ define "kopi/ui/animators/animations", (require, exports, module) ->
       setTimeout(startTransitionFn, 100)
       self
 
+    # onanimationready: (e, from, to, options) ->
     # onanimationstart: (e, from, to, options) ->
     # onanimationend: (e, from, to, options) ->
 

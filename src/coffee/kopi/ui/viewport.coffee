@@ -6,7 +6,6 @@ define "kopi/ui/viewport", (require, exports, module) ->
   browser = require "kopi/utils/browser"
   widgets = require "kopi/ui/widgets"
   notification = require "kopi/ui/notification"
-  app = require "kopi/app"
 
   win = $(window)
   logger = logging.logger(module.id)
@@ -61,11 +60,6 @@ define "kopi/ui/viewport", (require, exports, module) ->
       self = this
       cls = this.constructor
       # TODO Do not send resize events immediately when app is locked?
-      # if app.instance().locked
-      #   app.instance().once app.App.UNLOCK_EVENT, ->
-      #     self._resize(self._options.lockWhenResizing)
-      # else
-      #   self._resize(self._options.lockWhenResizing)
       self._resize(self._options.lockWhenResizing)
 
     ###
