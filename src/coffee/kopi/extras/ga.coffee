@@ -14,6 +14,11 @@ define "kopi/extras/ga", (require, exports, module) ->
   # tracker.event("book", "download_apk", )
   class Tracker
 
+    kls = this
+    kls.VISITOR_LEVEL = 1
+    kls.SESSION_LEVEL = 2
+    kls.PAGE_LEVEL = 3
+
     ###
     @constructor
     ###
@@ -21,6 +26,7 @@ define "kopi/extras/ga", (require, exports, module) ->
       this.account = null
       this.domain = null
       this.tracker = null
+      this.slot = 1
 
     ###
     Whether GA script is loaded
@@ -52,6 +58,15 @@ define "kopi/extras/ga", (require, exports, module) ->
     _script: ->
       host = if location.protocol is "https:" then "https://ssl." else "http://www."
       script = host + "google-analytics.com/" + (if this.debug then "u/ga_debug.js" else "ga.js")
+
+    ###
+    Set custom var
+    ###
+    set: (vars={}, level=1) ->
+      for key, value of vars
+        win._gaq.push ['_setCustomVar', this.slot, key, value, level]
+        this.slot++
+      this
 
     # setup Tracker
     #
