@@ -14,7 +14,7 @@ define "kopi/extras/ga", (require, exports, module) ->
       domain: "kopi.com"
     tracker.load()
     tracker.pageview("/xs/46/")
-    tracker.event("book", "download", )
+    tracker.event("book", "download", "1")
   ###
   class Tracker
 
@@ -32,12 +32,12 @@ define "kopi/extras/ga", (require, exports, module) ->
       this.domain = null
 
     ###
-    Whether GA script is loaded
+    Is GA script loaded successfully?
     ###
     isInitialized: -> typeof win._gat isnt "undefined"
 
     ###
-    Inject Google Analytics tracking script
+    Add Google Analytics tracking script to page
     ###
     initialize: ->
       return if this.isInitialized()
@@ -58,6 +58,9 @@ define "kopi/extras/ga", (require, exports, module) ->
       s.parentNode.insertBefore(ga, s)
       return
 
+    ###
+    Update a custom vars
+    ###
     setVar: (slot, key, value, level=kls.PAGE_LEVEL) ->
       win._gaq.push ['_setCustomVar', slot, key, value, level]
       this
@@ -72,11 +75,17 @@ define "kopi/extras/ga", (require, exports, module) ->
         slot++
       this
 
+    ###
+    Track page view
+    ###
     pageview: (url) ->
       logger.info "Track page: #{url}"
       win._gaq.push ["_trackPageview", url]
       return
 
+    ###
+    Track event
+    ###
     event: (category, action, label="", value=0) ->
       logger.info "Track event: #{category}:#{action}:#{label} (#{value})"
       win._gaq.push ["_trackEvent", category, action, label, value]
