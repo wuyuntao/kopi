@@ -53,6 +53,12 @@ define "kopi/settings", (require, exports, module) ->
         # @type  {String}       Default database name for indexed db
         name: "kopi_db"
 
+    tracking:
+      # @type  {String}         Google Analytics Account ID
+      account: null
+      # @type  {String}         Domain to track
+      domain: location.host
+
   # Read settings from localStorage
   load = ->
     throw new exceptions.NotImplementedError()

@@ -1,17 +1,21 @@
 define "kopi/extras/ga", (require, exports, module) ->
 
   $ = require "jquery"
+  settings = require "kopi/settings"
   logger = logging.logger(module.id)
+  win = window
 
-  # An Adapter for Google Analytics
-  #
-  # Usage:
-  # tracker.setup
-  #     account:  "UA-xxxxx-x"
-  #     domain: "zuikong.com"
-  # tracker.load()
-  # tracker.pageview("/xs/46/")
-  # tracker.event("book", "download_apk", )
+  ###
+  An Adapter for Google Analytics SDK
+
+  Usage:
+    tracker.setup
+      account:  "UA-xxxxx-x"
+      domain: "kopi.com"
+    tracker.load()
+    tracker.pageview("/xs/46/")
+    tracker.event("book", "download", )
+  ###
   class Tracker
 
     kls = this
@@ -23,76 +27,59 @@ define "kopi/extras/ga", (require, exports, module) ->
     @constructor
     ###
     constructor: ->
+      win._gaq ||= []
       this.account = null
       this.domain = null
-      this.tracker = null
-      this.slot = 1
 
     ###
     Whether GA script is loaded
     ###
-    isLoaded: -> typeof win._gat isnt "undefined"
+    isInitialized: -> typeof win._gat isnt "undefined"
 
-    # 加载 Google Analytics 脚本
-    load: ->
-      return if this.isLoaded()
+    ###
+    Inject Google Analytics tracking script
+    ###
+    initialize: ->
+      return if this.isInitialized()
+      if not settings.tracking.account
+        logger.error "Account ID for Google Analytics must be specified."
+        return
 
-      self = this
-      successFn = ->
-        if not self.isLoaded()
-          # TODO Retry?
-          win._gaq.push ["_trackPageview"]
-          logger.error "Failed to load Google Analytics script. Error: Missing _gat"
-      errorFn = (error) ->
-          # TODO Retry?
-          logger.error "Failed to load Google Analytics script. Error: #{error}"
-      $.ajax
-        url: this._script()
-        type: "GET"
-        dataType: "script"
-        cache: true
-        success: successFn
-        error: errorFn
+      win._gaq.push ["_setAccount", settings.tracking.account]
+      win._gaq.push ["_setDomainName", settings.tracking.domain]
+      win._gaq.push ["_trackPageview"]
+
+      ga = document.createElement("script")
+      ga.type = "text/javascript"
+      ga.async = true
+      ga.src = (if location.protocol is "https:" then "https://ssl." else "http://www.") +
+        "google-analytics.com/" + (if settings.debug then "u/ga_debug.js" else "ga.js")
+      s = document.getElementsByTagName('script')[0]
+      s.parentNode.insertBefore(ga, s)
       return
 
-    _script: ->
-      host = if location.protocol is "https:" then "https://ssl." else "http://www."
-      script = host + "google-analytics.com/" + (if this.debug then "u/ga_debug.js" else "ga.js")
-
-    ###
-    Set custom var
-    ###
-    set: (vars={}, level=1) ->
-      for key, value of vars
-        win._gaq.push ['_setCustomVar', this.slot, key, value, level]
-        this.slot++
+    setVar: (slot, key, value, level=kls.PAGE_LEVEL) ->
+      win._gaq.push ['_setCustomVar', slot, key, value, level]
       this
 
-    # setup Tracker
-    #
-    # account: "UA-xxxxx-x"
-    # domain: "zuikong.com"
-    setup: (options) ->
-      if "debug" of options
-        this.debug = !!debug
-
-      if options.account
-        this.account = options.account
-        win._gaq.push ["_setAccount", options.account] if win._gaq
-
-      if options.domain
-        this.domain = options.domain
-        win._gaq.push ["_setDomainName", options.domain] if win._gaq
-      return
+    ###
+    Update custom vars
+    ###
+    setVars: (vars={}, level=kls.PAGE_LEVEL) ->
+      slot = 1
+      for key, value of vars
+        this.attrs(slot, key, value, level)
+        slot++
+      this
 
     pageview: (url) ->
-      logger.log "Track page: #{url}"
-      win._gaq.push ["_trackPageview", url] if win._gaq
+      logger.info "Track page: #{url}"
+      win._gaq.push ["_trackPageview", url]
       return
 
     event: (category, action, label="", value=0) ->
-      logger.log "Track event: #{category}:#{action}:#{label} (#{value})"
-      win._gaq.push ["_trackEvent", category, action, label, value] if win._gaq
+      logger.info "Track event: #{category}:#{action}:#{label} (#{value})"
+      win._gaq.push ["_trackEvent", category, action, label, value]
       return
 
   tracker: new Tracker()
