@@ -1,7 +1,9 @@
 define "kopi/extras/ga", (require, exports, module) ->
 
   $ = require "jquery"
+  logging = require "kopi/logging"
   settings = require "kopi/settings"
+
   logger = logging.logger(module.id)
   win = window
 
@@ -34,26 +36,27 @@ define "kopi/extras/ga", (require, exports, module) ->
     ###
     Is GA script loaded successfully?
     ###
-    isInitialized: -> typeof win._gat isnt "undefined"
+    isReady: -> typeof win._gat isnt "undefined"
 
     ###
     Add Google Analytics tracking script to page
     ###
-    initialize: ->
-      return if this.isInitialized()
-      if not settings.tracking.account
+    setup: ->
+      return if this.isReady()
+      trackingSettings = settings.kopi.tracking
+      if not trackingSettings.account
         logger.error "Account ID for Google Analytics must be specified."
         return
 
-      win._gaq.push ["_setAccount", settings.tracking.account]
-      win._gaq.push ["_setDomainName", settings.tracking.domain]
+      win._gaq.push ["_setAccount", trackingSettings.account]
+      win._gaq.push ["_setDomainName", trackingSettings.domain]
       win._gaq.push ["_trackPageview"]
 
       ga = document.createElement("script")
       ga.type = "text/javascript"
       ga.async = true
       ga.src = (if location.protocol is "https:" then "https://ssl." else "http://www.") +
-        "google-analytics.com/" + (if settings.debug then "u/ga_debug.js" else "ga.js")
+        "google-analytics.com/" + (if settings.kopi.debug then "u/ga_debug.js" else "ga.js")
       s = document.getElementsByTagName('script')[0]
       s.parentNode.insertBefore(ga, s)
       return
@@ -79,7 +82,6 @@ define "kopi/extras/ga", (require, exports, module) ->
     Track page view
     ###
     pageview: (url) ->
-      logger.info "Track page: #{url}"
       win._gaq.push ["_trackPageview", url]
       return
 
@@ -87,7 +89,6 @@ define "kopi/extras/ga", (require, exports, module) ->
     Track event
     ###
     event: (category, action, label="", value=0) ->
-      logger.info "Track event: #{category}:#{action}:#{label} (#{value})"
       win._gaq.push ["_trackEvent", category, action, label, value]
       return
 

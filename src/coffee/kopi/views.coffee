@@ -117,7 +117,7 @@ define "kopi/views", (require, exports, module) ->
       logger.info("Start view. #{self.guid}")
       self.lock()
       self.on(cls.STARTED_EVENT, (e) -> fn(false, self)) if fn
-      self.emit(cls.START_EVENT, [options])
+      self.emit(cls.START_EVENT, [url, params, options])
 
     ###
     Update UI components when URL changes
@@ -135,7 +135,7 @@ define "kopi/views", (require, exports, module) ->
         options = {}
       logger.info("Update view. #{self.guid}")
       self.on(cls.UPDATED_EVENT, (e) -> fn(false, this)) if fn
-      self.emit(cls.UPDATE_EVENT, [options])
+      self.emit(cls.UPDATE_EVENT, [url, params, options])
 
     ###
     Hide UI components
@@ -153,7 +153,7 @@ define "kopi/views", (require, exports, module) ->
       logger.info("Stop view. #{self.guid}")
       self.lock()
       self.on(cls.STOPPED_EVENT, (e) -> fn(false, self)) if fn
-      self.emit(cls.STOP_EVENT, options)
+      self.emit(cls.STOP_EVENT, [options])
 
     ###
     Remove UI components from DOM Tree
@@ -171,7 +171,7 @@ define "kopi/views", (require, exports, module) ->
       logger.info("Destroy view. #{self.guid}")
       self.lock()
       self.on(cls.DESTROYED_EVENT, (e) -> fn(false, self)) if fn
-      self.emit(cls.DESTROY_EVENT, options)
+      self.emit(cls.DESTROY_EVENT, [options])
 
     lock: (fn) ->
       cls = this.constructor
