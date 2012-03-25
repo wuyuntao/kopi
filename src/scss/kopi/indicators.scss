@@ -1,0 +1,11 @@
+
+$kopi-indicator-height: 24px !default;
+$kopi-indicator-width: 24px !default;
+$kopi-indicator-url: image-url("kopi/loader.gif") !default;
+
+.kopi-indicator {
+  height: $kopi-indicator-height;
+  width: $kopi-indicator-width;
+  background: transparent $kopi-indicator-url center center no-repeat;
+  background-size: contain;
+}
