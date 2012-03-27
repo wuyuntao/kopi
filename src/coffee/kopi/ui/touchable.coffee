@@ -28,7 +28,11 @@ define "kopi/ui/touchable", (require, exports, module) ->
       ontouchend: null
       ontouchcancel: null
 
-    ondelegate: ->
+    onskeleton: ->
+      this.delegate()
+      super
+
+    delegate: ->
       cls = this.constructor
       self = this
       preventDefault = self._options.preventDefault

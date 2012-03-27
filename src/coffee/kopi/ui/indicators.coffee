@@ -6,6 +6,10 @@ define "kopi/ui/indicators", (require, exports, module) ->
 
     this.widgetName "Indicator"
 
+    constructor: ->
+      super
+      this.hidden = true
+
     show: ->
       cls = this.constructor
       self = this

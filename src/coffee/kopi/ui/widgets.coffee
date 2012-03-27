@@ -175,9 +175,6 @@ define "kopi/ui/widgets", (require, exports, module) ->
     skeletonTo: (element) ->
       this.skeleton().appendTo(element)
 
-    delegate: ->
-      this.emit("delegate")
-
     resize: ->
       this.emit(this.constructor.RESIZE_EVENT)
 
@@ -232,13 +229,10 @@ define "kopi/ui/widgets", (require, exports, module) ->
     # {{{ Event template methods
     onskeleton: ->
       self = this
-      self.delegate()
       if self._widgets
         self._widgets.forEach (name, widget) ->
           widget.skeletonTo(self.element) if widget.options().autoSkeleton isnt false
       self.initialized = true
-
-    ondelegate: ->
 
     onrender: ->
       this.resize()

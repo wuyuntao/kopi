@@ -11,6 +11,12 @@ define "kopi/utils/array", (require, exports, module) ->
 
   ArrayProto = Array.prototype
 
+  ###
+  Select a random item from array
+  ###
+  choice = (array) ->
+    array[math.round(math.random() * (array.length - 1))]
+
   clone = (array) -> array.slice(0)
 
   count = (array, iterator, context) ->
@@ -171,6 +177,7 @@ define "kopi/utils/array", (require, exports, module) ->
     set
 
   ArrayProto: ArrayProto
+  choice: choice
   clone: clone
   count: count
   forEach: forEach

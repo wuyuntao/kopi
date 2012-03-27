@@ -37,7 +37,7 @@ define "kopi/ui/clickable", (require, exports, module) ->
       cls.HOVER_CLASS or= cls.cssClass("hover")
       cls.ACTIVE_CLASS or= cls.cssClass("active")
 
-    ondelegate: ->
+    delegate: ->
       super
       cls = this.constructor
       self = this

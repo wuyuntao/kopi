@@ -4,6 +4,7 @@ define "kopi/utils/css", (require, exports, module) ->
   browser = require "kopi/utils/browser"
   support = require "kopi/utils/support"
   text = require "kopi/utils/text"
+  settings = require "kopi/settings"
 
   vendorPrefix = if browser.webkit
     "-webkit-"
@@ -69,5 +70,8 @@ define "kopi/utils/css", (require, exports, module) ->
     if matrix.length >= 6
       x: parseInt(matrix[4])
       y: parseInt(matrix[5])
+
+  $.fn.toggleDebug = ->
+    this.toggleClass("kopi-debug", settings.kopi.debug)
 
   experimental: experimental
