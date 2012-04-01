@@ -2,15 +2,43 @@ define "kopi/utils/klass", (require, exports, module) ->
 
   object = require "kopi/utils/object"
 
-  extend = (klass, mixin) ->
-    for name, method of mixin
-      klass[name] = method
-    return
+  ###
+  Define CoffeeScript style class which could be useful for
+  guys who uses Kopi with JavaScript.
 
+  @param {String} name Class name
+  @param {Object} parent Constructor function to inherit prototype from
+  ###
+  create = (name, parent) ->
+    if parent
+      klass = ->
+        parent.constructor.apply(this, arguments)
+      klass.__super__ = parent.prototype
+      if parent
+        # Assign class properties
+        for own key, value of parent
+          klass[key] = value
+    else
+      klass = ->
+    # constructor.name is a read-only property in webkit and some other browsers
+    klass.name = klass.__name__ = name
+    ctor = -> this.constructor = klass
+    # Assign instance properties
+    ctor.prototype = parent.prototype if parent
+    klass.prototype = new ctor()
+    klass
+
+  ###
+  Include a mixin object for class
+  ###
   include = (klass, mixin) ->
-    for name, method of mixin.prototype
+    # extend class properties
+    for own name, method of mixin
+      klass[name] = method
+    # extend instance properties
+    for own name, method of mixin.prototype
       klass.prototype[name] = method
-    return
+    klass
 
   configure = (klass, options) ->
     klass._options or= {}
@@ -74,7 +102,7 @@ define "kopi/utils/klass", (require, exports, module) ->
       property.get.apply(this, arguments)
     return
 
-  extend: extend
+  create: create
   include: include
   configure: configure
   accessor: accessor

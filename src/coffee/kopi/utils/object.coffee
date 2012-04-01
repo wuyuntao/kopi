@@ -22,9 +22,20 @@ define "kopi/utils/object", (require, exports, module) ->
 
   clone = (obj) -> extend {}, obj
 
-  # Define custom property. e.g.
-  # get: book.title
-  # set: book.title = 1
+  ###
+  Creates a new object with the specified prototype object and properties.
+
+  ###
+  create = Object.create or= (proto={}) ->
+    F = ->
+    F.prototype = proto
+    new F()
+
+  ###
+  Define custom property. e.g.
+  get: book.title
+  set: book.title = 1
+  ###
   defineProperty = Object.defineProperty or= (obj, field, property={}) ->
     if property.get
       obj.__defineGetter__ field, -> property.get.call(this)
@@ -84,6 +95,7 @@ define "kopi/utils/object", (require, exports, module) ->
   ObjectProto: ObjectProto
   accessor: accessor
   clone: clone
+  create: create
   defineProperty: defineProperty
   extend: extend
   isObject: isObject
