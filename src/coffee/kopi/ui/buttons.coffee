@@ -3,11 +3,11 @@ define "kopi/ui/buttons", (require, exports, module) ->
   $ = require "jquery"
   exceptions = require "kopi/exceptions"
   klass = require "kopi/utils/klass"
-  images = require "kopi/ui/images"
-  text = require "kopi/ui/text"
-  clickable = require "kopi/ui/clickable"
+  Image = require("kopi/ui/images").Image
+  Text = require("kopi/ui/text").Text
+  Clickable = require("kopi/ui/clickable").Clickable
 
-  class Button extends clickable.Clickable
+  class Button extends Clickable
 
     kls = this
     kls.ICON_POS_TOP = "top"
@@ -27,8 +27,8 @@ define "kopi/ui/buttons", (require, exports, module) ->
       iconPos: kls.ICON_POS_LEFT
       # @type   {String}    cssClass  extra css class added to button
       cssClass: ""
-      iconClass: images.Image
-      textClass: text.Text
+      iconClass: Image
+      titleClass: Text
 
     proto = kls.prototype
     # TODO Icon must be an instance of Image class
@@ -37,9 +37,9 @@ define "kopi/ui/buttons", (require, exports, module) ->
         this._icon.image(icon) if this._options.hasIcon
         this
     # TODO Text must be an instance of Text class
-    klass.accessor proto, "text",
+    klass.accessor proto, "title",
       set: (text) ->
-        this._text.text(text) if this._options.hasText
+        this._title.text(text) if this._options.hasText
         this
 
     constructor: (options) ->
@@ -53,20 +53,18 @@ define "kopi/ui/buttons", (require, exports, module) ->
         iconOptions.extraClass += " #{cls.cssClass("icon")}"
         self._icon = new options.iconClass(iconOptions)
       if options.hasText
-        textOptions = self._extractOptions("text")
-        textOptions.extraClass or= ""
-        textOptions.extraClass += " #{cls.cssClass("text")}"
-        self._text = new options.textClass(textOptions)
+        titleOptions = self._extractOptions("title")
+        titleOptions.extraClass or= ""
+        titleOptions.extraClass += " #{cls.cssClass("title")}"
+        self._title = new options.titleClass(titleOptions)
 
     onskeleton: ->
       self = this
       options = self._options
       if options.hasIcon
-        self._icon.skeleton()
-        self._icon.element.appendTo(self.element)
+        self._icon.skeletonTo(self.element)
       if options.hasText
-        self._text.skeleton()
-        self._text.element.appendTo(self.element)
+        self._title.skeletonTo(self.element)
       self.state("icon-pos", self._options.iconPos)
       super
 
@@ -74,14 +72,21 @@ define "kopi/ui/buttons", (require, exports, module) ->
       self = this
       options = self._options
       self._icon.render() if options.hasIcon
-      self._text.render() if options.hasText
+      self._title.render() if options.hasText
       super
 
     onupdate: ->
       self = this
       options = self._options
       self._icon.update() if options.hasIcon
-      self._text.update() if options.hasText
+      self._title.update() if options.hasText
+      super
+
+    ondestroy: ->
+      self = this
+      options = self._options
+      self._icon.destroy() if options.hasIcon
+      self._title.destroy() if options.hasText
       super
 
   ###
