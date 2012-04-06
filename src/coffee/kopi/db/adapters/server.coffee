@@ -36,16 +36,31 @@ define "kopi/db/adapters/server", (require, exports, module) ->
     proto = kls.prototype
     proto[action] = requestFn for action in kls.ACTIONS
 
+    raw: (query, fn) ->
+      requestFn = (error, result) ->
+        if error
+          fn(error, result) if fn
+          return
+        # Build collection
+        collection = []
+        if result.length > 0
+          for entry, i in result
+            model = new query.model(entry)
+            model.isNew = false
+            collection.push(model)
+        fn(error, collection) if fn
+      this._request(query, requestFn)
+
     # Build URL for query
     _url: (query, url) ->
       url or= this._options["#{query.action()}URL"]
-      for name, value of query.criteria().where
-        url = url.replace(":#{name}", value.eq) if value.eq
+      if url
+        for name, value of query.criteria().where
+          url = url.replace(":#{name}", value.eq) if value.eq
       url
 
     _method: (query) ->
-      method = this._options["#{query.action()}Method"]
-      method
+      this._options["#{query.action()}Method"]
 
     # Build request params
     # {
@@ -59,9 +74,16 @@ define "kopi/db/adapters/server", (require, exports, module) ->
     _request: (query, fn) ->
       self = this
       options = self._options
-      method = self._method(query)
-      url = self._url(query)
-      params = self._params(query)
+      if self._isRawQuery(query)
+        args = query.args()[0]
+        url = args.url
+        method = args.method or options.retrieveMethod
+        params = args.params or {}
+      else
+        url = self._url(query)
+        method = self._method(query)
+        params = self._params(query)
+
       doneFn = (response) ->
         args = self._parse(response)
         fn(args[0], args[1])
@@ -92,5 +114,8 @@ define "kopi/db/adapters/server", (require, exports, module) ->
 
     _parseErrorJSON: (xhr, text, error) ->
       [error or true]
+
+    _isRawQuery: (query) ->
+      query.action() == "raw"
 
   ServerAdapter: ServerAdapter
