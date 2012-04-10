@@ -10,7 +10,7 @@ define "kopi/demos/views/ui", (require, exports, module) ->
 
     constructor: ->
       super
-      backButton = new navigation.NavButton(url: "/").text("Back")
+      backButton = new navigation.NavButton(url: "/", titleText: "Back")
       this.nav = new navigation.Nav
         title: "UI"
         leftButton: backButton

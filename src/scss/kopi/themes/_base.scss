@@ -1,0 +1,187 @@
+// Contains default theme settings for kopi
+
+/**
+ * Global variables
+ */
+
+/**
+ * Gray levels
+ */
+$kopi-black: #000 !default;
+$kopi-gray-darker: #222 !default;
+$kopi-gray-dark: #333 !default;
+$kopi-gray: #555 !default;
+$kopi-gray-light: #999 !default;
+$kopi-gray-lighter: #eee !default;
+$kopi-white: #fff !default;
+
+/**
+ * Accent colors
+ */
+$kopi-blue: #049cdb !default;
+$kopi-blue-dark: #0064cd !default;
+$kopi-green: #46a546 !default;
+$kopi-red: #9d261d !default;
+$kopi-yellow: #ffc40d !default;
+$kopi-orange: #f89406 !default;
+$kopi-pink: #c3325f !default;
+$kopi-purple: #7a43b6 !default;
+
+/**
+ * Scaffolding
+ */
+$kopi-body-background: $kopi-white !default;
+$kopi-text-color: $kopi-gray-dark !default;
+
+/**
+ * Links
+ */
+$kopi-link-color: #08c !default;
+$kopi-link-color-hover: darken($kopi-link-color, 15%) !default;
+
+/**
+ * Typography
+ */
+$kopi-base-font-size: 13px !default;
+$kopi-base-font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$kopi-base-line-height: 18px !default;
+$kopi-alt-font-family: Georgia, "Times New Roman", Times, serif !default;
+
+$kopi-headings-font-family: inherit !default; // empty to use BS default, @base-fontFamily
+$kopi-headings-font-weight: bold !default; // instead of browser default, bold
+$kopi-headings-color: inherit !default; // empty to use BS default, @text-color
+
+/**
+ * Tables
+ */
+$kopi-table-background: transparent !default; // overall background-color
+$kopi-table-background-accent: #f9f9f9 !default; // for striping
+$kopi-table-background-hover: #f5f5f5 !default; // for hover
+$kopi-table-border: #ddd !default; // table and cell border
+
+/**
+ * Buttons
+ */
+$kopi-btn-background: $kopi-white !default;
+$kopi-btn-background-highlight: darken($kopi-white, 10%) !default;
+$kopi-btn-border: darken($kopi-white, 20%) !default;
+
+$kopi-btn-primary-background: $kopi-link-color !default;
+$kopi-btn-primary-background-highlight: adjust-hue($kopi-btn-primary-background, 15%) !default;
+
+$kopi-btn-info-background: #5bc0de !default;
+$kopi-btn-info-background-highlight: #2f96b4 !default;
+
+$kopi-btn-success-background: #62c462 !default;
+$kopi-btn-success-background-highlight: #51a351 !default;
+
+$kopi-btn-warning-background: lighten($kopi-orange, 15%) !default;
+$kopi-btn-warning-background-highlight: $kopi-orange !default;
+
+$kopi-btn-danger-background: #ee5f5b !default;
+$kopi-btn-danger-background-highlight: #bd362f !default;
+
+$kopi-btn-inverse-background: $kopi-gray !default;
+$kopi-btn-inverse-background-highlight: $kopi-gray-darker !default;
+
+/**
+ * Forms
+ */
+$kopi-input-background: $kopi-white !default;
+$kopi-input-border: #ccc !default;
+$kopi-input-disabled-background: $kopi-gray-lighter !default;
+
+
+/**
+ * Dropdowns
+ */
+$kopi-dropdown-background: $kopi-white !default;
+$kopi-dropdown-border: rgba(0,0,0,.2) !default;
+$kopi-dropdown-link-color: $kopi-gray-dark !default;
+$kopi-dropdown-link-color-hover: $kopi-white !default;
+$kopi-dropdown-link-background-hover: $kopi-link-color !default;
+
+
+/**
+ * COMPONENT VARIABLES
+ */
+
+/**
+ * Z-index master list
+ *
+ * Used for a bird's eye view of components dependent on the z-axis
+ * Try to avoid customizing these :)
+ */
+$kopi-zindex-dropdown: 1000;
+$kopi-zindex-popover: 1010;
+$kopi-zindex-tooltip: 1020;
+$kopi-zindex-fixed-navbar: 1030;
+$kopi-zindex-modal-backdrop: 1040;
+$kopi-zindex-modal: 1050;
+
+
+/**
+ * Sprite icons path
+ */
+$kopi-iconSpritePath: asset-url("kopi/glyphicons-halflings.png", image) !default;
+$kopi-iconWhiteSpritePath: asset-url("kopi/glyphicons-halflings-white.png", image) !default;
+
+
+/**
+ * Input placeholder text color
+ */
+$kopi-placeholder-text: $kopi-gray-light !default;
+
+
+/**
+ * Hr border color
+ */
+$kopi-hr-border: $kopi-gray-lighter !default;
+
+
+/**
+ * Navbar
+ */
+$kopi-navbarHeight: 40px !default;
+$kopi-navbar-background: $kopi-gray-darker !default;
+$kopi-navbar-backgroundHighlight: $kopi-gray-dark !default;
+
+$kopi-navbar-text: $kopi-gray-light !default;
+$kopi-navbar-link-color: $kopi-gray-light !default;
+$kopi-navbar-link-color-hover: $kopi-white !default;
+$kopi-navbar-link-color-active: $kopi-navbar-link-color-hover !default;
+$kopi-navbar-link-background-hover: transparent !default;
+$kopi-navbar-link-background-active: $kopi-navbar-background !default;
+
+$kopi-navbar-search-background: lighten($kopi-navbar-background, 25%) !default;
+$kopi-navbar-search-background-focus: $kopi-white !default;
+$kopi-navbar-search-border: darken($kopi-navbar-search-background, 30%) !default;
+$kopi-navbar-search-placeholder-color: #ccc !default;
+
+
+/**
+ * Hero unit
+ */
+$kopi-hero-unit-background: $kopi-gray-lighter !default;
+$kopi-hero-unit-heading-color: inherit !default;
+$kopi-hero-unit-lead-color: inherit !default;
+
+
+/**
+ * Form states and alerts
+ */
+$kopi-warning-text: #c09853 !default;
+$kopi-warning-background: #fcf8e3 !default;
+$kopi-warning-border: darken(adjust-hue($kopi-warning-background, -10), 3%) !default;
+
+$kopi-error-text: #b94a48 !default;
+$kopi-error-background: #f2dede !default;
+$kopi-error-border: darken(adjust-hue($kopi-error-background, -10), 3%) !default;
+
+$kopi-success-text: #468847 !default;
+$kopi-success-background: #dff0d8 !default;
+$kopi-success-border: darken(adjust-hue($kopi-success-background, -10), 5%) !default;
+
+$kopi-info-text: #3a87ad !default;
+$kopi-info-background: #d9edf7 !default;
+$kopi-info-border: darken(adjust-hue($kopi-info-background, -10), 7%) !default;

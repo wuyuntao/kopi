@@ -1,15 +1,31 @@
-@import "kopi/themes/default";
+// Theme variables
+@import "kopi/themes/default"; // Modify this for custom colors, font-sizes, etc
+@import "kopi/themes/base";
 
+// General CSS
+@import "kopi/general";
 @import "kopi/animation";
 @import "kopi/ellipsis";
-@import "kopi/general";
 
+// Components: common
 @import "kopi/box";
-@import "kopi/lists";
-@import "kopi/navigation";
-@import "kopi/notification";
-@import "kopi/buttons";
+@import "kopi/viewport";
+
+// Components: View
 @import "kopi/viewswitchers";
+
+// Components: Navigation
+@import "kopi/navigation";
+
+// Components: Buttons
+@import "kopi/buttons";
+
+// Components: Lists
+@import "kopi/lists";
+
+// Components: Notification
+@import "kopi/notification";
+
+// Components: Misc
 @import "kopi/scrollable";
 @import "kopi/indicators";
-@import "kopi/viewport";
