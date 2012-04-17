@@ -49,8 +49,15 @@ define "kopi/ui/navigation", (require, exports, module) ->
 
     constructor: ->
       super
+      cls = this.constructor
       options = this._options
-      this._title = if options.title and text.isString(options.title) then new Text(text: options.title, tagName: 'h1') else options.title
+      this._title = if options.title and text.isString(options.title)
+        new Text
+          text: options.title
+          tagName: 'h1'
+          extraClass: cls.cssClass('title')
+      else
+        options.title
       this._leftButton = options.leftButton
       this._rightButton = options.rightButton
 
