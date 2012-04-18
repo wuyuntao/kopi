@@ -55,6 +55,7 @@
 }
 
 .kopi-view-to-stop {
+  @extend .kopi-view-transition;
   @include opacity(1);
   @include translateX(0);
   display: block;

@@ -58,7 +58,7 @@ define "kopi/ui/animators/animations", (require, exports, module) ->
         fromElement.addClass(fromStopClass)
         toElement.addClass(toStopClass)
         self.emit(cls.ANIMATION_START_EVENT, [from, to, options])
-        setTimeout(endTransitionFn, self._options.duration * 1.5)
+        setTimeout(endTransitionFn, self._options.duration + 50)
 
       endTransitionFn = ->
         self.emit(cls.ANIMATION_END_EVENT, [from, to, options])
@@ -72,7 +72,7 @@ define "kopi/ui/animators/animations", (require, exports, module) ->
         animatorElement.removeClass("#{animationClass} #{animationReverseClass}")
         fn(null) if fn
 
-      setTimeout(startTransitionFn, 100)
+      setTimeout(startTransitionFn, 50)
       self
 
     # onanimationready: (e, from, to, options) ->
