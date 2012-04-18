@@ -1,6 +1,7 @@
 @import 'compass/css3';
 @import "compass/utilities";
 @import "kopi/utils";
+@import "kopi/themes/base";
 
 /* {{{ Navbar
 
@@ -18,6 +19,7 @@
   $shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 -1px 0 rgba(0,0,0,.1);
   @include box-shadow($shadow);
   color: $kopi-navbar-color;
+  text-shadow: $kopi-navbar-shadow;
   height: $kopi-navbar-height;
   text-align: center;
   min-height: 0;
@@ -69,17 +71,6 @@ div.kopi-navbar-top-fixed {
         span.kopi-nav-button-text
  */
 
-// TODO Move navbar button styles to base theme
-$kopi-navbar-button-height: $kopi-navbar-height - 2 * $kopi-navbar-padding !default;
-$kopi-navbar-button-width: 60px !default;
-$kopi-navbar-button-margin: 10px !default;
-$kopi-navbar-button-padding: 10px !default;
-$kopi-navbar-button-border: 1px solid #ccc !default;
-$kopi-navbar-button-background: #333 !default;
-$kopi-navbar-button-color: #ccc !default;
-$kopi-navbar-button-font-size: 14px !default;
-$kopi-navbar-button-border-radius: 5px !default;
-
 .kopi-nav {
   display: none;
 }
@@ -119,7 +110,6 @@ $kopi-navbar-button-border-radius: 5px !default;
 
 .kopi-nav-title {
   color: $kopi-navbar-title-color;
-  text-shadow: $kopi-navbar-title-shadow;
   font-size: $kopi-navbar-title-font-size;
   font-weight: bold;
   line-height: $kopi-navbar-height;
@@ -130,27 +120,38 @@ $kopi-navbar-button-border-radius: 5px !default;
 }
 
 .kopi-nav-button {
+  @extend .kopi-button;
   @include inline-block;
+  color: $kopi-navbar-button-color;
   text-decoration: none;
-  height: $kopi-navbar-height;
+  background: $kopi-navbar-button-background;
+  height: $kopi-navbar-button-height;
   width: auto;
-  padding: $kopi-navbar-padding;
+  padding-top: $kopi-navbar-padding;
+  padding-bottom: $kopi-navbar-padding;
 }
 
-.kopi-nav-button-text {
-  @include inline-block;
-  @include border-radius($kopi-navbar-button-border-radius);
+.kopi-nav-button-hover {
+  background-color: $kopi-navbar-button-background-hover;
+  color: $kopi-navbar-button-color-hover!important;
+  text-decoration: none;
+}
 
-  background: $kopi-navbar-button-background;
-  color: $kopi-navbar-button-color;
+.kopi-nav-button-active {
+  background-color: $kopi-navbar-button-background-active;
+  color: $kopi-navbar-button-color-active;
+  text-decoration: none;
+}
+
+.kopi-nav-button-title {
+  @include inline-block;
+
   font-size: $kopi-navbar-button-font-size;
   height: $kopi-navbar-button-height;
   width: auto;
   line-height: $kopi-navbar-button-height;
-  border: $kopi-navbar-button-border;
   min-width: $kopi-navbar-button-width;
   text-align: center;
-  padding: 0 $kopi-navbar-button-padding;
 }
 
 .kopi-nav-button-sprite {

@@ -12,7 +12,12 @@ define "kopi/ui/lists", (require, exports, module) ->
 
     kls = this
     kls.configure
+      # @type  {ListItem} class to build list items with
       childClass: items.ListItem
+      # @type  {Boolean} If use `striped` style for lists
+      striped: false
+      # @type  {Boolean} If use `bordered` style for lists
+      bordered: false
 
     proto = kls.prototype
     ###
@@ -32,6 +37,14 @@ define "kopi/ui/lists", (require, exports, module) ->
         if adapter and adapter instanceof QueueAdapter
           changeFn = (e) -> self.renderItems()
           adapter.on(QueueAdapter.CHANGE_EVENT, changeFn)
+
+    onskeleton: ->
+      options = this._options
+      cls = this.constructor
+      this.element
+        .toggleClass(cls.cssClass("striped"), options.striped)
+        .toggleClass(cls.cssClass("bordered"), options.bordered)
+      super
 
     onrender: ->
       this.renderItems()
@@ -56,8 +69,11 @@ define "kopi/ui/lists", (require, exports, module) ->
 
   class NavList extends List
 
+    this.widgetName("NavList")
+
     this.configure
       childClass: items.NavListItem
+      striped: true
 
   List: List
   NavList: NavList

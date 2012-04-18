@@ -11,7 +11,7 @@ $kopi-black: #000 !default;
 $kopi-gray-darker: #222 !default;
 $kopi-gray-dark: #333 !default;
 $kopi-gray: #555 !default;
-$kopi-gray-light: #999 !default;
+$kopi-gray-light: #aaa !default;
 $kopi-gray-lighter: #eee !default;
 $kopi-white: #fff !default;
 
@@ -38,6 +38,7 @@ $kopi-text-color: $kopi-gray-dark !default;
  */
 $kopi-link-color: #08c !default;
 $kopi-link-color-hover: darken($kopi-link-color, 15%) !default;
+$kopi-link-color-active: darken($kopi-link-color, 30%) !default;
 
 /**
  * Typography
@@ -58,6 +59,18 @@ $kopi-table-background: transparent !default; // overall background-color
 $kopi-table-background-accent: #f9f9f9 !default; // for striping
 $kopi-table-background-hover: #f5f5f5 !default; // for hover
 $kopi-table-border: #ddd !default; // table and cell border
+
+/**
+ * Lists
+ */
+$kopi-list-background: transparent !default; // overall background-color
+$kopi-list-background-accent: #f9f9f9 !default; // for striping
+$kopi-list-background-hover: $kopi-gray-light !default; // for hover
+$kopi-list-background-active: $kopi-link-color !default; // for active
+$kopi-list-border: #ddd !default; // list and item border
+$kopi-list-color: $kopi-gray-dark !default; // list and item border
+
+$kopi-list-item-height: 40px !default;
 
 /**
  * Buttons
@@ -147,16 +160,27 @@ $kopi-navbar-padding: 5px !default;
 $kopi-navbar-background: $kopi-gray-darker !default;
 $kopi-navbar-background-highlight: $kopi-gray-dark !default;
 $kopi-navbar-color: $kopi-gray-light !default;
+$kopi-navbar-shadow: $kopi-gray-light 0 -1px 0 !default;
 
 $kopi-navbar-title-color: $kopi-white !default;
 $kopi-navbar-title-font-size: 20px !default;
-$kopi-navbar-title-shadow: $kopi-gray-light 0 -1px 0 !default;
 
 $kopi-navbar-button-color: $kopi-gray-light !default;
 $kopi-navbar-button-color-hover: $kopi-white !default;
-$kopi-navbar-button-color-active: $kopi-navbar-button-color-hover !default;
-$kopi-navbar-button-background-hover: transparent !default;
-$kopi-navbar-button-background-active: $kopi-navbar-background !default;
+$kopi-navbar-button-color-active: $kopi-white !default;
+$kopi-navbar-button-background: transparent !default;
+$kopi-navbar-button-background-hover: $kopi-gray-dark !default;
+$kopi-navbar-button-background-active: $kopi-link-color !default;
+
+$kopi-navbar-button-height: $kopi-navbar-height - 2 * $kopi-navbar-padding !default;
+$kopi-navbar-button-width: 60px !default;
+$kopi-navbar-button-margin: 10px !default;
+$kopi-navbar-button-padding: 10px !default;
+$kopi-navbar-button-border: 1px solid #ccc !default;
+$kopi-navbar-button-background: #333 !default;
+$kopi-navbar-button-color: #ccc !default;
+$kopi-navbar-button-font-size: 14px !default;
+$kopi-navbar-button-border-radius: 5px !default;
 
 $kopi-navbar-search-background: lighten($kopi-navbar-background, 25%) !default;
 $kopi-navbar-search-background-focus: $kopi-white !default;

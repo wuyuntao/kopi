@@ -28,6 +28,8 @@ define "kopi/ui/lists/items", (require, exports, module) ->
 
   class NavListItem extends ListItem
 
+    this.widgetName "NavListItem"
+
     constructor: (list, data) ->
       super(list, data[0])
       self = this

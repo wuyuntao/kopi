@@ -18,6 +18,7 @@ define "kopi/utils/events", (require, exports, module) ->
   exports.MIDDLE_BUTTON = 2
   exports.RIGHT_BUTTON = 3
 
+  # TODO Consider a device supports both touch events and mouse events, like Chrome OS?
   if support.touch
     exports.TOUCH_START_EVENT = "touchstart"
     exports.TOUCH_MOVE_EVENT = "touchmove"

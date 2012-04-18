@@ -11,12 +11,10 @@ $kopi-button-color: white !default;
 $kopi-button-font-size: 16px !default;
 
 // Define some base styles for buttons
-@mixin kopi-button() {
+@mixin kopi-button {
   @include ellipsis;
   @include unselectable;
   @include kopi-transition;
-  @include opacity($kopi-button-opacity);
-  @include border-radius($kopi-button-border-radius);
   cursor: pointer;
   text-align: center;
 
@@ -36,6 +34,8 @@ $kopi-button-font-size: 16px !default;
 // Define color related styles for buttons
 @mixin kopi-button-color($background-color: black, $color: white) {
   background-color: $background-color;
+  @include border-radius($kopi-button-border-radius);
+  @include opacity($kopi-button-opacity);
   // border: 1px solid rgba(darken($background-color, 10%), 0.3);
 
   span.kopi-button-text {
@@ -47,15 +47,15 @@ $kopi-button-font-size: 16px !default;
 
 .kopi-button {
   @include kopi-button;
-  @include kopi-button-color($kopi-button-background-color, $kopi-button-color);
+  // @include kopi-button-color($kopi-button-background-color, $kopi-button-color);
 }
 
 .kopi-button-hover {
-  @include kopi-button-color(rgba($kopi-button-background-color, 0.5), $kopi-button-color);
+  // @include kopi-button-color(rgba($kopi-button-background-color, 0.5), $kopi-button-color);
 }
 
 .kopi-button-active {
-  @include kopi-button-color(darken($kopi-button-background-color, 50%), $kopi-button-color);
+  // @include kopi-button-color(darken($kopi-button-background-color, 50%), $kopi-button-color);
 }
 
 // .kopi-button-hover {
