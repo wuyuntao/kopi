@@ -75,27 +75,27 @@ $kopi-list-item-height: 40px !default;
 /**
  * Buttons
  */
-$kopi-btn-background: $kopi-white !default;
-$kopi-btn-background-highlight: darken($kopi-white, 10%) !default;
-$kopi-btn-border: darken($kopi-white, 20%) !default;
+$kopi-button-background: $kopi-white !default;
+$kopi-button-background-highlight: darken($kopi-white, 10%) !default;
+$kopi-button-border: darken($kopi-white, 20%) !default;
 
-$kopi-btn-primary-background: $kopi-link-color !default;
-$kopi-btn-primary-background-highlight: adjust-hue($kopi-btn-primary-background, 15%) !default;
+$kopi-button-primary-background: $kopi-link-color !default;
+$kopi-button-primary-background-highlight: adjust-hue($kopi-button-primary-background, 15%) !default;
 
-$kopi-btn-info-background: #5bc0de !default;
-$kopi-btn-info-background-highlight: #2f96b4 !default;
+$kopi-button-info-background: #5bc0de !default;
+$kopi-button-info-background-highlight: #2f96b4 !default;
 
-$kopi-btn-success-background: #62c462 !default;
-$kopi-btn-success-background-highlight: #51a351 !default;
+$kopi-button-success-background: #62c462 !default;
+$kopi-button-success-background-highlight: #51a351 !default;
 
-$kopi-btn-warning-background: lighten($kopi-orange, 15%) !default;
-$kopi-btn-warning-background-highlight: $kopi-orange !default;
+$kopi-button-warning-background: lighten($kopi-orange, 15%) !default;
+$kopi-button-warning-background-highlight: $kopi-orange !default;
 
-$kopi-btn-danger-background: #ee5f5b !default;
-$kopi-btn-danger-background-highlight: #bd362f !default;
+$kopi-button-danger-background: #ee5f5b !default;
+$kopi-button-danger-background-highlight: #bd362f !default;
 
-$kopi-btn-inverse-background: $kopi-gray !default;
-$kopi-btn-inverse-background-highlight: $kopi-gray-darker !default;
+$kopi-button-inverse-background: $kopi-gray !default;
+$kopi-button-inverse-background-highlight: $kopi-gray-darker !default;
 
 /**
  * Forms

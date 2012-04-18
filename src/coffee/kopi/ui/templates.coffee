@@ -3,6 +3,10 @@ define "kopi/templates", (require, exports, module) ->
   $ = require "jquery"
   text = require "kopi/utils/text"
 
+  # TODO
+  # Provide template registration to avoid create template
+  # instance every time when we need to render a template
+
   ###
   Interface for all template engines
   ###

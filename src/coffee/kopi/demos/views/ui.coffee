@@ -3,14 +3,20 @@ define "kopi/demos/views/ui", (require, exports, module) ->
   View = require("kopi/views").View
   navigation = require("kopi/ui/navigation")
   viewswitchers = require "kopi/ui/viewswitchers"
+  Button = require("kopi/ui/buttons").Button
+  ButtonGroup = require("kopi/ui/buttonGroup").ButtonGroup
   NavList = require("kopi/ui/lists").NavList
+  Text = require("kopi/ui/text").Text
   ArrayAdapter = require("kopi/ui/lists/adapters").ArrayAdapter
+  reverse = require("kopi/app/router").reverse
 
   class UIView extends View
 
     constructor: ->
       super
-      backButton = new navigation.NavButton(url: "/", titleText: "Back")
+      backButton = new navigation.NavButton
+        url: reverse("index")
+        titleText: "Back"
       this.nav = new navigation.Nav
         title: "UI"
         leftButton: backButton
@@ -18,66 +24,63 @@ define "kopi/demos/views/ui", (require, exports, module) ->
       this.list = new NavList()
 
     oncreate: ->
-      self = this
-      self.app.navBar.add(self.nav)
-      self.nav.skeleton()
-
-      self.app.viewSwitcher.add(self.view)
-      self.view.skeleton()
-
-      self.list
+      this.app.navBar.add(this.nav)
+      this.nav.skeleton()
+      this.app.viewSwitcher.add(this.view)
+      this.view.skeleton()
+      this.list
         .adapter(new ArrayAdapter([
           ["Buttons", "/ui/buttons/"]
           ["Controls", "/ui/controls/"]
           ["Dialogs", "/ui/dialogs/"]
           ["Lists", "/ui/lists/"]
           ["Tabs", "/ui/tabs/"]
-        ])).skeletonTo(self.view.element)
+        ])).skeletonTo(this.view.element)
       super
 
     onstart: ->
-      self = this
-      self.app.navBar.show(self.nav)
-      self.app.viewSwitcher.show(self.view)
-      self.nav.render()
-      self.view.render()
-      self.list.render()
+      this.app.navBar.show(this.nav)
+      this.app.viewSwitcher.show(this.view)
+      this.nav.render()
+      this.view.render()
+      this.list.render()
       super
 
     ondestroy: ->
-      self.nav.destroy()
-      self.view.destroy()
-      self.list.destroy()
+      this.nav.destroy()
+      this.view.destroy()
+      this.list.destroy()
       super
 
   class UIButtonView extends View
 
     constructor: ->
       super
-      this.nav = new Nav(title: "Buttons")
+      backButton = new navigation.NavButton
+        url: reverse("ui")
+        titleText: "Back"
+      this.nav = new navigation.Nav
+        title: "Buttons"
+        leftButton: backButton
       this.view = new viewswitchers.View()
 
     oncreate: ->
-      self = this
-      self.app.navBar.add(self.nav)
-      self.nav.skeleton()
-
-      self.app.viewSwitcher.add(self.view)
-      self.view.skeleton()
-
+      this.app.navBar.add(this.nav)
+      this.nav.skeleton()
+      this.app.viewSwitcher.add(this.view)
+      this.view.skeleton()
       super
 
     onstart: ->
-      self = this
-      self.app.navBar.show(self.nav)
-      self.app.viewSwitcher.show(self.view)
-      self.nav.render()
-      self.view.render()
+      this.app.navBar.show(this.nav)
+      this.app.viewSwitcher.show(this.view)
+      this.nav.render()
+      this.view.render()
       super
 
     ondestroy: ->
-      self.nav.destroy()
-      self.view.destroy()
+      this.nav.destroy()
+      this.view.destroy()
       super
 
   UIView: UIView

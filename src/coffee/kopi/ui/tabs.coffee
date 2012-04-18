@@ -66,6 +66,8 @@ define "kopi/ui/tabs", (require, exports, module) ->
 
   ###
   Tab bar contains multiple tabs
+
+  TODO Inherit from some button group
   ###
   class TabBar extends groups.Group
 

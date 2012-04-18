@@ -29,6 +29,12 @@ define "kopi/ui/buttons", (require, exports, module) ->
       cssClass: ""
       iconClass: Image
       titleClass: Text
+      # @type  {String}     Pre-defined style for buttons, including:
+      #                     default, primary, info, success, danger and inverse
+      style: "default"
+      # @type  {String}     Pre-defined size for buttons, including:
+      #                     normal, large, small and mini
+      size: "normal"
 
     proto = kls.prototype
     # TODO Icon must be an instance of Image class
@@ -57,6 +63,10 @@ define "kopi/ui/buttons", (require, exports, module) ->
         titleOptions.extraClass or= ""
         titleOptions.extraClass += " #{cls.cssClass("title")}"
         self._title = new options.titleClass(titleOptions)
+      if options.style
+        options.extraClass += " #{cls.cssClass(options.style)}"
+      if options.size
+        options.extraClass += " #{cls.cssClass(options.size)}"
 
     onskeleton: ->
       self = this

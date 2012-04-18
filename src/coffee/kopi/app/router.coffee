@@ -73,7 +73,7 @@ define "kopi/app/router", (require, exports, module) ->
       route.tokens.length == 1
 
     # Match a path and return a route object
-    match: (path, scope=null) ->
+    match: (path) ->
       self = this
       url = uri.parse(path)
       if url.path of self.statics
@@ -109,6 +109,7 @@ define "kopi/app/router", (require, exports, module) ->
           continue
         # Add to dynamic routes
         [regexp, params] = self.group(route)
+        route.params = params
         self.dynamics.push
           regexp: new RegExp('^' + regexp + '$', 'i'),
           params: params
@@ -118,6 +119,12 @@ define "kopi/app/router", (require, exports, module) ->
 
       self.compiled = true
       self
+
+    build: (route, params) ->
+      # Return static route directly
+      return route.route if this.isStatic(route)
+      # TODO Support dynamic routes
+
 
     # Clean route caches and set compiled flag to false
     reset: ->
@@ -136,8 +143,13 @@ define "kopi/app/router", (require, exports, module) ->
 
   match = -> router.match(arguments...)
 
-  reverse = (name) ->
-    router.names[name]
+  ###
+  Build route by given name
+
+  ###
+  reverse = (name, params) ->
+    route = router.names[name]
+    return router.build(route, params) if route
 
   ###
   Return a view object to add route

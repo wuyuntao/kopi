@@ -1,11 +1,19 @@
 define "kopi/ui/buttongroups", (require, exports, module) ->
 
+  Button = require("kopi/ui/buttons").Button
   Group = require "kopi/ui/groups"
 
   ###
-  Presents a group of buttons
+  A `ButtonGroup` joins multiple buttons together as one composite component.
   ###
   class ButtonGroup extends Group
+
+    this.widgetName("buttons")
+
+    this.configure
+      childClass: Button
+      # @type  {Boolean} If remove gaps between buttons
+      together: true
 
   ###
   A group of buttons acts as checkbox inputs
