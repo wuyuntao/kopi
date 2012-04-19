@@ -65,13 +65,13 @@
     font-size: $kopi-base-font-size;
     text-decoration: none;
     line-height: $kopi-base-line-height;
+    $shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
+    @include box-shadow($shadow);
+    @include kopi-button-background($kopi-button-background, $kopi-button-background-highlight);
     border-width: 1px;
     border-style: solid;
     border-color: $kopi-button-border;
     border-bottom-color: darken($kopi-button-border, 10%);
-    $shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
-    @include box-shadow($shadow);
-    @include kopi-button-background($kopi-button-background, $kopi-button-background-highlight);
   }
 }
 
@@ -168,7 +168,7 @@
 // Active state
 .kopi-button-default.kopi-button-active {
   .kopi-button-inner {
-    @include kopi-button-background(darken($kopi-white, 10%));
+    background-color: darken($kopi-white, 10%);
   }
 }
 
