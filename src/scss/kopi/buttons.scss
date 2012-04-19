@@ -5,23 +5,33 @@
 //
 // div.kopi-button
 //   span.kopi-button-text
-$kopi-button-opacity: 0.8;
-$kopi-button-border-radius: 3px !default;
-$kopi-button-background-color: rgba(white, 0.1) !default;
-$kopi-button-color: white !default;
-$kopi-button-font-size: 16px !default;
+@mixin kopi-button-background($background, $background-highlight: none) {
+  @if $background-highlight != none {
+    @include background(linear-gradient($background, $background-highlight));
+    background-color: $background-highlight;
+    border-color: $background-highlight $background-highlight darken($background-highlight, 15%);
+  } @else {
+    background-color: $background;
+    border-color: $background $background darken($background, 15%);
+  }
+  border-color: rgba(0,0,0,.1) rgba(0,0,0,.1) fadein(rgba(0,0,0,.1), 15%);
+}
 
 /**
  * Base styles for buttons
  */
 .kopi-button {
   @include inline-block;
-  @include ellipsis;
-  @include unselectable;
-  @include kopi-transition;
 
   text-align: center;
   cursor: pointer;
+
+  .kopi-button-wrapper {
+    @include inline-block;
+    @include ellipsis;
+    @include unselectable;
+    @include kopi-transition;
+  }
 
   .kopi-button-icon {
     @include inline-block;
@@ -36,51 +46,59 @@ $kopi-button-font-size: 16px !default;
 }
 
 .kopi-button-rounded {
-  @include border-radius(4px);
+  .kopi-button-wrapper {
+    @include border-radius(4px);
+  }
 }
 
 .kopi-button-default {
-  @extend .kopi-button;
+  padding: 4px;
 
-  // TODO Move to button groups
-  margin: 4px 10px;
-  padding: 4px 10px;
-  font-size: $kopi-base-font-size;
-  text-decoration: none;
-  line-height: $kopi-base-line-height;
-  border-width: 1px;
-  border-style: solid;
-  border-color: $kopi-button-border;
-  border-bottom-color: darken($kopi-button-border, 10%);
-  $shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
-  @include box-shadow($shadow);
-  @include background(linear-gradient($kopi-button-background, $kopi-button-background-highlight));
-  background-color: $kopi-button-background-highlight;
+  .kopi-button-wrapper {
+    padding: 4px 10px;
+    font-size: $kopi-base-font-size;
+    text-decoration: none;
+    line-height: $kopi-base-line-height;
+    border-width: 1px;
+    border-style: solid;
+    border-color: $kopi-button-border;
+    border-bottom-color: darken($kopi-button-border, 10%);
+    $shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
+    @include box-shadow($shadow);
+    @include kopi-button-background($kopi-button-background, $kopi-button-background-highlight);
+  }
 }
 
 // Hover state
 .kopi-button-hover {
-  color: $kopi-gray-dark;
-  background-image: none!important;
-  background-color: darken($kopi-white, 10%);
+  .kopi-button-wrapper {
+    color: $kopi-gray-dark;
+    background-image: none!important;
+    background-color: darken($kopi-white, 10%);
+  }
 }
 
 // Active state
 .kopi-button-active {
-  $shadow: inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05);
-  background-image: none!important;
-  @include box-shadow($shadow);
-  background-color: darken($kopi-white, 10%);
-  outline: 0;
+  .kopi-button-wrapper {
+    $shadow: inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05);
+    background-image: none!important;
+    @include box-shadow($shadow);
+    background-color: darken($kopi-white, 10%);
+    outline: 0;
+  }
 }
 
 // Disabled state
 .kopi-button-disabled {
   cursor: default;
-  background-image: none;
-  background-color: darken($kopi-white, 10%);
-  @include opacity(0.65);
-  @include box-shadow(none);
+
+  .kopi-button-wrapper {
+    background-image: none;
+    background-color: darken($kopi-white, 10%);
+    @include opacity(0.65);
+    @include box-shadow(none);
+  }
 }
 
 /**
@@ -99,8 +117,10 @@ $kopi-button-font-size: 16px !default;
 .kopi-button-success, .kopi-button-success.kopi-button-hover,
 .kopi-button-info, .kopi-button-info.kopi-button-hover,
 .kopi-button-inverse, .kopi-button-inverse.kopi-button-hover {
-  text-shadow: 0 -1px 0 rgba(0,0,0,.25);
-  color: $kopi-white;
+  .kopi-button-wrapper {
+    text-shadow: 0 -1px 0 rgba(0,0,0,.25);
+    color: $kopi-white;
+  }
 }
 
 // Provide *some* extra contrast for those who can get it
@@ -115,54 +135,104 @@ $kopi-button-font-size: 16px !default;
 
 // Set the backgrounds
 .kopi-button-primary {
-  @include background(linear-gradient($kopi-button-primary-background, $kopi-button-primary-background-highlight));
-  background-color: $kopi-button-primary-background-highlight;
+  .kopi-button-wrapper {
+    @include kopi-button-background($kopi-button-primary-background, $kopi-button-primary-background-highlight);
+  }
 }
 // Warning appears are orange
 .kopi-button-warning {
-  @include background(linear-gradient($kopi-button-warning-background, $kopi-button-warning-background-highlight));
-  background-color: $kopi-button-warning-background-highlight;
+  .kopi-button-wrapper {
+    @include kopi-button-background($kopi-button-warning-background, $kopi-button-warning-background-highlight);
+  }
 }
 // Danger and error appear as red
 .kopi-button-danger {
-  @include background(linear-gradient($kopi-button-danger-background, $kopi-button-danger-background-highlight));
-  background-color: $kopi-button-danger-background-highlight;
+  .kopi-button-wrapper {
+    @include kopi-button-background($kopi-button-danger-background, $kopi-button-danger-background-highlight);
+  }
 }
 // Success appears as green
 .kopi-button-success {
-  @include background(linear-gradient($kopi-button-success-background, $kopi-button-success-background-highlight));
-  background-color: $kopi-button-success-background-highlight;
+  .kopi-button-wrapper {
+    @include kopi-button-background($kopi-button-success-background, $kopi-button-success-background-highlight);
+  }
 }
 // Info appears as a neutral blue
 .kopi-button-info {
-  @include background(linear-gradient($kopi-button-info-background, $kopi-button-info-background-highlight));
-  background-color: $kopi-button-info-background-highlight;
+  .kopi-button-wrapper {
+    @include kopi-button-background($kopi-button-info-background, $kopi-button-info-background-highlight);
+  }
 }
 .kopi-button-inverse {
-  @include background(linear-gradient($kopi-button-inverse-background, $kopi-button-inverse-background-highlight));
-  background-color: $kopi-button-inverse-background-highlight;
+  .kopi-button-wrapper {
+    @include kopi-button-background($kopi-button-inverse-background, $kopi-button-inverse-background-highlight);
+  }
 }
 
 .kopi-button-primary.kopi-button-active  {
-  background-color: $kopi-button-primary-background-highlight;
+  .kopi-button-wrapper {
+    @include kopi-button-background($kopi-button-primary-background-highlight);
+  }
 }
 
 .kopi-button-warning.kopi-button-active  {
-  background-color: $kopi-button-warning-background-highlight;
+  .kopi-button-wrapper {
+    @include kopi-button-background($kopi-button-warning-background-highlight);
+  }
 }
 
 .kopi-button-danger.kopi-button-active  {
-  background-color: $kopi-button-danger-background-highlight;
+  .kopi-button-wrapper {
+    @include kopi-button-background($kopi-button-danger-background-highlight);
+  }
 }
 
 .kopi-button-success.kopi-button-active  {
-  background-color: $kopi-button-success-background-highlight;
+  .kopi-button-wrapper {
+    @include kopi-button-background($kopi-button-success-background-highlight);
+  }
 }
 
 .kopi-button-info.kopi-button-active  {
-  background-color: $kopi-button-info-background-highlight;
+  .kopi-button-wrapper {
+    @include kopi-button-background($kopi-button-info-background-highlight);
+  }
 }
 
 .kopi-button-inverse.kopi-button-active  {
-  background-color: $kopi-button-inverse-background-highlight;
+  .kopi-button-wrapper {
+    @include kopi-button-background($kopi-button-inverse-background-highlight);
+  }
 }
+
+/**
+ * Button sizes
+ */
+// Large
+.kopi-button-large {
+  .kopi-button-wrapper {
+    padding: 9px 14px;
+    font-size: $kopi-base-font-size + 2px;
+    line-height: normal;
+    @include border-radius(5px);
+  }
+}
+
+// Small
+.kopi-button-small {
+  .kopi-button-wrapper {
+    padding: 3px 9px;
+    font-size: $kopi-base-font-size - 2px;
+    line-height: $kopi-base-line-height - 2px;
+  }
+}
+
+// Mini
+.kopi-button-mini {
+  .kopi-button-wrapper {
+    padding: 2px 6px;
+    font-size: $kopi-base-font-size - 2px;
+    line-height: $kopi-base-line-height - 4px;
+  }
+}
+// }}}

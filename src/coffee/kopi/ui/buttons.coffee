@@ -83,10 +83,11 @@ define "kopi/ui/buttons", (require, exports, module) ->
       cls = this.constructor
       self = this
       options = self._options
+      wrapper = self._ensureWrapper()
       if options.hasIcon
-        self._icon.skeletonTo(self.element)
+        self._icon.skeletonTo(wrapper)
       if options.hasText
-        self._title.skeletonTo(self.element)
+        self._title.skeletonTo(wrapper)
       # When `iconPos` is right or bottom, append icon after text
       #
       # TODO Insert icon element right after initialized

@@ -13,7 +13,7 @@ define "kopi/demos/views/uibuttons", (require, exports, module) ->
 
     styles: ["default", "primary", "info", "success", "warning", "danger", "inverse"]
 
-    sizes: ["normal", "large", "small", "mini"]
+    sizes: ["large", "normal", "small", "mini"]
 
     constructor: ->
       super

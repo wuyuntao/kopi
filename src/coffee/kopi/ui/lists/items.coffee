@@ -23,7 +23,11 @@ define "kopi/ui/lists/items", (require, exports, module) ->
 
     constructor: (list, text) ->
       super(list)
-      this.register("button", buttons.Button, hasIcon: false)
+      this.register "button", buttons.Button,
+        size: false
+        style: false
+        rounded: false
+        hasIcon: false
       this._button.title(text)
 
   class NavListItem extends ListItem
