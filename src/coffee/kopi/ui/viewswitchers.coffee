@@ -1,6 +1,7 @@
 define "kopi/ui/viewswitchers", (require, exports, module) ->
 
   app = require("kopi/app")
+  viewport = require("kopi/ui/viewport")
   Widget = require("kopi/ui/widgets").Widget
   Animator = require("kopi/ui/animators").Animator
 
@@ -10,6 +11,10 @@ define "kopi/ui/viewswitchers", (require, exports, module) ->
   class View extends Widget
 
     this.widgetName "View"
+
+    onrender: ->
+      viewport.instance().register(this)
+      super
 
     onresize: ->
       this.element.width(this._end.element.width())

@@ -1,48 +1,44 @@
 @import 'compass/css3';
 @import "compass/utilities";
-
-$body-bg: #ffffff !default;
-$body-color: #333333 !default;
-$body-font-family: Helvetica,Arial,sans-serif !default;
-$body-font-size: 14px !default;
-
-$link-color: #333333 !default;
-$link-hover-color: #333333 !default;
-$link-active-color: #333333 !default;
-$link-visited-color: #333333 !default;
+@import 'kopi/themes/base';
 
 body {
   @include reset-html5;
 
-  background: $body-bg;
-  color: $body-color;
-  font-family: $body-font-family;
-  font-size: $body-font-size;
+  background: $kopi-white;
+  color: $kopi-gray-dark;
+  font-family: $kopi-base-font-family;
+  font-size: $kopi-base-font-size;
 }
 
 // Since mobile browsers don't support hover pseudo selector well
 // We render links as the same color, and use JS to render them later
 a {
-  color: $link-color;
+  color: $kopi-link-color;
   cursor: pointer;
   text-decoration: none;
 }
 
 a:active, a.active {
-  @extend a;
-  color: $link-active-color;
+  color: $kopi-link-color-active;
 }
 
 a:hover, a.hover {
-  @extend a;
-  color: $link-hover-color;
+  color: $kopi-link-color-hover;
 }
 
 a:visited, a.visited {
-  @extend a;
-  color: $link-visited-color;
+  color: $kopi-link-color;
 }
 
 img {
   @include reset-image-anchor-border;
+}
+
+.kopi-inner {
+  padding: $kopi-base-line-height;
+}
+
+.kopi-outer {
+  margin: $kopi-base-line-height;
 }

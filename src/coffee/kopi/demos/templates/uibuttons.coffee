@@ -4,7 +4,7 @@ define "kopi/demos/templates/uibuttons", (require, exports, module) ->
 
   # TODO Support i18n text
   buttons: new SimpleTemplate """
-    <div>
+    <div class="kopi-inner">
       <h2>Buttons</h2>
       <p>Description</p>
       <div class="button-style-section">

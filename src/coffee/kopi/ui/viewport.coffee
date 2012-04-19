@@ -40,10 +40,12 @@ define "kopi/ui/viewport", (require, exports, module) ->
     @param {Boolean}        emit   Trigger resize event right after widget is registered
     ###
     register: (widget) ->
+      logger.info "#{widget.toString()} is registered."
       this._listeners[widget.guid] = widget
       this
 
     unregister: (widget) ->
+      logger.info "#{widget.toString()} is unregistered."
       delete this._listeners[widget.guid]
       this
 

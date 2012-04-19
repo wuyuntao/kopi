@@ -26,7 +26,7 @@
   text-align: center;
   cursor: pointer;
 
-  .kopi-button-wrapper {
+  .kopi-button-inner {
     @include inline-block;
     @include ellipsis;
     @include unselectable;
@@ -46,15 +46,21 @@
 }
 
 .kopi-button-rounded {
-  .kopi-button-wrapper {
+  .kopi-button-inner {
     @include border-radius(4px);
   }
 }
 
-.kopi-button-default {
+/**
+ * Button styles
+ */
+.kopi-button-default,
+.kopi-button-primary, .kopi-button-warning,
+.kopi-button-danger, .kopi-button-success,
+.kopi-button-info, .kopi-button-inverse {
   padding: 4px;
 
-  .kopi-button-wrapper {
+  .kopi-button-inner {
     padding: 4px 10px;
     font-size: $kopi-base-font-size;
     text-decoration: none;
@@ -69,23 +75,136 @@
   }
 }
 
-// Hover state
-.kopi-button-hover {
-  .kopi-button-wrapper {
+.kopi-button-default {
+  .kopi-button-inner {
     color: $kopi-gray-dark;
-    background-image: none!important;
+  }
+}
+
+.kopi-button-primary, .kopi-button-warning,
+.kopi-button-danger, .kopi-button-success,
+.kopi-button-info, .kopi-button-inverse {
+  .kopi-button-inner {
+    text-shadow: 0 -1px 0 rgba(0,0,0,.25);
+    color: $kopi-white;
+  }
+}
+
+// Set the backgrounds
+.kopi-button-primary {
+  .kopi-button-inner {
+    @include kopi-button-background($kopi-button-primary-background, $kopi-button-primary-background-highlight);
+  }
+}
+// Warning appears are orange
+.kopi-button-warning {
+  .kopi-button-inner {
+    @include kopi-button-background($kopi-button-warning-background, $kopi-button-warning-background-highlight);
+  }
+}
+// Danger and error appear as red
+.kopi-button-danger {
+  .kopi-button-inner {
+    @include kopi-button-background($kopi-button-danger-background, $kopi-button-danger-background-highlight);
+  }
+}
+// Success appears as green
+.kopi-button-success {
+  .kopi-button-inner {
+    @include kopi-button-background($kopi-button-success-background, $kopi-button-success-background-highlight);
+  }
+}
+// Info appears as a neutral blue
+.kopi-button-info {
+  .kopi-button-inner {
+    @include kopi-button-background($kopi-button-info-background, $kopi-button-info-background-highlight);
+  }
+}
+.kopi-button-inverse {
+  .kopi-button-inner {
+    @include kopi-button-background($kopi-button-inverse-background, $kopi-button-inverse-background-highlight);
+  }
+}
+
+// Hover state
+.kopi-button-default.kopi-button-hover {
+  .kopi-button-inner {
+    color: $kopi-gray-dark;
+    background-image: none;
     background-color: darken($kopi-white, 10%);
   }
 }
 
-// Active state
-.kopi-button-active {
-  .kopi-button-wrapper {
+.kopi-button-primary.kopi-button-hover,
+.kopi-button-warning.kopi-button-hover,
+.kopi-button-danger.kopi-button-hover,
+.kopi-button-success.kopi-button-hover,
+.kopi-button-info.kopi-button-hover,
+.kopi-button-inverse.kopi-button-hover {
+  .kopi-button-inner {
+    text-shadow: 0 -1px 0 rgba(0,0,0,.25);
+    color: $kopi-white;
+    background-image: none;
+  }
+}
+
+// Provide *some* extra contrast for those who can get it
+.kopi-button-default.kopi-button-active,
+.kopi-button-primary.kopi-button-active,
+.kopi-button-warning.kopi-button-active,
+.kopi-button-danger.kopi-button-active,
+.kopi-button-success.kopi-button-active,
+.kopi-button-info.kopi-button-active,
+.kopi-button-inverse.kopi-button-active {
+  // color: rgba(255,255,255,.75);
+  .kopi-button-inner {
     $shadow: inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05);
-    background-image: none!important;
     @include box-shadow($shadow);
-    background-color: darken($kopi-white, 10%);
+    background-image: none;
     outline: 0;
+  }
+}
+
+// Active state
+.kopi-button-default.kopi-button-active {
+  .kopi-button-inner {
+    @include kopi-button-background(darken($kopi-white, 10%));
+  }
+}
+
+.kopi-button-primary.kopi-button-active  {
+  .kopi-button-inner {
+    @include kopi-button-background($kopi-button-primary-background-highlight);
+  }
+}
+
+.kopi-button-warning.kopi-button-active  {
+  .kopi-button-inner {
+    @include kopi-button-background($kopi-button-warning-background-highlight);
+  }
+}
+
+.kopi-button-danger.kopi-button-active  {
+  .kopi-button-inner {
+    @include kopi-button-background($kopi-button-danger-background-highlight);
+  }
+}
+
+.kopi-button-success.kopi-button-active  {
+  .kopi-button-inner {
+    @include kopi-button-background($kopi-button-success-background-highlight);
+  }
+}
+
+.kopi-button-info.kopi-button-active  {
+  .kopi-button-inner {
+    @include kopi-button-background($kopi-button-info-background-highlight);
+  }
+}
+
+.kopi-button-inverse.kopi-button-active  {
+  .kopi-button-inner {
+    @include kopi-button-background($kopi-button-inverse-background-highlight);
   }
 }
 
@@ -93,7 +212,7 @@
 .kopi-button-disabled {
   cursor: default;
 
-  .kopi-button-wrapper {
+  .kopi-button-inner {
     background-image: none;
     background-color: darken($kopi-white, 10%);
     @include opacity(0.65);
@@ -102,115 +221,11 @@
 }
 
 /**
- * Button styles
- */
-.kopi-button-primary, .kopi-button-warning,
-.kopi-button-danger, .kopi-button-success,
-.kopi-button-info, .kopi-button-inverse {
-  @extend .kopi-button-default;
-}
-
-// Set text color
-.kopi-button-primary, .kopi-button-primary.kopi-button-hover,
-.kopi-button-warning, .kopi-button-warning.kopi-button-hover,
-.kopi-button-danger, .kopi-button-danger.kopi-button-hover,
-.kopi-button-success, .kopi-button-success.kopi-button-hover,
-.kopi-button-info, .kopi-button-info.kopi-button-hover,
-.kopi-button-inverse, .kopi-button-inverse.kopi-button-hover {
-  .kopi-button-wrapper {
-    text-shadow: 0 -1px 0 rgba(0,0,0,.25);
-    color: $kopi-white;
-  }
-}
-
-// Provide *some* extra contrast for those who can get it
-.kopi-button-primary.kopi-button-active,
-.kopi-button-warning.kopi-button-active,
-.kopi-button-danger.kopi-button-active,
-.kopi-button-success.kopi-button-active,
-.kopi-button-info.kopi-button-active,
-.kopi-button-inverse.kopi-button-active {
-  // color: rgba(255,255,255,.75);
-}
-
-// Set the backgrounds
-.kopi-button-primary {
-  .kopi-button-wrapper {
-    @include kopi-button-background($kopi-button-primary-background, $kopi-button-primary-background-highlight);
-  }
-}
-// Warning appears are orange
-.kopi-button-warning {
-  .kopi-button-wrapper {
-    @include kopi-button-background($kopi-button-warning-background, $kopi-button-warning-background-highlight);
-  }
-}
-// Danger and error appear as red
-.kopi-button-danger {
-  .kopi-button-wrapper {
-    @include kopi-button-background($kopi-button-danger-background, $kopi-button-danger-background-highlight);
-  }
-}
-// Success appears as green
-.kopi-button-success {
-  .kopi-button-wrapper {
-    @include kopi-button-background($kopi-button-success-background, $kopi-button-success-background-highlight);
-  }
-}
-// Info appears as a neutral blue
-.kopi-button-info {
-  .kopi-button-wrapper {
-    @include kopi-button-background($kopi-button-info-background, $kopi-button-info-background-highlight);
-  }
-}
-.kopi-button-inverse {
-  .kopi-button-wrapper {
-    @include kopi-button-background($kopi-button-inverse-background, $kopi-button-inverse-background-highlight);
-  }
-}
-
-.kopi-button-primary.kopi-button-active  {
-  .kopi-button-wrapper {
-    @include kopi-button-background($kopi-button-primary-background-highlight);
-  }
-}
-
-.kopi-button-warning.kopi-button-active  {
-  .kopi-button-wrapper {
-    @include kopi-button-background($kopi-button-warning-background-highlight);
-  }
-}
-
-.kopi-button-danger.kopi-button-active  {
-  .kopi-button-wrapper {
-    @include kopi-button-background($kopi-button-danger-background-highlight);
-  }
-}
-
-.kopi-button-success.kopi-button-active  {
-  .kopi-button-wrapper {
-    @include kopi-button-background($kopi-button-success-background-highlight);
-  }
-}
-
-.kopi-button-info.kopi-button-active  {
-  .kopi-button-wrapper {
-    @include kopi-button-background($kopi-button-info-background-highlight);
-  }
-}
-
-.kopi-button-inverse.kopi-button-active  {
-  .kopi-button-wrapper {
-    @include kopi-button-background($kopi-button-inverse-background-highlight);
-  }
-}
-
-/**
  * Button sizes
  */
 // Large
 .kopi-button-large {
-  .kopi-button-wrapper {
+  .kopi-button-inner {
     padding: 9px 14px;
     font-size: $kopi-base-font-size + 2px;
     line-height: normal;
@@ -220,7 +235,7 @@
 
 // Small
 .kopi-button-small {
-  .kopi-button-wrapper {
+  .kopi-button-inner {
     padding: 3px 9px;
     font-size: $kopi-base-font-size - 2px;
     line-height: $kopi-base-line-height - 2px;
@@ -229,7 +244,7 @@
 
 // Mini
 .kopi-button-mini {
-  .kopi-button-wrapper {
+  .kopi-button-inner {
     padding: 2px 6px;
     font-size: $kopi-base-font-size - 2px;
     line-height: $kopi-base-line-height - 4px;

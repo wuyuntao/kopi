@@ -83,7 +83,7 @@ define "kopi/ui/buttons", (require, exports, module) ->
       cls = this.constructor
       self = this
       options = self._options
-      wrapper = self._ensureWrapper()
+      wrapper = self._ensureWrapper('inner')
       if options.hasIcon
         self._icon.skeletonTo(wrapper)
       if options.hasText

@@ -19,6 +19,8 @@ define "kopi/ui/navigation", (require, exports, module) ->
       hasIcon: false
       url: null
       rounded: false
+      style: false
+      size: false
 
     onclick: ->
       app.instance().load(this._options.url, this._options)
