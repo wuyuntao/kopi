@@ -1,14 +1,14 @@
 define "kopi/ui/buttongroups", (require, exports, module) ->
 
   Button = require("kopi/ui/buttons").Button
-  Group = require "kopi/ui/groups"
+  Group = require("kopi/ui/groups").Group
 
   ###
   A `ButtonGroup` joins multiple buttons together as one composite component.
   ###
   class ButtonGroup extends Group
 
-    this.widgetName("buttons")
+    this.widgetName("ButtonGroup")
 
     this.configure
       childClass: Button

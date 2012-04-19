@@ -1,20 +1,17 @@
-define "kopi/templates", (require, exports, module) ->
+define "kopi/ui/templates", (require, exports, module) ->
 
   $ = require "jquery"
   text = require "kopi/utils/text"
 
-  # TODO
-  # Provide template registration to avoid create template
-  # instance every time when we need to render a template
-
   ###
   Interface for all template engines
-  ###
+
   class Template
 
     constructor: ->
 
     render: (data) ->
+  ###
 
   ###
   Simple template engine
@@ -25,27 +22,10 @@ define "kopi/templates", (require, exports, module) ->
       this._template = template
 
     render: (data={}) ->
-      text.render(this._template, data)
+      text.format(this._template, data)
 
   # Render function
   simple = (template, data) -> new SimpleTemplate(template).render(data)
 
-  exports.Template = Template
-  exports.SimpleTemplate = SimpleTemplate
-  exports.simple = simple
-
-  if $.fn.tmpl
-    ###
-    Template engine for jQuery Templates Plugin
-    ###
-    class JQueryTemplate
-      constructor: (template) ->
-        this._template = $(template)
-
-      render: (data={}) ->
-        this._template.tmpl(data)
-
-    jquery = (template, data) -> new jQuery(template).render(data)
-
-    exports.JQueryTemplate = JQueryTemplate
-    exports.jquery = jquery
+  SimpleTemplate: SimpleTemplate
+  simple: simple
