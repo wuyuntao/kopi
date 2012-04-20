@@ -133,13 +133,13 @@ define "kopi/ui/notification/dialogs", (require, exports, module) ->
 
     action: (text, fn) ->
       cls = this.constructor
-      this._action.text(text) if text
+      this._action.title(text) if text
       this.off(cls.ACTION_EVENT).on(cls.ACTION_EVENT, fn) if fn
       this
 
     close: (text, fn) ->
       cls = this.constructor
-      this._close.text(text) if text
+      this._close.title(text) if text
       this.off(cls.CLOSE_EVENT).on(cls.CLOSE_EVENT, fn) if fn
       this
 

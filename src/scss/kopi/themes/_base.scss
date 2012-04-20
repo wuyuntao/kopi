@@ -116,7 +116,7 @@ $kopi-dropdown-link-background-hover: $kopi-link-color !default;
 
 
 /**
- * COMPONENT VARIABLES
+ * Component Variables
  */
 
 /**
@@ -214,3 +214,13 @@ $kopi-success-border: darken(adjust-hue($kopi-success-background, -10), 5%) !def
 $kopi-info-color: #3a87ad !default;
 $kopi-info-background: #d9edf7 !default;
 $kopi-info-border: darken(adjust-hue($kopi-info-background, -10), 7%) !default;
+
+/**
+ * Notification
+ */
+$kopi-notification-indicator-height: 24px !default;
+$kopi-notification-indicator-width: 24px !default;
+$kopi-notification-indicator-url: image-url("kopi/loader.gif") !default;
+
+$kopi-notification-overlay-opacity: 0.5 !default;
+$kopi-notification-overlay-background-color: #000 !default;

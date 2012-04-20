@@ -19,7 +19,9 @@ define "kopi/ui/notification/bubbles", (require, exports, module) ->
     ###
     Update text in bubble
     ###
-    text: (text) -> this._content.text(text, true)
+    text: (text) ->
+      this._content.text(text, true)
+      this
 
     ###
     Show bubble

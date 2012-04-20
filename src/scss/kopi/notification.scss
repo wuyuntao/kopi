@@ -4,10 +4,6 @@
 @import "kopi/buttons";
 
 // {{{ Indicator
-$kopi-notification-indicator-height: 24px !default;
-$kopi-notification-indicator-width: 24px !default;
-$kopi-notification-indicator-url: image-url("kopi/loader.gif") !default;
-
 .kopi-notification-indicator {
   position: fixed;
   top: 50%;
@@ -18,15 +14,12 @@ $kopi-notification-indicator-url: image-url("kopi/loader.gif") !default;
   margin-left: $kopi-notification-indicator-width / -2;
   display: none;
   z-index: 1300;
-  background: transparent url($kopi-notification-indicator-url) center center no-repeat;
+  background: transparent $kopi-notification-indicator-url center center no-repeat;
   background-size: contain;
 }
 // }}}
 
 // {{{ Overlay
-$kopi-notification-overlay-opacity: 0.5 !default;
-$kopi-notification-overlay-background-color: #000 !default;
-
 .kopi-notification-overlay {
   // TODO Add opacity transition when toggling overlay?
   @include opacity($kopi-notification-overlay-opacity);

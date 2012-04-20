@@ -1,11 +1,11 @@
 define "kopi/demos/views/ui", (require, exports, module) ->
 
+  reverse = require("kopi/app/router").reverse
   View = require("kopi/views").View
   navigation = require("kopi/ui/navigation")
   viewswitchers = require "kopi/ui/viewswitchers"
   NavList = require("kopi/ui/lists").NavList
   ArrayAdapter = require("kopi/ui/lists/adapters").ArrayAdapter
-  reverse = require("kopi/app/router").reverse
 
   class UIView extends View
 
@@ -32,6 +32,7 @@ define "kopi/demos/views/ui", (require, exports, module) ->
           ["Dialogs", "/ui/dialogs/"]
           ["Lists", "/ui/lists/"]
           ["Tabs", "/ui/tabs/"]
+          ["Notification", "/ui/notification/"]
         ])).skeletonTo(this.view.element)
       super
 
