@@ -106,7 +106,7 @@ define "kopi/utils/array", (require, exports, module) ->
   map = (array, iterator, context) ->
     results = []
     forEach array, (v, i) ->
-      array[i] = iterator.call(context, v, i, array)
+      results[i] = iterator.call(context, v, i, array)
     results
 
   ###

@@ -95,10 +95,10 @@ define "kopi/ui/scrollable", (require, exports, module) ->
       self._container or= self._ensureWrapper("container")
       super
 
-    onrender: ->
-      self = this
-      cls = this.constructor
-      super
+    # onrender: ->
+    #   self = this
+    #   cls = this.constructor
+    #   super
 
     onresize: ->
       this

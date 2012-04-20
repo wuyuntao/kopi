@@ -16,29 +16,26 @@ define "kopi/demos/views/uinotification", (require, exports, module) ->
         url: reverse("ui")
         titleText: "Back"
       this.nav = new navigation.Nav
-        title: "Buttons"
+        title: "Notification"
         leftButton: backButton
       this.view = new viewswitchers.View
         template: templates.notification
 
       this.indicatorButton = new Button
         titleText: "Show indicator"
-        size: "large"
       this.indicatorButton.on Button.CLICK_EVENT, ->
         notification.indicator().show()
         setTimeout (-> notification.indicator().hide()), 3000
 
       this.bubbleButton = new Button
         titleText: "Show bubble"
-        size: "large"
       this.bubbleButton.on Button.CLICK_EVENT, ->
         notification.bubble().show "This is a bubble",
           lock: true,
-          duration: 10000
+          duration: 3000
 
       this.dialogButton = new Button
         titleText: "Show dialog"
-        size: "large"
       this.dialogButton.on Button.CLICK_EVENT, ->
         notification.dialog()
           .title("This is a dialog")
