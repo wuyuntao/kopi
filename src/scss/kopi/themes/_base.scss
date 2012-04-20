@@ -160,7 +160,7 @@ $kopi-navbar-padding: 5px !default;
 $kopi-navbar-background: $kopi-gray-darker !default;
 $kopi-navbar-background-highlight: $kopi-gray-dark !default;
 $kopi-navbar-color: $kopi-gray-light !default;
-$kopi-navbar-shadow: $kopi-gray-light 0 -1px 0 !default;
+$kopi-navbar-shadow: $kopi-gray 0 -1px 0 !default;
 
 $kopi-navbar-title-color: $kopi-white !default;
 $kopi-navbar-title-font-size: 20px !default;
@@ -222,5 +222,20 @@ $kopi-notification-indicator-height: 24px !default;
 $kopi-notification-indicator-width: 24px !default;
 $kopi-notification-indicator-url: image-url("kopi/loader.gif") !default;
 
-$kopi-notification-overlay-opacity: 0.5 !default;
+$kopi-notification-overlay-opacity: 0.8 !default;
 $kopi-notification-overlay-background-color: #000 !default;
+
+$kopi-notification-bubble-width: 200px !default;
+$kopi-notification-bubble-height: $kopi-base-line-height * 5 + 3px * 4 !default;
+
+$kopi-notification-dialog-height: 200px !default;
+$kopi-notification-dialog-width: 300px !default;
+$kopi-notification-dialog-header-height: 50px !default;
+$kopi-notification-dialog-footer-height: 48px !default;
+$kopi-notification-dialog-content-height: $kopi-notification-dialog-height - $kopi-notification-dialog-header-height - $kopi-notification-dialog-footer-height !default;
+$kopi-notification-dialog-title-font-size: 20px !default;
+$kopi-notification-dialog-content-font-size: 16px !default;
+
+$kopi-notification-dialog-button-margin: 5px !default;
+$kopi-notification-dialog-button-width: ($kopi-notification-dialog-width - 4 * $kopi-notification-dialog-button-margin) / 2 !default;
+$kopi-notification-dialog-button-height: $kopi-notification-dialog-footer-height - $kopi-notification-dialog-button-margin * 1.5 !default;

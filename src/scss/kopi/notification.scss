@@ -43,13 +43,22 @@
 }
 // }}}
 
-// {{{ Bubble
-$kopi-notification-line-height: $kopi-box-font-size * 1.5;
-$kopi-notification-bubble-width: 200px !default;
-$kopi-notification-bubble-height: $kopi-notification-line-height * 5 + $kopi-box-border-radius * 4 !default;
+.kopi-notification-background {
+  @include unselectable;
+  @include opacity(0.9);
+  @include border-radius(4px);
+  $shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 2px 5px rgba(0,0,0,0.5);
+  @include box-shadow($shadow);
 
+  color: $kopi-white;
+  background-color: $kopi-gray-darker;
+  border: 1px solid darken($kopi-gray-darker, 15%);
+  border-color: rgba(0,0,0,.1) rgba(0,0,0,.1) fadein(rgba(0,0,0,.1), 15%);
+}
+
+// {{{ Bubble
 .kopi-notification-bubble {
-  @extend .kopi-round-box;
+  @extend .kopi-notification-background;
   width: $kopi-notification-bubble-width;
   height: $kopi-notification-bubble-height;
   position: fixed;
@@ -63,53 +72,22 @@ $kopi-notification-bubble-height: $kopi-notification-line-height * 5 + $kopi-box
   p {
     @include box-sizing(border-box);
     text-align: center;
+    text-shadow: 0 -1px 0 $kopi-gray;
     vertical-align: middle;
     padding: 0;
-    margin: $kopi-notification-line-height 10px 0;
+    margin: $kopi-base-line-height 10px 0;
   }
 }
 // }}}
 
 // {{{ Dialog
-$kopi-notification-dialog-height: 200px !default;
-$kopi-notification-dialog-width: 300px !default;
-$kopi-notification-dialog-background-color: rgba(64, 64, 64, 0.6) !default;
-$kopi-notification-dialog-color: white !default;
-$kopi-notification-dialog-text-shadow:  #333 0 -1px 0 !default;
-$kopi-notification-dialog-border-radius: 12px !default;
-$kopi-notification-dialog-border: 2px solid rgba(255, 255, 255, 0.8) !default;
-$kopi-notification-dialog-border-shadow: #000 0 0 3px !default;
-$kopi-notification-dialog-box-shadow: #333 0 5px 30px !default;
-$kopi-notification-dialog-header-height: 50px !default;
-$kopi-notification-dialog-footer-height: 48px !default;
-$kopi-notification-dialog-content-height: $kopi-notification-dialog-height - $kopi-notification-dialog-header-height - $kopi-notification-dialog-footer-height !default;
-
-$kopi-notification-dialog-title-font-size: 20px !default;
-$kopi-notification-dialog-content-font-size: 16px !default;
-$kopi-notification-dialog-button-font-size: 16px !default;
-$kopi-notification-dialog-button-margin: 5px !default;
-$kopi-notification-dialog-button-width: ($kopi-notification-dialog-width - 4 * $kopi-notification-dialog-button-margin) / 2 !default;
-$kopi-notification-dialog-button-height: $kopi-notification-dialog-footer-height - $kopi-notification-dialog-button-margin * 1.5 !default;
-$kopi-notification-dialog-button-border-radius: 5px !default;
-$kopi-notification-dialog-button-border: 1px solid #555 !default;
-$kopi-notification-dialog-button-background: rgba(255,255,255,0.5) !default;
-$kopi-notification-dialog-button-hover-background: rgba(255,255,255,0.2) !default;
-$kopi-notification-dialog-button-active-background: rgba(0,0,0,0.5) !default;
-$kopi-notification-dialog-button-box-shadow: rgba(255,255,255,0.3) 0 1px 0 !default;
-
-$kopi-notification-dialog-gloss-height: 25px !default;
-$kopi-notification-dialog-gloss-border-top-radius: $kopi-box-border-radius !default;
-$kopi-notification-dialog-gloss-border-bottom-radius: 120px 10px !default;
-$kopi-notification-dialog-gloss-top-background: rgba(255,255,255,0.4) !default;
-$kopi-notification-dialog-gloss-bottom-background: rgba(255,255,255,0.1) !default;
-
 .kopi-notification-dialog {
-  @extend .kopi-round-box;
+  @extend .kopi-notification-background;
   position: fixed;
   top: 50%;
   left: 50%;
   width: $kopi-notification-dialog-width;
-  min-height: $kopi-notification-line-height;
+  min-height: $kopi-base-line-height;
   max-height: $kopi-notification-dialog-height;
   margin-left: - $kopi-notification-dialog-width / 2;
   margin-top: - $kopi-notification-dialog-height / 2;
@@ -124,38 +102,26 @@ $kopi-notification-dialog-gloss-bottom-background: rgba(255,255,255,0.1) !defaul
   height: $kopi-notification-dialog-header-height;
 }
 
-.kopi-notification-dialog-gloss {
-  display: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: $kopi-notification-dialog-gloss-height;;
-  @include border-top-left-radius($kopi-notification-dialog-gloss-border-top-radius);
-  @include border-top-right-radius($kopi-notification-dialog-gloss-border-top-radius);
-  @include border-bottom-left-radius($kopi-notification-dialog-gloss-border-bottom-radius);
-  @include border-bottom-right-radius($kopi-notification-dialog-gloss-border-bottom-radius);
-  background-color: $kopi-notification-dialog-gloss-top-background;
-  @include background(linear-gradient(top , $kopi-notification-dialog-gloss-top-background 0, $kopi-notification-dialog-gloss-bottom-background $kopi-notification-dialog-gloss-height));
-}
-
 .kopi-notification-dialog-title {
-  // @include ellipsis;
+  @include ellipsis;
   font-size: $kopi-notification-dialog-title-font-size;
   height: $kopi-notification-dialog-header-height;
   line-height: $kopi-notification-dialog-header-height;
   margin: 0;
-  padding: 0 $kopi-notification-dialog-border-radius * 2;
+  padding: 0 4px * 2;
 }
 
 .kopi-notification-dialog-content {
   font-size: $kopi-notification-dialog-content-font-size;
   max-height: $kopi-notification-dialog-content-height;
   overflow: hidden;
+  border: 1px solid $kopi-gray;
+  background-color: $kopi-gray-dark;
+  border-width: 1px 0;
 
   p {
     margin: 0;
-    padding: 0 ($kopi-notification-dialog-border-radius * 2) ($kopi-notification-dialog-border-radius);
+    padding: 0 (4px * 2) 4px;
   }
 }
 
@@ -164,9 +130,6 @@ $kopi-notification-dialog-gloss-bottom-background: rgba(255,255,255,0.1) !defaul
 }
 
 .kopi-notification-dialog-button {
-  @extend .kopi-button;
-  font-size: $kopi-notification-dialog-button-font-size;
-  font-weight: bold;
   position: absolute;
   height: $kopi-notification-dialog-button-height;
   line-height: $kopi-notification-dialog-button-height;
@@ -176,11 +139,13 @@ $kopi-notification-dialog-gloss-bottom-background: rgba(255,255,255,0.1) !defaul
 .kopi-notification-dialog-action {
   @extend .kopi-notification-dialog-button;
   left: $kopi-notification-dialog-button-margin;
+  text-align: left;
 }
 
 .kopi-notification-dialog-close {
   @extend .kopi-notification-dialog-button;
   right: $kopi-notification-dialog-button-margin;
+  text-align: right;
 }
 // }}}
 

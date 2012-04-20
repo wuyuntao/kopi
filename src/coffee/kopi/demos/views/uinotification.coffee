@@ -34,7 +34,7 @@ define "kopi/demos/views/uinotification", (require, exports, module) ->
       this.bubbleButton.on Button.CLICK_EVENT, ->
         notification.bubble().show "This is a bubble",
           lock: true,
-          duration: 3000
+          duration: 10000
 
       this.dialogButton = new Button
         titleText: "Show dialog"
@@ -43,7 +43,7 @@ define "kopi/demos/views/uinotification", (require, exports, module) ->
         notification.dialog()
           .title("This is a dialog")
           .content("Say something...")
-          .show()
+          .show(lock: true)
 
     oncreate: ->
       this.app.navBar.add(this.nav)

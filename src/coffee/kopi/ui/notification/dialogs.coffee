@@ -63,11 +63,13 @@ define "kopi/ui/notification/dialogs", (require, exports, module) ->
       self._action = new Button
         hasIcon: false
         extraClass: cls.cssClass("action")
+        style: "primary"
         autoSkeleton: false
         autoRender: false
       self._close = new Button
         hasIcon: false
         extraClass: cls.cssClass("close")
+        style: "inverse"
         autoSkeleton: false
         autoRender: false
 
@@ -90,6 +92,7 @@ define "kopi/ui/notification/dialogs", (require, exports, module) ->
       delete self._content
       delete self._footer
 
+      self.reset()
       super
 
     onrender: ->
