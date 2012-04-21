@@ -38,27 +38,6 @@
 
 .kopi-list-item {
   height: $kopi-list-item-height;
-}
-// }}}
-
-/* {{{ NavList
- */
-.kopi-nav-list {
-  @extend .kopi-list;
-}
-
-.kopi-nav-list-striped {
-  .kopi-nav-list-item-odd, .kopi-nav-list-item:nth-child(odd) {
-    background-color: $kopi-list-background-accent;
-  }
-}
-
-.kopi-nav-list-bordered {
-  @extend .kopi-list-bordered;
-}
-
-.kopi-nav-list-item {
-  @extend .kopi-list-item;
 
   .kopi-button {
     text-align: left;
@@ -80,5 +59,26 @@
     color: $kopi-white;
     background-color: $kopi-list-background-active;
   }
+}
+// }}}
+
+/* {{{ NavList
+ */
+.kopi-nav-list {
+  @extend .kopi-list;
+}
+
+.kopi-nav-list-striped {
+  .kopi-nav-list-item-odd, .kopi-nav-list-item:nth-child(odd) {
+    background-color: $kopi-list-background-accent;
+  }
+}
+
+.kopi-nav-list-bordered {
+  @extend .kopi-list-bordered;
+}
+
+.kopi-nav-list-item {
+  @extend .kopi-list-item;
 }
 // }}}

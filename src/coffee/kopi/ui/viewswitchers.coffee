@@ -16,11 +16,6 @@ define "kopi/ui/viewswitchers", (require, exports, module) ->
       viewport.instance().register(this)
       super
 
-    onresize: ->
-      this.element.width(this._end.element.width())
-      this.element.height(this._end.element.height())
-      super
-
   ###
   Widget switcher for views
   ###

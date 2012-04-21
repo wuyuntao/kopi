@@ -4,6 +4,8 @@
 .kopi-scrollable {
   position: relative;
   overflow: hidden;
+  width: 100%;
+  height: 100%;
 }
 
 .kopi-scrollable-container {
@@ -11,6 +13,8 @@
   position: absolute;
   top: 0;
   left: 0;
+  min-width: 100%;
+  min-height: 100%;
 
   // TODO Is it possible use experimental to generate vendor specific attributes
   -webkit-transition-property: -webkit-transform,top,left;

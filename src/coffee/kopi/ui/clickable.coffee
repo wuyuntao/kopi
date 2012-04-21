@@ -94,6 +94,8 @@ define "kopi/ui/clickable", (require, exports, module) ->
       self.element.removeClass(cls.ACTIVE_CLASS)
       # a small distance move will trigger a click event too
       if not self._holded and not self._moved
+        event.preventDefault()
+        event.stopPropagation()
         self.emit(cls.CLICK_EVENT, [event])
       super
 

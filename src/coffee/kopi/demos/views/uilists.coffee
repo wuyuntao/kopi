@@ -23,7 +23,8 @@ define "kopi/demos/views/uilists", (require, exports, module) ->
 
       this.scrollable = new Scrollable
         scrollX: false
-      this.list = new List()
+      this.list = new List
+        striped: true
 
     oncreate: ->
       this.app.navBar.add(this.nav)
@@ -42,8 +43,8 @@ define "kopi/demos/views/uilists", (require, exports, module) ->
       this.app.viewSwitcher.show(this.view)
       this.nav.render()
       this.view.render()
-      this.scrollable.render()
       this.list.render()
+      this.scrollable.render()
       super
 
     ondestroy: ->
