@@ -12,6 +12,11 @@ define "kopi/ui/viewswitchers", (require, exports, module) ->
 
     this.widgetName "View"
 
+    constructor: (view, options) ->
+      super(options)
+      this._view = view
+      # TODO Add view name to extra classes
+
     onrender: ->
       viewport.instance().register(this)
       super

@@ -34,7 +34,10 @@ define "kopi/ui/tabs", (require, exports, module) ->
     kls.SELECT_EVENT = "select"
     kls.UNSELECT_EVENT = "unselect"
 
+    kls.widgetName "Tab"
+
     kls.configure
+      hasIcon: true
       iconPos: this.ICON_POS_TOP
 
     klass.accessor kls.prototype, "key"
@@ -92,7 +95,7 @@ define "kopi/ui/tabs", (require, exports, module) ->
     # {{{ Configuration
     kls.configure
       childClass: Tab
-      layout: kls.LAYOUT_VERTICAL
+      layout: kls.LAYOUT_HORIZONTAL
       style: kls.STYLE_EVEN
       width: null
       height: null
@@ -109,7 +112,9 @@ define "kopi/ui/tabs", (require, exports, module) ->
     ###
     constructor: (options) ->
       super
+      cls = this.constructor
       this._selectedIndex = -1
+      this._options.extraClass += " #{cls.cssClass(this._options.layout)} #{cls.cssClass(this._options.style)}"
 
     add: (key, options) ->
       self = this

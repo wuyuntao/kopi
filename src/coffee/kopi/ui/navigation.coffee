@@ -15,6 +15,8 @@ define "kopi/ui/navigation", (require, exports, module) ->
 
   class NavButton extends Button
 
+    this.widgetName "NavButton"
+
     this.configure
       hasIcon: false
       url: null

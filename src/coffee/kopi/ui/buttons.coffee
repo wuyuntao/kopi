@@ -23,6 +23,8 @@ define "kopi/ui/buttons", (require, exports, module) ->
     kls.ICON_POS_LEFT = "left"
     # kls.ICON_POS_CHOICES = [kls.ICON_TOP, kls.ICON_RIGHT, kls.ICON_BOTTOM, kls.ICON_LEFT]
 
+    kls.widgetName "Button"
+
     kls.configure
       # @type   {Boolean}   hasIcon   if show icon
       hasIcon: false

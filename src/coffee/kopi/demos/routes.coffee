@@ -6,6 +6,7 @@ define "kopi/demos/routes", (require, exports, module) ->
   uilists = require "kopi/demos/views/uilists"
   uibuttons = require "kopi/demos/views/uibuttons"
   uinotification = require "kopi/demos/views/uinotification"
+  uitabs = require "kopi/demos/views/uitabs"
 
   router
     .view(views.IndexView).route("/", name: "index").end()
@@ -14,5 +15,6 @@ define "kopi/demos/routes", (require, exports, module) ->
     .view(uibuttons.UIButtonView).route("/ui/buttons/", name: "ui-buttons").end()
     .view(uilists.UIListView).route("/ui/lists/", name: "ui-lists").end()
     .view(uinotification.UINotificationView).route("/ui/notification/", name: "ui-notification").end()
+    .view(uitabs.UITabView).route("/ui/tabs/", name: "ui-tabs").end()
 
   return

@@ -239,3 +239,11 @@ $kopi-notification-dialog-content-font-size: 16px !default;
 $kopi-notification-dialog-button-margin: 5px !default;
 $kopi-notification-dialog-button-width: ($kopi-notification-dialog-width - 4 * $kopi-notification-dialog-button-margin) / 2 !default;
 $kopi-notification-dialog-button-height: $kopi-notification-dialog-footer-height - $kopi-notification-dialog-button-margin * 1.5 !default;
+
+/**
+ * Tabs
+ */
+$kopi-tab-bar-height: 50px;
+$kopi-tab-bar-width: 60px;
+$kopi-tab-bar-background: #f5f5f5;
+$kopi-tab-bar-background-highlight: #eee;
