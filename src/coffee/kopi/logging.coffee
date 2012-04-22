@@ -18,7 +18,7 @@ define "kopi/logging", (require, exports, module) ->
   class Logger
 
     # @type {Date}    Start time of logger
-    start = new Date()
+    start = (window.__KOPI__START_TIME or= new Date())
 
     # @type {Hash}    Log timers
     timers = {}
