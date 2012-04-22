@@ -122,7 +122,6 @@ define "kopi/ui/scrollable", (require, exports, module) ->
           self._container.unbind(events.WEBKIT_TRANSITION_END_EVENT)
           self._steps = []
           self._position(matrix.x, matrix.y)
-      super
 
     ontouchmove: (e, event) ->
       event.preventDefault()
@@ -166,7 +165,6 @@ define "kopi/ui/scrollable", (require, exports, module) ->
         self._startTime = timestamp
         self._startX = self._x
         self._startY = self._y
-      super
 
     ontouchend: (e, event) ->
       cls = this.constructor
@@ -208,7 +206,6 @@ define "kopi/ui/scrollable", (require, exports, module) ->
         if (self._y > self._minScrollY and newY > self._minScrollY) or (self._y < self._maxScrollY and newY < self._maxScrollY)
           momentum.distY = 0
 
-      super
 
       if momentum.distX or momentum.distY
         newDuration = math.max(momentum.duration, 10)
@@ -228,7 +225,6 @@ define "kopi/ui/scrollable", (require, exports, module) ->
 
     ontouchcancel: ->
       this.ontouchend(arguments...)
-      super
 
     ontransitionend: (e, event) ->
       cls = this.constructor
