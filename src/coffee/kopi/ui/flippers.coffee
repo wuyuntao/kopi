@@ -10,6 +10,10 @@ define "kopi/ui/flippers", (require, exports, module) ->
 
   math = Math
 
+  # DEPRECATED
+  # This module is deprecated and should be rewrited later
+  # `Flipper` should inherit from `Animator` class
+
   ###
   Scrollable widget for flipper. Snap to pages
   ###

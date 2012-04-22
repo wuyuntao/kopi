@@ -7,6 +7,13 @@ define "kopi/ui/buttons", (require, exports, module) ->
   Text = require("kopi/ui/text").Text
   Clickable = require("kopi/ui/clickable").Clickable
 
+  ###
+  Button
+
+  TODO
+  provide a outer wrapper for buttons so that we can extend
+  click area for buttons on mobile devices
+  ###
   class Button extends Clickable
 
     kls = this
@@ -16,19 +23,27 @@ define "kopi/ui/buttons", (require, exports, module) ->
     kls.ICON_POS_LEFT = "left"
     # kls.ICON_POS_CHOICES = [kls.ICON_TOP, kls.ICON_RIGHT, kls.ICON_BOTTOM, kls.ICON_LEFT]
 
+    kls.widgetName "Button"
+
     kls.configure
-      preventDefault: true
-      stopPropagation: true
       # @type   {Boolean}   hasIcon   if show icon
-      hasIcon: true
+      hasIcon: false
       # @type   {Boolean}   hasText   if show text
       hasText: true
       # @type   {Integer}   iconPos   where to put icon
       iconPos: kls.ICON_POS_LEFT
+      # @type   {Boolean}   rounded
+      rounded: true
       # @type   {String}    cssClass  extra css class added to button
       cssClass: ""
       iconClass: Image
       titleClass: Text
+      # @type  {String}     Pre-defined style for buttons, including:
+      #                     default, primary, info, success, warning, danger and inverse
+      style: "default"
+      # @type  {String}     Pre-defined size for buttons, including:
+      #                     normal, large, small and mini
+      size: "normal"
 
     proto = kls.prototype
     # TODO Icon must be an instance of Image class
@@ -57,15 +72,28 @@ define "kopi/ui/buttons", (require, exports, module) ->
         titleOptions.extraClass or= ""
         titleOptions.extraClass += " #{cls.cssClass("title")}"
         self._title = new options.titleClass(titleOptions)
+      if options.rounded
+        options.extraClass += " #{cls.cssClass('rounded')}"
+      if options.style
+        options.extraClass += " #{cls.cssClass(options.style)}"
+      if options.size
+        options.extraClass += " #{cls.cssClass(options.size)}"
 
     onskeleton: ->
+      cls = this.constructor
       self = this
       options = self._options
+      wrapper = self._ensureWrapper('inner')
       if options.hasIcon
-        self._icon.skeletonTo(self.element)
+        self._icon.skeletonTo(wrapper)
       if options.hasText
-        self._title.skeletonTo(self.element)
-      self.state("icon-pos", self._options.iconPos)
+        self._title.skeletonTo(wrapper)
+      # When `iconPos` is right or bottom, append icon after text
+      #
+      # TODO Insert icon element right after initialized
+      if options.hasIcon and options.hasText and options.iconPos is cls.ICON_POS_RIGHT or options.iconPos is cls.ICON_BOTTOM
+        self._icon.element.insertAfter(self._title.element)
+      self.state("icon-pos", options.iconPos)
       super
 
     onrender: ->

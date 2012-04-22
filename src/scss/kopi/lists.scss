@@ -3,32 +3,82 @@
 @import "kopi/box";
 @import "kopi/buttons";
 
-/* {{{ ListItem
+/* {{{ Lists
  *
- * div.kopi-list-item
- *   div.kopi-button
- *     span.kopi-button-text
+ * div.kopi-list
+ *   div.kopi-list-item
+ *     div.kopi-button
+ *       span.kopi-button-text
+ *
+ * TODO Add some innner shadow to list item?
  */
 
-$kopi-list-item-height: 48px !default;
-$kopi-list-item-background: black !default;
-$kopi-list-item-color: white !default;
+.kopi-list {
+  width: 100%;
+  max-width: 100%;
+  background-color: $kopi-list-background;
+}
+
+/**
+ * Zebra-striping
+ */
+.kopi-list-striped {
+  .kopi-list-item-odd, .kopi-list-item:nth-child(odd) {
+    background-color: $kopi-list-background-accent;
+  }
+}
+
+/**
+ * Bordered version
+ */
+.kopi-list-bordered {
+  // padding-left: 15px;
+  // padding-right: 15px;
+}
 
 .kopi-list-item {
-  @extend .kopi-round-box;
-
   height: $kopi-list-item-height;
-  margin: 3px 2px;
 
   .kopi-button {
+    text-align: left;
     width: 100%;
     height: 100%;
 
-    .kopi-button-text {
+    .kopi-button-title {
       padding: 0 10px;
       font-size: $kopi-list-item-height / 3;
       line-height: $kopi-list-item-height;
     }
   }
+
+  .kopi-button-hover {
+    background-color: $kopi-list-background-hover;
+  }
+
+  .kopi-button-active {
+    color: $kopi-white;
+    background-color: $kopi-list-background-active;
+  }
+}
+// }}}
+
+/* {{{ NavList
+ */
+.kopi-nav-list {
+  @extend .kopi-list;
+}
+
+.kopi-nav-list-striped {
+  .kopi-nav-list-item-odd, .kopi-nav-list-item:nth-child(odd) {
+    background-color: $kopi-list-background-accent;
+  }
+}
+
+.kopi-nav-list-bordered {
+  @extend .kopi-list-bordered;
+}
+
+.kopi-nav-list-item {
+  @extend .kopi-list-item;
 }
 // }}}

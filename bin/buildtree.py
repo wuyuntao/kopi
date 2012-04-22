@@ -10,6 +10,7 @@ A Script to build JavaScript dependency tree
 """
 
 # TODO Discover recursive dependencies
+# TODO Support non-AMD modules
 
 import re
 import os

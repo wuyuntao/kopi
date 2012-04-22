@@ -56,8 +56,6 @@ define "kopi/ui/scrollable", (require, exports, module) ->
       momentum: true
       damping: 0.5
       deceleration: 0.0006
-      ontransitionend: null
-      onresize: null
       snap: false
       snapThreshold: 1
       throttle: 250
@@ -90,14 +88,7 @@ define "kopi/ui/scrollable", (require, exports, module) ->
       self
 
     onskeleton: ->
-      cls = this.constructor
-      self = this
-      self._container or= self._ensureWrapper("container")
-      super
-
-    onrender: ->
-      self = this
-      cls = this.constructor
+      this._container or= this._ensureWrapper("container")
       super
 
     onresize: ->

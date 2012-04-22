@@ -56,4 +56,6 @@ define "kopi/utils/structs/weakmap", (require, exports, module) ->
           iterator.call(this, key, value)
       this
 
+    length: -> this._keys.length
+
   WeakMap: WeakMap

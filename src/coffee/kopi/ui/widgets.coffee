@@ -74,6 +74,10 @@ define "kopi/ui/widgets", (require, exports, module) ->
       tagName: "div"
       # @type {String}    extra css class added to element
       extraClass: ""
+      # @type {Template}  Template instance to render element
+      template: undefined
+      # @type {Hash}      Context can be used when rendering template
+      context: undefined
     # }}}
 
     # {{{ Events
@@ -353,10 +357,10 @@ define "kopi/ui/widgets", (require, exports, module) ->
       return $(element) if element
       if self._options.element
         return $(self._options.element)
+      element = $(document.createElement(self._options.tagName))
       if self._options.template
-        # FIXME Use template adapter instead jQuery template plugin
-        return $(self._options.template).tmpl(self)
-      $(document.createElement(self._options.tagName))
+        element.html(self._options.template.render(self._options.context))
+      element
 
     ###
     Get or create wrapper element

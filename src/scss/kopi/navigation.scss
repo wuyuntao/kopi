@@ -1,7 +1,7 @@
 @import 'compass/css3';
 @import "compass/utilities";
 @import "kopi/utils";
-@import "kopi/box";
+@import "kopi/themes/base";
 
 /* {{{ Navbar
 
@@ -13,18 +13,13 @@
     div.kopi-nav-next
       div.kopi-nav
  */
-// Variables
-$kopi-navbar-background-color: black !default;
-$kopi-navbar-color: white !default;
-$kopi-navbar-height: 36px !default;
-$kopi-navbar-background: rgba(0,0,0,0.7) !default;
-$kopi-navbar-opacity: 1 !default;
-$kopi-navbar-box-shadow: #000 0 0 10px !default;
-$kopi-navbar-border: 1px solid #333 !default;
-
 .kopi-navbar {
-  @include kopi-box($kopi-navbar-background-color, $kopi-navbar-color);
-  @include border-radius(0);
+  @include unselectable;
+  @include background(linear-gradient(top, $kopi-navbar-background-highlight 0%, $kopi-navbar-background 100%));
+  $shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 -1px 0 rgba(0,0,0,.1);
+  @include box-shadow($shadow);
+  color: $kopi-navbar-color;
+  text-shadow: $kopi-navbar-shadow;
   height: $kopi-navbar-height;
   text-align: center;
   min-height: 0;
@@ -34,12 +29,14 @@ $kopi-navbar-border: 1px solid #333 !default;
   @extend .kopi-navbar;
   top: 0;
   border-width: 0 0 1px;
+  margin-bottom: $kopi-base-line-height;
   z-index: 400;
 }
 
 .kopi-navbar-bottom {
   @extend .kopi-navbar;
   bottom: 0;
+  margin-top: $kopi-base-line-height;
   border-width: 1px 0 0;
 }
 
@@ -74,25 +71,6 @@ div.kopi-navbar-top-fixed {
         span.kopi-nav-button-text
  */
 
-// Variables
-$kopi-nav-height: 36px !default;
-$kopi-nav-padding: 6px !default;
-
-$kopi-nav-title-color: #fff !default;
-$kopi-nav-title-font-size: 20px !default;
-$kopi-nav-title-margin: 60px !default;
-$kopi-nav-title-shadow: #333 0 -1px 0 !default;
-
-$kopi-nav-button-height: $kopi-nav-height - 2 * $kopi-nav-padding !default;
-$kopi-nav-button-width: 60px !default;
-$kopi-nav-button-margin: 10px !default;
-$kopi-nav-button-padding: 10px !default;
-$kopi-nav-button-border: 1px solid #ccc !default;
-$kopi-nav-button-background: #333 !default;
-$kopi-nav-button-color: #ccc !default;
-$kopi-nav-button-font-size: 14px !default;
-$kopi-nav-button-border-radius: 5px !default;
-
 .kopi-nav {
   display: none;
 }
@@ -107,7 +85,7 @@ $kopi-nav-button-border-radius: 5px !default;
 .kopi-nav-button-wrapper {
   position: absolute;
   top: 0;
-  height: $kopi-nav-height;
+  height: $kopi-navbar-height;
 }
 
 .kopi-nav-left {
@@ -124,44 +102,56 @@ $kopi-nav-button-border-radius: 5px !default;
 
 .kopi-nav-center {
   @extend .kopi-nav-button-wrapper;
-  left: $kopi-nav-button-width;
-  right: $kopi-nav-button-width;
+  left: $kopi-navbar-button-width;
+  right: $kopi-navbar-button-width;
   text-align: center;
 
-  .kopi-text {
-    color: white;
-    font-size: 20px;
-    font-weight: bold;
-    line-height: $kopi-nav-height;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-    vertical-align: middle;
-  }
+}
+
+.kopi-nav-title {
+  color: $kopi-navbar-title-color;
+  font-size: $kopi-navbar-title-font-size;
+  font-weight: bold;
+  line-height: $kopi-navbar-height;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .kopi-nav-button {
+  @extend .kopi-button;
   @include inline-block;
+  color: $kopi-navbar-button-color;
   text-decoration: none;
-  height: $kopi-nav-height;
+  background: $kopi-navbar-button-background;
+  height: $kopi-navbar-button-height;
   width: auto;
-  padding: $kopi-nav-padding;
+  padding-top: $kopi-navbar-padding;
+  padding-bottom: $kopi-navbar-padding;
 }
 
-.kopi-nav-button-text {
-  @include inline-block;
-  @include border-radius($kopi-nav-button-border-radius);
+.kopi-nav-button-hover {
+  background-color: $kopi-navbar-button-background-hover;
+  color: $kopi-navbar-button-color-hover!important;
+  text-decoration: none;
+}
 
-  background: $kopi-nav-button-background;
-  color: $kopi-nav-button-color;
-  font-size: $kopi-nav-button-font-size;
-  height: $kopi-nav-button-height;
+.kopi-nav-button-active {
+  background-color: $kopi-navbar-button-background-active;
+  color: $kopi-navbar-button-color-active;
+  text-decoration: none;
+}
+
+.kopi-nav-button-title {
+  @include inline-block;
+
+  font-size: $kopi-navbar-button-font-size;
+  height: $kopi-navbar-button-height;
   width: auto;
-  line-height: $kopi-nav-button-height;
-  border: $kopi-nav-button-border;
-  min-width: $kopi-nav-button-width;
+  line-height: $kopi-navbar-button-height;
+  min-width: $kopi-navbar-button-width;
   text-align: center;
-  padding: 0 $kopi-nav-button-padding;
 }
 
 .kopi-nav-button-sprite {
@@ -205,7 +195,7 @@ $kopi-nav-button-border-radius: 5px !default;
   display: block;
 
   .kopi-nav-left {
-    @include translateX($kopi-nav-button-width * -1);
+    @include translateX($kopi-navbar-button-width * -1);
   }
 
   .kopi-nav-center {
@@ -224,7 +214,7 @@ $kopi-nav-button-border-radius: 5px !default;
 
   .kopi-nav-left {
     @extend .kopi-nav-transition;
-    @include translateX($kopi-nav-button-width);
+    @include translateX($kopi-navbar-button-width);
   }
 
   .kopi-nav-center {

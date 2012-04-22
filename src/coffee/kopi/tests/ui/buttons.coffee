@@ -8,6 +8,6 @@ define "kopi/tests/ui/buttons", (require, exports, module) ->
     onhoverout: -> console.log("hoverout")
     onclick: -> console.log("click")
     ontouchhold: -> console.log("touchhold")
-  button.text("button").skeleton("#button1").render()
+  button.title("button").skeleton("#button1").render()
 
   return
