@@ -386,11 +386,11 @@ define "kopi/ui/widgets", (require, exports, module) ->
       this
 
     ###
-    execute callback function defined in options
+    DEPRECATED execute callback function defined in options
     ###
     _callback: (event, args) ->
       fn = this._options[ON + event]
-      fn(args...) if fn
+      fn.apply(this, args) if fn
       this
 
     ###

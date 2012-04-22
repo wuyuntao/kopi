@@ -38,14 +38,15 @@ define "kopi/ui/tabs", (require, exports, module) ->
 
     kls.configure
       hasIcon: true
+      iconWidth: 24
+      iconHeight: 24
       iconPos: this.ICON_POS_TOP
 
     klass.accessor kls.prototype, "key"
 
-    constructor: (tabBar, key, options) ->
+    constructor: (options) ->
       super(options)
-      this._tabBar = tabBar
-      this._key = key
+      this._key or= this.guid
       this._selected = false
 
     select: ->
@@ -116,22 +117,14 @@ define "kopi/ui/tabs", (require, exports, module) ->
       this._selectedIndex = -1
       this._options.extraClass += " #{cls.cssClass(this._options.layout)} #{cls.cssClass(this._options.style)}"
 
-    add: (key, options) ->
-      self = this
-      tab = new self._options.childClass(self, key, options)
-      super(tab, options)
-
-    addAt: (key, options, index=0) ->
-      self = this
-      tab = new self._options.childClass(self, key, options)
-      super(tab, options, index)
-
     _wrapper: ->
       this.element
 
-    remove: (key) ->
-      index = array.indexOf(this._keys, key)
-      this.removeAt(index)
+    # TODO Add some method to add/remove tab by its key
+    # addByKey
+    # addAtByKey
+    # removeByKey
+    # removeAtByKey
 
     ###
     Select a tab as if clicked.

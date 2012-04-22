@@ -98,7 +98,6 @@ define "kopi/ui/scrollable", (require, exports, module) ->
         ._scrollSize()
         ._duration(0)
         ._resetPosition(100)
-      this._callback(this.constructor.RESIZE_EVENT, arguments)
 
     ontouchstart: (e, event) ->
       cls = this.constructor
@@ -236,7 +235,6 @@ define "kopi/ui/scrollable", (require, exports, module) ->
       self = this
       self._container.unbind(events.WEBKIT_TRANSITION_END_EVENT)
       self._animate()
-      self._callback(cls.TRANSITION_END_EVENT, arguments)
 
     ###
     Get size of element

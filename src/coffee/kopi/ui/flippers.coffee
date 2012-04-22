@@ -11,7 +11,8 @@ define "kopi/ui/flippers", (require, exports, module) ->
   math = Math
 
   # DEPRECATED
-  # This module is deprecated and should be rewrited later
+  # This module is deprecated and will be totally rewrited later
+  #
   # `Flipper` should inherit from `Animator` class
 
   ###
@@ -61,7 +62,7 @@ define "kopi/ui/flippers", (require, exports, module) ->
       threshold = self._options.snapThreshold
       distX = x - self._absStartX
       distY = y - self._absStartY
-      # TODO 判断速度，而非判断距离
+      # TODO Detect speed instead of distance
       if math.abs(distX) < threshold and math.abs(distY) < threshold
         x = self._absStartX
         y = self._absStartY

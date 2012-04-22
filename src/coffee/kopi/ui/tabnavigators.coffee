@@ -1,5 +1,6 @@
 define "kopi/ui/tabnavigators", (require, exports, module) ->
 
+  klass = require "kopi/utils/klass"
   Widget = require("kopi/ui/widgets").Widget
   tabs = require("kopi/ui/tabs")
   Animator = require("kopi/ui/animators").Animator
@@ -8,9 +9,18 @@ define "kopi/ui/tabnavigators", (require, exports, module) ->
 
     this.widgetName "TabPanel"
 
-    constructor: (tab, options) ->
+    klass.accessor this.prototype, "key"
+
+    constructor: (options) ->
       super(options)
-      this._tab = tab
+      this._key or= this.guid
+
+  class TabPanelAnimator extends Animator
+
+    this.widgetName "TabPanelAnimator"
+
+    this.configure
+      childClass: TabPanel
 
   ###
   A navigation tabview with a tabbar and a flipper for content
@@ -28,11 +38,11 @@ define "kopi/ui/tabnavigators", (require, exports, module) ->
     kls.configure
       tabBarPos: kls.TAB_BAR_POS_TOP
       tabBarClass: tabs.TabBar
-      tabPanelClass: Animator
-      tabPanelChildClass: TabPanel
+      tabPanelClass: TabPanelAnimator
 
     constructor: ->
       super
+      self = this
       cls = this.constructor
       options = this._options
       if options.tabBarPos
@@ -45,16 +55,18 @@ define "kopi/ui/tabnavigators", (require, exports, module) ->
         this
           .register("tabPanel", options.tabPanelClass)
           .register("tabBar", options.tabBarClass)
+      this._tabBar.on tabs.TabBar.SELECT_EVENT, (e, tab) ->
+        self._tabPanel.show(tab)
 
-  ###
-  A navigation tabview with a scrollable tabbar and a flipper for content
-  ###
-  class ScrollableTabNavigator extends TabNavigator
 
-    this.widgetName "ScrollableTabNavigator"
+    addTab: (tab, options) ->
+      this._tabBar.add(tab, options)
+      this
 
-    this.configure
-      tabBarClass: tabs.ScrollableTabBar
+    addPanel: (panel, options) ->
+      this._tabPanel.add(panel, options)
+      this
 
+  TabPanel: TabPanel
+  TabPanelAnimator: TabPanelAnimator
   TabNavigator: TabNavigator
-  ScrollableTabNavigator: ScrollableTabNavigator

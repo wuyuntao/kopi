@@ -1,0 +1,7 @@
+@import 'kopi/utils';
+
+.kopi-image {
+  @include inline-block;
+  text-align: center;
+  vertical-align: middle;
+}

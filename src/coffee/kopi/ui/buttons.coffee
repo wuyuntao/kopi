@@ -10,9 +10,6 @@ define "kopi/ui/buttons", (require, exports, module) ->
   ###
   Button
 
-  TODO
-  provide a outer wrapper for buttons so that we can extend
-  click area for buttons on mobile devices
   ###
   class Button extends Clickable
 

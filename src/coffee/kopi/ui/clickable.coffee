@@ -22,14 +22,6 @@ define "kopi/ui/clickable", (require, exports, module) ->
       holdTime: 2000
       # @type   {Integer}   moveThreshold moving distance should be ignored
       moveThreshold: 10
-      # @type   {Function}  onhover       custom callback function
-      onhover: null
-      # @type   {Function}  onhoverout    custom callback function
-      onhoverout: null
-      # @type   {Function}  onclick       custom callback function
-      onclick: null
-      # @type   {Function}  ontouchhold   custom callback function
-      ontouchhold: null
 
     constructor: ->
       super
@@ -39,6 +31,7 @@ define "kopi/ui/clickable", (require, exports, module) ->
 
     delegate: ->
       super
+
       cls = this.constructor
       self = this
       preventDefault = self._options.preventDefault
@@ -72,7 +65,6 @@ define "kopi/ui/clickable", (require, exports, module) ->
       point = self._points(event)
       self.element.addClass(cls.ACTIVE_CLASS)
       self._setHoldTimeout()
-      super
 
     ontouchmove: (e, event) ->
       self = this
@@ -85,7 +77,6 @@ define "kopi/ui/clickable", (require, exports, module) ->
         self._moved = true
       # Reset hold timeout if touch moves
       self._setHoldTimeout()
-      super
 
     ontouchend: (e, event) ->
       cls = this.constructor
@@ -97,35 +88,29 @@ define "kopi/ui/clickable", (require, exports, module) ->
         event.preventDefault()
         event.stopPropagation()
         self.emit(cls.CLICK_EVENT, [event])
-      super
 
     ontouchcancel: (e, event) ->
       this.emit(this.constructor.TOUCH_END_EVENT, [event])
-      super
 
     onhover: (e, event) ->
       cls = this.constructor
       self = this
       self._hovered = true
       self.element.addClass(cls.HOVER_CLASS)
-      self._callback(cls.HOVER_EVENT)
 
     onhoverout: (e, event) ->
       cls = this.constructor
       self = this
       self._hovered = false
       self.element.removeClass(cls.HOVER_CLASS)
-      self._callback(cls.HOVER_OUT_EVENT)
 
     onclick: (e, event) ->
-      this._callback(this.constructor.CLICK_EVENT, arguments)
 
     ontouchhold: (e, event) ->
       cls = this.constructor
       self = this
       self._holded = true
       self.emit(cls.TOUCH_END_EVENT, [event])
-      self._callback(cls.TOUCH_HOLD_EVENT, arguments)
 
     _reset: () ->
       self = this

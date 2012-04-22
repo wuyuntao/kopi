@@ -5,6 +5,8 @@ define "kopi/demos/views/uitabs", (require, exports, module) ->
   viewswitchers = require "kopi/ui/viewswitchers"
   reverse = require("kopi/app/router").reverse
   TabNavigator = require("kopi/ui/tabnavigators").TabNavigator
+  TabPanel = require("kopi/ui/tabnavigators").TabPanel
+  Tab = require("kopi/ui/tabs").Tab
   templates = require("kopi/demos/templates/uitabs")
 
   class UITabView extends View
@@ -18,17 +20,27 @@ define "kopi/demos/views/uitabs", (require, exports, module) ->
         title: "Tabs"
         leftButton: backButton
       this.view = new viewswitchers.View
+      tab1 = new Tab(titleText: "Tab #1", iconSrc: "/images/kopi/plus.png").key('tab1')
+      tab2 = new Tab(titleText: "Tab #2", iconSrc: "/images/kopi/plus.png").key('tab2')
+      tab3 = new Tab(titleText: "Tab #3", iconSrc: "/images/kopi/plus.png").key('tab3')
+      tab4 = new Tab(titleText: "Tab #4", iconSrc: "/images/kopi/plus.png").key('tab4')
+      tab5 = new Tab(titleText: "Tab #5", iconSrc: "/images/kopi/plus.png").key('tab5')
+      panel1 = new TabPanel(template: templates.tabPanel1).key("tab1")
+      panel2 = new TabPanel(template: templates.tabPanel2).key("tab2")
+      panel3 = new TabPanel(template: templates.tabPanel3).key("tab3")
+      panel4 = new TabPanel(template: templates.tabPanel4).key("tab4")
+      panel5 = new TabPanel(template: templates.tabPanel5).key("tab5")
       this.tabNavigator = new TabNavigator(tabBarPos: TabNavigator.TAB_BAR_POS_BOTTOM)
-        .addTab("tab1", textTitle: "Tab #1", iconSrc: "/images/kopi/icon1.png")
-        .addTab("tab2", textTitle: "Tab #2", iconSrc: "/images/kopi/icon2.png")
-        .addTab("tab3", textTitle: "Tab #3", iconSrc: "/images/kopi/icon3.png")
-        .addTab("tab4", textTitle: "Tab #4", iconSrc: "/images/kopi/icon4.png")
-        .addTab("tab5", textTitle: "Tab #5", iconSrc: "/images/kopi/icon5.png")
-        .addPanel("tab1", template: templates.tabPanel1)
-        .addPanel("tab2", template: templates.tabPanel2)
-        .addPanel("tab3", template: templates.tabPanel3)
-        .addPanel("tab4", template: templates.tabPanel4)
-        .addPanel("tab5", template: templates.tabPanel5)
+        .addTab(tab1)
+        .addTab(tab2)
+        .addTab(tab3)
+        .addTab(tab4)
+        .addTab(tab5)
+        .addPanel(panel1)
+        .addPanel(panel2)
+        .addPanel(panel3)
+        .addPanel(panel4)
+        .addPanel(panel5)
 
     oncreate: ->
       this.app.navBar.add(this.nav)
