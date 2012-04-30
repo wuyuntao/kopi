@@ -12,6 +12,36 @@
 .kopi-view-switcher {
   @extend .fill-parent;
 }
+
+.kopi-view-switcher-top {
+  top: $kopi-navbar-height;
+  border-width: 0 0 1px;
+  z-index: 300;
+}
+
+.kopi-view-switcher-bottom {
+  bottom: $kopi-navbar-height;
+  border-width: 1px 0 0;
+}
+
+.kopi-view-switcher-fixed {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 200;
+}
+
+div.kopi-view-switcher-top-fixed {
+  @extend .kopi-view-switcher-fixed;
+  @extend .kopi-view-switcher-top;
+  bottom: 0;
+}
+
+.kopi-view-switcher-bottom-fixed {
+  @extend .kopi-navbar-fixed;
+  @extend .kopi-navbar-bottom;
+  top: 0;
+}
 // }}}
 
 // {{{ View
