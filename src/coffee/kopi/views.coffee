@@ -68,6 +68,8 @@ define "kopi/views", (require, exports, module) ->
     klass.accessor kls, "viewName",
       get: -> this._viewName or= this.name
 
+    this.viewName "View"
+
     constructor: (app, url, params={}) ->
       if not app
         throw new exceptions.ValueError("app must be instance of Application")

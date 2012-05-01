@@ -155,10 +155,11 @@ define "kopi/app", (require, exports, module) ->
           state = url.path
         self.once cls.VIEW_LOAD_EVENT, ->
           hist.pushState(null, null, state)
-        self.emit(cls.REQUEST_EVENT, [url, options])
       else if self._options.useHashChange or self._options.useInterval
-        # TODO Remove support for hashchange event?
-        loc.hash = uri.relative(url.urlNoQuery, baseURL)
+        # Set hash until view is loaded
+        self.once cls.VIEW_LOAD_EVENT, ->
+          loc.hash = uri.relative(url.urlNoQuery, baseURL)
+      self.emit(cls.REQUEST_EVENT, [url, options])
       self
 
     ###
@@ -222,7 +223,7 @@ define "kopi/app", (require, exports, module) ->
       if support.history and self._options.usePushState
         self._useHash = self._options.alwaysUseHash
         win.bind 'popstate', checkFn
-      else if support.hash and self._options.useHashChange
+      else if support.hash and (self._options.usePushState or self._options.useHashChange)
         self._useHash = true
         win.bind "hashchange", checkFn
       else if self._options.useInterval
@@ -241,7 +242,6 @@ define "kopi/app", (require, exports, module) ->
     ###
     _stopListenToURLChange: ->
       self = this
-      checkFn = -> self._checkURLChange()
       if support.history and self._options.usePushState
         win.unbind 'popstate'
       else if support.hash and self._options.useHashChange
