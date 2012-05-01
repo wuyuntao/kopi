@@ -29,6 +29,8 @@ define "kopi/ui/scrollable", (require, exports, module) ->
 
     kls = this
 
+    kls.widgetName "Scrollable"
+
     kls.CLICK_EVENT = "click"
     kls.RESIZE_EVENT = "resize"
     kls.TRANSITION_END_EVENT = "transitionend"

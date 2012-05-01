@@ -17,6 +17,8 @@ define "kopi/ui/images", (require, exports, module) ->
   ###
   class Image extends widgets.Widget
 
+    this.widgetName "Image"
+
     this.configure
       tagName: "figure"
       height: null

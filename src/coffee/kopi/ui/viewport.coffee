@@ -19,6 +19,8 @@ define "kopi/ui/viewport", (require, exports, module) ->
 
     this.RESIZE_EVENT = "resize"
 
+    this.widgetName "Viewport"
+
     this.configure
       lockWhenResizing: true
 

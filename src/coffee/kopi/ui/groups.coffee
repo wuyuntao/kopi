@@ -6,6 +6,8 @@ define "kopi/ui/groups", (require, exports, module) ->
 
   class Group extends widgets.Widget
 
+    this.widgetName "Group"
+
     this.configure
       # @option {kopi.ui.widgets.Widget} childClass
       #   Widget class which can be added to group

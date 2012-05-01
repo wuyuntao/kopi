@@ -8,6 +8,8 @@ define "kopi/ui/animators", (require, exports, module) ->
 
     kls = this
 
+    kls.widgetName "Animator"
+
     kls.configure
       animationClass: animations.Animation
 

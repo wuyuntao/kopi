@@ -14,6 +14,8 @@ define "kopi/ui/switchers", (require, exports, module) ->
 
   class Switcher extends groups.Group
 
+    this.widgetName "Switcher"
+
     constructor: ->
       super
       # @type {Number} active child

@@ -149,7 +149,7 @@ define "kopi/utils/text", (require, exports, module) ->
   ###
   # Ref:
   #   http://perfectionkills.com/whitespace-deviations/
-  whitespaces = [
+  whiteSpaces = [
     '\\s',
     #'0009', # 'HORIZONTAL TAB'
     #'000A', # 'LINE FEED OR NEW LINE'

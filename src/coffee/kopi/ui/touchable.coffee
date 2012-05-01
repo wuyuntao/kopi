@@ -19,6 +19,8 @@ define "kopi/ui/touchable", (require, exports, module) ->
     kls.TOUCH_CANCEL_EVENT = "touchcancel"
     kls.EVENT_NAMESPACE = "touchable"
 
+    kls.widgetName "Touchable"
+
     kls.configure
       preventDefault: false
       stopPropagation: false

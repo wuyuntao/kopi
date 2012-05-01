@@ -76,6 +76,8 @@ define "kopi/ui/tabs", (require, exports, module) ->
 
     kls = this
 
+    kls.widgetName "TabBar"
+
     # {{{ Constant variables
     kls.LAYOUT_HORIZONTAL = "horizontal"
     kls.LAYOUT_VERTICAL = "vertical"
@@ -222,6 +224,9 @@ define "kopi/ui/tabs", (require, exports, module) ->
   class ScrollableTabBar extends TabBar
 
     kls = this
+
+    kls.widgetName "ScrollableTabBar"
+
     kls.configure
       scrollableClass :scrollable.Scrollable
 

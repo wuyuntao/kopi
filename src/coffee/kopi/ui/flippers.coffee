@@ -19,6 +19,8 @@ define "kopi/ui/flippers", (require, exports, module) ->
   ###
   class Flippable extends scrollable.Scrollable
 
+    this.widgetName "Flippable"
+
     this.configure
       snap: true
 
@@ -109,11 +111,15 @@ define "kopi/ui/flippers", (require, exports, module) ->
   ###
   class Page extends widgets.Widget
 
+    this.widgetName "Page"
+
   ###
   A simple animator that will animate between two or more views added to it.
 
   ###
   class Flipper extends groups.Group
+
+    this.widgetName "Flipper"
 
     this.configure
       childClass: Page

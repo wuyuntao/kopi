@@ -6,6 +6,9 @@ define "kopi/ui/text", (require, exports, module) ->
   class Text extends widgets.Widget
 
     kls = this
+
+    kls.widgetName "Text"
+
     kls.configure
       tagName: 'span'
 
@@ -39,6 +42,9 @@ define "kopi/ui/text", (require, exports, module) ->
   class EllipsisText extends Text
 
     kls = this
+
+    kls.widgetName "EllipsisText"
+
     # Text align methods
     kls.VALIGN_NONE   = 0
     kls.VALIGN_TOP    = 1
