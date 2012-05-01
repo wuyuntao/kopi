@@ -20,7 +20,6 @@ define "kopi/ui/animators", (require, exports, module) ->
     resetAnimation: -> this._animation = null
 
     _switch: (fromChild, toChild, options) ->
-      console.log "_switch", options
       cls = this.constructor
       self = this
       animateFn = ->
