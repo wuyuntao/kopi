@@ -137,8 +137,9 @@ define "kopi/app", (require, exports, module) ->
     load URL
 
     @param {String} url   URL must be an absolute path without query string and fragment
+    @param {Hash} options
     ###
-    load: (url) ->
+    load: (url, options) ->
       logger.info "Load URL: #{url}"
       cls = this.constructor
       self = this
@@ -154,7 +155,7 @@ define "kopi/app", (require, exports, module) ->
           state = url.path
         self.once cls.VIEW_LOAD_EVENT, ->
           hist.pushState(null, null, state)
-        self.emit(cls.REQUEST_EVENT, [url])
+        self.emit(cls.REQUEST_EVENT, [url, options])
       else if self._options.useHashChange or self._options.useInterval
         # TODO Remove support for hashchange event?
         loc.hash = uri.relative(url.urlNoQuery, baseURL)
@@ -173,7 +174,7 @@ define "kopi/app", (require, exports, module) ->
     @param {Event}  e
     @param {kopi.utils.uri.URI} url
     ###
-    onrequest: (e, url) ->
+    onrequest: (e, url, options) ->
       logger.info "Receive request: #{url.path}"
       self = this
       cls = this.constructor
@@ -195,19 +196,18 @@ define "kopi/app", (require, exports, module) ->
         self.emit(cls.VIEW_LOAD_EVENT)
 
       # If views are same, update the current view
-      # TODO Add to some method. e.g. view.equals(self.currentView)
       if self.currentView and self.currentView.equals(view)
-        self.currentView.update(request.url, request.params, loadFn)
+        self.currentView.update(request.url, request.params, options, loadFn)
         return
 
       # If views are different, stop current view and start target view
       if self.currentView and self.currentView.started
-        self.currentView.stop()
+        self.currentView.stop(options)
       # If view is not created, create view then start
       if not view.created
-        view.create -> view.start(request.url, request.params, loadFn)
+        view.create -> view.start(request.url, request.params, options, loadFn)
       else
-        view.start(request.url, request.params, loadFn)
+        view.start(request.url, request.params, options, loadFn)
 
     ###
     Listen to URL change events.

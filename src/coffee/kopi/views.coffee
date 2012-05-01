@@ -8,6 +8,7 @@ define "kopi/views", (require, exports, module) ->
   utils = require "kopi/utils"
   html = require "kopi/utils/html"
   text = require "kopi/utils/text"
+  func = require "kopi/utils/func"
 
   logger = logging.logger(module.id)
 
@@ -93,7 +94,7 @@ define "kopi/views", (require, exports, module) ->
       if self.created or self.locked
         logger.warn "View is already created or locked."
         return self
-      if not fn
+      if not fn and func.isFunction(options)
         fn = options
         options = {}
       logger.info("Create view. #{self.guid}")
@@ -111,7 +112,7 @@ define "kopi/views", (require, exports, module) ->
       if self.started or self.locked
         logger.warn "View is already started or locked."
         return self
-      if not fn
+      if not fn and func.isFunction(options)
         fn = options
         options = {}
       logger.info("Start view. #{self.guid}")
@@ -122,7 +123,7 @@ define "kopi/views", (require, exports, module) ->
     ###
     Update UI components when URL changes
     ###
-    update: (url, params, fn) ->
+    update: (url, params, options, fn) ->
       cls = this.constructor
       self = this
       if not self.started
@@ -130,7 +131,7 @@ define "kopi/views", (require, exports, module) ->
       if self.locked
         logger.warn "View is locked."
         return self
-      if not fn
+      if not fn and func.isFunction(options)
         fn = options
         options = {}
       logger.info("Update view. #{self.guid}")
@@ -147,7 +148,7 @@ define "kopi/views", (require, exports, module) ->
       if not self.started or self.locked
         logger.warn "View is already stopped or locked."
         return self
-      if not fn
+      if not fn and func.isFunction(options)
         fn = options
         options = {}
       logger.info("Stop view. #{self.guid}")
@@ -165,7 +166,7 @@ define "kopi/views", (require, exports, module) ->
       if not self.created or self.locked
         logger.warn "View is already destroyed or locked."
         return self
-      if not fn
+      if not fn and func.isFunction(options)
         fn = options
         options = {}
       logger.info("Destroy view. #{self.guid}")

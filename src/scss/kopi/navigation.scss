@@ -168,80 +168,165 @@ div.kopi-navbar-top-fixed {
   @include transition-timing-function(ease-out);
 }
 
-.kopi-nav-from-start {
-  @extend .kopi-nav-transition;
-  @include opacity(1);
-  display: block;
+.kopi-navbar-animation {
 
-  .kopi-nav-left {
+  .kopi-nav-from-start {
     @extend .kopi-nav-transition;
-    @include translateX(0);
+    @include opacity(1);
+    display: block;
+
+    .kopi-nav-left {
+      @extend .kopi-nav-transition;
+      @include translateX(0);
+    }
+
+    .kopi-nav-center {
+      @extend .kopi-nav-transition;
+      @include translateX(0);
+    }
+
+    .kopi-nav-right {
+      @extend .kopi-nav-transition;
+      @include translateX(0);
+    }
   }
 
-  .kopi-nav-center {
+  .kopi-nav-from-stop {
     @extend .kopi-nav-transition;
-    @include translateX(0);
+    @include opacity(0);
+    display: block;
+
+    .kopi-nav-left {
+      @include translateX($kopi-navbar-button-width * -1);
+    }
+
+    .kopi-nav-center {
+      @include translateX(-30%);
+    }
+
+    .kopi-nav-right {
+      @include translateX(0);
+    }
   }
 
-  .kopi-nav-right {
+  .kopi-nav-to-start {
     @extend .kopi-nav-transition;
-    @include translateX(0);
+    @include opacity(0);
+    display: block;
+
+    .kopi-nav-left {
+      @extend .kopi-nav-transition;
+      @include translateX($kopi-navbar-button-width);
+    }
+
+    .kopi-nav-center {
+      @extend .kopi-nav-transition;
+      @include translateX(30%);
+    }
+
+    .kopi-nav-right {
+      @extend .kopi-nav-transition;
+      @include translateX(0);
+    }
   }
+
+  .kopi-nav-to-stop {
+    @include opacity(1);
+    display: block;
+
+    .kopi-nav-left {
+      @include translateX(0);
+    }
+
+    .kopi-nav-center {
+      @include translateX(0);
+    }
+
+    .kopi-nav-right {
+      @include translateX(0);
+    }
+  }
+
 }
 
-.kopi-nav-from-stop {
-  @extend .kopi-nav-transition;
-  @include opacity(0);
-  display: block;
+.kopi-navbar-animation-reverse {
 
-  .kopi-nav-left {
-    @include translateX($kopi-navbar-button-width * -1);
-  }
-
-  .kopi-nav-center {
-    @include translateX(-30%);
-  }
-
-  .kopi-nav-right {
-    @include translateX(0);
-  }
-}
-
-.kopi-nav-to-start {
-  @extend .kopi-nav-transition;
-  @include opacity(0);
-  display: block;
-
-  .kopi-nav-left {
+  .kopi-nav-from-start {
     @extend .kopi-nav-transition;
-    @include translateX($kopi-navbar-button-width);
+    @include opacity(1);
+    display: block;
+
+    .kopi-nav-left {
+      @extend .kopi-nav-transition;
+      @include translateX(0);
+    }
+
+    .kopi-nav-center {
+      @extend .kopi-nav-transition;
+      @include translateX(0);
+    }
+
+    .kopi-nav-right {
+      @extend .kopi-nav-transition;
+      @include translateX(0);
+    }
   }
 
-  .kopi-nav-center {
+  .kopi-nav-from-stop {
     @extend .kopi-nav-transition;
-    @include translateX(30%);
+    @include opacity(0);
+    display: block;
+
+    .kopi-nav-left {
+      @include translateX($kopi-navbar-button-width);
+    }
+
+    .kopi-nav-center {
+      @include translateX(30%);
+    }
+
+    .kopi-nav-right {
+      @include translateX(0);
+    }
   }
 
-  .kopi-nav-right {
+  .kopi-nav-to-start {
     @extend .kopi-nav-transition;
-    @include translateX(0);
-  }
-}
+    @include opacity(0);
+    display: block;
 
-.kopi-nav-to-stop {
-  @include opacity(1);
-  display: block;
+    .kopi-nav-left {
+      @extend .kopi-nav-transition;
+      @include translateX($kopi-navbar-button-width * -1);
+    }
 
-  .kopi-nav-left {
-    @include translateX(0);
+    .kopi-nav-center {
+      @extend .kopi-nav-transition;
+      @include translateX(-30%);
+    }
+
+    .kopi-nav-right {
+      @extend .kopi-nav-transition;
+      @include translateX(0);
+    }
   }
 
-  .kopi-nav-center {
-    @include translateX(0);
+  .kopi-nav-to-stop {
+    @include opacity(1);
+    display: block;
+
+    .kopi-nav-left {
+      @include translateX(0);
+    }
+
+    .kopi-nav-center {
+      @include translateX(0);
+    }
+
+    .kopi-nav-right {
+      @include translateX(0);
+    }
   }
 
-  .kopi-nav-right {
-    @include translateX(0);
-  }
 }
 // }}}
