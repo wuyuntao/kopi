@@ -31,6 +31,8 @@ define "kopi/ui/notification/widgets", (require, exports, module) ->
 
     constructor: (options) ->
       super(options)
+      # Setup default element selector for notification widgets
+      this._options.element or= "##{this.constructor.cssClass()}"
       this.hidden = true
 
     # show: ->

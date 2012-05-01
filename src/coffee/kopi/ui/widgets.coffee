@@ -356,7 +356,8 @@ define "kopi/ui/widgets", (require, exports, module) ->
       self = this
       return $(element) if element
       if self._options.element
-        return $(self._options.element)
+        element = $(self._options.element)
+        return element if element.length
       element = $(document.createElement(self._options.tagName))
       if self._options.template
         element.html(self._options.template.render(self._options.context))

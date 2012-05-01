@@ -223,7 +223,7 @@ $kopi-notification-indicator-width: 24px !default;
 $kopi-notification-indicator-url: image-url("kopi/loader.gif") !default;
 
 $kopi-notification-overlay-opacity: 0.8 !default;
-$kopi-notification-overlay-background-color: #000 !default;
+$kopi-notification-overlay-background-color: rgba(0,0,0,1) !default;
 
 $kopi-notification-bubble-width: 200px !default;
 $kopi-notification-bubble-height: $kopi-base-line-height * 5 + 3px * 4 !default;

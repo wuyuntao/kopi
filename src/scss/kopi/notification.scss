@@ -28,7 +28,7 @@
   // Webkit only supports pixels for the start and end stops
   // for radial gradients?
   // But works in chromium and firefox AFAIS
-  @include background(radial-gradient(center, white 0%, $kopi-notification-overlay-background-color 100%));
+  @include background(radial-gradient(center, rgba(0,0,0,0) 0%, $kopi-notification-overlay-background-color 100%));
   position: fixed;
   top: 0;
   bottom: 0;
