@@ -1,7 +1,6 @@
 define "kopi/tests/app/router", (require, exports, module) ->
 
   q = require "qunit"
-  base = require "kopi/tests/base"
   router = require "kopi/app/router"
 
   class View
