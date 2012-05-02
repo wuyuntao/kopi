@@ -30,7 +30,7 @@ define "kopi/ui/touchable", (require, exports, module) ->
       ontouchend: null
       ontouchcancel: null
 
-    onskeleton: ->
+    onrender: ->
       this.delegate()
       super
 

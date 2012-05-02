@@ -179,16 +179,19 @@ div.kopi-navbar-top-fixed {
     .kopi-nav-left {
       @extend .kopi-nav-transition;
       @include translateX(0);
+      @include translate3d(0, 0, 0);
     }
 
     .kopi-nav-center {
       @extend .kopi-nav-transition;
       @include translateX(0);
+      @include translate3d(0, 0, 0);
     }
 
     .kopi-nav-right {
       @extend .kopi-nav-transition;
       @include translateX(0);
+      @include translate3d(0, 0, 0);
     }
   }
 
@@ -200,16 +203,19 @@ div.kopi-navbar-top-fixed {
     .kopi-nav-left {
       @include opacity(0);
       @include translateX($kopi-navbar-button-width * -1);
+      @include translate3d($kopi-navbar-button-width * -1, 0, 0);
     }
 
     .kopi-nav-center {
       @include opacity(0);
       @include translateX(-30%);
+      @include translate3d(-30%, 0, 0);
     }
 
     .kopi-nav-right {
       @include opacity(0);
       @include translateX(0);
+      @include translate3d(0, 0, 0);
     }
   }
 
@@ -221,16 +227,19 @@ div.kopi-navbar-top-fixed {
     .kopi-nav-left {
       @extend .kopi-nav-transition;
       @include translateX($kopi-navbar-button-width);
+      @include translate3d($kopi-navbar-button-width, 0, 0);
     }
 
     .kopi-nav-center {
       @extend .kopi-nav-transition;
       @include translateX(30%);
+      @include translate3d(30%, 0, 0);
     }
 
     .kopi-nav-right {
       @extend .kopi-nav-transition;
       @include translateX(0);
+      @include translate3d(0, 0, 0);
     }
   }
 
@@ -240,14 +249,17 @@ div.kopi-navbar-top-fixed {
 
     .kopi-nav-left {
       @include translateX(0);
+      @include translate3d(0, 0, 0);
     }
 
     .kopi-nav-center {
       @include translateX(0);
+      @include translate3d(0, 0, 0);
     }
 
     .kopi-nav-right {
       @include translateX(0);
+      @include translate3d(0, 0, 0);
     }
   }
 
@@ -263,16 +275,19 @@ div.kopi-navbar-top-fixed {
     .kopi-nav-left {
       @extend .kopi-nav-transition;
       @include translateX(0);
+      @include translate3d(0, 0, 0);
     }
 
     .kopi-nav-center {
       @extend .kopi-nav-transition;
       @include translateX(0);
+      @include translate3d(0, 0, 0);
     }
 
     .kopi-nav-right {
       @extend .kopi-nav-transition;
       @include translateX(0);
+      @include translate3d(0, 0, 0);
     }
   }
 
@@ -284,16 +299,19 @@ div.kopi-navbar-top-fixed {
     .kopi-nav-left {
       @include opacity(0);
       @include translateX($kopi-navbar-button-width);
+      @include translate3d($kopi-navbar-button-width, 0, 0);
     }
 
     .kopi-nav-center {
       @include opacity(0);
       @include translateX(30%);
+      @include translate3d(30%, 0, 0);
     }
 
     .kopi-nav-right {
       @include opacity(0);
       @include translateX(0);
+      @include translate3d(0, 0, 0);
     }
   }
 
@@ -305,16 +323,19 @@ div.kopi-navbar-top-fixed {
     .kopi-nav-left {
       @extend .kopi-nav-transition;
       @include translateX($kopi-navbar-button-width * -1);
+      @include translate3d($kopi-navbar-button-width * -1, 0, 0);
     }
 
     .kopi-nav-center {
       @extend .kopi-nav-transition;
       @include translateX(-30%);
+      @include translate3d(-30%, 0, 0);
     }
 
     .kopi-nav-right {
       @extend .kopi-nav-transition;
       @include translateX(0);
+      @include translate3d(0, 0, 0);
     }
   }
 
@@ -324,14 +345,17 @@ div.kopi-navbar-top-fixed {
 
     .kopi-nav-left {
       @include translateX(0);
+      @include translate3d(0, 0, 0);
     }
 
     .kopi-nav-center {
       @include translateX(0);
+      @include translate3d(0, 0, 0);
     }
 
     .kopi-nav-right {
       @include translateX(0);
+      @include translate3d(0, 0, 0);
     }
   }
 
