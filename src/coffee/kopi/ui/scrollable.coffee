@@ -267,6 +267,8 @@ define "kopi/ui/scrollable", (require, exports, module) ->
             child = $(child)
             containerWidth += child.outerWidth()
           self._container.width(containerWidth)
+        else
+          self._container.width(self._elementWidth)
 
         # Set total height
         if self._options.scrollY
@@ -275,7 +277,10 @@ define "kopi/ui/scrollable", (require, exports, module) ->
             child = $(child)
             containerHeight += child.outerHeight()
           self._container.height(containerHeight)
+        else
+          self._container.height(self._elementHeight)
 
+      # FIXME Actual size of container should be greater than element?
       self._containerWidth = math.max(self._container.outerWidth(), self._elementWidth)
       self._containerHeight = math.max(self._container.outerHeight(), self._elementHeight)
       self

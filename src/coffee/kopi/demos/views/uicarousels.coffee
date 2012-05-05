@@ -1,39 +1,35 @@
-define "kopi/demos/views/ui", (require, exports, module) ->
+define "kopi/demos/views/uicarousels", (require, exports, module) ->
 
+  array = require("kopi/utils/array")
   reverse = require("kopi/app/router").reverse
   View = require("kopi/views").View
   navigation = require("kopi/ui/navigation")
   viewswitchers = require "kopi/ui/viewswitchers"
-  NavList = require("kopi/ui/lists").NavList
-  ArrayAdapter = require("kopi/ui/lists/adapters").ArrayAdapter
+  carousels = require("kopi/ui/carousels")
 
-  class UIView extends View
+  class UICarouselView extends View
 
     constructor: ->
       super
       backButton = new navigation.NavButton
-        url: reverse("index")
+        url: reverse("ui")
         titleText: "Back"
       this.nav = new navigation.Nav
-        title: "UI"
+        title: "Carousel"
         leftButton: backButton
       this.view = new viewswitchers.View()
-      this.list = new NavList()
+
+      this.carousel = new carousels.Carousel()
 
     oncreate: ->
       this.app.navBar.add(this.nav)
       this.nav.skeleton()
       this.app.viewSwitcher.add(this.view)
       this.view.skeleton()
-      this.list
-        .adapter(new ArrayAdapter([
-          ["Buttons", "/ui/buttons/"]
-          ["Controls", "/ui/controls/"]
-          ["Lists", "/ui/lists/"]
-          ["Notification", "/ui/notification/"]
-          ["Tabs", "/ui/tabs/"]
-          ["Carousels", "/ui/carousels/"]
-        ])).skeletonTo(this.view.element)
+      for i in [1..10]
+        page = new carousels.CarouselPage imageSrc: "/images/pics/#{i}.jpg"
+        this.carousel.add(page)
+      this.carousel.skeletonTo(this.view.element)
       super
 
     onstart: ->
@@ -41,13 +37,13 @@ define "kopi/demos/views/ui", (require, exports, module) ->
       this.app.viewSwitcher.show(this.view)
       this.nav.render()
       this.view.render()
-      this.list.render()
+      this.carousel.render()
       super
 
     ondestroy: ->
-      this.list.destroy()
+      this.carousel.destroy()
       this.nav.destroy()
       this.view.destroy()
       super
 
-  UIView: UIView
+  UICarouselView: UICarouselView

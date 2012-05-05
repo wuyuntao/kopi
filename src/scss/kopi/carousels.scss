@@ -1,0 +1,18 @@
+@import "kopi/utils";
+
+.kopi-carousel {
+  @include unselectable;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.kopi-carousel-page {
+  @include unselectable;
+  float: left;
+  overflow: hidden;
+
+  img {
+    @include unselectable;
+  }
+}

@@ -46,7 +46,10 @@ define "kopi/ui/images", (require, exports, module) ->
         self._image = $ IMG_TAG, src: options.loaderSrc
         self.element.addClass cls.cssClass("loading")
       else
-        self._image = $ IMG_TAG, src: options.src
+        self._image = $ IMG_TAG,
+          src: options.src
+          width: options.width
+          height: options.height
       self.element.width(options.width).height(options.height).html(self._image)
       super
 

@@ -179,19 +179,16 @@ define "kopi/ui/widgets", (require, exports, module) ->
     skeletonTo: (element) ->
       this.skeleton().appendTo(element)
 
-    resize: ->
-      this.emit(this.constructor.RESIZE_EVENT)
-
     ###
     Render widget when data is ready
     ###
-    render: () ->
+    render: ->
       self = this
       return self if self.rendered or self.locked
       cls = this.constructor
       self.emit(cls.RENDER_EVENT)
 
-    update: () ->
+    update: ->
       self = this
       return self if self.locked
       cls = this.constructor
@@ -239,7 +236,8 @@ define "kopi/ui/widgets", (require, exports, module) ->
       self.initialized = true
 
     onrender: ->
-      this.resize()
+      cls = this.constructor
+      this.emit cls.RESIZE_EVENT
       if this._widgets
         this._widgets.forEach (name, widget) ->
           widget.render() if widget.options().autoRender isnt false

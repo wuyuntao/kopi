@@ -5,11 +5,11 @@ define "kopi/tests/ui/flippers", (require, exports, module) ->
   flipper = new flippers.Flipper
     flippableOptions:
       scrollY: false
-  page1 = new flippers.Page().skeleton(".page-1")
-  page2 = new flippers.Page().skeleton(".page-2")
-  page3 = new flippers.Page().skeleton(".page-3")
-  page4 = new flippers.Page().skeleton(".page-4")
-  page5 = new flippers.Page().skeleton(".page-5")
+  page1 = new flippers.FlipperPage().skeleton(".page-1")
+  page2 = new flippers.FlipperPage().skeleton(".page-2")
+  page3 = new flippers.FlipperPage().skeleton(".page-3")
+  page4 = new flippers.FlipperPage().skeleton(".page-4")
+  page5 = new flippers.FlipperPage().skeleton(".page-5")
   flipper
     .add(page1).end()
     .add(page2).end()

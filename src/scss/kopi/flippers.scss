@@ -1,0 +1,9 @@
+@import "kopi/scrollable";
+
+.kopi-flippable {
+  @extend .kopi-scrollable;
+}
+
+.kopi-flippable-container {
+  @extend .kopi-scrollable-container;
+}
