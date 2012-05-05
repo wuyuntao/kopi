@@ -1,5 +1,6 @@
 define "kopi/app/router", (require, exports, module) ->
 
+  object = require("kopi/utils/object")
   uri = require "kopi/utils/uri"
 
   ###

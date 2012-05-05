@@ -24,10 +24,26 @@ define "kopi/ui/viewswitchers", (require, exports, module) ->
   ###
   class ViewSwitcher extends Animator
 
-    this.widgetName "ViewSwitcher"
+    kls = this
+    kls.widgetName "ViewSwitcher"
 
-    this.configure
+    kls.POS_NONE = "none"
+    kls.POS_TOP = "top"
+    kls.POS_TOP_FIXED = "top-fixed"
+    kls.POS_BOTTOM = "bottom"
+    kls.POS_BOTTOM_FIXED = "bottom-fixed"
+
+    kls.configure
       childClass: View
+      # @type  {String} position of navbar
+      position: kls.POS_NONE
+
+    constructor: ->
+      super
+      cls = this.constructor
+      options = this._options
+      if options.position != cls.POS_NONE
+        options.extraClass += " #{cls.cssClass(options.position)}"
 
     onlock: ->
       app.instance().lock()

@@ -58,25 +58,21 @@ define "kopi/ui/animators/animations", (require, exports, module) ->
         fromElement.addClass(fromStopClass)
         toElement.addClass(toStopClass)
         self.emit(cls.ANIMATION_START_EVENT, [from, to, options])
+        # TODO Use transitionEnd event when possible?
         setTimeout(endTransitionFn, self._options.duration + 50)
 
       endTransitionFn = ->
         self.emit(cls.ANIMATION_END_EVENT, [from, to, options])
         # Make sure transition is complete
-        toElement
-          .addClass(toClass.cssClass("show"))
-          .removeClass("#{toStartClass} #{toStopClass}")
-        # A workaround that removes classes `fromElement` a bit later
-        # to make sure `toElement` has been shown
-        setTimeout (->
-          fromElement
-            .removeClass(toClass.cssClass("show"))
-            .removeClass("#{fromStartClass} #{fromStopClass}")
-        ), 50
+        toElement.addClass(toClass.cssClass("show"))
+        fromElement.removeClass(toClass.cssClass("show"))
+        # Make sure transition classes are removed later
         animatorElement.removeClass("#{animationClass} #{animationReverseClass}")
+        toElement.removeClass("#{toStartClass} #{toStopClass}")
+        fromElement.removeClass("#{fromStartClass} #{fromStopClass}")
         fn(null) if fn
 
-      setTimeout(startTransitionFn, 50)
+      setTimeout(startTransitionFn, 100)
       self
 
     # onanimationready: (e, from, to, options) ->

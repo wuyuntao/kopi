@@ -17,6 +17,8 @@ define "kopi/ui/clickable", (require, exports, module) ->
     kls.TOUCH_HOLD_EVENT = "touchhold"
     kls.EVENT_NAMESPACE = "clickable"
 
+    this.widgetName "Clickable"
+
     kls.configure
       # @type   {Integer}   holdTime      time for touch and hold event
       holdTime: 2000

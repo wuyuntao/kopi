@@ -1,7 +1,18 @@
+@import "kopi/themes/base";
 @import 'kopi/utils';
 
 .kopi-image {
   @include inline-block;
   text-align: center;
   vertical-align: middle;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.kopi-image-bordered {
+  border: 1px solid $kopi-gray-light;
+
+  img {
+    margin: 3px;
+  }
 }

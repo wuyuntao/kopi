@@ -4,8 +4,12 @@
 
 // General CSS
 @import "kopi/general";
+@import "kopi/sections";
 @import "kopi/animation";
 @import "kopi/ellipsis";
+
+// Components: Forms
+@import "kopi/forms";
 
 // Components: common
 @import "kopi/box";
@@ -32,6 +36,11 @@
 // Components: Tabs
 @import "kopi/tabs";
 
-// Components: Misc
+// Components: Carousel
 @import "kopi/scrollable";
+@import "kopi/flippers";
+@import "kopi/carousels";
+
+// Components: Misc
 @import "kopi/indicators";
+@import "kopi/images";

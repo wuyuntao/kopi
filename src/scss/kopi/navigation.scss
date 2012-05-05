@@ -15,6 +15,7 @@
  */
 .kopi-navbar {
   @include unselectable;
+  background-color: $kopi-navbar-background;
   @include background(linear-gradient(top, $kopi-navbar-background-highlight 0%, $kopi-navbar-background 100%));
   $shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 -1px 0 rgba(0,0,0,.1);
   @include box-shadow($shadow);
@@ -168,80 +169,195 @@ div.kopi-navbar-top-fixed {
   @include transition-timing-function(ease-out);
 }
 
-.kopi-nav-from-start {
-  @extend .kopi-nav-transition;
-  @include opacity(1);
-  display: block;
+.kopi-navbar-animation {
 
-  .kopi-nav-left {
+  .kopi-nav-from-start {
     @extend .kopi-nav-transition;
-    @include translateX(0);
+    @include opacity(1);
+    display: block;
+
+    .kopi-nav-left {
+      @extend .kopi-nav-transition;
+      @include translateX(0);
+      @include translate3d(0, 0, 0);
+    }
+
+    .kopi-nav-center {
+      @extend .kopi-nav-transition;
+      @include translateX(0);
+      @include translate3d(0, 0, 0);
+    }
+
+    .kopi-nav-right {
+      @extend .kopi-nav-transition;
+      @include translateX(0);
+      @include translate3d(0, 0, 0);
+    }
   }
 
-  .kopi-nav-center {
+  .kopi-nav-from-stop {
     @extend .kopi-nav-transition;
-    @include translateX(0);
+    @include opacity(0);
+    display: block;
+
+    .kopi-nav-left {
+      @include opacity(0);
+      @include translateX($kopi-navbar-button-width * -1);
+      @include translate3d($kopi-navbar-button-width * -1, 0, 0);
+    }
+
+    .kopi-nav-center {
+      @include opacity(0);
+      @include translateX(-30%);
+      @include translate3d(-30%, 0, 0);
+    }
+
+    .kopi-nav-right {
+      @include opacity(0);
+      @include translateX(0);
+      @include translate3d(0, 0, 0);
+    }
   }
 
-  .kopi-nav-right {
+  .kopi-nav-to-start {
     @extend .kopi-nav-transition;
-    @include translateX(0);
+    @include opacity(0);
+    display: block;
+
+    .kopi-nav-left {
+      @extend .kopi-nav-transition;
+      @include translateX($kopi-navbar-button-width);
+      @include translate3d($kopi-navbar-button-width, 0, 0);
+    }
+
+    .kopi-nav-center {
+      @extend .kopi-nav-transition;
+      @include translateX(30%);
+      @include translate3d(30%, 0, 0);
+    }
+
+    .kopi-nav-right {
+      @extend .kopi-nav-transition;
+      @include translateX(0);
+      @include translate3d(0, 0, 0);
+    }
   }
+
+  .kopi-nav-to-stop {
+    @include opacity(1);
+    display: block;
+
+    .kopi-nav-left {
+      @include translateX(0);
+      @include translate3d(0, 0, 0);
+    }
+
+    .kopi-nav-center {
+      @include translateX(0);
+      @include translate3d(0, 0, 0);
+    }
+
+    .kopi-nav-right {
+      @include translateX(0);
+      @include translate3d(0, 0, 0);
+    }
+  }
+
 }
 
-.kopi-nav-from-stop {
-  @extend .kopi-nav-transition;
-  @include opacity(0);
-  display: block;
+.kopi-navbar-animation-reverse {
 
-  .kopi-nav-left {
-    @include translateX($kopi-navbar-button-width * -1);
-  }
-
-  .kopi-nav-center {
-    @include translateX(-30%);
-  }
-
-  .kopi-nav-right {
-    @include translateX(0);
-  }
-}
-
-.kopi-nav-to-start {
-  @extend .kopi-nav-transition;
-  @include opacity(0);
-  display: block;
-
-  .kopi-nav-left {
+  .kopi-nav-from-start {
     @extend .kopi-nav-transition;
-    @include translateX($kopi-navbar-button-width);
+    @include opacity(1);
+    display: block;
+
+    .kopi-nav-left {
+      @extend .kopi-nav-transition;
+      @include translateX(0);
+      @include translate3d(0, 0, 0);
+    }
+
+    .kopi-nav-center {
+      @extend .kopi-nav-transition;
+      @include translateX(0);
+      @include translate3d(0, 0, 0);
+    }
+
+    .kopi-nav-right {
+      @extend .kopi-nav-transition;
+      @include translateX(0);
+      @include translate3d(0, 0, 0);
+    }
   }
 
-  .kopi-nav-center {
+  .kopi-nav-from-stop {
     @extend .kopi-nav-transition;
-    @include translateX(30%);
+    @include opacity(0);
+    display: block;
+
+    .kopi-nav-left {
+      @include opacity(0);
+      @include translateX($kopi-navbar-button-width);
+      @include translate3d($kopi-navbar-button-width, 0, 0);
+    }
+
+    .kopi-nav-center {
+      @include opacity(0);
+      @include translateX(30%);
+      @include translate3d(30%, 0, 0);
+    }
+
+    .kopi-nav-right {
+      @include opacity(0);
+      @include translateX(0);
+      @include translate3d(0, 0, 0);
+    }
   }
 
-  .kopi-nav-right {
+  .kopi-nav-to-start {
     @extend .kopi-nav-transition;
-    @include translateX(0);
-  }
-}
+    @include opacity(0);
+    display: block;
 
-.kopi-nav-to-stop {
-  @include opacity(1);
-  display: block;
+    .kopi-nav-left {
+      @extend .kopi-nav-transition;
+      @include translateX($kopi-navbar-button-width * -1);
+      @include translate3d($kopi-navbar-button-width * -1, 0, 0);
+    }
 
-  .kopi-nav-left {
-    @include translateX(0);
+    .kopi-nav-center {
+      @extend .kopi-nav-transition;
+      @include translateX(-30%);
+      @include translate3d(-30%, 0, 0);
+    }
+
+    .kopi-nav-right {
+      @extend .kopi-nav-transition;
+      @include translateX(0);
+      @include translate3d(0, 0, 0);
+    }
   }
 
-  .kopi-nav-center {
-    @include translateX(0);
+  .kopi-nav-to-stop {
+    @include opacity(1);
+    display: block;
+
+    .kopi-nav-left {
+      @include translateX(0);
+      @include translate3d(0, 0, 0);
+    }
+
+    .kopi-nav-center {
+      @include translateX(0);
+      @include translate3d(0, 0, 0);
+    }
+
+    .kopi-nav-right {
+      @include translateX(0);
+      @include translate3d(0, 0, 0);
+    }
   }
 
-  .kopi-nav-right {
-    @include translateX(0);
-  }
 }
 // }}}

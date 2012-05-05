@@ -1,4 +1,4 @@
 #!/bin/bash
 
-mkdir -p build/css
+mkdir -p lib/css
 compass watch .

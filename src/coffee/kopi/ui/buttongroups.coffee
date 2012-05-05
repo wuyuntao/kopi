@@ -8,7 +8,7 @@ define "kopi/ui/buttongroups", (require, exports, module) ->
   ###
   class ButtonGroup extends Group
 
-    this.widgetName("ButtonGroup")
+    this.widgetName "ButtonGroup"
 
     this.configure
       childClass: Button

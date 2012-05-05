@@ -17,6 +17,8 @@ define "kopi/ui/images", (require, exports, module) ->
   ###
   class Image extends widgets.Widget
 
+    this.widgetName "Image"
+
     this.configure
       tagName: "figure"
       height: null
@@ -24,9 +26,12 @@ define "kopi/ui/images", (require, exports, module) ->
       src: "/images/kopi/transparent.gif"
       loaderSrc: ""
       fallbackSrc: ""
+      bordered: false
 
     constructor: ->
       super
+      if this._options.bordered
+        this._options.extraClasses += " #{this.constructor.cssClass("bordered")}"
       this._src = this._options.src
 
     image: (src) ->
@@ -45,8 +50,8 @@ define "kopi/ui/images", (require, exports, module) ->
         self.element.addClass cls.cssClass("loading")
       else
         self._image = $(IMG_TAG, src: options.src)
-          .height(options.height)
-          .width(options.width)
+        self._image.height(options.height)
+        self._image.width(options.width)
       self.element
         .width(options.width)
         .height(options.height)

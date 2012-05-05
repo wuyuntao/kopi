@@ -1,4 +1,4 @@
-define "kopi/ui/lists/adapters", (require, exports, module) ->
+define "kopi/ui/groups/adapters", (require, exports, module) ->
 
   array = require "kopi/utils/array"
   events = require "kopi/events"

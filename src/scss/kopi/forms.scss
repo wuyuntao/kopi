@@ -1,0 +1,500 @@
+/**
+ * NOTE
+ * This module has just ported from bootstrap and needs a cleanup
+ *
+ * -- wuyuntao, 2012-05-01
+ */
+
+/**
+ * GENERAL STYLES
+ */
+@import "kopi/themes/base";
+@import "kopi/utils";
+
+// Make all forms have space below them
+form {
+  margin: 0 0 $kopi-base-line-height;
+}
+
+fieldset {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+// Groups of fields with labels on top (legends)
+legend {
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin-bottom: $kopi-base-line-height * 1.5;
+  font-size: $kopi-base-font-size * 1.5;
+  line-height: $kopi-base-line-height * 2;
+  color: $kopi-gray-dark;
+  border: 0;
+  border-bottom: 1px solid #eee;
+
+  // Small
+  small {
+    font-size: $kopi-base-line-height * .75;
+    color: $kopi-gray-light;
+  }
+}
+
+// Set font for forms
+label, input, button, select, textarea {
+  font-size: $kopi-base-font-size;
+  font-weight: normal;
+  font-weight: $kopi-base-line-height;
+}
+
+input, button, select, textarea {
+  font-family: $kopi-base-font-family; // And only set font-family here for those that need it (note the missing label element)
+}
+
+// Identify controls by their labels
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: $kopi-gray-dark;
+}
+
+// Inputs, Textareas, Selects
+input, textarea, select, .uneditable-input {
+  @include inline-block();
+  width: 210px;
+  height: $kopi-base-line-height;
+  padding: 4px;
+  margin-bottom: 9px;
+  font-size: $kopi-base-font-size;
+  line-height: $kopi-base-line-height;
+  color: $kopi-gray;
+  border: 1px solid $kopi-input-border;
+  @include border-radius(3px);
+}
+.uneditable-textarea {
+  width: auto;
+  height: auto;
+}
+
+// Inputs within a label
+label input, label textarea, label select {
+  display: block;
+}
+
+// Mini reset for unique input types
+input[type="image"], input[type="checkbox"], input[type="radio"] {
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 3px 0;
+  *margin-top: 0; /* IE7 */
+  line-height: normal;
+  cursor: pointer;
+  @include border-radius(0);
+  border: 0 \9; /* IE9 and down */
+}
+input[type="image"] {
+  border: 0;
+}
+
+// Reset the file input to browser defaults
+input[type="file"] {
+  width: auto;
+  padding: initial;
+  line-height: initial;
+  border: initial;
+  background-color: $kopi-input-background;
+  background-color: initial;
+  @include box-shadow(none);
+}
+
+// Help out input buttons
+input[type="button"], input[type="reset"], input[type="submit"] {
+  width: auto;
+  height: auto;
+}
+
+// Set the height of select and file controls to match text inputs
+select, input[type="file"] {
+  height: 28px; /* In IE7, the height of the select element cannot be changed by height, only font-size */
+  *margin-top: 4px; /* For IE7, add top margin to align select with labels */
+  line-height: 28px;
+}
+
+// Reset line-height for IE
+input[type="file"] {
+  line-height: 18px \9;
+}
+
+// Chrome on Linux and Mobile Safari need background-color
+select {
+  width: 220px; // default input width + 10px of padding that doesn't get applied
+  background-color: $kopi-input-background;
+}
+
+// Make multiple select elements height not fixed
+select[multiple], select[size] {
+  height: auto;
+}
+
+// Remove shadow from image inputs
+input[type="image"] {
+  @include box-shadow(none);
+}
+
+// Make textarea height behave
+textarea {
+  height: auto;
+}
+
+// Hidden inputs
+input[type="hidden"] {
+  display: none;
+}
+
+/**
+ * CHECKBOXES & RADIOS
+ */
+
+// Indent the labels to position radios/checkboxes as hanging
+.radio, .checkbox {
+  padding-left: 18px;
+}
+.radio input[type="radio"], .checkbox input[type="checkbox"] {
+  float: left;
+  margin-left: -18px;
+}
+
+// Move the options list down to align with labels
+.kopi-controls > .radio:first-child, .kopi-controls > .checkbox:first-child {
+  padding-top: 5px; // has to be padding because margin collaspes
+}
+
+// Radios and checkboxes on same line
+// TODO v3: Convert .inline to .kopi-control-inline
+.radio.inline, .checkbox.inline {
+  @include inline-block();
+  padding-top: 5px;
+  margin-bottom: 0;
+  vertical-align: middle;
+}
+.radio.inline + .radio.inline, .checkbox.inline + .checkbox.inline {
+  margin-left: 10px; // space out consecutive inline controls
+}
+
+/**
+ * FOCUS STATE
+ */
+input, textarea {
+  @include box-shadow(inset 0 1px 1px rgba(0,0,0,.075));
+  $transition: border linear .2s, box-shadow linear .2s;
+  @include transition($transition);
+}
+input:focus, textarea:focus {
+  border-color: rgba(82,168,236,.8);
+  $shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
+  @include box-shadow($shadow);
+  outline: 0;
+  outline: thin dotted \9; /* IE6-9 */
+}
+input[type="file"]:focus, input[type="radio"]:focus, input[type="checkbox"]:focus, select:focus {
+  @include box-shadow(none); // override for file inputs
+  @include kopi-tab-focus();
+}
+
+/**
+ * INPUT SIZES
+ */
+
+// General classes for quick sizes
+.kopi-input-mini {
+  width: 60px;
+}
+
+.kopi-input-small {
+  width: 90px;
+}
+
+.kopi-input-medium {
+  width: 150px;
+}
+
+.kopi-input-large {
+  width: 210px;
+  font-size: $kopi-base-font-size + 2px;
+  line-height: $kopi-base-line-height + 5px;
+  height: $kopi-base-line-height + 5px;
+}
+
+.kopi-input-xlarge {
+  width: 270px;
+  font-size: $kopi-base-font-size + 2px;
+  line-height: $kopi-base-line-height + 5px;
+  height: $kopi-base-line-height + 5px;
+}
+
+.kopi-input-xxlarge {
+  width: 530px;
+  font-size: $kopi-base-font-size + 7px;
+  line-height: $kopi-base-line-height + 12px;
+  height: $kopi-base-line-height + 12px;
+}
+
+.kopi-input-fill {
+  width: 90%;
+  font-size: $kopi-base-font-size + 7px;
+  line-height: $kopi-base-line-height + 12px;
+  height: $kopi-base-line-height + 12px;
+}
+
+// Grid style input sizes
+input[class*="span"], select[class*="span"], textarea[class*="span"], .uneditable-input {
+  float: none;
+  margin-left: 0;
+}
+
+/**
+ * DISABLED STATE
+ */
+
+// Disabled and read-only inputs
+input[disabled], select[disabled], textarea[disabled], input[readonly], select[readonly], textarea[readonly] {
+  background-color: $kopi-input-disabled-background;
+  border-color: #ddd;
+  cursor: not-allowed;
+}
+
+/**
+ * FORM FIELD FEEDBACK STATES
+ */
+
+// HTML5 invalid states
+// Shares styles with the .kopi-control-group.error above
+input:focus:required:invalid, textarea:focus:required:invalid, select:focus:required:invalid {
+  color: #b94a48;
+  border-color: #ee5f5b;
+  &:focus {
+    border-color: darken(#ee5f5b, 10%);
+    @include box-shadow(0 0 6px lighten(#ee5f5b, 20%));
+  }
+}
+
+
+
+/**
+ * FORM ACTIONS
+ */
+
+.kopi-form-actions {
+  padding: ($kopi-base-line-height - 1) 20px $kopi-base-line-height;
+  margin-top: $kopi-base-line-height;
+  margin-bottom: $kopi-base-line-height;
+  background-color: $kopi-gray-lighter;
+  border-top: 1px solid #ddd;
+  @include clearfix(); // Adding clearfix to allow for .pull-right button containers
+}
+
+// For text that needs to appear as an input but should not be an input
+.uneditable-input {
+  display: block;
+  background-color: $kopi-input-background;
+  border-color: #eee;
+  @include box-shadow(inset 0 1px 2px rgba(0,0,0,.025));
+  cursor: not-allowed;
+}
+
+/**
+ * HELP TEXT
+ */
+
+.kopi-help-block, .kopi-help-inline {
+  color: $kopi-gray; // lighten the text for some contrast
+}
+
+.kopi-help-block {
+  display: block; // account for any element using help-block
+  margin-bottom: $kopi-base-line-height / 2;
+}
+
+.kopi-help-inline {
+  @include inline-block();
+  vertical-align: middle;
+  padding-left: 5px;
+}
+
+
+
+/**
+ * INPUT GROUPS
+ */
+
+// Allow us to put symbols and text within the input field for a cleaner look
+.input-prepend, .input-append {
+  margin-bottom: 5px;
+  input, select, .uneditable-input {
+    *margin-left: 0;
+    @include border-radius(0 3px 3px 0);
+    &:focus {
+      position: relative;
+      z-index: 2;
+    }
+  }
+  .uneditable-input {
+    border-left-color: #eee;
+    border-right-color: #ccc;
+  }
+  .add-on {
+    @include inline-block();
+    width: auto;
+    min-width: 16px;
+    height: $kopi-base-line-height;
+    padding: 4px 5px;
+    font-weight: normal;
+    line-height: $kopi-base-line-height;
+    text-align: center;
+    text-shadow: 0 1px 0 $kopi-white;
+    vertical-align: middle;
+    background-color: $kopi-gray-lighter;
+    border: 1px solid #ccc;
+  }
+  .add-on, .btn {
+    @include border-radius(3px 0 0 3px);
+  }
+  .active {
+    background-color: lighten($kopi-green, 30);
+    border-color: $kopi-green;
+  }
+}
+.input-prepend {
+  .add-on, .btn {
+    margin-right: -1px;
+  }
+}
+.input-append {
+  input, select, .uneditable-input {
+    @include border-radius(3px 0 0 3px);
+  }
+  .uneditable-input {
+    border-right-color: #ccc;
+  }
+  .add-on, .btn {
+    margin-left: -1px;
+    @include border-radius(0 3px 3px 0);
+  }
+}
+// Remove all border-radius for inputs with both prepend and append
+.input-prepend.input-append {
+  input, select, .uneditable-input {
+    @include border-radius(0);
+  }
+  .add-on:first-child, .btn:first-child {
+    margin-right: -1px;
+    @include border-radius(3px 0 0 3px);
+  }
+  .add-on:last-child, .btn:last-child {
+    margin-left: -1px;
+    @include border-radius(0 3px 3px 0);
+  }
+}
+
+
+
+/**
+ * SEARCH FORM
+ */
+
+.search-query {
+  padding-left: 14px;
+  padding-right: 14px;
+  margin-bottom: 0; // remove the default margin on all inputs
+  @include border-radius(14px);
+}
+
+
+
+/**
+ * HORIZONTAL & VERTICAL FORMS
+ */
+
+/**
+ * Common properties
+ */
+
+.kopi-form-search, .kopi-form-inline, .kopi-form-horizontal {
+  input, textarea, select, .kopi-help-inline, .uneditable-input, .input-prepend, .input-append {
+    @include inline-block();
+    margin-bottom: 0;
+  }
+  // Re-hide elemnts due to specifity
+  .hide { display: none; }
+}
+.kopi-form-search label, .kopi-form-inline label {
+  @include inline-block();
+}
+// Remove margin for input-prepend/-append
+.kopi-form-search .input-append, .kopi-form-inline .input-append, .kopi-form-search .input-prepend, .kopi-form-inline .input-prepend {
+  margin-bottom: 0;
+}
+// Inline checkbox/radio labels (remove padding on left)
+.kopi-form-search .radio, .kopi-form-search .checkbox, .kopi-form-inline .radio, .kopi-form-inline .checkbox {
+  padding-left: 0;
+  margin-bottom: 0;
+  vertical-align: middle;
+}
+// Remove float and margin, set to inline-block
+.kopi-form-search .radio input[type="radio"], .kopi-form-search .checkbox input[type="checkbox"], .kopi-form-inline .radio input[type="radio"], .kopi-form-inline .checkbox input[type="checkbox"] {
+  float: left;
+  margin-left: 0;
+  margin-right: 3px;
+}
+
+
+
+// Margin to space out fieldsets
+.kopi-control-group {
+  margin-bottom: $kopi-base-line-height / 2;
+}
+
+// Legend collapses margin, so next elements is responsible for spacing
+legend + .kopi-control-group {
+  margin-top: $kopi-base-line-height;
+  -webkit-margin-top-collapse: separate;
+}
+
+/**
+ * Horizontal-specific styles
+ */
+
+.kopi-form-horizontal {
+  // Increase spacing between groups
+  .kopi-control-group {
+    margin-bottom: $kopi-base-line-height;
+    @include clearfix();
+  }
+  // Float the labels left
+  .kopi-control-label {
+    float: left;
+    width: 140px;
+    padding-top: 5px;
+    text-align: right;
+  }
+  // Move over all input controls and content
+  .kopi-controls {
+    margin-left: 160px;
+    /* Super jank IE7 fix to ensure the inputs in .input-append and input-prepend don't inherit the margin of the parent, in this case .kopi-controls */
+    *display: inline-block;
+    *margin-left: 0;
+    *padding-left: 20px;
+  }
+  // Remove bottom margin on block level help text since that's accounted for on .kopi-control-group
+  .kopi-help-block {
+    margin-top: $kopi-base-line-height / 2;
+    margin-bottom: 0;
+  }
+  // Move over buttons in .kopi-form-actions to align with .kopi-controls
+  .kopi-form-actions {
+    padding-left: 160px;
+  }
+}
+

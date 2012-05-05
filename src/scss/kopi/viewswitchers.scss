@@ -1,4 +1,5 @@
 @import "compass/css3";
+@import "kopi/themes/base";
 
 .fill-parent {
   position: absolute;
@@ -11,6 +12,36 @@
 // {{{ View Switcher
 .kopi-view-switcher {
   @extend .fill-parent;
+}
+
+.kopi-view-switcher-top {
+  top: $kopi-navbar-height;
+  border-width: 0 0 1px;
+  z-index: 300;
+}
+
+.kopi-view-switcher-bottom {
+  bottom: $kopi-navbar-height;
+  border-width: 1px 0 0;
+}
+
+.kopi-view-switcher-fixed {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 200;
+}
+
+div.kopi-view-switcher-top-fixed {
+  @extend .kopi-view-switcher-fixed;
+  @extend .kopi-view-switcher-top;
+  bottom: 0;
+}
+
+.kopi-view-switcher-bottom-fixed {
+  @extend .kopi-navbar-fixed;
+  @extend .kopi-navbar-bottom;
+  top: 0;
 }
 // }}}
 
@@ -35,29 +66,69 @@
   @include transition-timing-function(ease-out);
 }
 
-.kopi-view-from-start {
-  @include opacity(1);
-  @include translateX(0);
-  display: block;
+.kopi-view-switcher-animation {
+
+  .kopi-view-from-start {
+    @include opacity(1);
+    @include translateX(0);
+    @include translate3d(0, 0, 0);
+    display: block;
+  }
+
+  .kopi-view-from-stop {
+    @extend .kopi-view-transition;
+    @include opacity(0.7);
+    @include translateX(-100%);
+    @include translate3d(-100%, 0, 0);
+    display: block;
+  }
+
+  .kopi-view-to-start {
+    @include opacity(0.7);
+    @include translateX(100%);
+    @include translate3d(100%, 0, 0);
+    display: block;
+  }
+
+  .kopi-view-to-stop {
+    @extend .kopi-view-transition;
+    @include opacity(1);
+    @include translateX(0);
+    @include translate3d(0, 0, 0);
+    display: block;
+  }
 }
 
-.kopi-view-from-stop {
-  @extend .kopi-view-transition;
-  @include opacity(0.7);
-  @include translateX(-100%);
-  display: block;
-}
+.kopi-view-switcher-animation-reverse {
 
-.kopi-view-to-start {
-  @include opacity(0.7);
-  @include translateX(100%);
-  display: block;
-}
+  .kopi-view-from-start {
+    @include opacity(1);
+    @include translateX(0);
+    @include translate3d(0, 0, 0);
+    display: block;
+  }
 
-.kopi-view-to-stop {
-  @extend .kopi-view-transition;
-  @include opacity(1);
-  @include translateX(0);
-  display: block;
+  .kopi-view-from-stop {
+    @extend .kopi-view-transition;
+    @include opacity(0.7);
+    @include translateX(100%);
+    @include translate3d(100%, 0, 0);
+    display: block;
+  }
+
+  .kopi-view-to-start {
+    @include opacity(0.7);
+    @include translateX(-100%);
+    @include translate3d(-100%, 0, 0);
+    display: block;
+  }
+
+  .kopi-view-to-stop {
+    @extend .kopi-view-transition;
+    @include opacity(1);
+    @include translateX(0);
+    @include translate3d(0, 0, 0);
+    display: block;
+  }
 }
 // }}}

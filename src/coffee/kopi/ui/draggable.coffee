@@ -33,6 +33,8 @@ define "kopi/ui/draggable", (require, exports, module) ->
     kls.TRANSFORM_ORIGIN_STYLE = "0 0"
     kls.TRANSFORM_STYLE = "#{css.TRANSLATE_OPEN}{x}px,{y}px#{css.TRANSLATE_CLOSE}"
 
+    kls.widgetName "Draggable"
+
     moveTo: (x, y, duration) ->
       self = this
       self._stopAnimation()
