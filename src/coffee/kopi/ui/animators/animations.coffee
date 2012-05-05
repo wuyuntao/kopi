@@ -58,6 +58,7 @@ define "kopi/ui/animators/animations", (require, exports, module) ->
         fromElement.addClass(fromStopClass)
         toElement.addClass(toStopClass)
         self.emit(cls.ANIMATION_START_EVENT, [from, to, options])
+        # TODO Use transitionEnd event when possible?
         setTimeout(endTransitionFn, self._options.duration + 50)
 
       endTransitionFn = ->

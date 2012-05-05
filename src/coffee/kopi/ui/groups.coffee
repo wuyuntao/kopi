@@ -1,8 +1,10 @@
 define "kopi/ui/groups", (require, exports, module) ->
 
+  klass = require "kopi/utils/klass"
   exceptions = require "kopi/exceptions"
   array = require "kopi/utils/array"
   widgets = require "kopi/ui/widgets"
+  QueueAdapter = require("kopi/ui/groups/adapters").QueueAdapter
 
   class Group extends widgets.Widget
 
@@ -123,4 +125,53 @@ define "kopi/ui/groups", (require, exports, module) ->
     ###
     _wrapper: -> this.element
 
+  ###
+  An AdapterGroup is a group whose children are determined by an Adapter.
+
+  Inspired by Android's AdapterView.
+
+  ###
+  class AdapterGroup extends Group
+
+    ###
+    Accessor for adapter
+
+    When changing adapter, redraw whole list
+    ###
+    klass.accessor this.prototype, "adapter",
+      set: (adapter) ->
+        self = this
+        # Remove event listeners if previous adapter is a queue adapter
+        if self._adapter and self._adapter instanceof QueueAdapter
+          self._adapter.off(QueueAdapter.CHANGE_EVENT)
+
+        self._adapter = adapter
+        # Add event listeners if current adapter is a queue adapter
+        if adapter and adapter instanceof QueueAdapter
+          changeFn = (e) -> self.renderItems()
+          adapter.on(QueueAdapter.CHANGE_EVENT, changeFn)
+
+    onrender: ->
+      this.renderChildren()
+      super
+
+    ###
+    Render all items included in the adapter
+
+    ###
+    renderChildren: ->
+      self = this
+      if not self._adapter
+        throw new exceptions.ValueError("Missing adapter")
+      # Remove old items
+      while self._children.length
+        self.removeAt(0)
+      # Create from adapter
+      itemClass = self._options.childClass
+      self._adapter.forEach (data, i) ->
+        item = new itemClass(self, data)
+        self.addAt(item, i)
+      self
+
   Group: Group
+  AdapterGroup: AdapterGroup
