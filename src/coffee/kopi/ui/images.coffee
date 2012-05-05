@@ -26,9 +26,12 @@ define "kopi/ui/images", (require, exports, module) ->
       src: ""
       loaderSrc: ""
       fallbackSrc: ""
+      bordered: false
 
     constructor: ->
       super
+      if this._options.bordered
+        this._options.extraClasses += " #{this.constructor.cssClass("bordered")}"
       this._src = this._options.src
 
     image: (src) ->
