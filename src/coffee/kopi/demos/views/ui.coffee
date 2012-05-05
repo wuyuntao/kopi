@@ -5,7 +5,7 @@ define "kopi/demos/views/ui", (require, exports, module) ->
   navigation = require("kopi/ui/navigation")
   viewswitchers = require "kopi/ui/viewswitchers"
   NavList = require("kopi/ui/lists").NavList
-  ArrayAdapter = require("kopi/ui/lists/adapters").ArrayAdapter
+  ArrayAdapter = require("kopi/ui/groups/adapters").ArrayAdapter
 
   class UIView extends View
 

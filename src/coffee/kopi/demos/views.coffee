@@ -2,7 +2,7 @@ define "kopi/demos/views", (require, exports, module) ->
 
   views = require "kopi/views"
   lists = require "kopi/ui/lists"
-  adapters = require "kopi/ui/lists/adapters"
+  adapters = require "kopi/ui/groups/adapters"
   navigation = require "kopi/ui/navigation"
   viewswitchers = require "kopi/ui/viewswitchers"
   settings = require "kopi/demos/settings"

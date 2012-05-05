@@ -6,7 +6,7 @@ define "kopi/demos/views/uilists", (require, exports, module) ->
   reverse = require("kopi/app/router").reverse
   Scrollable = require("kopi/ui/scrollable").Scrollable
   List = require("kopi/ui/lists").List
-  ArrayAdapter = require("kopi/ui/lists/adapters").ArrayAdapter
+  ArrayAdapter = require("kopi/ui/groups/adapters").ArrayAdapter
   array = require("kopi/utils/array")
 
   class UIListView extends View
