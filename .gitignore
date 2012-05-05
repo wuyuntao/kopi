@@ -11,5 +11,8 @@
 .todo*
 .rvmrc
 .DS_Store
-build
+lib/js/kopi
+lib/js/kopi.js
+lib/css/kopi
+lib/css/kopi.css
 tmp

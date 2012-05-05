@@ -1,4 +1,4 @@
 #!/bin/bash
 
-mkdir -p build/js
-coffee -o build/js/ -cw src/coffee/
+mkdir -p lib/js
+coffee -o lib/js/ -cw src/coffee/
