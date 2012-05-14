@@ -1,0 +1,33 @@
+/* line 3, ../../../src/scss/kopi/carousels.scss */
+.kopi-carousel {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-drag: none;
+  user-drag: none;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* line 10, ../../../src/scss/kopi/carousels.scss */
+.kopi-carousel-page {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-drag: none;
+  user-drag: none;
+  float: left;
+  overflow: hidden;
+}
+/* line 15, ../../../src/scss/kopi/carousels.scss */
+.kopi-carousel-page img {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-drag: none;
+  user-drag: none;
+}

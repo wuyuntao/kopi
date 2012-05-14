@@ -1,0 +1,3892 @@
+/**
+ * Global variables
+ */
+/**
+ * Gray levels
+ */
+/**
+ * Accent colors
+ */
+/**
+ * Scaffolding
+ */
+/**
+ * Links
+ */
+/**
+ * Typography
+ */
+/**
+ * Tables
+ */
+/**
+ * Lists
+ */
+/**
+ * Buttons
+ */
+/**
+ * Forms
+ */
+/**
+ * Dropdowns
+ */
+/**
+ * Component Variables
+ */
+/**
+ * Z-index master list
+ *
+ * Used for a bird's eye view of components dependent on the z-axis
+ * Try to avoid customizing these :)
+ */
+/**
+ * Sprite icons path
+ */
+/**
+ * Input placeholder text color
+ */
+/**
+ * Hr border color
+ */
+/**
+ * Navbar
+ */
+/**
+ * Hero unit
+ */
+/**
+ * Form states and alerts
+ */
+/**
+ * Notification
+ */
+/**
+ * Tabs
+ */
+/**
+ * Global variables
+ */
+/**
+ * Gray levels
+ */
+/**
+ * Accent colors
+ */
+/**
+ * Scaffolding
+ */
+/**
+ * Links
+ */
+/**
+ * Typography
+ */
+/**
+ * Tables
+ */
+/**
+ * Lists
+ */
+/**
+ * Buttons
+ */
+/**
+ * Forms
+ */
+/**
+ * Dropdowns
+ */
+/**
+ * Component Variables
+ */
+/**
+ * Z-index master list
+ *
+ * Used for a bird's eye view of components dependent on the z-axis
+ * Try to avoid customizing these :)
+ */
+/**
+ * Sprite icons path
+ */
+/**
+ * Input placeholder text color
+ */
+/**
+ * Hr border color
+ */
+/**
+ * Navbar
+ */
+/**
+ * Hero unit
+ */
+/**
+ * Form states and alerts
+ */
+/**
+ * Notification
+ */
+/**
+ * Tabs
+ */
+/* line 5, ../../src/scss/kopi/general.scss */
+body {
+  background: white;
+  color: #333333;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+}
+/* line 114, ../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+body article, body aside, body details, body figcaption, body figure, body footer, body header, body hgroup, body menu, body nav, body section, body summary {
+  display: block;
+}
+
+/* line 16, ../../src/scss/kopi/general.scss */
+a {
+  color: #0088cc;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* line 22, ../../src/scss/kopi/general.scss */
+a:active, a.active {
+  color: #002233;
+}
+
+/* line 26, ../../src/scss/kopi/general.scss */
+a:hover, a.hover {
+  color: #005580;
+}
+
+/* line 30, ../../src/scss/kopi/general.scss */
+a:visited, a.visited {
+  color: #0088cc;
+}
+
+/* line 34, ../../src/scss/kopi/general.scss */
+figure {
+  padding: 0;
+  margin: 0;
+}
+
+/* line 39, ../../src/scss/kopi/general.scss */
+img {
+  border: none;
+}
+
+/* line 43, ../../src/scss/kopi/general.scss */
+.kopi-inner {
+  padding: 18px;
+}
+
+/* line 47, ../../src/scss/kopi/general.scss */
+.kopi-outer {
+  margin: 18px;
+}
+
+/* line 53, ../../src/scss/kopi/general.scss */
+code, pre {
+  padding: 0 3px 2px;
+  font-family: Menlo, Monaco, "Courier New", monospace;
+  font-size: 12px;
+  color: #333333;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+}
+
+/* line 62, ../../src/scss/kopi/general.scss */
+code {
+  padding: 2px 4px;
+  color: #d14;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+}
+
+/* line 70, ../../src/scss/kopi/general.scss */
+pre {
+  display: block;
+  padding: 8.5px;
+  margin: 0 0 9px;
+  font-size: 12.025px;
+  line-height: 18px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+  white-space: pre;
+  white-space: pre-wrap;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+/* line 86, ../../src/scss/kopi/general.scss */
+pre.prettyprint {
+  margin-bottom: 18px;
+}
+/* line 91, ../../src/scss/kopi/general.scss */
+pre code {
+  padding: 0;
+  color: inherit;
+  background-color: transparent;
+  border: 0;
+}
+
+/* line 100, ../../src/scss/kopi/general.scss */
+.pre-scrollable {
+  max-height: 340px;
+  overflow-y: scroll;
+}
+
+/**
+ * Section
+ */
+/* line 7, ../../src/scss/kopi/sections.scss */
+.kopi-section, .kopi-section-large, .kopi-section-small {
+  min-height: 20px;
+  padding: 19px;
+  margin-bottom: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #eee;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+/* line 16, ../../src/scss/kopi/sections.scss */
+.kopi-section blockquote, .kopi-section-large blockquote, .kopi-section-small blockquote {
+  border-color: #ddd;
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+/* line 23, ../../src/scss/kopi/sections.scss */
+.kopi-section-large {
+  padding: 24px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  -ms-border-radius: 6px;
+  -o-border-radius: 6px;
+  border-radius: 6px;
+}
+
+/* line 29, ../../src/scss/kopi/sections.scss */
+.kopi-section-small {
+  padding: 9px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+}
+
+/* line 4, ../../src/scss/kopi/animation.scss */
+.kopi-animation-spin {
+  -webkit-transform: rotate(360deg);
+  transform: rotate(360deg);
+  -webkit-animation-name: spin;
+  -moz-animation-name: spin;
+  animation-name: spin;
+  -webkit-animation-duration: 1s;
+  -moz-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-iteration-count: infinite;
+  -moz-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+  -moz-animation-timing-function: linear;
+  animation-timing-function: linear;
+}
+
+@-webkit-keyframes spin {
+  /* line 13, ../../src/scss/kopi/animation.scss */
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+
+  /* line 14, ../../src/scss/kopi/animation.scss */
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframes spin {
+  /* line 18, ../../src/scss/kopi/animation.scss */
+  from {
+    -moz-transform: rotate(0deg);
+  }
+
+  /* line 19, ../../src/scss/kopi/animation.scss */
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+/* line 7, ../../src/scss/kopi/ellipsis.scss */
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  -moz-binding: url('/lib/css/xml/ellipsis.xml#ellipsis');
+}
+
+/**
+ * NOTE
+ * This module has just ported from bootstrap and needs a cleanup
+ *
+ * -- wuyuntao, 2012-05-01
+ */
+/**
+ * GENERAL STYLES
+ */
+/**
+ * Global variables
+ */
+/**
+ * Gray levels
+ */
+/**
+ * Accent colors
+ */
+/**
+ * Scaffolding
+ */
+/**
+ * Links
+ */
+/**
+ * Typography
+ */
+/**
+ * Tables
+ */
+/**
+ * Lists
+ */
+/**
+ * Buttons
+ */
+/**
+ * Forms
+ */
+/**
+ * Dropdowns
+ */
+/**
+ * Component Variables
+ */
+/**
+ * Z-index master list
+ *
+ * Used for a bird's eye view of components dependent on the z-axis
+ * Try to avoid customizing these :)
+ */
+/**
+ * Sprite icons path
+ */
+/**
+ * Input placeholder text color
+ */
+/**
+ * Hr border color
+ */
+/**
+ * Navbar
+ */
+/**
+ * Hero unit
+ */
+/**
+ * Form states and alerts
+ */
+/**
+ * Notification
+ */
+/**
+ * Tabs
+ */
+/* line 15, ../../src/scss/kopi/forms.scss */
+form {
+  margin: 0 0 18px;
+}
+
+/* line 19, ../../src/scss/kopi/forms.scss */
+fieldset {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+/* line 26, ../../src/scss/kopi/forms.scss */
+legend {
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin-bottom: 27px;
+  font-size: 19.5px;
+  line-height: 36px;
+  color: #333333;
+  border: 0;
+  border-bottom: 1px solid #eee;
+}
+/* line 38, ../../src/scss/kopi/forms.scss */
+legend small {
+  font-size: 13.5px;
+  color: #dddddd;
+}
+
+/* line 45, ../../src/scss/kopi/forms.scss */
+label, input, button, select, textarea {
+  font-size: 13px;
+  font-weight: normal;
+  font-weight: 18px;
+}
+
+/* line 51, ../../src/scss/kopi/forms.scss */
+input, button, select, textarea {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* line 56, ../../src/scss/kopi/forms.scss */
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #333333;
+}
+
+/* line 63, ../../src/scss/kopi/forms.scss */
+input, textarea, select, .uneditable-input {
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  width: 210px;
+  height: 18px;
+  padding: 4px;
+  margin-bottom: 9px;
+  font-size: 13px;
+  line-height: 18px;
+  color: #555555;
+  border: 1px solid #cccccc;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+}
+/* line 7, ../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+input, textarea, select, .uneditable-input {
+  *display: inline;
+}
+
+/* line 75, ../../src/scss/kopi/forms.scss */
+.uneditable-textarea {
+  width: auto;
+  height: auto;
+}
+
+/* line 81, ../../src/scss/kopi/forms.scss */
+label input, label textarea, label select {
+  display: block;
+}
+
+/* line 86, ../../src/scss/kopi/forms.scss */
+input[type="image"], input[type="checkbox"], input[type="radio"] {
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 3px 0;
+  *margin-top: 0;
+  /* IE7 */
+  line-height: normal;
+  cursor: pointer;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+  border: 0 \9;
+  /* IE9 and down */
+}
+
+/* line 97, ../../src/scss/kopi/forms.scss */
+input[type="image"] {
+  border: 0;
+}
+
+/* line 102, ../../src/scss/kopi/forms.scss */
+input[type="file"] {
+  width: auto;
+  padding: initial;
+  line-height: initial;
+  border: initial;
+  background-color: white;
+  background-color: initial;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+/* line 113, ../../src/scss/kopi/forms.scss */
+input[type="button"], input[type="reset"], input[type="submit"] {
+  width: auto;
+  height: auto;
+}
+
+/* line 119, ../../src/scss/kopi/forms.scss */
+select, input[type="file"] {
+  height: 28px;
+  /* In IE7, the height of the select element cannot be changed by height, only font-size */
+  *margin-top: 4px;
+  /* For IE7, add top margin to align select with labels */
+  line-height: 28px;
+}
+
+/* line 126, ../../src/scss/kopi/forms.scss */
+input[type="file"] {
+  line-height: 18px \9;
+}
+
+/* line 131, ../../src/scss/kopi/forms.scss */
+select {
+  width: 220px;
+  background-color: white;
+}
+
+/* line 137, ../../src/scss/kopi/forms.scss */
+select[multiple], select[size] {
+  height: auto;
+}
+
+/* line 142, ../../src/scss/kopi/forms.scss */
+input[type="image"] {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+/* line 147, ../../src/scss/kopi/forms.scss */
+textarea {
+  height: auto;
+}
+
+/* line 152, ../../src/scss/kopi/forms.scss */
+input[type="hidden"] {
+  display: none;
+}
+
+/**
+ * CHECKBOXES & RADIOS
+ */
+/* line 161, ../../src/scss/kopi/forms.scss */
+.radio, .checkbox {
+  padding-left: 18px;
+}
+
+/* line 164, ../../src/scss/kopi/forms.scss */
+.radio input[type="radio"], .checkbox input[type="checkbox"] {
+  float: left;
+  margin-left: -18px;
+}
+
+/* line 170, ../../src/scss/kopi/forms.scss */
+.kopi-controls > .radio:first-child, .kopi-controls > .checkbox:first-child {
+  padding-top: 5px;
+}
+
+/* line 176, ../../src/scss/kopi/forms.scss */
+.radio.inline, .checkbox.inline {
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  padding-top: 5px;
+  margin-bottom: 0;
+  vertical-align: middle;
+}
+/* line 7, ../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+.radio.inline, .checkbox.inline {
+  *display: inline;
+}
+
+/* line 182, ../../src/scss/kopi/forms.scss */
+.radio.inline + .radio.inline, .checkbox.inline + .checkbox.inline {
+  margin-left: 10px;
+}
+
+/**
+ * FOCUS STATE
+ */
+/* line 189, ../../src/scss/kopi/forms.scss */
+input, textarea {
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+  -moz-transition: border linear 0.2s box-shadow linear 0.2s;
+  -ms-transition: border linear 0.2s box-shadow linear 0.2s;
+  -o-transition: border linear 0.2s box-shadow linear 0.2s;
+  transition: border linear 0.2s, box-shadow linear 0.2s;
+}
+
+/* line 194, ../../src/scss/kopi/forms.scss */
+input:focus, textarea:focus {
+  border-color: rgba(82, 168, 236, 0.8);
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+  outline: 0;
+  outline: thin dotted \9;
+  /* IE6-9 */
+}
+
+/* line 201, ../../src/scss/kopi/forms.scss */
+input[type="file"]:focus, input[type="radio"]:focus, input[type="checkbox"]:focus, select:focus {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  outline: thin dotted #333;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+/**
+ * INPUT SIZES
+ */
+/* line 211, ../../src/scss/kopi/forms.scss */
+.kopi-input-mini {
+  width: 60px;
+}
+
+/* line 215, ../../src/scss/kopi/forms.scss */
+.kopi-input-small {
+  width: 90px;
+}
+
+/* line 219, ../../src/scss/kopi/forms.scss */
+.kopi-input-medium {
+  width: 150px;
+}
+
+/* line 223, ../../src/scss/kopi/forms.scss */
+.kopi-input-large {
+  width: 210px;
+  font-size: 15px;
+  line-height: 23px;
+  height: 23px;
+}
+
+/* line 230, ../../src/scss/kopi/forms.scss */
+.kopi-input-xlarge {
+  width: 270px;
+  font-size: 15px;
+  line-height: 23px;
+  height: 23px;
+}
+
+/* line 237, ../../src/scss/kopi/forms.scss */
+.kopi-input-xxlarge {
+  width: 530px;
+  font-size: 20px;
+  line-height: 30px;
+  height: 30px;
+}
+
+/* line 244, ../../src/scss/kopi/forms.scss */
+.kopi-input-fill {
+  width: 90%;
+  font-size: 20px;
+  line-height: 30px;
+  height: 30px;
+}
+
+/* line 252, ../../src/scss/kopi/forms.scss */
+input[class*="span"], select[class*="span"], textarea[class*="span"], .uneditable-input {
+  float: none;
+  margin-left: 0;
+}
+
+/**
+ * DISABLED STATE
+ */
+/* line 262, ../../src/scss/kopi/forms.scss */
+input[disabled], select[disabled], textarea[disabled], input[readonly], select[readonly], textarea[readonly] {
+  background-color: #eeeeee;
+  border-color: #ddd;
+  cursor: not-allowed;
+}
+
+/**
+ * FORM FIELD FEEDBACK STATES
+ */
+/* line 274, ../../src/scss/kopi/forms.scss */
+input:focus:required:invalid, textarea:focus:required:invalid, select:focus:required:invalid {
+  color: #b94a48;
+  border-color: #ee5f5b;
+}
+/* line 277, ../../src/scss/kopi/forms.scss */
+input:focus:required:invalid:focus, textarea:focus:required:invalid:focus, select:focus:required:invalid:focus {
+  border-color: #e9322d;
+  -webkit-box-shadow: 0 0 6px #f8b9b7;
+  -moz-box-shadow: 0 0 6px #f8b9b7;
+  box-shadow: 0 0 6px #f8b9b7;
+}
+
+/**
+ * FORM ACTIONS
+ */
+/* line 289, ../../src/scss/kopi/forms.scss */
+.kopi-form-actions {
+  padding: 17px 20px 18px;
+  margin-top: 18px;
+  margin-bottom: 18px;
+  background-color: #eeeeee;
+  border-top: 1px solid #ddd;
+  overflow: hidden;
+  *zoom: 1;
+}
+
+/* line 299, ../../src/scss/kopi/forms.scss */
+.uneditable-input {
+  display: block;
+  background-color: white;
+  border-color: #eee;
+  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.025);
+  -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.025);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.025);
+  cursor: not-allowed;
+}
+
+/**
+ * HELP TEXT
+ */
+/* line 311, ../../src/scss/kopi/forms.scss */
+.kopi-help-block, .kopi-help-inline {
+  color: #555555;
+}
+
+/* line 315, ../../src/scss/kopi/forms.scss */
+.kopi-help-block {
+  display: block;
+  margin-bottom: 9px;
+}
+
+/* line 320, ../../src/scss/kopi/forms.scss */
+.kopi-help-inline {
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  vertical-align: middle;
+  padding-left: 5px;
+}
+/* line 7, ../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+.kopi-help-inline {
+  *display: inline;
+}
+
+/**
+ * INPUT GROUPS
+ */
+/* line 333, ../../src/scss/kopi/forms.scss */
+.input-prepend, .input-append {
+  margin-bottom: 5px;
+}
+/* line 335, ../../src/scss/kopi/forms.scss */
+.input-prepend input, .input-prepend select, .input-prepend .uneditable-input, .input-append input, .input-append select, .input-append .uneditable-input {
+  *margin-left: 0;
+  -webkit-border-radius: 0 3px 3px 0;
+  -moz-border-radius: 0 3px 3px 0;
+  -ms-border-radius: 0 3px 3px 0;
+  -o-border-radius: 0 3px 3px 0;
+  border-radius: 0 3px 3px 0;
+}
+/* line 338, ../../src/scss/kopi/forms.scss */
+.input-prepend input:focus, .input-prepend select:focus, .input-prepend .uneditable-input:focus, .input-append input:focus, .input-append select:focus, .input-append .uneditable-input:focus {
+  position: relative;
+  z-index: 2;
+}
+/* line 343, ../../src/scss/kopi/forms.scss */
+.input-prepend .uneditable-input, .input-append .uneditable-input {
+  border-left-color: #eee;
+  border-right-color: #ccc;
+}
+/* line 347, ../../src/scss/kopi/forms.scss */
+.input-prepend .add-on, .input-append .add-on {
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  width: auto;
+  min-width: 16px;
+  height: 18px;
+  padding: 4px 5px;
+  font-weight: normal;
+  line-height: 18px;
+  text-align: center;
+  text-shadow: 0 1px 0 white;
+  vertical-align: middle;
+  background-color: #eeeeee;
+  border: 1px solid #ccc;
+}
+/* line 7, ../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+.input-prepend .add-on, .input-append .add-on {
+  *display: inline;
+}
+/* line 361, ../../src/scss/kopi/forms.scss */
+.input-prepend .add-on, .input-prepend .btn, .input-append .add-on, .input-append .btn {
+  -webkit-border-radius: 3px 0 0 3px;
+  -moz-border-radius: 3px 0 0 3px;
+  -ms-border-radius: 3px 0 0 3px;
+  -o-border-radius: 3px 0 0 3px;
+  border-radius: 3px 0 0 3px;
+}
+/* line 364, ../../src/scss/kopi/forms.scss */
+.input-prepend .active, .input-append .active {
+  background-color: #a9dba9;
+  border-color: #46a546;
+}
+
+/* line 370, ../../src/scss/kopi/forms.scss */
+.input-prepend .add-on, .input-prepend .btn {
+  margin-right: -1px;
+}
+
+/* line 375, ../../src/scss/kopi/forms.scss */
+.input-append input, .input-append select, .input-append .uneditable-input {
+  -webkit-border-radius: 3px 0 0 3px;
+  -moz-border-radius: 3px 0 0 3px;
+  -ms-border-radius: 3px 0 0 3px;
+  -o-border-radius: 3px 0 0 3px;
+  border-radius: 3px 0 0 3px;
+}
+/* line 378, ../../src/scss/kopi/forms.scss */
+.input-append .uneditable-input {
+  border-right-color: #ccc;
+}
+/* line 381, ../../src/scss/kopi/forms.scss */
+.input-append .add-on, .input-append .btn {
+  margin-left: -1px;
+  -webkit-border-radius: 0 3px 3px 0;
+  -moz-border-radius: 0 3px 3px 0;
+  -ms-border-radius: 0 3px 3px 0;
+  -o-border-radius: 0 3px 3px 0;
+  border-radius: 0 3px 3px 0;
+}
+
+/* line 388, ../../src/scss/kopi/forms.scss */
+.input-prepend.input-append input, .input-prepend.input-append select, .input-prepend.input-append .uneditable-input {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+}
+/* line 391, ../../src/scss/kopi/forms.scss */
+.input-prepend.input-append .add-on:first-child, .input-prepend.input-append .btn:first-child {
+  margin-right: -1px;
+  -webkit-border-radius: 3px 0 0 3px;
+  -moz-border-radius: 3px 0 0 3px;
+  -ms-border-radius: 3px 0 0 3px;
+  -o-border-radius: 3px 0 0 3px;
+  border-radius: 3px 0 0 3px;
+}
+/* line 395, ../../src/scss/kopi/forms.scss */
+.input-prepend.input-append .add-on:last-child, .input-prepend.input-append .btn:last-child {
+  margin-left: -1px;
+  -webkit-border-radius: 0 3px 3px 0;
+  -moz-border-radius: 0 3px 3px 0;
+  -ms-border-radius: 0 3px 3px 0;
+  -o-border-radius: 0 3px 3px 0;
+  border-radius: 0 3px 3px 0;
+}
+
+/**
+ * SEARCH FORM
+ */
+/* line 407, ../../src/scss/kopi/forms.scss */
+.search-query {
+  padding-left: 14px;
+  padding-right: 14px;
+  margin-bottom: 0;
+  -webkit-border-radius: 14px;
+  -moz-border-radius: 14px;
+  -ms-border-radius: 14px;
+  -o-border-radius: 14px;
+  border-radius: 14px;
+}
+
+/**
+ * HORIZONTAL & VERTICAL FORMS
+ */
+/**
+ * Common properties
+ */
+/* line 425, ../../src/scss/kopi/forms.scss */
+.kopi-form-search input, .kopi-form-search textarea, .kopi-form-search select, .kopi-form-search .kopi-help-inline, .kopi-form-search .uneditable-input, .kopi-form-search .input-prepend, .kopi-form-search .input-append, .kopi-form-inline input, .kopi-form-inline textarea, .kopi-form-inline select, .kopi-form-inline .kopi-help-inline, .kopi-form-inline .uneditable-input, .kopi-form-inline .input-prepend, .kopi-form-inline .input-append, .kopi-form-horizontal input, .kopi-form-horizontal textarea, .kopi-form-horizontal select, .kopi-form-horizontal .kopi-help-inline, .kopi-form-horizontal .uneditable-input, .kopi-form-horizontal .input-prepend, .kopi-form-horizontal .input-append {
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  margin-bottom: 0;
+}
+/* line 7, ../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+.kopi-form-search input, .kopi-form-search textarea, .kopi-form-search select, .kopi-form-search .kopi-help-inline, .kopi-form-search .uneditable-input, .kopi-form-search .input-prepend, .kopi-form-search .input-append, .kopi-form-inline input, .kopi-form-inline textarea, .kopi-form-inline select, .kopi-form-inline .kopi-help-inline, .kopi-form-inline .uneditable-input, .kopi-form-inline .input-prepend, .kopi-form-inline .input-append, .kopi-form-horizontal input, .kopi-form-horizontal textarea, .kopi-form-horizontal select, .kopi-form-horizontal .kopi-help-inline, .kopi-form-horizontal .uneditable-input, .kopi-form-horizontal .input-prepend, .kopi-form-horizontal .input-append {
+  *display: inline;
+}
+/* line 430, ../../src/scss/kopi/forms.scss */
+.kopi-form-search .hide, .kopi-form-inline .hide, .kopi-form-horizontal .hide {
+  display: none;
+}
+
+/* line 432, ../../src/scss/kopi/forms.scss */
+.kopi-form-search label, .kopi-form-inline label {
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+}
+/* line 7, ../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+.kopi-form-search label, .kopi-form-inline label {
+  *display: inline;
+}
+
+/* line 436, ../../src/scss/kopi/forms.scss */
+.kopi-form-search .input-append, .kopi-form-inline .input-append, .kopi-form-search .input-prepend, .kopi-form-inline .input-prepend {
+  margin-bottom: 0;
+}
+
+/* line 440, ../../src/scss/kopi/forms.scss */
+.kopi-form-search .radio, .kopi-form-search .checkbox, .kopi-form-inline .radio, .kopi-form-inline .checkbox {
+  padding-left: 0;
+  margin-bottom: 0;
+  vertical-align: middle;
+}
+
+/* line 446, ../../src/scss/kopi/forms.scss */
+.kopi-form-search .radio input[type="radio"], .kopi-form-search .checkbox input[type="checkbox"], .kopi-form-inline .radio input[type="radio"], .kopi-form-inline .checkbox input[type="checkbox"] {
+  float: left;
+  margin-left: 0;
+  margin-right: 3px;
+}
+
+/* line 455, ../../src/scss/kopi/forms.scss */
+.kopi-control-group {
+  margin-bottom: 9px;
+}
+
+/* line 460, ../../src/scss/kopi/forms.scss */
+legend + .kopi-control-group {
+  margin-top: 18px;
+  -webkit-margin-top-collapse: separate;
+}
+
+/**
+ * Horizontal-specific styles
+ */
+/* line 471, ../../src/scss/kopi/forms.scss */
+.kopi-form-horizontal .kopi-control-group {
+  margin-bottom: 18px;
+  overflow: hidden;
+  *zoom: 1;
+}
+/* line 476, ../../src/scss/kopi/forms.scss */
+.kopi-form-horizontal .kopi-control-label {
+  float: left;
+  width: 140px;
+  padding-top: 5px;
+  text-align: right;
+}
+/* line 483, ../../src/scss/kopi/forms.scss */
+.kopi-form-horizontal .kopi-controls {
+  margin-left: 160px;
+  /* Super jank IE7 fix to ensure the inputs in .input-append and input-prepend don't inherit the margin of the parent, in this case .kopi-controls */
+  *display: inline-block;
+  *margin-left: 0;
+  *padding-left: 20px;
+}
+/* line 491, ../../src/scss/kopi/forms.scss */
+.kopi-form-horizontal .kopi-help-block {
+  margin-top: 9px;
+  margin-bottom: 0;
+}
+/* line 496, ../../src/scss/kopi/forms.scss */
+.kopi-form-horizontal .kopi-form-actions {
+  padding-left: 160px;
+}
+
+/* line 40, ../../src/scss/kopi/box.scss */
+.kopi-box, .kopi-round-box {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-drag: none;
+  user-drag: none;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+  opacity: 0.8;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.7) 0 5px 30px, rgba(255, 255, 255, 0.3) 0 0 10px inset;
+  -moz-box-shadow: rgba(0, 0, 0, 0.7) 0 5px 30px, rgba(255, 255, 255, 0.3) 0 0 10px inset;
+  box-shadow: rgba(0, 0, 0, 0.7) 0 5px 30px, rgba(255, 255, 255, 0.3) 0 0 10px inset;
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+  color: white;
+  font-size: 16px;
+  line-height: 24px;
+  text-shadow: 0 -1px 0 black;
+}
+
+/* line 44, ../../src/scss/kopi/box.scss */
+.kopi-round-box {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+}
+
+/**
+  Viewport arch
+
+  .kopi-viewport (100)
+    .kopi-view-container (200)
+      .kopi-view
+    .kopi-navbar-bottom (300)
+      .kopi-nav
+    .kopi-navbar-top (400)
+      .kopi-nav
+
+    .kopi-notifier-overlay (1000)
+    .kopi-notifier-dialog (1100)
+    .kopi-notifier-bubble (1200)
+    .kopi-notifier-indicator (1300)
+ */
+/* line 18, ../../src/scss/kopi/viewport.scss */
+body.kopi-viewport {
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 100;
+}
+
+/**
+ * Global variables
+ */
+/**
+ * Gray levels
+ */
+/**
+ * Accent colors
+ */
+/**
+ * Scaffolding
+ */
+/**
+ * Links
+ */
+/**
+ * Typography
+ */
+/**
+ * Tables
+ */
+/**
+ * Lists
+ */
+/**
+ * Buttons
+ */
+/**
+ * Forms
+ */
+/**
+ * Dropdowns
+ */
+/**
+ * Component Variables
+ */
+/**
+ * Z-index master list
+ *
+ * Used for a bird's eye view of components dependent on the z-axis
+ * Try to avoid customizing these :)
+ */
+/**
+ * Sprite icons path
+ */
+/**
+ * Input placeholder text color
+ */
+/**
+ * Hr border color
+ */
+/**
+ * Navbar
+ */
+/**
+ * Hero unit
+ */
+/**
+ * Form states and alerts
+ */
+/**
+ * Notification
+ */
+/**
+ * Tabs
+ */
+/* line 4, ../../src/scss/kopi/viewswitchers.scss */
+.fill-parent, .kopi-view-switcher, .kopi-view {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+/* line 17, ../../src/scss/kopi/viewswitchers.scss */
+.kopi-view-switcher-top, div.kopi-view-switcher-top-fixed {
+  top: 40px;
+  border-width: 0 0 1px;
+  z-index: 300;
+}
+
+/* line 23, ../../src/scss/kopi/viewswitchers.scss */
+.kopi-view-switcher-bottom {
+  bottom: 40px;
+  border-width: 1px 0 0;
+}
+
+/* line 28, ../../src/scss/kopi/viewswitchers.scss */
+.kopi-view-switcher-fixed, div.kopi-view-switcher-top-fixed {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 200;
+}
+
+/* line 35, ../../src/scss/kopi/viewswitchers.scss */
+div.kopi-view-switcher-top-fixed {
+  bottom: 0;
+}
+
+/* line 41, ../../src/scss/kopi/viewswitchers.scss */
+.kopi-view-switcher-bottom-fixed {
+  top: 0;
+}
+
+/* line 49, ../../src/scss/kopi/viewswitchers.scss */
+.kopi-view {
+  display: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* line 55, ../../src/scss/kopi/viewswitchers.scss */
+.kopi-view-show {
+  display: block;
+}
+
+/* line 61, ../../src/scss/kopi/viewswitchers.scss */
+.kopi-view-transition, .kopi-view-switcher-animation .kopi-view-from-stop, .kopi-view-switcher-animation .kopi-view-to-stop, .kopi-view-switcher-animation-reverse .kopi-view-from-stop, .kopi-view-switcher-animation-reverse .kopi-view-to-stop {
+  -webkit-transition-property: -webkit-transform,opacity;
+  -moz-transition-property: -moz-transform,opacity;
+  transition-property: transform,opacity;
+  -webkit-transition-duration: 300ms;
+  -moz-transition-duration: 300ms;
+  -ms-transition-duration: 300ms;
+  -o-transition-duration: 300ms;
+  transition-duration: 300ms;
+  -webkit-transition-timing-function: ease-out;
+  -moz-transition-timing-function: ease-out;
+  -ms-transition-timing-function: ease-out;
+  -o-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
+}
+
+/* line 71, ../../src/scss/kopi/viewswitchers.scss */
+.kopi-view-switcher-animation .kopi-view-from-start {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  display: block;
+}
+/* line 78, ../../src/scss/kopi/viewswitchers.scss */
+.kopi-view-switcher-animation .kopi-view-from-stop {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=70);
+  opacity: 0.7;
+  -webkit-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  -o-transform: translateX(-100%);
+  transform: translateX(-100%);
+  -webkit-transform: translate3d(-100%, 0, 0);
+  transform: translate3d(-100%, 0, 0);
+  display: block;
+}
+/* line 86, ../../src/scss/kopi/viewswitchers.scss */
+.kopi-view-switcher-animation .kopi-view-to-start {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=70);
+  opacity: 0.7;
+  -webkit-transform: translateX(100%);
+  -moz-transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  -o-transform: translateX(100%);
+  transform: translateX(100%);
+  -webkit-transform: translate3d(100%, 0, 0);
+  transform: translate3d(100%, 0, 0);
+  display: block;
+}
+/* line 93, ../../src/scss/kopi/viewswitchers.scss */
+.kopi-view-switcher-animation .kopi-view-to-stop {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  display: block;
+}
+
+/* line 104, ../../src/scss/kopi/viewswitchers.scss */
+.kopi-view-switcher-animation-reverse .kopi-view-from-start {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  display: block;
+}
+/* line 111, ../../src/scss/kopi/viewswitchers.scss */
+.kopi-view-switcher-animation-reverse .kopi-view-from-stop {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=70);
+  opacity: 0.7;
+  -webkit-transform: translateX(100%);
+  -moz-transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  -o-transform: translateX(100%);
+  transform: translateX(100%);
+  -webkit-transform: translate3d(100%, 0, 0);
+  transform: translate3d(100%, 0, 0);
+  display: block;
+}
+/* line 119, ../../src/scss/kopi/viewswitchers.scss */
+.kopi-view-switcher-animation-reverse .kopi-view-to-start {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=70);
+  opacity: 0.7;
+  -webkit-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  -o-transform: translateX(-100%);
+  transform: translateX(-100%);
+  -webkit-transform: translate3d(-100%, 0, 0);
+  transform: translate3d(-100%, 0, 0);
+  display: block;
+}
+/* line 126, ../../src/scss/kopi/viewswitchers.scss */
+.kopi-view-switcher-animation-reverse .kopi-view-to-stop {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  display: block;
+}
+
+/**
+ * Global variables
+ */
+/**
+ * Gray levels
+ */
+/**
+ * Accent colors
+ */
+/**
+ * Scaffolding
+ */
+/**
+ * Links
+ */
+/**
+ * Typography
+ */
+/**
+ * Tables
+ */
+/**
+ * Lists
+ */
+/**
+ * Buttons
+ */
+/**
+ * Forms
+ */
+/**
+ * Dropdowns
+ */
+/**
+ * Component Variables
+ */
+/**
+ * Z-index master list
+ *
+ * Used for a bird's eye view of components dependent on the z-axis
+ * Try to avoid customizing these :)
+ */
+/**
+ * Sprite icons path
+ */
+/**
+ * Input placeholder text color
+ */
+/**
+ * Hr border color
+ */
+/**
+ * Navbar
+ */
+/**
+ * Hero unit
+ */
+/**
+ * Form states and alerts
+ */
+/**
+ * Notification
+ */
+/**
+ * Tabs
+ */
+/* {{{ Navbar
+
+  nav.kopi-navbar
+    div.kopi-nav-previous
+      div.kopi-nav
+    div.kopi-nav-current
+      div.kopi-nav
+    div.kopi-nav-next
+      div.kopi-nav
+ */
+/* line 16, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar, .kopi-navbar-top, div.kopi-navbar-top-fixed, .kopi-navbar-bottom, .kopi-view-switcher-bottom-fixed, .kopi-navbar-bottom-fixed {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-drag: none;
+  user-drag: none;
+  background-color: #222222;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #333333), color-stop(100%, #222222));
+  background: -webkit-linear-gradient(top, #333333 0%, #222222 100%);
+  background: -moz-linear-gradient(top, #333333 0%, #222222 100%);
+  background: -o-linear-gradient(top, #333333 0%, #222222 100%);
+  background: -ms-linear-gradient(top, #333333 0%, #222222 100%);
+  background: linear-gradient(top, #333333 0%, #222222 100%);
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  color: #dddddd;
+  text-shadow: #555555 0 -1px 0;
+  height: 40px;
+  text-align: center;
+  min-height: 0;
+}
+
+/* line 29, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-top, div.kopi-navbar-top-fixed {
+  top: 0;
+  border-width: 0 0 1px;
+  margin-bottom: 18px;
+  z-index: 400;
+}
+
+/* line 37, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-bottom, .kopi-view-switcher-bottom-fixed, .kopi-navbar-bottom-fixed {
+  bottom: 0;
+  margin-top: 18px;
+  border-width: 1px 0 0;
+}
+
+/* line 44, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-fixed, .kopi-view-switcher-bottom-fixed, div.kopi-navbar-top-fixed, .kopi-navbar-bottom-fixed {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 300;
+}
+
+/* {{{ Nav
+
+  nav.kopi-nav
+    div.kopi-nav-left
+      a.kopi-nav-button
+        span.kopi-nav-button-sprite
+    div.kopi-nav-center
+      h1.kopi-nav-title
+    div.kopi-nav-right
+      a.kopi-nav-button
+        span.kopi-nav-button-text
+ */
+/* line 75, ../../src/scss/kopi/navigation.scss */
+.kopi-nav {
+  display: none;
+}
+
+/* line 79, ../../src/scss/kopi/navigation.scss */
+.kopi-nav-show {
+  display: block;
+}
+
+/* line 86, ../../src/scss/kopi/navigation.scss */
+.kopi-nav-button-wrapper, .kopi-nav-left, .kopi-nav-right, .kopi-nav-center {
+  position: absolute;
+  top: 0;
+  height: 40px;
+}
+
+/* line 92, ../../src/scss/kopi/navigation.scss */
+.kopi-nav-left {
+  left: 0;
+  text-align: left;
+}
+
+/* line 98, ../../src/scss/kopi/navigation.scss */
+.kopi-nav-right {
+  right: 0;
+  text-align: right;
+}
+
+/* line 104, ../../src/scss/kopi/navigation.scss */
+.kopi-nav-center {
+  left: 60px;
+  right: 60px;
+  text-align: center;
+}
+
+/* line 112, ../../src/scss/kopi/navigation.scss */
+.kopi-nav-title {
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 40px;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* line 123, ../../src/scss/kopi/navigation.scss */
+.kopi-nav-button {
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  color: #dddddd;
+  text-decoration: none;
+  background: transparent;
+  height: 30px;
+  width: auto;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+/* line 7, ../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+.kopi-nav-button {
+  *display: inline;
+}
+
+/* line 135, ../../src/scss/kopi/navigation.scss */
+.kopi-nav-button-hover {
+  background-color: #333333;
+  color: white !important;
+  text-decoration: none;
+}
+
+/* line 141, ../../src/scss/kopi/navigation.scss */
+.kopi-nav-button-active {
+  background-color: #0088cc;
+  color: white;
+  text-decoration: none;
+}
+
+/* line 147, ../../src/scss/kopi/navigation.scss */
+.kopi-nav-button-title {
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  font-size: 14px;
+  height: 30px;
+  width: auto;
+  line-height: 30px;
+  min-width: 60px;
+  text-align: center;
+}
+/* line 7, ../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+.kopi-nav-button-title {
+  *display: inline;
+}
+
+/* line 164, ../../src/scss/kopi/navigation.scss */
+.kopi-nav-transition, .kopi-navbar-animation .kopi-nav-from-start, .kopi-navbar-animation .kopi-nav-from-start .kopi-nav-left, .kopi-navbar-animation .kopi-nav-from-start .kopi-nav-center, .kopi-navbar-animation .kopi-nav-from-start .kopi-nav-right, .kopi-navbar-animation .kopi-nav-from-stop, .kopi-navbar-animation .kopi-nav-to-start, .kopi-navbar-animation .kopi-nav-to-start .kopi-nav-left, .kopi-navbar-animation .kopi-nav-to-start .kopi-nav-center, .kopi-navbar-animation .kopi-nav-to-start .kopi-nav-right, .kopi-navbar-animation-reverse .kopi-nav-from-start, .kopi-navbar-animation-reverse .kopi-nav-from-start .kopi-nav-left, .kopi-navbar-animation-reverse .kopi-nav-from-start .kopi-nav-center, .kopi-navbar-animation-reverse .kopi-nav-from-start .kopi-nav-right, .kopi-navbar-animation-reverse .kopi-nav-from-stop, .kopi-navbar-animation-reverse .kopi-nav-to-start, .kopi-navbar-animation-reverse .kopi-nav-to-start .kopi-nav-left, .kopi-navbar-animation-reverse .kopi-nav-to-start .kopi-nav-center, .kopi-navbar-animation-reverse .kopi-nav-to-start .kopi-nav-right {
+  -webkit-transition-property: -webkit-transform,opacity;
+  -moz-transition-property: -moz-transform,opacity;
+  transition-property: transform,opacity;
+  -webkit-transition-duration: 300ms;
+  -moz-transition-duration: 300ms;
+  -ms-transition-duration: 300ms;
+  -o-transition-duration: 300ms;
+  transition-duration: 300ms;
+  -webkit-transition-timing-function: ease-out;
+  -moz-transition-timing-function: ease-out;
+  -ms-transition-timing-function: ease-out;
+  -o-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
+}
+
+/* line 174, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation .kopi-nav-from-start {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  display: block;
+}
+/* line 179, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation .kopi-nav-from-start .kopi-nav-left {
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+/* line 185, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation .kopi-nav-from-start .kopi-nav-center {
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+/* line 191, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation .kopi-nav-from-start .kopi-nav-right {
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+/* line 198, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation .kopi-nav-from-stop {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  display: block;
+}
+/* line 203, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation .kopi-nav-from-stop .kopi-nav-left {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  -webkit-transform: translateX(-60px);
+  -moz-transform: translateX(-60px);
+  -ms-transform: translateX(-60px);
+  -o-transform: translateX(-60px);
+  transform: translateX(-60px);
+  -webkit-transform: translate3d(-60px, 0, 0);
+  transform: translate3d(-60px, 0, 0);
+}
+/* line 209, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation .kopi-nav-from-stop .kopi-nav-center {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  -webkit-transform: translateX(-30%);
+  -moz-transform: translateX(-30%);
+  -ms-transform: translateX(-30%);
+  -o-transform: translateX(-30%);
+  transform: translateX(-30%);
+  -webkit-transform: translate3d(-30%, 0, 0);
+  transform: translate3d(-30%, 0, 0);
+}
+/* line 215, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation .kopi-nav-from-stop .kopi-nav-right {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+/* line 222, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation .kopi-nav-to-start {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  display: block;
+}
+/* line 227, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation .kopi-nav-to-start .kopi-nav-left {
+  -webkit-transform: translateX(60px);
+  -moz-transform: translateX(60px);
+  -ms-transform: translateX(60px);
+  -o-transform: translateX(60px);
+  transform: translateX(60px);
+  -webkit-transform: translate3d(60px, 0, 0);
+  transform: translate3d(60px, 0, 0);
+}
+/* line 233, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation .kopi-nav-to-start .kopi-nav-center {
+  -webkit-transform: translateX(30%);
+  -moz-transform: translateX(30%);
+  -ms-transform: translateX(30%);
+  -o-transform: translateX(30%);
+  transform: translateX(30%);
+  -webkit-transform: translate3d(30%, 0, 0);
+  transform: translate3d(30%, 0, 0);
+}
+/* line 239, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation .kopi-nav-to-start .kopi-nav-right {
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+/* line 246, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation .kopi-nav-to-stop {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  display: block;
+}
+/* line 250, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation .kopi-nav-to-stop .kopi-nav-left {
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+/* line 255, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation .kopi-nav-to-stop .kopi-nav-center {
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+/* line 260, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation .kopi-nav-to-stop .kopi-nav-right {
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+
+/* line 270, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation-reverse .kopi-nav-from-start {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  display: block;
+}
+/* line 275, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation-reverse .kopi-nav-from-start .kopi-nav-left {
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+/* line 281, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation-reverse .kopi-nav-from-start .kopi-nav-center {
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+/* line 287, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation-reverse .kopi-nav-from-start .kopi-nav-right {
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+/* line 294, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation-reverse .kopi-nav-from-stop {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  display: block;
+}
+/* line 299, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation-reverse .kopi-nav-from-stop .kopi-nav-left {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  -webkit-transform: translateX(60px);
+  -moz-transform: translateX(60px);
+  -ms-transform: translateX(60px);
+  -o-transform: translateX(60px);
+  transform: translateX(60px);
+  -webkit-transform: translate3d(60px, 0, 0);
+  transform: translate3d(60px, 0, 0);
+}
+/* line 305, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation-reverse .kopi-nav-from-stop .kopi-nav-center {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  -webkit-transform: translateX(30%);
+  -moz-transform: translateX(30%);
+  -ms-transform: translateX(30%);
+  -o-transform: translateX(30%);
+  transform: translateX(30%);
+  -webkit-transform: translate3d(30%, 0, 0);
+  transform: translate3d(30%, 0, 0);
+}
+/* line 311, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation-reverse .kopi-nav-from-stop .kopi-nav-right {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+/* line 318, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation-reverse .kopi-nav-to-start {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  display: block;
+}
+/* line 323, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation-reverse .kopi-nav-to-start .kopi-nav-left {
+  -webkit-transform: translateX(-60px);
+  -moz-transform: translateX(-60px);
+  -ms-transform: translateX(-60px);
+  -o-transform: translateX(-60px);
+  transform: translateX(-60px);
+  -webkit-transform: translate3d(-60px, 0, 0);
+  transform: translate3d(-60px, 0, 0);
+}
+/* line 329, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation-reverse .kopi-nav-to-start .kopi-nav-center {
+  -webkit-transform: translateX(-30%);
+  -moz-transform: translateX(-30%);
+  -ms-transform: translateX(-30%);
+  -o-transform: translateX(-30%);
+  transform: translateX(-30%);
+  -webkit-transform: translate3d(-30%, 0, 0);
+  transform: translate3d(-30%, 0, 0);
+}
+/* line 335, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation-reverse .kopi-nav-to-start .kopi-nav-right {
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+/* line 342, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation-reverse .kopi-nav-to-stop {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+  display: block;
+}
+/* line 346, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation-reverse .kopi-nav-to-stop .kopi-nav-left {
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+/* line 351, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation-reverse .kopi-nav-to-stop .kopi-nav-center {
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+/* line 356, ../../src/scss/kopi/navigation.scss */
+.kopi-navbar-animation-reverse .kopi-nav-to-stop .kopi-nav-right {
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+
+/**
+ * Global variables
+ */
+/**
+ * Gray levels
+ */
+/**
+ * Accent colors
+ */
+/**
+ * Scaffolding
+ */
+/**
+ * Links
+ */
+/**
+ * Typography
+ */
+/**
+ * Tables
+ */
+/**
+ * Lists
+ */
+/**
+ * Buttons
+ */
+/**
+ * Forms
+ */
+/**
+ * Dropdowns
+ */
+/**
+ * Component Variables
+ */
+/**
+ * Z-index master list
+ *
+ * Used for a bird's eye view of components dependent on the z-axis
+ * Try to avoid customizing these :)
+ */
+/**
+ * Sprite icons path
+ */
+/**
+ * Input placeholder text color
+ */
+/**
+ * Hr border color
+ */
+/**
+ * Navbar
+ */
+/**
+ * Hero unit
+ */
+/**
+ * Form states and alerts
+ */
+/**
+ * Notification
+ */
+/**
+ * Tabs
+ */
+/* line 4, ../../src/scss/kopi/images.scss */
+.kopi-image {
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  text-align: center;
+  vertical-align: middle;
+  margin: 0 auto;
+  padding: 0;
+}
+/* line 7, ../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+.kopi-image {
+  *display: inline;
+}
+
+/* line 12, ../../src/scss/kopi/images.scss */
+.kopi-image-bordered {
+  border: 1px solid #dddddd;
+}
+/* line 15, ../../src/scss/kopi/images.scss */
+.kopi-image-bordered img {
+  margin: 3px;
+}
+
+/**
+ * Global variables
+ */
+/**
+ * Gray levels
+ */
+/**
+ * Accent colors
+ */
+/**
+ * Scaffolding
+ */
+/**
+ * Links
+ */
+/**
+ * Typography
+ */
+/**
+ * Tables
+ */
+/**
+ * Lists
+ */
+/**
+ * Buttons
+ */
+/**
+ * Forms
+ */
+/**
+ * Dropdowns
+ */
+/**
+ * Component Variables
+ */
+/**
+ * Z-index master list
+ *
+ * Used for a bird's eye view of components dependent on the z-axis
+ * Try to avoid customizing these :)
+ */
+/**
+ * Sprite icons path
+ */
+/**
+ * Input placeholder text color
+ */
+/**
+ * Hr border color
+ */
+/**
+ * Navbar
+ */
+/**
+ * Hero unit
+ */
+/**
+ * Form states and alerts
+ */
+/**
+ * Notification
+ */
+/**
+ * Tabs
+ */
+/**
+ * Base styles for buttons
+ */
+/* line 23, ../../src/scss/kopi/buttons.scss */
+.kopi-button, .kopi-nav-button, .kopi-tab {
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  text-align: center;
+  cursor: pointer;
+}
+/* line 7, ../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+.kopi-button, .kopi-nav-button, .kopi-tab {
+  *display: inline;
+}
+/* line 29, ../../src/scss/kopi/buttons.scss */
+.kopi-button .kopi-button-inner, .kopi-nav-button .kopi-button-inner, .kopi-tab .kopi-button-inner {
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  -moz-binding: url('/lib/css/xml/ellipsis.xml#ellipsis');
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-drag: none;
+  user-drag: none;
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -ms-transition-property: all;
+  -o-transition-property: all;
+  transition-property: all;
+  -webkit-transition-duration: 300ms;
+  -moz-transition-duration: 300ms;
+  -ms-transition-duration: 300ms;
+  -o-transition-duration: 300ms;
+  transition-duration: 300ms;
+  -webkit-transition-timing-function: ease-out;
+  -moz-transition-timing-function: ease-out;
+  -ms-transition-timing-function: ease-out;
+  -o-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
+}
+/* line 7, ../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+.kopi-button .kopi-button-inner, .kopi-nav-button .kopi-button-inner, .kopi-tab .kopi-button-inner {
+  *display: inline;
+}
+/* line 36, ../../src/scss/kopi/buttons.scss */
+.kopi-button .kopi-button-icon, .kopi-nav-button .kopi-button-icon, .kopi-tab .kopi-button-icon {
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* line 7, ../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+.kopi-button .kopi-button-icon, .kopi-nav-button .kopi-button-icon, .kopi-tab .kopi-button-icon {
+  *display: inline;
+}
+/* line 42, ../../src/scss/kopi/buttons.scss */
+.kopi-button .kopi-button-text, .kopi-nav-button .kopi-button-text, .kopi-tab .kopi-button-text {
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  vertical-align: middle;
+}
+/* line 7, ../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+.kopi-button .kopi-button-text, .kopi-nav-button .kopi-button-text, .kopi-tab .kopi-button-text {
+  *display: inline;
+}
+
+/* line 49, ../../src/scss/kopi/buttons.scss */
+.kopi-button-rounded .kopi-button-inner {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+}
+
+/**
+ * Button styles
+ */
+/* line 60, ../../src/scss/kopi/buttons.scss */
+.kopi-button-default,
+.kopi-button-primary, .kopi-button-warning,
+.kopi-button-danger, .kopi-button-success,
+.kopi-button-info, .kopi-button-inverse {
+  padding: 4px;
+}
+/* line 63, ../../src/scss/kopi/buttons.scss */
+.kopi-button-default .kopi-button-inner,
+.kopi-button-primary .kopi-button-inner, .kopi-button-warning .kopi-button-inner,
+.kopi-button-danger .kopi-button-inner, .kopi-button-success .kopi-button-inner,
+.kopi-button-info .kopi-button-inner, .kopi-button-inverse .kopi-button-inner {
+  padding: 4px 10px;
+  font-size: 13px;
+  text-decoration: none;
+  line-height: 18px;
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #e6e6e6));
+  background: -webkit-linear-gradient(#ffffff, #e6e6e6);
+  background: -moz-linear-gradient(#ffffff, #e6e6e6);
+  background: -o-linear-gradient(#ffffff, #e6e6e6);
+  background: -ms-linear-gradient(#ffffff, #e6e6e6);
+  background: linear-gradient(#ffffff, #e6e6e6);
+  background-color: #e6e6e6;
+  border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+  border-width: 1px;
+  border-style: solid;
+  border-color: #cccccc;
+  border-bottom-color: #b3b3b3;
+}
+
+/* line 79, ../../src/scss/kopi/buttons.scss */
+.kopi-button-default .kopi-button-inner {
+  color: #333333;
+}
+
+/* line 87, ../../src/scss/kopi/buttons.scss */
+.kopi-button-primary .kopi-button-inner, .kopi-button-warning .kopi-button-inner,
+.kopi-button-danger .kopi-button-inner, .kopi-button-success .kopi-button-inner,
+.kopi-button-info .kopi-button-inner, .kopi-button-inverse .kopi-button-inner {
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  color: white;
+}
+
+/* line 95, ../../src/scss/kopi/buttons.scss */
+.kopi-button-primary .kopi-button-inner {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #0088cc), color-stop(100%, #0055cc));
+  background: -webkit-linear-gradient(#0088cc, #0055cc);
+  background: -moz-linear-gradient(#0088cc, #0055cc);
+  background: -o-linear-gradient(#0088cc, #0055cc);
+  background: -ms-linear-gradient(#0088cc, #0055cc);
+  background: linear-gradient(#0088cc, #0055cc);
+  background-color: #0055cc;
+  border-color: #0055cc #0055cc #003580;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 101, ../../src/scss/kopi/buttons.scss */
+.kopi-button-warning .kopi-button-inner {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fbb450), color-stop(100%, #f89406));
+  background: -webkit-linear-gradient(#fbb450, #f89406);
+  background: -moz-linear-gradient(#fbb450, #f89406);
+  background: -o-linear-gradient(#fbb450, #f89406);
+  background: -ms-linear-gradient(#fbb450, #f89406);
+  background: linear-gradient(#fbb450, #f89406);
+  background-color: #f89406;
+  border-color: #f89406 #f89406 #ad6704;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 107, ../../src/scss/kopi/buttons.scss */
+.kopi-button-danger .kopi-button-inner {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ee5f5b), color-stop(100%, #bd362f));
+  background: -webkit-linear-gradient(#ee5f5b, #bd362f);
+  background: -moz-linear-gradient(#ee5f5b, #bd362f);
+  background: -o-linear-gradient(#ee5f5b, #bd362f);
+  background: -ms-linear-gradient(#ee5f5b, #bd362f);
+  background: linear-gradient(#ee5f5b, #bd362f);
+  background-color: #bd362f;
+  border-color: #bd362f #bd362f #802420;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 113, ../../src/scss/kopi/buttons.scss */
+.kopi-button-success .kopi-button-inner {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #62c462), color-stop(100%, #51a351));
+  background: -webkit-linear-gradient(#62c462, #51a351);
+  background: -moz-linear-gradient(#62c462, #51a351);
+  background: -o-linear-gradient(#62c462, #51a351);
+  background: -ms-linear-gradient(#62c462, #51a351);
+  background: linear-gradient(#62c462, #51a351);
+  background-color: #51a351;
+  border-color: #51a351 #51a351 #387038;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 119, ../../src/scss/kopi/buttons.scss */
+.kopi-button-info .kopi-button-inner {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5bc0de), color-stop(100%, #2f96b4));
+  background: -webkit-linear-gradient(#5bc0de, #2f96b4);
+  background: -moz-linear-gradient(#5bc0de, #2f96b4);
+  background: -o-linear-gradient(#5bc0de, #2f96b4);
+  background: -ms-linear-gradient(#5bc0de, #2f96b4);
+  background: linear-gradient(#5bc0de, #2f96b4);
+  background-color: #2f96b4;
+  border-color: #2f96b4 #2f96b4 #1f6377;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 124, ../../src/scss/kopi/buttons.scss */
+.kopi-button-inverse .kopi-button-inner {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #555555), color-stop(100%, #222222));
+  background: -webkit-linear-gradient(#555555, #222222);
+  background: -moz-linear-gradient(#555555, #222222);
+  background: -o-linear-gradient(#555555, #222222);
+  background: -ms-linear-gradient(#555555, #222222);
+  background: linear-gradient(#555555, #222222);
+  background-color: #222222;
+  border-color: #222222 #222222 black;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 131, ../../src/scss/kopi/buttons.scss */
+.kopi-button-default.kopi-button-hover .kopi-button-inner {
+  color: #333333;
+  background-image: none;
+  background-color: #e6e6e6;
+}
+
+/* line 144, ../../src/scss/kopi/buttons.scss */
+.kopi-button-primary.kopi-button-hover .kopi-button-inner,
+.kopi-button-warning.kopi-button-hover .kopi-button-inner,
+.kopi-button-danger.kopi-button-hover .kopi-button-inner,
+.kopi-button-success.kopi-button-hover .kopi-button-inner,
+.kopi-button-info.kopi-button-hover .kopi-button-inner,
+.kopi-button-inverse.kopi-button-hover .kopi-button-inner {
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  color: white;
+  background-image: none;
+}
+
+/* line 160, ../../src/scss/kopi/buttons.scss */
+.kopi-button-default.kopi-button-active .kopi-button-inner,
+.kopi-button-primary.kopi-button-active .kopi-button-inner,
+.kopi-button-warning.kopi-button-active .kopi-button-inner,
+.kopi-button-danger.kopi-button-active .kopi-button-inner,
+.kopi-button-success.kopi-button-active .kopi-button-inner,
+.kopi-button-info.kopi-button-active .kopi-button-inner,
+.kopi-button-inverse.kopi-button-active .kopi-button-inner {
+  -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+  background-image: none;
+  outline: 0;
+}
+
+/* line 170, ../../src/scss/kopi/buttons.scss */
+.kopi-button-default.kopi-button-active .kopi-button-inner {
+  background-color: #e6e6e6;
+}
+
+/* line 176, ../../src/scss/kopi/buttons.scss */
+.kopi-button-primary.kopi-button-active .kopi-button-inner {
+  background-color: #0055cc;
+  border-color: #0055cc #0055cc #003580;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 182, ../../src/scss/kopi/buttons.scss */
+.kopi-button-warning.kopi-button-active .kopi-button-inner {
+  background-color: #f89406;
+  border-color: #f89406 #f89406 #ad6704;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 188, ../../src/scss/kopi/buttons.scss */
+.kopi-button-danger.kopi-button-active .kopi-button-inner {
+  background-color: #bd362f;
+  border-color: #bd362f #bd362f #802420;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 194, ../../src/scss/kopi/buttons.scss */
+.kopi-button-success.kopi-button-active .kopi-button-inner {
+  background-color: #51a351;
+  border-color: #51a351 #51a351 #387038;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 200, ../../src/scss/kopi/buttons.scss */
+.kopi-button-info.kopi-button-active .kopi-button-inner {
+  background-color: #2f96b4;
+  border-color: #2f96b4 #2f96b4 #1f6377;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 206, ../../src/scss/kopi/buttons.scss */
+.kopi-button-inverse.kopi-button-active .kopi-button-inner {
+  background-color: #222222;
+  border-color: #222222 #222222 black;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 212, ../../src/scss/kopi/buttons.scss */
+.kopi-button-disabled {
+  cursor: default;
+}
+/* line 215, ../../src/scss/kopi/buttons.scss */
+.kopi-button-disabled .kopi-button-inner {
+  background-image: none;
+  background-color: #e6e6e6;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=65);
+  opacity: 0.65;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+/**
+ * Button sizes
+ */
+/* line 228, ../../src/scss/kopi/buttons.scss */
+.kopi-button-large .kopi-button-inner {
+  padding: 9px 14px;
+  font-size: 15px;
+  line-height: normal;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+}
+
+/* line 238, ../../src/scss/kopi/buttons.scss */
+.kopi-button-small .kopi-button-inner {
+  padding: 3px 9px;
+  font-size: 11px;
+  line-height: 16px;
+}
+
+/* line 247, ../../src/scss/kopi/buttons.scss */
+.kopi-button-mini .kopi-button-inner {
+  padding: 2px 6px;
+  font-size: 11px;
+  line-height: 14px;
+}
+
+/* line 40, ../../src/scss/kopi/box.scss */
+.kopi-box, .kopi-round-box {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-drag: none;
+  user-drag: none;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+  opacity: 0.8;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.7) 0 5px 30px, rgba(255, 255, 255, 0.3) 0 0 10px inset;
+  -moz-box-shadow: rgba(0, 0, 0, 0.7) 0 5px 30px, rgba(255, 255, 255, 0.3) 0 0 10px inset;
+  box-shadow: rgba(0, 0, 0, 0.7) 0 5px 30px, rgba(255, 255, 255, 0.3) 0 0 10px inset;
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+  color: white;
+  font-size: 16px;
+  line-height: 24px;
+  text-shadow: 0 -1px 0 black;
+}
+
+/* line 44, ../../src/scss/kopi/box.scss */
+.kopi-round-box {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+}
+
+/**
+ * Global variables
+ */
+/**
+ * Gray levels
+ */
+/**
+ * Accent colors
+ */
+/**
+ * Scaffolding
+ */
+/**
+ * Links
+ */
+/**
+ * Typography
+ */
+/**
+ * Tables
+ */
+/**
+ * Lists
+ */
+/**
+ * Buttons
+ */
+/**
+ * Forms
+ */
+/**
+ * Dropdowns
+ */
+/**
+ * Component Variables
+ */
+/**
+ * Z-index master list
+ *
+ * Used for a bird's eye view of components dependent on the z-axis
+ * Try to avoid customizing these :)
+ */
+/**
+ * Sprite icons path
+ */
+/**
+ * Input placeholder text color
+ */
+/**
+ * Hr border color
+ */
+/**
+ * Navbar
+ */
+/**
+ * Hero unit
+ */
+/**
+ * Form states and alerts
+ */
+/**
+ * Notification
+ */
+/**
+ * Tabs
+ */
+/**
+ * Base styles for buttons
+ */
+/* line 23, ../../src/scss/kopi/buttons.scss */
+.kopi-button, .kopi-nav-button, .kopi-tab {
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  text-align: center;
+  cursor: pointer;
+}
+/* line 7, ../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+.kopi-button, .kopi-nav-button, .kopi-tab {
+  *display: inline;
+}
+/* line 29, ../../src/scss/kopi/buttons.scss */
+.kopi-button .kopi-button-inner, .kopi-nav-button .kopi-button-inner, .kopi-tab .kopi-button-inner {
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  -moz-binding: url('/lib/css/xml/ellipsis.xml#ellipsis');
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-drag: none;
+  user-drag: none;
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -ms-transition-property: all;
+  -o-transition-property: all;
+  transition-property: all;
+  -webkit-transition-duration: 300ms;
+  -moz-transition-duration: 300ms;
+  -ms-transition-duration: 300ms;
+  -o-transition-duration: 300ms;
+  transition-duration: 300ms;
+  -webkit-transition-timing-function: ease-out;
+  -moz-transition-timing-function: ease-out;
+  -ms-transition-timing-function: ease-out;
+  -o-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
+}
+/* line 7, ../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+.kopi-button .kopi-button-inner, .kopi-nav-button .kopi-button-inner, .kopi-tab .kopi-button-inner {
+  *display: inline;
+}
+/* line 36, ../../src/scss/kopi/buttons.scss */
+.kopi-button .kopi-button-icon, .kopi-nav-button .kopi-button-icon, .kopi-tab .kopi-button-icon {
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* line 7, ../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+.kopi-button .kopi-button-icon, .kopi-nav-button .kopi-button-icon, .kopi-tab .kopi-button-icon {
+  *display: inline;
+}
+/* line 42, ../../src/scss/kopi/buttons.scss */
+.kopi-button .kopi-button-text, .kopi-nav-button .kopi-button-text, .kopi-tab .kopi-button-text {
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  vertical-align: middle;
+}
+/* line 7, ../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+.kopi-button .kopi-button-text, .kopi-nav-button .kopi-button-text, .kopi-tab .kopi-button-text {
+  *display: inline;
+}
+
+/* line 49, ../../src/scss/kopi/buttons.scss */
+.kopi-button-rounded .kopi-button-inner {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+}
+
+/**
+ * Button styles
+ */
+/* line 60, ../../src/scss/kopi/buttons.scss */
+.kopi-button-default,
+.kopi-button-primary, .kopi-button-warning,
+.kopi-button-danger, .kopi-button-success,
+.kopi-button-info, .kopi-button-inverse {
+  padding: 4px;
+}
+/* line 63, ../../src/scss/kopi/buttons.scss */
+.kopi-button-default .kopi-button-inner,
+.kopi-button-primary .kopi-button-inner, .kopi-button-warning .kopi-button-inner,
+.kopi-button-danger .kopi-button-inner, .kopi-button-success .kopi-button-inner,
+.kopi-button-info .kopi-button-inner, .kopi-button-inverse .kopi-button-inner {
+  padding: 4px 10px;
+  font-size: 13px;
+  text-decoration: none;
+  line-height: 18px;
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #e6e6e6));
+  background: -webkit-linear-gradient(#ffffff, #e6e6e6);
+  background: -moz-linear-gradient(#ffffff, #e6e6e6);
+  background: -o-linear-gradient(#ffffff, #e6e6e6);
+  background: -ms-linear-gradient(#ffffff, #e6e6e6);
+  background: linear-gradient(#ffffff, #e6e6e6);
+  background-color: #e6e6e6;
+  border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+  border-width: 1px;
+  border-style: solid;
+  border-color: #cccccc;
+  border-bottom-color: #b3b3b3;
+}
+
+/* line 79, ../../src/scss/kopi/buttons.scss */
+.kopi-button-default .kopi-button-inner {
+  color: #333333;
+}
+
+/* line 87, ../../src/scss/kopi/buttons.scss */
+.kopi-button-primary .kopi-button-inner, .kopi-button-warning .kopi-button-inner,
+.kopi-button-danger .kopi-button-inner, .kopi-button-success .kopi-button-inner,
+.kopi-button-info .kopi-button-inner, .kopi-button-inverse .kopi-button-inner {
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  color: white;
+}
+
+/* line 95, ../../src/scss/kopi/buttons.scss */
+.kopi-button-primary .kopi-button-inner {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #0088cc), color-stop(100%, #0055cc));
+  background: -webkit-linear-gradient(#0088cc, #0055cc);
+  background: -moz-linear-gradient(#0088cc, #0055cc);
+  background: -o-linear-gradient(#0088cc, #0055cc);
+  background: -ms-linear-gradient(#0088cc, #0055cc);
+  background: linear-gradient(#0088cc, #0055cc);
+  background-color: #0055cc;
+  border-color: #0055cc #0055cc #003580;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 101, ../../src/scss/kopi/buttons.scss */
+.kopi-button-warning .kopi-button-inner {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fbb450), color-stop(100%, #f89406));
+  background: -webkit-linear-gradient(#fbb450, #f89406);
+  background: -moz-linear-gradient(#fbb450, #f89406);
+  background: -o-linear-gradient(#fbb450, #f89406);
+  background: -ms-linear-gradient(#fbb450, #f89406);
+  background: linear-gradient(#fbb450, #f89406);
+  background-color: #f89406;
+  border-color: #f89406 #f89406 #ad6704;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 107, ../../src/scss/kopi/buttons.scss */
+.kopi-button-danger .kopi-button-inner {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ee5f5b), color-stop(100%, #bd362f));
+  background: -webkit-linear-gradient(#ee5f5b, #bd362f);
+  background: -moz-linear-gradient(#ee5f5b, #bd362f);
+  background: -o-linear-gradient(#ee5f5b, #bd362f);
+  background: -ms-linear-gradient(#ee5f5b, #bd362f);
+  background: linear-gradient(#ee5f5b, #bd362f);
+  background-color: #bd362f;
+  border-color: #bd362f #bd362f #802420;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 113, ../../src/scss/kopi/buttons.scss */
+.kopi-button-success .kopi-button-inner {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #62c462), color-stop(100%, #51a351));
+  background: -webkit-linear-gradient(#62c462, #51a351);
+  background: -moz-linear-gradient(#62c462, #51a351);
+  background: -o-linear-gradient(#62c462, #51a351);
+  background: -ms-linear-gradient(#62c462, #51a351);
+  background: linear-gradient(#62c462, #51a351);
+  background-color: #51a351;
+  border-color: #51a351 #51a351 #387038;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 119, ../../src/scss/kopi/buttons.scss */
+.kopi-button-info .kopi-button-inner {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5bc0de), color-stop(100%, #2f96b4));
+  background: -webkit-linear-gradient(#5bc0de, #2f96b4);
+  background: -moz-linear-gradient(#5bc0de, #2f96b4);
+  background: -o-linear-gradient(#5bc0de, #2f96b4);
+  background: -ms-linear-gradient(#5bc0de, #2f96b4);
+  background: linear-gradient(#5bc0de, #2f96b4);
+  background-color: #2f96b4;
+  border-color: #2f96b4 #2f96b4 #1f6377;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 124, ../../src/scss/kopi/buttons.scss */
+.kopi-button-inverse .kopi-button-inner {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #555555), color-stop(100%, #222222));
+  background: -webkit-linear-gradient(#555555, #222222);
+  background: -moz-linear-gradient(#555555, #222222);
+  background: -o-linear-gradient(#555555, #222222);
+  background: -ms-linear-gradient(#555555, #222222);
+  background: linear-gradient(#555555, #222222);
+  background-color: #222222;
+  border-color: #222222 #222222 black;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 131, ../../src/scss/kopi/buttons.scss */
+.kopi-button-default.kopi-button-hover .kopi-button-inner {
+  color: #333333;
+  background-image: none;
+  background-color: #e6e6e6;
+}
+
+/* line 144, ../../src/scss/kopi/buttons.scss */
+.kopi-button-primary.kopi-button-hover .kopi-button-inner,
+.kopi-button-warning.kopi-button-hover .kopi-button-inner,
+.kopi-button-danger.kopi-button-hover .kopi-button-inner,
+.kopi-button-success.kopi-button-hover .kopi-button-inner,
+.kopi-button-info.kopi-button-hover .kopi-button-inner,
+.kopi-button-inverse.kopi-button-hover .kopi-button-inner {
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  color: white;
+  background-image: none;
+}
+
+/* line 160, ../../src/scss/kopi/buttons.scss */
+.kopi-button-default.kopi-button-active .kopi-button-inner,
+.kopi-button-primary.kopi-button-active .kopi-button-inner,
+.kopi-button-warning.kopi-button-active .kopi-button-inner,
+.kopi-button-danger.kopi-button-active .kopi-button-inner,
+.kopi-button-success.kopi-button-active .kopi-button-inner,
+.kopi-button-info.kopi-button-active .kopi-button-inner,
+.kopi-button-inverse.kopi-button-active .kopi-button-inner {
+  -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+  background-image: none;
+  outline: 0;
+}
+
+/* line 170, ../../src/scss/kopi/buttons.scss */
+.kopi-button-default.kopi-button-active .kopi-button-inner {
+  background-color: #e6e6e6;
+}
+
+/* line 176, ../../src/scss/kopi/buttons.scss */
+.kopi-button-primary.kopi-button-active .kopi-button-inner {
+  background-color: #0055cc;
+  border-color: #0055cc #0055cc #003580;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 182, ../../src/scss/kopi/buttons.scss */
+.kopi-button-warning.kopi-button-active .kopi-button-inner {
+  background-color: #f89406;
+  border-color: #f89406 #f89406 #ad6704;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 188, ../../src/scss/kopi/buttons.scss */
+.kopi-button-danger.kopi-button-active .kopi-button-inner {
+  background-color: #bd362f;
+  border-color: #bd362f #bd362f #802420;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 194, ../../src/scss/kopi/buttons.scss */
+.kopi-button-success.kopi-button-active .kopi-button-inner {
+  background-color: #51a351;
+  border-color: #51a351 #51a351 #387038;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 200, ../../src/scss/kopi/buttons.scss */
+.kopi-button-info.kopi-button-active .kopi-button-inner {
+  background-color: #2f96b4;
+  border-color: #2f96b4 #2f96b4 #1f6377;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 206, ../../src/scss/kopi/buttons.scss */
+.kopi-button-inverse.kopi-button-active .kopi-button-inner {
+  background-color: #222222;
+  border-color: #222222 #222222 black;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 212, ../../src/scss/kopi/buttons.scss */
+.kopi-button-disabled {
+  cursor: default;
+}
+/* line 215, ../../src/scss/kopi/buttons.scss */
+.kopi-button-disabled .kopi-button-inner {
+  background-image: none;
+  background-color: #e6e6e6;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=65);
+  opacity: 0.65;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+/**
+ * Button sizes
+ */
+/* line 228, ../../src/scss/kopi/buttons.scss */
+.kopi-button-large .kopi-button-inner {
+  padding: 9px 14px;
+  font-size: 15px;
+  line-height: normal;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+}
+
+/* line 238, ../../src/scss/kopi/buttons.scss */
+.kopi-button-small .kopi-button-inner {
+  padding: 3px 9px;
+  font-size: 11px;
+  line-height: 16px;
+}
+
+/* line 247, ../../src/scss/kopi/buttons.scss */
+.kopi-button-mini .kopi-button-inner {
+  padding: 2px 6px;
+  font-size: 11px;
+  line-height: 14px;
+}
+
+/* {{{ Lists
+ *
+ * div.kopi-list
+ *   div.kopi-list-item
+ *     div.kopi-button
+ *       span.kopi-button-text
+ *
+ * TODO Add some innner shadow to list item?
+ */
+/* line 16, ../../src/scss/kopi/lists.scss */
+.kopi-list, .kopi-nav-list {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+}
+
+/**
+ * Zebra-striping
+ */
+/* line 26, ../../src/scss/kopi/lists.scss */
+.kopi-list-striped .kopi-list-item-odd, .kopi-list-striped .kopi-list-item:nth-child(odd), .kopi-list-striped .kopi-nav-list-item:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+/**
+ * Bordered version
+ */
+/* line 39, ../../src/scss/kopi/lists.scss */
+.kopi-list-item, .kopi-nav-list-item {
+  height: 40px;
+}
+/* line 42, ../../src/scss/kopi/lists.scss */
+.kopi-list-item .kopi-button, .kopi-nav-list-item .kopi-button, .kopi-list-item .kopi-nav-button, .kopi-nav-list-item .kopi-nav-button, .kopi-list-item .kopi-tab, .kopi-nav-list-item .kopi-tab {
+  text-align: left;
+  width: 100%;
+  height: 100%;
+}
+/* line 47, ../../src/scss/kopi/lists.scss */
+.kopi-list-item .kopi-button .kopi-button-title, .kopi-nav-list-item .kopi-button .kopi-button-title, .kopi-list-item .kopi-nav-button .kopi-button-title, .kopi-nav-list-item .kopi-nav-button .kopi-button-title, .kopi-list-item .kopi-tab .kopi-button-title, .kopi-nav-list-item .kopi-tab .kopi-button-title {
+  padding: 0 10px;
+  font-size: 13.333px;
+  line-height: 40px;
+}
+/* line 54, ../../src/scss/kopi/lists.scss */
+.kopi-list-item .kopi-button-hover, .kopi-nav-list-item .kopi-button-hover {
+  background-color: #dddddd;
+}
+/* line 58, ../../src/scss/kopi/lists.scss */
+.kopi-list-item .kopi-button-active, .kopi-nav-list-item .kopi-button-active {
+  color: white;
+  background-color: #0088cc;
+}
+
+/* {{{ NavList
+ */
+/* line 72, ../../src/scss/kopi/lists.scss */
+.kopi-nav-list-striped .kopi-nav-list-item-odd, .kopi-nav-list-striped .kopi-nav-list-item:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+/* line 40, ../../src/scss/kopi/box.scss */
+.kopi-box, .kopi-round-box {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-drag: none;
+  user-drag: none;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+  opacity: 0.8;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.7) 0 5px 30px, rgba(255, 255, 255, 0.3) 0 0 10px inset;
+  -moz-box-shadow: rgba(0, 0, 0, 0.7) 0 5px 30px, rgba(255, 255, 255, 0.3) 0 0 10px inset;
+  box-shadow: rgba(0, 0, 0, 0.7) 0 5px 30px, rgba(255, 255, 255, 0.3) 0 0 10px inset;
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+  color: white;
+  font-size: 16px;
+  line-height: 24px;
+  text-shadow: 0 -1px 0 black;
+}
+
+/* line 44, ../../src/scss/kopi/box.scss */
+.kopi-round-box {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+}
+
+/**
+ * Global variables
+ */
+/**
+ * Gray levels
+ */
+/**
+ * Accent colors
+ */
+/**
+ * Scaffolding
+ */
+/**
+ * Links
+ */
+/**
+ * Typography
+ */
+/**
+ * Tables
+ */
+/**
+ * Lists
+ */
+/**
+ * Buttons
+ */
+/**
+ * Forms
+ */
+/**
+ * Dropdowns
+ */
+/**
+ * Component Variables
+ */
+/**
+ * Z-index master list
+ *
+ * Used for a bird's eye view of components dependent on the z-axis
+ * Try to avoid customizing these :)
+ */
+/**
+ * Sprite icons path
+ */
+/**
+ * Input placeholder text color
+ */
+/**
+ * Hr border color
+ */
+/**
+ * Navbar
+ */
+/**
+ * Hero unit
+ */
+/**
+ * Form states and alerts
+ */
+/**
+ * Notification
+ */
+/**
+ * Tabs
+ */
+/**
+ * Base styles for buttons
+ */
+/* line 23, ../../src/scss/kopi/buttons.scss */
+.kopi-button, .kopi-nav-button, .kopi-tab {
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  text-align: center;
+  cursor: pointer;
+}
+/* line 7, ../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+.kopi-button, .kopi-nav-button, .kopi-tab {
+  *display: inline;
+}
+/* line 29, ../../src/scss/kopi/buttons.scss */
+.kopi-button .kopi-button-inner, .kopi-nav-button .kopi-button-inner, .kopi-tab .kopi-button-inner {
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  -moz-binding: url('/lib/css/xml/ellipsis.xml#ellipsis');
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-drag: none;
+  user-drag: none;
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -ms-transition-property: all;
+  -o-transition-property: all;
+  transition-property: all;
+  -webkit-transition-duration: 300ms;
+  -moz-transition-duration: 300ms;
+  -ms-transition-duration: 300ms;
+  -o-transition-duration: 300ms;
+  transition-duration: 300ms;
+  -webkit-transition-timing-function: ease-out;
+  -moz-transition-timing-function: ease-out;
+  -ms-transition-timing-function: ease-out;
+  -o-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
+}
+/* line 7, ../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+.kopi-button .kopi-button-inner, .kopi-nav-button .kopi-button-inner, .kopi-tab .kopi-button-inner {
+  *display: inline;
+}
+/* line 36, ../../src/scss/kopi/buttons.scss */
+.kopi-button .kopi-button-icon, .kopi-nav-button .kopi-button-icon, .kopi-tab .kopi-button-icon {
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* line 7, ../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+.kopi-button .kopi-button-icon, .kopi-nav-button .kopi-button-icon, .kopi-tab .kopi-button-icon {
+  *display: inline;
+}
+/* line 42, ../../src/scss/kopi/buttons.scss */
+.kopi-button .kopi-button-text, .kopi-nav-button .kopi-button-text, .kopi-tab .kopi-button-text {
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  vertical-align: middle;
+}
+/* line 7, ../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+.kopi-button .kopi-button-text, .kopi-nav-button .kopi-button-text, .kopi-tab .kopi-button-text {
+  *display: inline;
+}
+
+/* line 49, ../../src/scss/kopi/buttons.scss */
+.kopi-button-rounded .kopi-button-inner {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+}
+
+/**
+ * Button styles
+ */
+/* line 60, ../../src/scss/kopi/buttons.scss */
+.kopi-button-default,
+.kopi-button-primary, .kopi-button-warning,
+.kopi-button-danger, .kopi-button-success,
+.kopi-button-info, .kopi-button-inverse {
+  padding: 4px;
+}
+/* line 63, ../../src/scss/kopi/buttons.scss */
+.kopi-button-default .kopi-button-inner,
+.kopi-button-primary .kopi-button-inner, .kopi-button-warning .kopi-button-inner,
+.kopi-button-danger .kopi-button-inner, .kopi-button-success .kopi-button-inner,
+.kopi-button-info .kopi-button-inner, .kopi-button-inverse .kopi-button-inner {
+  padding: 4px 10px;
+  font-size: 13px;
+  text-decoration: none;
+  line-height: 18px;
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #e6e6e6));
+  background: -webkit-linear-gradient(#ffffff, #e6e6e6);
+  background: -moz-linear-gradient(#ffffff, #e6e6e6);
+  background: -o-linear-gradient(#ffffff, #e6e6e6);
+  background: -ms-linear-gradient(#ffffff, #e6e6e6);
+  background: linear-gradient(#ffffff, #e6e6e6);
+  background-color: #e6e6e6;
+  border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+  border-width: 1px;
+  border-style: solid;
+  border-color: #cccccc;
+  border-bottom-color: #b3b3b3;
+}
+
+/* line 79, ../../src/scss/kopi/buttons.scss */
+.kopi-button-default .kopi-button-inner {
+  color: #333333;
+}
+
+/* line 87, ../../src/scss/kopi/buttons.scss */
+.kopi-button-primary .kopi-button-inner, .kopi-button-warning .kopi-button-inner,
+.kopi-button-danger .kopi-button-inner, .kopi-button-success .kopi-button-inner,
+.kopi-button-info .kopi-button-inner, .kopi-button-inverse .kopi-button-inner {
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  color: white;
+}
+
+/* line 95, ../../src/scss/kopi/buttons.scss */
+.kopi-button-primary .kopi-button-inner {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #0088cc), color-stop(100%, #0055cc));
+  background: -webkit-linear-gradient(#0088cc, #0055cc);
+  background: -moz-linear-gradient(#0088cc, #0055cc);
+  background: -o-linear-gradient(#0088cc, #0055cc);
+  background: -ms-linear-gradient(#0088cc, #0055cc);
+  background: linear-gradient(#0088cc, #0055cc);
+  background-color: #0055cc;
+  border-color: #0055cc #0055cc #003580;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 101, ../../src/scss/kopi/buttons.scss */
+.kopi-button-warning .kopi-button-inner {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fbb450), color-stop(100%, #f89406));
+  background: -webkit-linear-gradient(#fbb450, #f89406);
+  background: -moz-linear-gradient(#fbb450, #f89406);
+  background: -o-linear-gradient(#fbb450, #f89406);
+  background: -ms-linear-gradient(#fbb450, #f89406);
+  background: linear-gradient(#fbb450, #f89406);
+  background-color: #f89406;
+  border-color: #f89406 #f89406 #ad6704;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 107, ../../src/scss/kopi/buttons.scss */
+.kopi-button-danger .kopi-button-inner {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ee5f5b), color-stop(100%, #bd362f));
+  background: -webkit-linear-gradient(#ee5f5b, #bd362f);
+  background: -moz-linear-gradient(#ee5f5b, #bd362f);
+  background: -o-linear-gradient(#ee5f5b, #bd362f);
+  background: -ms-linear-gradient(#ee5f5b, #bd362f);
+  background: linear-gradient(#ee5f5b, #bd362f);
+  background-color: #bd362f;
+  border-color: #bd362f #bd362f #802420;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 113, ../../src/scss/kopi/buttons.scss */
+.kopi-button-success .kopi-button-inner {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #62c462), color-stop(100%, #51a351));
+  background: -webkit-linear-gradient(#62c462, #51a351);
+  background: -moz-linear-gradient(#62c462, #51a351);
+  background: -o-linear-gradient(#62c462, #51a351);
+  background: -ms-linear-gradient(#62c462, #51a351);
+  background: linear-gradient(#62c462, #51a351);
+  background-color: #51a351;
+  border-color: #51a351 #51a351 #387038;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 119, ../../src/scss/kopi/buttons.scss */
+.kopi-button-info .kopi-button-inner {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5bc0de), color-stop(100%, #2f96b4));
+  background: -webkit-linear-gradient(#5bc0de, #2f96b4);
+  background: -moz-linear-gradient(#5bc0de, #2f96b4);
+  background: -o-linear-gradient(#5bc0de, #2f96b4);
+  background: -ms-linear-gradient(#5bc0de, #2f96b4);
+  background: linear-gradient(#5bc0de, #2f96b4);
+  background-color: #2f96b4;
+  border-color: #2f96b4 #2f96b4 #1f6377;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 124, ../../src/scss/kopi/buttons.scss */
+.kopi-button-inverse .kopi-button-inner {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #555555), color-stop(100%, #222222));
+  background: -webkit-linear-gradient(#555555, #222222);
+  background: -moz-linear-gradient(#555555, #222222);
+  background: -o-linear-gradient(#555555, #222222);
+  background: -ms-linear-gradient(#555555, #222222);
+  background: linear-gradient(#555555, #222222);
+  background-color: #222222;
+  border-color: #222222 #222222 black;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 131, ../../src/scss/kopi/buttons.scss */
+.kopi-button-default.kopi-button-hover .kopi-button-inner {
+  color: #333333;
+  background-image: none;
+  background-color: #e6e6e6;
+}
+
+/* line 144, ../../src/scss/kopi/buttons.scss */
+.kopi-button-primary.kopi-button-hover .kopi-button-inner,
+.kopi-button-warning.kopi-button-hover .kopi-button-inner,
+.kopi-button-danger.kopi-button-hover .kopi-button-inner,
+.kopi-button-success.kopi-button-hover .kopi-button-inner,
+.kopi-button-info.kopi-button-hover .kopi-button-inner,
+.kopi-button-inverse.kopi-button-hover .kopi-button-inner {
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  color: white;
+  background-image: none;
+}
+
+/* line 160, ../../src/scss/kopi/buttons.scss */
+.kopi-button-default.kopi-button-active .kopi-button-inner,
+.kopi-button-primary.kopi-button-active .kopi-button-inner,
+.kopi-button-warning.kopi-button-active .kopi-button-inner,
+.kopi-button-danger.kopi-button-active .kopi-button-inner,
+.kopi-button-success.kopi-button-active .kopi-button-inner,
+.kopi-button-info.kopi-button-active .kopi-button-inner,
+.kopi-button-inverse.kopi-button-active .kopi-button-inner {
+  -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+  background-image: none;
+  outline: 0;
+}
+
+/* line 170, ../../src/scss/kopi/buttons.scss */
+.kopi-button-default.kopi-button-active .kopi-button-inner {
+  background-color: #e6e6e6;
+}
+
+/* line 176, ../../src/scss/kopi/buttons.scss */
+.kopi-button-primary.kopi-button-active .kopi-button-inner {
+  background-color: #0055cc;
+  border-color: #0055cc #0055cc #003580;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 182, ../../src/scss/kopi/buttons.scss */
+.kopi-button-warning.kopi-button-active .kopi-button-inner {
+  background-color: #f89406;
+  border-color: #f89406 #f89406 #ad6704;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 188, ../../src/scss/kopi/buttons.scss */
+.kopi-button-danger.kopi-button-active .kopi-button-inner {
+  background-color: #bd362f;
+  border-color: #bd362f #bd362f #802420;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 194, ../../src/scss/kopi/buttons.scss */
+.kopi-button-success.kopi-button-active .kopi-button-inner {
+  background-color: #51a351;
+  border-color: #51a351 #51a351 #387038;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 200, ../../src/scss/kopi/buttons.scss */
+.kopi-button-info.kopi-button-active .kopi-button-inner {
+  background-color: #2f96b4;
+  border-color: #2f96b4 #2f96b4 #1f6377;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 206, ../../src/scss/kopi/buttons.scss */
+.kopi-button-inverse.kopi-button-active .kopi-button-inner {
+  background-color: #222222;
+  border-color: #222222 #222222 black;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 212, ../../src/scss/kopi/buttons.scss */
+.kopi-button-disabled {
+  cursor: default;
+}
+/* line 215, ../../src/scss/kopi/buttons.scss */
+.kopi-button-disabled .kopi-button-inner {
+  background-image: none;
+  background-color: #e6e6e6;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=65);
+  opacity: 0.65;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+/**
+ * Button sizes
+ */
+/* line 228, ../../src/scss/kopi/buttons.scss */
+.kopi-button-large .kopi-button-inner {
+  padding: 9px 14px;
+  font-size: 15px;
+  line-height: normal;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+}
+
+/* line 238, ../../src/scss/kopi/buttons.scss */
+.kopi-button-small .kopi-button-inner {
+  padding: 3px 9px;
+  font-size: 11px;
+  line-height: 16px;
+}
+
+/* line 247, ../../src/scss/kopi/buttons.scss */
+.kopi-button-mini .kopi-button-inner {
+  padding: 2px 6px;
+  font-size: 11px;
+  line-height: 14px;
+}
+
+/* line 7, ../../src/scss/kopi/notification.scss */
+.kopi-notification-indicator {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  height: 24px;
+  width: 24px;
+  margin-top: -12px;
+  margin-left: -12px;
+  display: none;
+  z-index: 1300;
+  background: transparent url('/images/kopi/loader.gif?1331558580') center center no-repeat;
+  background-size: contain;
+}
+
+/* line 23, ../../src/scss/kopi/notification.scss */
+.kopi-notification-overlay {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+  opacity: 0.8;
+  background-color: black;
+  background: -webkit-gradient(radial, 50%, 0, 50%, 100, color-stop(0%, rgba(0, 0, 0, 0)), color-stop(100%, #000000));
+  background: -webkit-radial-gradient(center, rgba(0, 0, 0, 0) 0%, #000000 100%);
+  background: -moz-radial-gradient(center, rgba(0, 0, 0, 0) 0%, #000000 100%);
+  background: -o-radial-gradient(center, rgba(0, 0, 0, 0) 0%, #000000 100%);
+  background: -ms-radial-gradient(center, rgba(0, 0, 0, 0) 0%, #000000 100%);
+  background: radial-gradient(center, rgba(0, 0, 0, 0) 0%, #000000 100%);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: none;
+}
+
+/* line 41, ../../src/scss/kopi/notification.scss */
+.kopi-notification-overlay-transparent {
+  background: none;
+}
+
+/* line 46, ../../src/scss/kopi/notification.scss */
+.kopi-notification-background, .kopi-notification-bubble, .kopi-notification-dialog {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-drag: none;
+  user-drag: none;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=90);
+  opacity: 0.9;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 2px 5px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 2px 5px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 2px 5px rgba(0, 0, 0, 0.5);
+  color: white;
+  background-color: #222222;
+  border: 1px solid black;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) fadein(rgba(0, 0, 0, 0.1), 15%);
+}
+
+/* line 60, ../../src/scss/kopi/notification.scss */
+.kopi-notification-bubble {
+  width: 200px;
+  height: 102px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -51px;
+  margin-left: -100px;
+  z-index: 1200;
+  display: none;
+}
+/* line 72, ../../src/scss/kopi/notification.scss */
+.kopi-notification-bubble p {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  text-align: center;
+  text-shadow: 0 -1px 0 #555555;
+  vertical-align: middle;
+  padding: 0;
+  margin: 18px 10px 0;
+}
+
+/* line 84, ../../src/scss/kopi/notification.scss */
+.kopi-notification-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  min-height: 18px;
+  max-height: 200px;
+  margin-left: -150px;
+  margin-top: -100px;
+  overflow: hidden;
+  text-align: center;
+  vertical-align: middle;
+  display: none;
+  z-index: 1100;
+}
+
+/* line 101, ../../src/scss/kopi/notification.scss */
+.kopi-notification-dialog-header {
+  height: 50px;
+}
+
+/* line 105, ../../src/scss/kopi/notification.scss */
+.kopi-notification-dialog-title {
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  -moz-binding: url('/lib/css/xml/ellipsis.xml#ellipsis');
+  font-size: 20px;
+  height: 50px;
+  line-height: 50px;
+  margin: 0;
+  padding: 0 8px;
+}
+
+/* line 114, ../../src/scss/kopi/notification.scss */
+.kopi-notification-dialog-content {
+  font-size: 16px;
+  max-height: 102px;
+  overflow: hidden;
+  border: 1px solid #555555;
+  background-color: #333333;
+  border-width: 1px 0;
+}
+/* line 122, ../../src/scss/kopi/notification.scss */
+.kopi-notification-dialog-content p {
+  margin: 0;
+  padding: 0 8px 4px;
+}
+
+/* line 128, ../../src/scss/kopi/notification.scss */
+.kopi-notification-dialog-footer {
+  height: 48px;
+}
+
+/* line 132, ../../src/scss/kopi/notification.scss */
+.kopi-notification-dialog-button, .kopi-notification-dialog-action, .kopi-notification-dialog-close {
+  position: absolute;
+  height: 40.5px;
+  line-height: 40.5px;
+  width: 140px;
+}
+
+/* line 139, ../../src/scss/kopi/notification.scss */
+.kopi-notification-dialog-action {
+  left: 5px;
+  text-align: left;
+}
+
+/* line 145, ../../src/scss/kopi/notification.scss */
+.kopi-notification-dialog-close {
+  right: 5px;
+  text-align: right;
+}
+
+/* line 155, ../../src/scss/kopi/notification.scss */
+.kopi-notification-overlay-show,
+.kopi-notification-indicator-show,
+.kopi-notification-bubble-show,
+.kopi-notification-dialog-show {
+  display: block;
+}
+
+/**
+ * Global variables
+ */
+/**
+ * Gray levels
+ */
+/**
+ * Accent colors
+ */
+/**
+ * Scaffolding
+ */
+/**
+ * Links
+ */
+/**
+ * Typography
+ */
+/**
+ * Tables
+ */
+/**
+ * Lists
+ */
+/**
+ * Buttons
+ */
+/**
+ * Forms
+ */
+/**
+ * Dropdowns
+ */
+/**
+ * Component Variables
+ */
+/**
+ * Z-index master list
+ *
+ * Used for a bird's eye view of components dependent on the z-axis
+ * Try to avoid customizing these :)
+ */
+/**
+ * Sprite icons path
+ */
+/**
+ * Input placeholder text color
+ */
+/**
+ * Hr border color
+ */
+/**
+ * Navbar
+ */
+/**
+ * Hero unit
+ */
+/**
+ * Form states and alerts
+ */
+/**
+ * Notification
+ */
+/**
+ * Tabs
+ */
+/* line 5, ../../src/scss/kopi/tabs.scss */
+.kopi-tab-bar {
+  border-color: #d5d5d5;
+  color: #0088cc;
+  background: #eeeeee;
+}
+
+/* line 13, ../../src/scss/kopi/tabs.scss */
+.kopi-tab-bar-horizontal {
+  width: 100%;
+  height: 50px;
+}
+
+/* line 24, ../../src/scss/kopi/tabs.scss */
+.kopi-tab-bar-bottom, .kopi-tab-navigator-bottom .kopi-tab-bar {
+  border-width: 1px 0 0;
+  -webkit-box-shadow: inset 0 1px 0 white, 0 -1px 5px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: inset 0 1px 0 white, 0 -1px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 1px 0 white, 0 -1px 5px rgba(0, 0, 0, 0.1);
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f5f5f5), color-stop(100%, #eeeeee));
+  background: -webkit-linear-gradient(#f5f5f5, #eeeeee);
+  background: -moz-linear-gradient(#f5f5f5, #eeeeee);
+  background: -o-linear-gradient(#f5f5f5, #eeeeee);
+  background: -ms-linear-gradient(#f5f5f5, #eeeeee);
+  background: linear-gradient(#f5f5f5, #eeeeee);
+  background: #eeeeee;
+}
+
+/* line 46, ../../src/scss/kopi/tabs.scss */
+.kopi-tab-navigator {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+/* line 52, ../../src/scss/kopi/tabs.scss */
+.kopi-tab-navigator .kopi-tab-bar, .kopi-tab-navigator .kopi-tab-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+/* line 69, ../../src/scss/kopi/tabs.scss */
+.kopi-tab-navigator-bottom .kopi-tab-bar {
+  bottom: 0;
+}
+/* line 74, ../../src/scss/kopi/tabs.scss */
+.kopi-tab-navigator-bottom .kopi-tab-panel {
+  top: 0;
+  bottom: 50px;
+}
+
+/* line 4, ../../src/scss/kopi/scrollable.scss */
+.kopi-scrollable, .kopi-flippable {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+/* line 11, ../../src/scss/kopi/scrollable.scss */
+.kopi-scrollable-container, .kopi-flippable-container {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-drag: none;
+  user-drag: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  min-height: 100%;
+  -webkit-transition-property: -webkit-transform,top,left;
+  -moz-transition-property: -moz-transform,top,left;
+  transition-property: transform,top,left;
+  -webkit-transition-duration: 0ms;
+  -moz-transition-duration: 0ms;
+  transition-duration: 0ms;
+  -webkit-transition-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+  -moz-transition-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+  transition-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+  -webkit-transform-origin: 0 0;
+  -moz-transform-origin: 0 0;
+  transform-origin: 0 0;
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  transform: translate(0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+/* line 35, ../../src/scss/kopi/scrollable.scss */
+.kopi-scrollable-container img, .kopi-flippable-container img {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-drag: none;
+  user-drag: none;
+}
+
+/* line 4, ../../src/scss/kopi/scrollable.scss */
+.kopi-scrollable, .kopi-flippable {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+/* line 11, ../../src/scss/kopi/scrollable.scss */
+.kopi-scrollable-container, .kopi-flippable-container {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-drag: none;
+  user-drag: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  min-height: 100%;
+  -webkit-transition-property: -webkit-transform,top,left;
+  -moz-transition-property: -moz-transform,top,left;
+  transition-property: transform,top,left;
+  -webkit-transition-duration: 0ms;
+  -moz-transition-duration: 0ms;
+  transition-duration: 0ms;
+  -webkit-transition-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+  -moz-transition-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+  transition-timing-function: cubic-bezier(0.33, 0.66, 0.66, 1);
+  -webkit-transform-origin: 0 0;
+  -moz-transform-origin: 0 0;
+  transform-origin: 0 0;
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  transform: translate(0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+/* line 35, ../../src/scss/kopi/scrollable.scss */
+.kopi-scrollable-container img, .kopi-flippable-container img {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-drag: none;
+  user-drag: none;
+}
+
+/* line 3, ../../src/scss/kopi/carousels.scss */
+.kopi-carousel {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-drag: none;
+  user-drag: none;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* line 10, ../../src/scss/kopi/carousels.scss */
+.kopi-carousel-page {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-drag: none;
+  user-drag: none;
+  float: left;
+  overflow: hidden;
+}
+/* line 15, ../../src/scss/kopi/carousels.scss */
+.kopi-carousel-page img {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-drag: none;
+  user-drag: none;
+}
+
+/* line 5, ../../src/scss/kopi/indicators.scss */
+.kopi-indicator {
+  height: 24px;
+  width: 24px;
+  background: transparent url('/images/kopi/loader.gif?1331558580') center center no-repeat;
+  background-size: contain;
+  display: none;
+}
+
+/* line 13, ../../src/scss/kopi/indicators.scss */
+.kopi-indicator-show {
+  display: block;
+}
+
+/* line 17, ../../src/scss/kopi/indicators.scss */
+.kopi-indicator-center {
+  position: absolute;
+  margin-top: -12px;
+  margin-left: -12px;
+  top: 50%;
+  left: 50%;
+  z-index: 1300;
+}
+
+/**
+ * Global variables
+ */
+/**
+ * Gray levels
+ */
+/**
+ * Accent colors
+ */
+/**
+ * Scaffolding
+ */
+/**
+ * Links
+ */
+/**
+ * Typography
+ */
+/**
+ * Tables
+ */
+/**
+ * Lists
+ */
+/**
+ * Buttons
+ */
+/**
+ * Forms
+ */
+/**
+ * Dropdowns
+ */
+/**
+ * Component Variables
+ */
+/**
+ * Z-index master list
+ *
+ * Used for a bird's eye view of components dependent on the z-axis
+ * Try to avoid customizing these :)
+ */
+/**
+ * Sprite icons path
+ */
+/**
+ * Input placeholder text color
+ */
+/**
+ * Hr border color
+ */
+/**
+ * Navbar
+ */
+/**
+ * Hero unit
+ */
+/**
+ * Form states and alerts
+ */
+/**
+ * Notification
+ */
+/**
+ * Tabs
+ */
+/* line 4, ../../src/scss/kopi/images.scss */
+.kopi-image {
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  text-align: center;
+  vertical-align: middle;
+  margin: 0 auto;
+  padding: 0;
+}
+/* line 7, ../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
+.kopi-image {
+  *display: inline;
+}
+
+/* line 12, ../../src/scss/kopi/images.scss */
+.kopi-image-bordered {
+  border: 1px solid #dddddd;
+}
+/* line 15, ../../src/scss/kopi/images.scss */
+.kopi-image-bordered img {
+  margin: 3px;
+}
