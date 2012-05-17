@@ -2,6 +2,7 @@ define "kopi/ui/images", (require, exports, module) ->
 
   $ = require "jquery"
   widgets = require "kopi/ui/widgets"
+  settings = require "kopi/settings"
 
   doc = document
   IMG_TAG = "<img></img>"
@@ -23,7 +24,7 @@ define "kopi/ui/images", (require, exports, module) ->
       tagName: "figure"
       height: null
       width: null
-      src: "/images/kopi/transparent.gif"
+      src: "#{settings.kopi.ui.imageDir}/kopi/transparent.gif"
       loaderSrc: ""
       fallbackSrc: ""
       bordered: false

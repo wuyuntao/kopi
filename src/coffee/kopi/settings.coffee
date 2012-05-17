@@ -47,6 +47,7 @@ define "kopi/settings", (require, exports, module) ->
       prefix: "kopi"
       notification:
         prefix: "kopi-notification"
+      imageDir: "/images"
 
     db:
       indexedDB:
