@@ -775,6 +775,8 @@ seajs._fn = {};
         .replace(/(?:^|\n|\r)\s*\/\/.*(?:\r|\n|$)/g, '\n');
   }
 
+  // Support jQuery
+  define.amd = {jQuery: true};
 
   fn.define = define;
 
