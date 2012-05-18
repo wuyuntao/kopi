@@ -15,3 +15,5 @@ define "kopi/demos/settings", (require, exports, module) ->
       "item9"
       "item10"
     ]
+
+  settings

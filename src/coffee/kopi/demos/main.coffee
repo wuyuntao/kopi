@@ -11,7 +11,7 @@ define "kopi/demos/main", (require, exports, module) ->
 
     onstart: ->
       super
-      this.navBar = new Navbar(position: Navbar.POS_TOP_FIXED)
+      this.navbar = new Navbar(position: Navbar.POS_TOP_FIXED)
         .skeletonTo(this.viewport.element)
         .render()
       this.viewSwitcher = new ViewSwitcher()
