@@ -10,8 +10,14 @@ define "kopi/ui/indicators", (require, exports, module) ->
 
     klass.include this, Togglable
 
+    this.configure
+      center: false
+
     constructor: ->
       super
+      if this._options.center
+        cls = this.constructor
+        this._options.extraClass += " #{cls.cssClass("center")}"
       this.hidden = true
 
   Indicator: Indicator
