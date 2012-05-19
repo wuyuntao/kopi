@@ -67,9 +67,10 @@ define "kopi/db/adapters/kv", (require, exports, module) ->
       value = self._get(key)
       if value
         try
-          fn(null, [self._modelObject(value, model.meta().names)]) if fn
+          result = [self._modelObject(value, model.meta().names)]
         catch e
-          fn("Failed to parse value: #{e}") if fn
+          error = "Failed to parse value: #{e}"
+        fn(error, result) if fn
       else
         fn(null, []) if fn
       self
