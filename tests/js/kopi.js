@@ -1,1 +1,1 @@
-../../build/js/kopi.js
+../../lib/js/kopi.js

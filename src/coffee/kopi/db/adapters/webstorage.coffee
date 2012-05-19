@@ -1,6 +1,7 @@
 define "kopi/db/adapters/webstorage", (require, exports, module) ->
 
   logging = require "kopi/logging"
+  klass = require "kopi/utils/support"
   support = require "kopi/utils/support"
   kv = require "kopi/db/adapters/kv"
   models = require "kopi/db/models"
@@ -14,7 +15,9 @@ define "kopi/db/adapters/webstorage", (require, exports, module) ->
 
     _get: (key, defautValue, fn) ->
       value = storage.getItem(key)
-      fn(null, if value? then value else defautValue) if fn
+      value = if value? then value else defautValue
+      fn(null, value) if fn
+      value
 
     _set: (key, value, fn) ->
       try
@@ -27,12 +30,12 @@ define "kopi/db/adapters/webstorage", (require, exports, module) ->
           fn(e) if fn
         else
           throw e
-      this
+      value
 
     _remove: (key, fn) ->
-      storage.removeItem(key)
-      fn(null) if fn
-      this
+      value = storage.removeItem(key)
+      fn(null, value) if fn
+      value
 
     _adapterValue: (value, field) ->
       self = this

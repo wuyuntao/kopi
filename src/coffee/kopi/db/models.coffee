@@ -559,7 +559,7 @@ define "kopi/db/models", (require, exports, module) ->
       self
 
     toString: ->
-      "[#{this.constructor.modelName()} #{this.pk() or "null"}"
+      "[#{this.constructor.modelName()} #{this.pk() or "null"}]"
 
     ###
     Return a copy of model's attributes

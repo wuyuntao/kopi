@@ -85,7 +85,7 @@ define "kopi/app/router", (require, exports, module) ->
         matches = url.path.match(dynamic.regexp)
         if matches
           route = dynamic.route
-          params = []
+          params = {}
           for param, i in dynamic.params
             params[param] = matches[i + 1]
           return route: route, url: url, params: params

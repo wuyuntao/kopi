@@ -101,7 +101,7 @@ define "kopi/views", (require, exports, module) ->
         options = {}
       logger.info("Create view. #{self.guid}")
       self.lock()
-      self.on(cls.CREATED_EVENT, (e) -> fn(false, self)) if fn
+      self.on(cls.CREATED_EVENT, (e, error) -> fn(error, self)) if fn
       self.emit(cls.CREATE_EVENT, [options])
 
     ###
@@ -119,7 +119,7 @@ define "kopi/views", (require, exports, module) ->
         options = {}
       logger.info("Start view. #{self.guid}")
       self.lock()
-      self.on(cls.STARTED_EVENT, (e) -> fn(false, self)) if fn
+      self.on(cls.STARTED_EVENT, (e, error) -> fn(error, self)) if fn
       self.emit(cls.START_EVENT, [url, params, options])
 
     ###
@@ -137,7 +137,7 @@ define "kopi/views", (require, exports, module) ->
         fn = options
         options = {}
       logger.info("Update view. #{self.guid}")
-      self.on(cls.UPDATED_EVENT, (e) -> fn(false, this)) if fn
+      self.on(cls.UPDATED_EVENT, (e, error) -> fn(error, this)) if fn
       self.emit(cls.UPDATE_EVENT, [url, params, options])
 
     ###
@@ -155,7 +155,7 @@ define "kopi/views", (require, exports, module) ->
         options = {}
       logger.info("Stop view. #{self.guid}")
       self.lock()
-      self.on(cls.STOPPED_EVENT, (e) -> fn(false, self)) if fn
+      self.on(cls.STOPPED_EVENT, (e, error) -> fn(error, self)) if fn
       self.emit(cls.STOP_EVENT, [options])
 
     ###
@@ -173,7 +173,7 @@ define "kopi/views", (require, exports, module) ->
         options = {}
       logger.info("Destroy view. #{self.guid}")
       self.lock()
-      self.on(cls.DESTROYED_EVENT, (e) -> fn(false, self)) if fn
+      self.on(cls.DESTROYED_EVENT, (e, error) -> fn(error, self)) if fn
       self.emit(cls.DESTROY_EVENT, [options])
 
     lock: (fn) ->
@@ -183,7 +183,7 @@ define "kopi/views", (require, exports, module) ->
       logger.info("Lock view. #{self.guid}")
       self.locked = true
       self.emit cls.LOCK_EVENT
-      fn(false, self) if fn
+      fn(null, self) if fn
       self
 
     unlock: (fn) ->
@@ -193,7 +193,7 @@ define "kopi/views", (require, exports, module) ->
       logger.info("Unlock view. #{self.guid}")
       self.locked = false
       self.emit cls.UNLOCK_EVENT
-      fn(false, self) if fn
+      fn(null, self) if fn
       self
 
     ###

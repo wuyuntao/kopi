@@ -45,12 +45,12 @@ define "kopi/db/adapters/kv", (require, exports, module) ->
       attrs = query.attrs()
       pk = query.pk()
       if not pk
-        fn(true, "Must provide primary key") if fn
+        fn("Must provide primary key") if fn
         return self
       key = self._keyForModel(model, pk)
       isKeyExists = !!self._get(key)
       if isKeyExists
-        fn(true, "Primary key already exists.") if fn
+        fn("Primary key already exists.") if fn
         return self
       self._set(key, self._adapterObject(attrs, model.meta().names))
       fn(null) if fn
@@ -72,24 +72,23 @@ define "kopi/db/adapters/kv", (require, exports, module) ->
           fn("Failed to parse value: #{e}") if fn
       else
         fn(null, []) if fn
-      fn(message.error, message) if fn
       self
 
     update: (query, fn) ->
       self = this
-      retrieveFn = (error, message) ->
+      retrieveFn = (error, result) ->
         if error
-          fn(error, message) if fn
+          fn(error) if fn
           return
         model = query.model
         key = self._keyForModel(model, query.pk())
-        value = message.entries[0]
+        value = result[0]
         if value
           object.extend value, query.attrs()
           self._set(key, self._adapterObject(value, model.meta().names))
           fn(null) if fn
         else
-          fn(true, "Entry not found") if fn
+          fn("Entry not found") if fn
 
       self.retrieve(query, retrieveFn)
       self
@@ -99,11 +98,10 @@ define "kopi/db/adapters/kv", (require, exports, module) ->
       model = query.model
       pk = query.pk()
       if not pk
-        fn(true, "pk not found") if fn
+        fn("pk not found") if fn
         return self
       key = self._keyForModel(model, pk)
-      self._remove(key)
-      fn(null) if fn
+      fn(null, self._remove(key)) if fn
       self
 
     ###
@@ -114,7 +112,7 @@ define "kopi/db/adapters/kv", (require, exports, module) ->
       unless self._keyForModelTmpl
         prefix = self._options.keyPrefix
         delimiter = self._options.keyDelimiter
-        self._keyForModelTmpl = "#{prefix}#{delimiter}{model}#{delimiter}#{pk}"
+        self._keyForModelTmpl = "#{prefix}#{delimiter}{model}#{delimiter}{pk}"
       text.format(self._keyForModelTmpl, model: text.dasherize(model.name), pk: pk)
 
     ###
@@ -131,19 +129,19 @@ define "kopi/db/adapters/kv", (require, exports, module) ->
     ###
     Get value from db. Implement in subclasses
     ###
-    _get: (store, key, value, fn) ->
+    _get: (key, defaultValue, fn) ->
       throw new exceptions.NotImplementedError()
 
     ###
     Set value to db. Implement in subclasses
     ###
-    _set: (store, key, value, fn) ->
+    _set: (key, value, fn) ->
       throw new exceptions.NotImplementedError()
 
     ###
     Remove value from db. Implement in subclasses
     ###
-    _remove: (store, key, fn) ->
+    _remove: (key, fn) ->
       throw new exceptions.NotImplementedError()
 
   KeyValueAdapter: KeyValueAdapter

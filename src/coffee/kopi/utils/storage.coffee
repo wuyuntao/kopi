@@ -16,7 +16,7 @@ define "kopi/utils/storage", (require, exports, module) ->
     getItem: (key) -> this._values[key]
 
     setItem: (key, value) ->
-      this._keys.push(key) if not key in this._keys
+      this._keys.push(key) unless key in this._keys
       this._values[key] = value
       return
 
