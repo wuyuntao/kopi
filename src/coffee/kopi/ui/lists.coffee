@@ -1,9 +1,9 @@
 define "kopi/ui/lists", (require, exports, module) ->
 
-  AdapterGroup = require("kopi/ui/groups").AdapterGroup
+  Group = require("kopi/ui/groups").Group
   items = require "kopi/ui/lists/items"
 
-  class List extends AdapterGroup
+  class List extends Group
 
     this.widgetName "List"
 
