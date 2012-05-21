@@ -68,7 +68,7 @@ define "kopi/app", (require, exports, module) ->
       self.currentURL = null
       self.currentView = null
 
-      self._views = []
+      self._views = {}
       self._interval = null
 
       self.configure settings.kopi.app, options
@@ -116,7 +116,8 @@ define "kopi/app", (require, exports, module) ->
       self.emit(cls.START_EVENT)
       self._listenToURLChange()
       # Load current URL
-      self.load(self._options.startURL or self.getCurrentURL())
+      unless support.history and self._options.usePushState
+        self.load(self._options.startURL or self.getCurrentURL())
       self.started = true
       fn() if fn
       self
@@ -195,6 +196,7 @@ define "kopi/app", (require, exports, module) ->
       loadFn = (error, view) ->
         if error
           logger.error "Failed to load view #{view.toString}. Error: #{error}"
+          delete self._views[view.guid]
           return
 
         # If views are different, stop current view and start target view
@@ -215,6 +217,7 @@ define "kopi/app", (require, exports, module) ->
       if not view.created
         view.create (error, view) ->
           if error
+            delete self._views[view.guid]
             logger.error "Failed to create view #{view.toString()}. Error: #{error}"
             return
           view.start(request.url, request.params, options, loadFn)
@@ -297,7 +300,7 @@ define "kopi/app", (require, exports, module) ->
         return
 
       route = request.route
-      for view in self._views
+      for guid, view of self._views
         # If `group` is `true`, use same view for every URL matches route
         if route.group is true
           if view.name == route.view.name
@@ -322,7 +325,7 @@ define "kopi/app", (require, exports, module) ->
 
       # Create view and add it to list
       view = new route.view(self, request.url, request.params)
-      self._views.push(view)
+      self._views[view.guid] = view
       [view, request]
 
   App: App
