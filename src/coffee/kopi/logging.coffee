@@ -138,11 +138,15 @@ define "kopi/logging", (require, exports, module) ->
   # Default logger
   logger = new Logger("kopi")
 
-  time: -> logger.time(arguments...)
   debug: -> logger.debug(arguments...)
   info: -> logger.info(arguments...)
   warn: -> logger.warn(arguments...)
   error: -> logger.error(arguments...)
-  logger: (name) ->
-    # Factory method for loggers
-    if name then loggers[name] or new Logger(name) else logger
+
+  time: -> logger.time(arguments...)
+  timeEnd: -> logger.timeEnd(arguments...)
+
+  ###
+  Factory method for loggers
+  ###
+  logger: (name) -> if name then loggers[name] or new Logger(name) else logger

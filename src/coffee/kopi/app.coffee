@@ -302,8 +302,7 @@ define "kopi/app", (require, exports, module) ->
       route = request.route
       for guid, view of self._views
         # If `group` is `true`, use same view for every URL matches route
-        if route.group is true
-          if view.name == route.view.name
+        if route.group is true and view.name == route.view.name
             return [view, request]
         # If `group` is `string`, use same view for every URL matches route
         else if text.isString(route.group)

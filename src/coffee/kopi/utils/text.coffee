@@ -2,10 +2,12 @@ define "kopi/utils/text", (require, exports, module) ->
 
   StringProto = String.prototype
 
-  reUnderscore = /(?:^|[_-])(.)/
+  reCapitalLetter = /(?:^|[_-])(.)/g
+  reUnderscore = /_+/g
   reFirstLetter = /^(.)/
-  upperCaseFn = (c) -> c.toUpperCase(c)
-  lowerCaseFn = (c) -> c.toLowerCase(c)
+  capitalFn = (c) -> c.replace(reUnderscore, '').toUpperCase()
+  upperCaseFn = (c) -> c.toUpperCase()
+  lowerCaseFn = (c) -> c.toLowerCase()
   ###
   Convert string to UpperCamelCase.
   If `upperCase` is set to true, produce lowerCamelCase
@@ -15,7 +17,7 @@ define "kopi/utils/text", (require, exports, module) ->
   @return   {String}
   ###
   camelize = (word, upperCase=true) ->
-    word = ("" + word).replace(reUnderscore, upperCaseFn)
+    word = ("" + word).replace(reCapitalLetter, capitalFn)
     unless upperCase
       word = word.replace(reFirstLetter, lowerCaseFn)
     word
