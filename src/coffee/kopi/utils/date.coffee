@@ -15,17 +15,17 @@ define "kopi/utils/date", (require, exports, module) ->
 
   hours = (count=1) -> minutes(60) * count
 
-  day = (count=1) -> hours(24) * count
+  days = (count=1) -> hours(24) * count
 
   today = ->
     now = new Date()
     new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
-  dayBefore = (count=1) ->
-    new Date(today - days(count))
+  dayBefore = (count=1, date=today()) ->
+    new Date(date - days(count))
 
-  dayAfter = (count=1) ->
-    new Date(today + days(count))
+  dayAfter = (count=1, date=today()) ->
+    new Date(date + days(count))
 
   yesterday = -> dayBefore(1)
 
@@ -36,7 +36,7 @@ define "kopi/utils/date", (require, exports, module) ->
   seconds: seconds
   minutes: minutes
   hours: hours
-  day: day
+  days: days
   today: today
   dayBefore: dayBefore
   dayAfter: dayAfter
