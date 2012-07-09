@@ -20,11 +20,19 @@ define "kopi/ui/gestures", (require, exports, module) ->
   ###
   class Base extends EventEmitter
 
+    this.prefix = "gesture"
+
+    this.DIRECTION_UP = "up"
+    this.DIRECTION_DOWN = "down"
+    this.DIRECTION_LEFT = "left"
+    this.DIRECTION_RIGHT = "right"
+
     klass.configure this,
       preventDefault: true
       stopPropagation: false
 
     constructor: (widget, options={}) ->
+      this.guid = utils.guid(this.constructor.prefix)
       this._widget = widget
       this.configure(options)
 
@@ -43,12 +51,81 @@ define "kopi/ui/gestures", (require, exports, module) ->
     ontouchcancel: (e) -> this.ontouchend.call(this, e)
 
     ###
+    calculate the angle between two points
+
+    @param   object  pos1 { x: int, y: int }
+    @param   object  pos2 { x: int, y: int }
+    ###
+    _angle: (pos1, pos2) ->
+      math.atan2(pos2.y - pos1.y, pos2.x - pos1.x) * 180 / math.PI
+
+    ###
+    calculate the scale size between two fingers
+    @param   object  posStart
+    @param   object  posMove
+    @return  float   scale
+    ###
+    _scale: (posStart, posMove) ->
+      if posStart.length == 2 and posMove.length == 2
+
+        x = posStart[0].x - posStart[1].x
+        y = posStart[0].y - posStart[1].y
+        startDistance = math.sqrt((x*x) + (y*y))
+
+        x = posMove[0].x - posMove[1].x
+        y = posMove[0].y - posMove[1].y
+        endDistance = math.sqrt((x*x) + (y*y))
+
+        return endDistance / startDistance
+
+      return 0
+
+
+    ###
+    calculate the rotation degrees between two fingers
+    @param   object  posStart
+    @param   object  posMove
+    @return  float   rotation
+    ###
+    _rotation: (posStart, posMove) ->
+      if posStart.length == 2 and posMove.length == 2
+
+        x = posStart[0].x - posStart[1].x
+        y = posStart[0].y - posStart[1].y
+        startRotation = math.atan2(y, x) * 180 / math.PI
+
+        x = posMove[0].x - posMove[1].x
+        y = posMove[0].y - posMove[1].y
+        endRotation = math.atan2(y, x) * 180 / math.PI
+
+        return endRotation - startRotation
+
+      return 0
+
+    ###
+    Get the angle to direction define
+
+    @param {Number} angle
+    @return {String} direction
+    ###
+    _direction: (angle) ->
+      cls = this.constructor
+      if angle >= 45 and angle < 135
+        return cls.DIRECTION_DOWN
+      else if angle >= 135 or angle <= -135
+        return cls.DIRECTION_LEFT
+      else if angle < -45 and angle > -135
+        return cls.DIRECTION_UP
+      else
+        return cls.DIRECTION_RIGHT
+
+    ###
     get the x and y positions from the event object
 
     @param {Event} event
     @return {Array}  [{ x: int, y: int }]
     ###
-    _getPositionfromEvent: (e, multiTouch=false) ->
+    _position: (e, multiTouch=false) ->
       e or= win.event
 
       # no touches, use the event pageX and pageY
@@ -64,6 +141,16 @@ define "kopi/ui/gestures", (require, exports, module) ->
         pos = ({x: touch.pageX, y: touch.pageY} for touch in touches)
 
       if multiTouch then pos else pos[0]
+
+    ###
+    Count the number of fingers in the event
+    when no fingers are detected, one finger is returned (mouse pointer)
+
+    @param {Event} event
+    @return {Number}
+    ###
+    _touches: (e) ->
+      if e.touches then e.touches.length else 1
 
 
   ###
@@ -91,7 +178,7 @@ define "kopi/ui/gestures", (require, exports, module) ->
       super
       this._moved = false
       this._holded = false
-      pos = this._getPositionfromEvent(e, false)
+      pos = this._position(e, false)
       this._posX = pos.x
       this._posY = pos.y
       this._widget.emit(this.constructor.TAP_START, [e])
@@ -164,6 +251,6 @@ define "kopi/ui/gestures", (require, exports, module) ->
 
   Base: Base
   Tap: Tap
+  Pan: Pan
   Pinch: Pinch
   Rotation: Rotation
-  Pan: Pan

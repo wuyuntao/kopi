@@ -4,6 +4,7 @@ define "kopi/ui/touchable", (require, exports, module) ->
   events = require "kopi/utils/events"
   support = require "kopi/utils/support"
   widgets = require "kopi/ui/widgets"
+  Map = require("kopi/utils/structs/map").Map
 
   doc = $(document)
 
@@ -29,7 +30,10 @@ define "kopi/ui/touchable", (require, exports, module) ->
     constructor: ->
       super
       options = this._options
-      this._gestures = (new gesture(this, options) for gesture in options.gestures)
+      this._gestures = new Map()
+      for gesture in options.gestures
+        this.addGesture(new gesture(this, options))
+      return
 
     onrender: ->
       this.delegate()
@@ -78,10 +82,17 @@ define "kopi/ui/touchable", (require, exports, module) ->
     undelegate: ->
       this.element.unbind(events.TOUCH_START_EVENT)
 
+    addGesture: (gesture) ->
+      this._gestures.set(gesture.guid, gesture)
+
+    removeGesture: (gesture) ->
+      this._gestures.remove(gesture.guid)
+
     _callGestures: (name, event) ->
-      for gesture in this._gestures
+      this._gestures.forEach (key, gesture) ->
         method = gesture["on" + name]
-        break if method and method.call(gesture, event) == false
+        if method
+          method.call(gesture, event) if method
       return
 
   Touchable: Touchable

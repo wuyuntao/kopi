@@ -9,7 +9,7 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
     this.widgetName "Playground"
 
     this.configure
-      gestures: [g.Tap]
+      gestures: [g.Tap, g.Pan]
 
     ontap: (e) ->
       console.log "Tap", arguments
