@@ -24,66 +24,64 @@ define "kopi/ui/touchable", (require, exports, module) ->
     kls.configure
       preventDefault: false
       stopPropagation: false
-      multiTouch: false
+      gestures: []
+
+    constructor: ->
+      super
+      options = this._options
+      this._gestures = (new gesture(this, options) for gesture in options.gestures)
 
     onrender: ->
       this.delegate()
       super
 
+    ondestroy: ->
+      this.undelegate()
+      super
+
     delegate: ->
       cls = this.constructor
-      self = this
-      preventDefault = self._options.preventDefault
-      stopPropagation = self._options.stopPropagation
+      # TODO
+      # What to do if widget is locked?
+      #
+      # -- wuyuntao, 2012-07-09
+      touchMoveFn = (e) =>
+        this._callGestures(kls.TOUCH_MOVE_EVENT, e)
 
-      touchMoveFn = (e) ->
-        # TODO What to do if widget is locked?
-        e.preventDefault() if preventDefault
-        e.stopPropagation() if stopPropagation
-        self.emit(cls.TOUCH_MOVE_EVENT, [e])
-
-      touchEndFn = (e) ->
-        # TODO What to do if widget is locked?
-        e.preventDefault() if preventDefault
-        e.stopPropagation() if stopPropagation
+      touchEndFn = (e) =>
         doc
           .unbind(kls.eventName(events.TOUCH_MOVE_EVENT))
           .unbind(kls.eventName(events.TOUCH_END_EVENT))
           .unbind(kls.eventName(events.TOUCH_CANCEL_EVENT))
-        self.emit(cls.TOUCH_END_EVENT, [e])
 
-      touchCancelFn = (e) ->
-        # TODO What to do if widget is locked?
-        e.preventDefault() if preventDefault
-        e.stopPropagation() if stopPropagation
+        this._callGestures(kls.TOUCH_END_EVENT, e)
+
+      touchCancelFn = (e) =>
         doc
           .unbind(kls.eventName(events.TOUCH_MOVE_EVENT))
           .unbind(kls.eventName(events.TOUCH_END_EVENT))
           .unbind(kls.eventName(events.TOUCH_CANCEL_EVENT))
-        self.emit(cls.TOUCH_CANCEL_EVENT, [e])
 
-      touchStartFn = (e) ->
-        return if self.locked or not events.isLeftClick(e)
-        e.preventDefault() if preventDefault
-        e.stopPropagation() if stopPropagation
-        self.emit(cls.TOUCH_START_EVENT, [e])
+        this._callGestures(kls.TOUCH_CANCEL_EVENT, e)
+
+      touchStartFn = (e) =>
+        this._callGestures(kls.TOUCH_START_EVENT, e)
+
         doc
           .bind(kls.eventName(events.TOUCH_MOVE_EVENT), touchMoveFn)
           .bind(kls.eventName(events.TOUCH_END_EVENT), touchEndFn)
           .bind(kls.eventName(events.TOUCH_CANCEL_EVENT), touchCancelFn)
 
-      self.element
+      this.element
         .bind(events.TOUCH_START_EVENT, touchStartFn)
 
-    ###
-    Get point from event
-    ###
-    _points: (event) ->
-      event = event.originalEvent
-      if support.touch
-        touches = if event.type == events.TOUCH_END_EVENT then event.changedTouches else event.touches
-        if this._options.multiTouch then touches else touches[0]
-      else
-        if this._options.multiTouch then [event] else event
+    undelegate: ->
+      this.element.unbind(events.TOUCH_START_EVENT)
+
+    _callGestures: (name, event) ->
+      for gesture in this._gestures
+        method = gesture["on" + name]
+        break if method and method.call(gesture, event) == false
+      return
 
   Touchable: Touchable

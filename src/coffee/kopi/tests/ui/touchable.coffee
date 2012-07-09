@@ -1,9 +1,23 @@
 define "kopi/tests/ui/touchable", (require, exports, module) ->
 
   $ = require "jquery"
-  q = require "qunit"
-  touchable = require "kopi/ui/touchable"
+  Touchable = require("kopi/ui/touchable").Touchable
+  g = require "kopi/ui/gestures"
 
-  class TestTouchable extends touchable.Touchable
+  class Playground extends Touchable
 
-  q.module "kopi.ui.touchable"
+    this.widgetName "Playground"
+
+    this.configure
+      gestures: [g.Tap]
+
+    ontap: (e) ->
+      console.log "Tap", arguments
+
+    ontaphold: (e) ->
+      console.log "Tap hold", arguments
+
+    ontaprelease: (e) ->
+      console.log "Tap release", arguments
+
+  new Playground().skeletonTo("#container").render()
