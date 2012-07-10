@@ -50,7 +50,7 @@ define "kopi/ui/touchable", (require, exports, module) ->
       #
       # -- wuyuntao, 2012-07-09
       touchMoveFn = (e) =>
-        this._callGestures(kls.TOUCH_MOVE_EVENT, e)
+        this.emit(kls.TOUCH_MOVE_EVENT, [e])
 
       touchEndFn = (e) =>
         doc
@@ -58,7 +58,7 @@ define "kopi/ui/touchable", (require, exports, module) ->
           .unbind(kls.eventName(events.TOUCH_END_EVENT))
           .unbind(kls.eventName(events.TOUCH_CANCEL_EVENT))
 
-        this._callGestures(kls.TOUCH_END_EVENT, e)
+        this.emit(kls.TOUCH_END_EVENT, [e])
 
       touchCancelFn = (e) =>
         doc
@@ -66,10 +66,10 @@ define "kopi/ui/touchable", (require, exports, module) ->
           .unbind(kls.eventName(events.TOUCH_END_EVENT))
           .unbind(kls.eventName(events.TOUCH_CANCEL_EVENT))
 
-        this._callGestures(kls.TOUCH_CANCEL_EVENT, e)
+        this.emit(kls.TOUCH_CANCEL_EVENT, [e])
 
       touchStartFn = (e) =>
-        this._callGestures(kls.TOUCH_START_EVENT, e)
+        this.emit(kls.TOUCH_START_EVENT, [e])
 
         doc
           .bind(kls.eventName(events.TOUCH_MOVE_EVENT), touchMoveFn)
@@ -84,9 +84,23 @@ define "kopi/ui/touchable", (require, exports, module) ->
 
     addGesture: (gesture) ->
       this._gestures.set(gesture.guid, gesture)
+      gesture
 
     removeGesture: (gesture) ->
       this._gestures.remove(gesture.guid)
+      gesture
+
+    ontouchstart: (e, event) ->
+      this._callGestures(this.constructor.TOUCH_START_EVENT, event)
+
+    ontouchmove: (e, event) ->
+      this._callGestures(this.constructor.TOUCH_MOVE_EVENT, event)
+
+    ontouchend: (e, event) ->
+      this._callGestures(this.constructor.TOUCH_END_EVENT, event)
+
+    ontouchcancel: (e, event) ->
+      this._callGestures(this.constructor.TOUCH_CANCEL_EVENT, event)
 
     _callGestures: (name, event) ->
       this._gestures.forEach (key, gesture) ->

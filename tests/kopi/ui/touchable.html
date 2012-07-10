@@ -9,7 +9,7 @@
         -webkit-user-select: none;
       }
 
-      #container .kopi-playground {
+      .kopi-photo-gallery {
         position: fixed;
         top: 20px;
         left: 20px;
@@ -17,18 +17,42 @@
         bottom: 20px;
         background: black;
       }
+
+      .kopi-photo-gallery img {
+        display: none;
+      }
+
+      .kopi-photo-gallery img.kopi-photo-gallery-active {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
     </style>
     <script type="text/javascript" src="/js/sea.js"></script>
     <script type="text/javascript">
       window.define.amd = { jQuery: true };
       seajs.config({
-        map: [[ /^(.*\/assets\/.*\.(?:css|js))(?:.*)$/i, '$1?#{version}']]
+        map: [[ /^(.*\/assets\/.*\.(?:css|js))(?:.*)$/i, '$1?' + (new Date()).getTime()]]
       });
       seajs.use(["kopi/tests/ui/touchable"]);
     </script>
   </head>
   <body>
     <div id="container">
+      <img src="/images/001.jpg" />
+      <img src="/images/002.jpg" />
+      <img src="/images/003.jpg" />
+      <img src="/images/004.jpg" />
+      <img src="/images/005.jpg" />
+      <img src="/images/006.jpg" />
+      <img src="/images/007.jpg" />
+      <img src="/images/008.jpg" />
+      <img src="/images/009.jpg" />
+      <img src="/images/010.jpg" />
+      <img src="/images/011.jpg" />
+      <img src="/images/012.jpg" />
     </div>
   </body>
 </html>

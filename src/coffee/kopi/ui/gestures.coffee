@@ -3,6 +3,7 @@ define "kopi/ui/gestures", (require, exports, module) ->
   EventEmitter = require("kopi/events").EventEmitter
   klass = require "kopi/utils/klass"
   support = require "kopi/utils/support"
+  utils = require "kopi/utils"
 
   win = window
   doc = document
@@ -187,7 +188,7 @@ define "kopi/ui/gestures", (require, exports, module) ->
     ontouchmove: (e) ->
       super
       threshold = this._options.movement
-      pos = this._getPositionfromEvent(e, false)
+      pos = this._position(e, false)
       deltaX = pos.x - this._posX
       deltaY = pos.y - this._posY
       # Only if move distance over threshold

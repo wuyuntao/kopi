@@ -4,20 +4,37 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
   Touchable = require("kopi/ui/touchable").Touchable
   g = require "kopi/ui/gestures"
 
-  class Playground extends Touchable
-
-    this.widgetName "Playground"
+  class CustomGesture extends g.Base
 
     this.configure
-      gestures: [g.Tap, g.Pan]
+      preventDefault: true
 
-    ontap: (e) ->
-      console.log "Tap", arguments
+    constructor: ->
+      super
+      this._previousTaps = []
 
-    ontaphold: (e) ->
-      console.log "Tap hold", arguments
+    ontouchstart: (e) ->
+      this.reset()
 
-    ontaprelease: (e) ->
-      console.log "Tap release", arguments
+    ontouchmove: (e) ->
 
-  new Playground().skeletonTo("#container").render()
+    ontouchend: (e) ->
+
+    ontouchcancel: (e) -> this.touchend(e)
+
+    reset: ->
+
+
+  class PhotoGallery extends Touchable
+
+    this.widgetName "PhotoGallery"
+
+    this.configure
+      gestures: [CustomGesture]
+
+    onskeleton: ->
+
+    onrender: ->
+
+  $ ->
+    new PhotoGallery().skeleton("#container").render()
