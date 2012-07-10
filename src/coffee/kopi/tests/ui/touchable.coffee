@@ -11,10 +11,13 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
 
     constructor: ->
       super
-      this._previousTaps = []
 
     ontouchstart: (e) ->
-      this.reset()
+      this._startPos = this._getPosition(e)
+      this._startTime = new Date()
+      this._startTouches = this._getTouches(e)
+      this._startEvent = e
+      this._setHoldTimeout(event)
 
     ontouchmove: (e) ->
 
@@ -22,8 +25,7 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
 
     ontouchcancel: (e) -> this.touchend(e)
 
-    reset: ->
-
+    _setHoldTimeout: (e) ->
 
   class PhotoGallery extends Touchable
 
@@ -32,9 +34,23 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
     this.configure
       gestures: [CustomGesture]
 
+    constructor: ->
+      super
+      this.images = []
+
     onskeleton: ->
+      super
 
     onrender: ->
+      $("img", this.element).each =>
+        img = $(this)
+        img
+          .data("width", this.width)
+          .data("height", this.height)
+        this.images.push(img)
+      super
 
   $ ->
-    new PhotoGallery().skeleton("#container").render()
+    new PhotoGallery()
+      .skeleton("#container")
+      .render()

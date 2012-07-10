@@ -28,13 +28,19 @@ define "kopi/ui/gestures", (require, exports, module) ->
     this.DIRECTION_LEFT = "left"
     this.DIRECTION_RIGHT = "right"
 
+    this.STATE_POSSIBLE = 0
+    this.STATE_RECOGNIZED = 1
+    this.STATE_FAILED = 2
+
     klass.configure this,
       preventDefault: true
       stopPropagation: false
 
     constructor: (widget, options={}) ->
-      this.guid = utils.guid(this.constructor.prefix)
+      cls = this.constructor
+      this.guid = utils.guid(cls.prefix)
       this._widget = widget
+      this.state = cls.STATE_POSSIBLE
       this.configure(options)
 
     ontouchstart: (e) ->
@@ -57,7 +63,7 @@ define "kopi/ui/gestures", (require, exports, module) ->
     @param   object  pos1 { x: int, y: int }
     @param   object  pos2 { x: int, y: int }
     ###
-    _angle: (pos1, pos2) ->
+    _getAngle: (pos1, pos2) ->
       math.atan2(pos2.y - pos1.y, pos2.x - pos1.x) * 180 / math.PI
 
     ###
@@ -66,7 +72,7 @@ define "kopi/ui/gestures", (require, exports, module) ->
     @param   object  posMove
     @return  float   scale
     ###
-    _scale: (posStart, posMove) ->
+    _getScale: (posStart, posMove) ->
       if posStart.length == 2 and posMove.length == 2
 
         x = posStart[0].x - posStart[1].x
@@ -88,7 +94,7 @@ define "kopi/ui/gestures", (require, exports, module) ->
     @param   object  posMove
     @return  float   rotation
     ###
-    _rotation: (posStart, posMove) ->
+    _getRotation: (posStart, posMove) ->
       if posStart.length == 2 and posMove.length == 2
 
         x = posStart[0].x - posStart[1].x
@@ -109,7 +115,7 @@ define "kopi/ui/gestures", (require, exports, module) ->
     @param {Number} angle
     @return {String} direction
     ###
-    _direction: (angle) ->
+    _getDirection: (angle) ->
       cls = this.constructor
       if angle >= 45 and angle < 135
         return cls.DIRECTION_DOWN
@@ -126,7 +132,7 @@ define "kopi/ui/gestures", (require, exports, module) ->
     @param {Event} event
     @return {Array}  [{ x: int, y: int }]
     ###
-    _position: (e, multiTouch=false) ->
+    _getPosition: (e, multiTouch=false) ->
       e or= win.event
 
       # no touches, use the event pageX and pageY
@@ -150,7 +156,7 @@ define "kopi/ui/gestures", (require, exports, module) ->
     @param {Event} event
     @return {Number}
     ###
-    _touches: (e) ->
+    _getTouches: (e) ->
       if e.touches then e.touches.length else 1
 
 
