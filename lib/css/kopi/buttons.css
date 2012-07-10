@@ -69,25 +69,23 @@
  */
 /* line 23, ../../../src/scss/kopi/buttons.scss */
 .kopi-button {
-  display: -moz-inline-box;
-  -moz-box-orient: vertical;
+  display: -moz-inline-stack;
   display: inline-block;
   vertical-align: middle;
   *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
   text-align: center;
   cursor: pointer;
 }
-/* line 7, ../../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
-.kopi-button {
-  *display: inline;
-}
 /* line 29, ../../../src/scss/kopi/buttons.scss */
 .kopi-button .kopi-button-inner {
-  display: -moz-inline-box;
-  -moz-box-orient: vertical;
+  display: -moz-inline-stack;
   display: inline-block;
   vertical-align: middle;
   *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
   white-space: nowrap;
   overflow: hidden;
   -ms-text-overflow: ellipsis;
@@ -101,50 +99,37 @@
   user-drag: none;
   -webkit-transition-property: all;
   -moz-transition-property: all;
-  -ms-transition-property: all;
   -o-transition-property: all;
   transition-property: all;
   -webkit-transition-duration: 300ms;
   -moz-transition-duration: 300ms;
-  -ms-transition-duration: 300ms;
   -o-transition-duration: 300ms;
   transition-duration: 300ms;
   -webkit-transition-timing-function: ease-out;
   -moz-transition-timing-function: ease-out;
-  -ms-transition-timing-function: ease-out;
   -o-transition-timing-function: ease-out;
   transition-timing-function: ease-out;
 }
-/* line 7, ../../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
-.kopi-button .kopi-button-inner {
-  *display: inline;
-}
 /* line 36, ../../../src/scss/kopi/buttons.scss */
 .kopi-button .kopi-button-icon {
-  display: -moz-inline-box;
-  -moz-box-orient: vertical;
+  display: -moz-inline-stack;
   display: inline-block;
   vertical-align: middle;
   *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
   margin-left: auto;
   margin-right: auto;
 }
-/* line 7, ../../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
-.kopi-button .kopi-button-icon {
-  *display: inline;
-}
 /* line 42, ../../../src/scss/kopi/buttons.scss */
 .kopi-button .kopi-button-text {
-  display: -moz-inline-box;
-  -moz-box-orient: vertical;
+  display: -moz-inline-stack;
   display: inline-block;
   vertical-align: middle;
   *vertical-align: auto;
-  vertical-align: middle;
-}
-/* line 7, ../../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
-.kopi-button .kopi-button-text {
+  zoom: 1;
   *display: inline;
+  vertical-align: middle;
 }
 
 /* line 49, ../../../src/scss/kopi/buttons.scss */
@@ -182,7 +167,6 @@
   background: -webkit-linear-gradient(#ffffff, #e6e6e6);
   background: -moz-linear-gradient(#ffffff, #e6e6e6);
   background: -o-linear-gradient(#ffffff, #e6e6e6);
-  background: -ms-linear-gradient(#ffffff, #e6e6e6);
   background: linear-gradient(#ffffff, #e6e6e6);
   background-color: #e6e6e6;
   border-color: #e6e6e6 #e6e6e6 #bfbfbf;
@@ -212,7 +196,6 @@
   background: -webkit-linear-gradient(#0088cc, #0055cc);
   background: -moz-linear-gradient(#0088cc, #0055cc);
   background: -o-linear-gradient(#0088cc, #0055cc);
-  background: -ms-linear-gradient(#0088cc, #0055cc);
   background: linear-gradient(#0088cc, #0055cc);
   background-color: #0055cc;
   border-color: #0055cc #0055cc #003580;
@@ -225,7 +208,6 @@
   background: -webkit-linear-gradient(#fbb450, #f89406);
   background: -moz-linear-gradient(#fbb450, #f89406);
   background: -o-linear-gradient(#fbb450, #f89406);
-  background: -ms-linear-gradient(#fbb450, #f89406);
   background: linear-gradient(#fbb450, #f89406);
   background-color: #f89406;
   border-color: #f89406 #f89406 #ad6704;
@@ -238,7 +220,6 @@
   background: -webkit-linear-gradient(#ee5f5b, #bd362f);
   background: -moz-linear-gradient(#ee5f5b, #bd362f);
   background: -o-linear-gradient(#ee5f5b, #bd362f);
-  background: -ms-linear-gradient(#ee5f5b, #bd362f);
   background: linear-gradient(#ee5f5b, #bd362f);
   background-color: #bd362f;
   border-color: #bd362f #bd362f #802420;
@@ -251,7 +232,6 @@
   background: -webkit-linear-gradient(#62c462, #51a351);
   background: -moz-linear-gradient(#62c462, #51a351);
   background: -o-linear-gradient(#62c462, #51a351);
-  background: -ms-linear-gradient(#62c462, #51a351);
   background: linear-gradient(#62c462, #51a351);
   background-color: #51a351;
   border-color: #51a351 #51a351 #387038;
@@ -264,7 +244,6 @@
   background: -webkit-linear-gradient(#5bc0de, #2f96b4);
   background: -moz-linear-gradient(#5bc0de, #2f96b4);
   background: -o-linear-gradient(#5bc0de, #2f96b4);
-  background: -ms-linear-gradient(#5bc0de, #2f96b4);
   background: linear-gradient(#5bc0de, #2f96b4);
   background-color: #2f96b4;
   border-color: #2f96b4 #2f96b4 #1f6377;
@@ -277,7 +256,6 @@
   background: -webkit-linear-gradient(#555555, #222222);
   background: -moz-linear-gradient(#555555, #222222);
   background: -o-linear-gradient(#555555, #222222);
-  background: -ms-linear-gradient(#555555, #222222);
   background: linear-gradient(#555555, #222222);
   background-color: #222222;
   border-color: #222222 #222222 black;

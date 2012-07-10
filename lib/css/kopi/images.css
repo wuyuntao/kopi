@@ -66,19 +66,16 @@
  */
 /* line 4, ../../../src/scss/kopi/images.scss */
 .kopi-image {
-  display: -moz-inline-box;
-  -moz-box-orient: vertical;
+  display: -moz-inline-stack;
   display: inline-block;
   vertical-align: middle;
   *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
   text-align: center;
   vertical-align: middle;
   margin: 0 auto;
   padding: 0;
-}
-/* line 7, ../../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
-.kopi-image {
-  *display: inline;
 }
 
 /* line 12, ../../../src/scss/kopi/images.scss */

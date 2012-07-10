@@ -87,7 +87,6 @@
   background: -webkit-linear-gradient(top, #333333 0%, #222222 100%);
   background: -moz-linear-gradient(top, #333333 0%, #222222 100%);
   background: -o-linear-gradient(top, #333333 0%, #222222 100%);
-  background: -ms-linear-gradient(top, #333333 0%, #222222 100%);
   background: linear-gradient(top, #333333 0%, #222222 100%);
   -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
   -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
@@ -184,11 +183,12 @@
 
 /* line 123, ../../../src/scss/kopi/navigation.scss */
 .kopi-nav-button {
-  display: -moz-inline-box;
-  -moz-box-orient: vertical;
+  display: -moz-inline-stack;
   display: inline-block;
   vertical-align: middle;
   *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
   color: #dddddd;
   text-decoration: none;
   background: transparent;
@@ -196,10 +196,6 @@
   width: auto;
   padding-top: 5px;
   padding-bottom: 5px;
-}
-/* line 7, ../../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
-.kopi-nav-button {
-  *display: inline;
 }
 
 /* line 135, ../../../src/scss/kopi/navigation.scss */
@@ -218,21 +214,18 @@
 
 /* line 147, ../../../src/scss/kopi/navigation.scss */
 .kopi-nav-button-title {
-  display: -moz-inline-box;
-  -moz-box-orient: vertical;
+  display: -moz-inline-stack;
   display: inline-block;
   vertical-align: middle;
   *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
   font-size: 14px;
   height: 30px;
   width: auto;
   line-height: 30px;
   min-width: 60px;
   text-align: center;
-}
-/* line 7, ../../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
-.kopi-nav-button-title {
-  *display: inline;
 }
 
 /* line 164, ../../../src/scss/kopi/navigation.scss */
@@ -242,12 +235,10 @@
   transition-property: transform,opacity;
   -webkit-transition-duration: 300ms;
   -moz-transition-duration: 300ms;
-  -ms-transition-duration: 300ms;
   -o-transition-duration: 300ms;
   transition-duration: 300ms;
   -webkit-transition-timing-function: ease-out;
   -moz-transition-timing-function: ease-out;
-  -ms-transition-timing-function: ease-out;
   -o-transition-timing-function: ease-out;
   transition-timing-function: ease-out;
 }
@@ -266,6 +257,9 @@
   -o-transform: translateX(0);
   transform: translateX(0);
   -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
 /* line 185, ../../../src/scss/kopi/navigation.scss */
@@ -276,6 +270,9 @@
   -o-transform: translateX(0);
   transform: translateX(0);
   -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
 /* line 191, ../../../src/scss/kopi/navigation.scss */
@@ -286,6 +283,9 @@
   -o-transform: translateX(0);
   transform: translateX(0);
   -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
 /* line 198, ../../../src/scss/kopi/navigation.scss */
@@ -304,6 +304,9 @@
   -o-transform: translateX(-60px);
   transform: translateX(-60px);
   -webkit-transform: translate3d(-60px, 0, 0);
+  -moz-transform: translate3d(-60px, 0, 0);
+  -ms-transform: translate3d(-60px, 0, 0);
+  -o-transform: translate3d(-60px, 0, 0);
   transform: translate3d(-60px, 0, 0);
 }
 /* line 209, ../../../src/scss/kopi/navigation.scss */
@@ -316,6 +319,9 @@
   -o-transform: translateX(-30%);
   transform: translateX(-30%);
   -webkit-transform: translate3d(-30%, 0, 0);
+  -moz-transform: translate3d(-30%, 0, 0);
+  -ms-transform: translate3d(-30%, 0, 0);
+  -o-transform: translate3d(-30%, 0, 0);
   transform: translate3d(-30%, 0, 0);
 }
 /* line 215, ../../../src/scss/kopi/navigation.scss */
@@ -328,6 +334,9 @@
   -o-transform: translateX(0);
   transform: translateX(0);
   -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
 /* line 222, ../../../src/scss/kopi/navigation.scss */
@@ -344,6 +353,9 @@
   -o-transform: translateX(60px);
   transform: translateX(60px);
   -webkit-transform: translate3d(60px, 0, 0);
+  -moz-transform: translate3d(60px, 0, 0);
+  -ms-transform: translate3d(60px, 0, 0);
+  -o-transform: translate3d(60px, 0, 0);
   transform: translate3d(60px, 0, 0);
 }
 /* line 233, ../../../src/scss/kopi/navigation.scss */
@@ -354,6 +366,9 @@
   -o-transform: translateX(30%);
   transform: translateX(30%);
   -webkit-transform: translate3d(30%, 0, 0);
+  -moz-transform: translate3d(30%, 0, 0);
+  -ms-transform: translate3d(30%, 0, 0);
+  -o-transform: translate3d(30%, 0, 0);
   transform: translate3d(30%, 0, 0);
 }
 /* line 239, ../../../src/scss/kopi/navigation.scss */
@@ -364,6 +379,9 @@
   -o-transform: translateX(0);
   transform: translateX(0);
   -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
 /* line 246, ../../../src/scss/kopi/navigation.scss */
@@ -380,6 +398,9 @@
   -o-transform: translateX(0);
   transform: translateX(0);
   -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
 /* line 255, ../../../src/scss/kopi/navigation.scss */
@@ -390,6 +411,9 @@
   -o-transform: translateX(0);
   transform: translateX(0);
   -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
 /* line 260, ../../../src/scss/kopi/navigation.scss */
@@ -400,6 +424,9 @@
   -o-transform: translateX(0);
   transform: translateX(0);
   -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
 
@@ -417,6 +444,9 @@
   -o-transform: translateX(0);
   transform: translateX(0);
   -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
 /* line 281, ../../../src/scss/kopi/navigation.scss */
@@ -427,6 +457,9 @@
   -o-transform: translateX(0);
   transform: translateX(0);
   -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
 /* line 287, ../../../src/scss/kopi/navigation.scss */
@@ -437,6 +470,9 @@
   -o-transform: translateX(0);
   transform: translateX(0);
   -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
 /* line 294, ../../../src/scss/kopi/navigation.scss */
@@ -455,6 +491,9 @@
   -o-transform: translateX(60px);
   transform: translateX(60px);
   -webkit-transform: translate3d(60px, 0, 0);
+  -moz-transform: translate3d(60px, 0, 0);
+  -ms-transform: translate3d(60px, 0, 0);
+  -o-transform: translate3d(60px, 0, 0);
   transform: translate3d(60px, 0, 0);
 }
 /* line 305, ../../../src/scss/kopi/navigation.scss */
@@ -467,6 +506,9 @@
   -o-transform: translateX(30%);
   transform: translateX(30%);
   -webkit-transform: translate3d(30%, 0, 0);
+  -moz-transform: translate3d(30%, 0, 0);
+  -ms-transform: translate3d(30%, 0, 0);
+  -o-transform: translate3d(30%, 0, 0);
   transform: translate3d(30%, 0, 0);
 }
 /* line 311, ../../../src/scss/kopi/navigation.scss */
@@ -479,6 +521,9 @@
   -o-transform: translateX(0);
   transform: translateX(0);
   -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
 /* line 318, ../../../src/scss/kopi/navigation.scss */
@@ -495,6 +540,9 @@
   -o-transform: translateX(-60px);
   transform: translateX(-60px);
   -webkit-transform: translate3d(-60px, 0, 0);
+  -moz-transform: translate3d(-60px, 0, 0);
+  -ms-transform: translate3d(-60px, 0, 0);
+  -o-transform: translate3d(-60px, 0, 0);
   transform: translate3d(-60px, 0, 0);
 }
 /* line 329, ../../../src/scss/kopi/navigation.scss */
@@ -505,6 +553,9 @@
   -o-transform: translateX(-30%);
   transform: translateX(-30%);
   -webkit-transform: translate3d(-30%, 0, 0);
+  -moz-transform: translate3d(-30%, 0, 0);
+  -ms-transform: translate3d(-30%, 0, 0);
+  -o-transform: translate3d(-30%, 0, 0);
   transform: translate3d(-30%, 0, 0);
 }
 /* line 335, ../../../src/scss/kopi/navigation.scss */
@@ -515,6 +566,9 @@
   -o-transform: translateX(0);
   transform: translateX(0);
   -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
 /* line 342, ../../../src/scss/kopi/navigation.scss */
@@ -531,6 +585,9 @@
   -o-transform: translateX(0);
   transform: translateX(0);
   -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
 /* line 351, ../../../src/scss/kopi/navigation.scss */
@@ -541,6 +598,9 @@
   -o-transform: translateX(0);
   transform: translateX(0);
   -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
 /* line 356, ../../../src/scss/kopi/navigation.scss */
@@ -551,5 +611,8 @@
   -o-transform: translateX(0);
   transform: translateX(0);
   -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }

@@ -1,4 +1,4 @@
-/* line 4, ../../../src/scss/kopi/scrollable.scss */
+/* line 4, /home/wuyuntao/Workspace/kopi/src/scss/kopi/scrollable.scss */
 .kopi-scrollable, .kopi-flippable {
   position: relative;
   overflow: hidden;
@@ -6,7 +6,7 @@
   height: 100%;
 }
 
-/* line 11, ../../../src/scss/kopi/scrollable.scss */
+/* line 11, /home/wuyuntao/Workspace/kopi/src/scss/kopi/scrollable.scss */
 .kopi-scrollable-container, .kopi-flippable-container {
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -38,7 +38,7 @@
   -moz-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
-/* line 35, ../../../src/scss/kopi/scrollable.scss */
+/* line 35, /home/wuyuntao/Workspace/kopi/src/scss/kopi/scrollable.scss */
 .kopi-scrollable-container img, .kopi-flippable-container img {
   -webkit-user-select: none;
   -moz-user-select: none;

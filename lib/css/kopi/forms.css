@@ -124,11 +124,12 @@ label {
 
 /* line 63, ../../../src/scss/kopi/forms.scss */
 input, textarea, select, .uneditable-input {
-  display: -moz-inline-box;
-  -moz-box-orient: vertical;
+  display: -moz-inline-stack;
   display: inline-block;
   vertical-align: middle;
   *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
   width: 210px;
   height: 18px;
   padding: 4px;
@@ -142,10 +143,6 @@ input, textarea, select, .uneditable-input {
   -ms-border-radius: 3px;
   -o-border-radius: 3px;
   border-radius: 3px;
-}
-/* line 7, ../../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
-input, textarea, select, .uneditable-input {
-  *display: inline;
 }
 
 /* line 75, ../../../src/scss/kopi/forms.scss */
@@ -265,18 +262,15 @@ input[type="hidden"] {
 
 /* line 176, ../../../src/scss/kopi/forms.scss */
 .radio.inline, .checkbox.inline {
-  display: -moz-inline-box;
-  -moz-box-orient: vertical;
+  display: -moz-inline-stack;
   display: inline-block;
   vertical-align: middle;
   *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
   padding-top: 5px;
   margin-bottom: 0;
   vertical-align: middle;
-}
-/* line 7, ../../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
-.radio.inline, .checkbox.inline {
-  *display: inline;
 }
 
 /* line 182, ../../../src/scss/kopi/forms.scss */
@@ -292,10 +286,10 @@ input, textarea {
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-  -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
-  -moz-transition: border linear 0.2s box-shadow linear 0.2s;
-  -ms-transition: border linear 0.2s box-shadow linear 0.2s;
-  -o-transition: border linear 0.2s box-shadow linear 0.2s;
+  -webkit-transition: border linear, box-shadow linear;
+  -webkit-transition-delay: 0.2s, 0.2s;
+  -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
+  -o-transition: border linear 0.2s, box-shadow linear 0.2s;
   transition: border linear 0.2s, box-shadow linear 0.2s;
 }
 
@@ -443,17 +437,14 @@ input:focus:required:invalid:focus, textarea:focus:required:invalid:focus, selec
 
 /* line 320, ../../../src/scss/kopi/forms.scss */
 .kopi-help-inline {
-  display: -moz-inline-box;
-  -moz-box-orient: vertical;
+  display: -moz-inline-stack;
   display: inline-block;
   vertical-align: middle;
   *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
   vertical-align: middle;
   padding-left: 5px;
-}
-/* line 7, ../../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
-.kopi-help-inline {
-  *display: inline;
 }
 
 /**
@@ -484,11 +475,12 @@ input:focus:required:invalid:focus, textarea:focus:required:invalid:focus, selec
 }
 /* line 347, ../../../src/scss/kopi/forms.scss */
 .input-prepend .add-on, .input-append .add-on {
-  display: -moz-inline-box;
-  -moz-box-orient: vertical;
+  display: -moz-inline-stack;
   display: inline-block;
   vertical-align: middle;
   *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
   width: auto;
   min-width: 16px;
   height: 18px;
@@ -500,10 +492,6 @@ input:focus:required:invalid:focus, textarea:focus:required:invalid:focus, selec
   vertical-align: middle;
   background-color: #eeeeee;
   border: 1px solid #ccc;
-}
-/* line 7, ../../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
-.input-prepend .add-on, .input-append .add-on {
-  *display: inline;
 }
 /* line 361, ../../../src/scss/kopi/forms.scss */
 .input-prepend .add-on, .input-prepend .btn, .input-append .add-on, .input-append .btn {
@@ -596,16 +584,13 @@ input:focus:required:invalid:focus, textarea:focus:required:invalid:focus, selec
  */
 /* line 425, ../../../src/scss/kopi/forms.scss */
 .kopi-form-search input, .kopi-form-search textarea, .kopi-form-search select, .kopi-form-search .kopi-help-inline, .kopi-form-search .uneditable-input, .kopi-form-search .input-prepend, .kopi-form-search .input-append, .kopi-form-inline input, .kopi-form-inline textarea, .kopi-form-inline select, .kopi-form-inline .kopi-help-inline, .kopi-form-inline .uneditable-input, .kopi-form-inline .input-prepend, .kopi-form-inline .input-append, .kopi-form-horizontal input, .kopi-form-horizontal textarea, .kopi-form-horizontal select, .kopi-form-horizontal .kopi-help-inline, .kopi-form-horizontal .uneditable-input, .kopi-form-horizontal .input-prepend, .kopi-form-horizontal .input-append {
-  display: -moz-inline-box;
-  -moz-box-orient: vertical;
+  display: -moz-inline-stack;
   display: inline-block;
   vertical-align: middle;
   *vertical-align: auto;
-  margin-bottom: 0;
-}
-/* line 7, ../../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
-.kopi-form-search input, .kopi-form-search textarea, .kopi-form-search select, .kopi-form-search .kopi-help-inline, .kopi-form-search .uneditable-input, .kopi-form-search .input-prepend, .kopi-form-search .input-append, .kopi-form-inline input, .kopi-form-inline textarea, .kopi-form-inline select, .kopi-form-inline .kopi-help-inline, .kopi-form-inline .uneditable-input, .kopi-form-inline .input-prepend, .kopi-form-inline .input-append, .kopi-form-horizontal input, .kopi-form-horizontal textarea, .kopi-form-horizontal select, .kopi-form-horizontal .kopi-help-inline, .kopi-form-horizontal .uneditable-input, .kopi-form-horizontal .input-prepend, .kopi-form-horizontal .input-append {
+  zoom: 1;
   *display: inline;
+  margin-bottom: 0;
 }
 /* line 430, ../../../src/scss/kopi/forms.scss */
 .kopi-form-search .hide, .kopi-form-inline .hide, .kopi-form-horizontal .hide {
@@ -614,14 +599,11 @@ input:focus:required:invalid:focus, textarea:focus:required:invalid:focus, selec
 
 /* line 432, ../../../src/scss/kopi/forms.scss */
 .kopi-form-search label, .kopi-form-inline label {
-  display: -moz-inline-box;
-  -moz-box-orient: vertical;
+  display: -moz-inline-stack;
   display: inline-block;
   vertical-align: middle;
   *vertical-align: auto;
-}
-/* line 7, ../../../../../../../.rvm/gems/ruby-1.9.2-p290/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/css3/_inline-block.scss */
-.kopi-form-search label, .kopi-form-inline label {
+  zoom: 1;
   *display: inline;
 }
 
