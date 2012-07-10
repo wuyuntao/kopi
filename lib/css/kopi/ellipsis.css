@@ -1,9 +1,0 @@
-/* line 7, ../../../src/scss/kopi/ellipsis.scss */
-.ellipsis {
-  white-space: nowrap;
-  overflow: hidden;
-  -ms-text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  text-overflow: ellipsis;
-  -moz-binding: url('/lib/css/xml/ellipsis.xml#ellipsis');
-}
