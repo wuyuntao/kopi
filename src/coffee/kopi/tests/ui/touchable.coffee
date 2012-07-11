@@ -12,6 +12,8 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
       preventDefault: true
       # @type  {Number} px
       tapDistance: 20
+      # @type  {Number} ms
+      tapInterval: 300
       # @type  {Number} px
       dragMinDistance: 20
       # @type  {Number} ms
@@ -35,6 +37,13 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
       # 只有在单指触摸的情况下，才考虑触发 tap 事件
       if this._isSingleTouched
         this._tapMoved = false
+        # 如果前一次 tap 的时间戳和当前时间戳间隔小于阈值时
+        # 且前一次 tap 的位置和当前位置间隔小于阈值时
+        # 认为可能触发双击事件
+        this._canBeDoubleTap = this._lastTapTime and
+          (this._startTime - this._lastTapTime < this._options.tapInterval) and
+          this._lastTapPos and
+          (this._getDistance(this._lastTapPos, this._startPos).dist < this._options.tapDistance)
 
       # 只有在多指触摸时，才考虑触发 pinch 事件
       else
@@ -47,6 +56,10 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
 
       this._isPinched = false
       this._isPinchEnd = false
+
+      if this._tapTimer
+        clearTimeout this._tapTimer
+        this._tapTimer = null
 
     ontouchmove: (e) ->
       return false unless this._isTouched
@@ -63,6 +76,7 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
           # console.log "move", moveDistance
           if moveDistance.dist > this._options.tapDistance
             this._tapMoved = true
+            this._canBeDoubleTap = false
       else
         # 在多指触摸时，考虑缩放问题
 
@@ -119,13 +133,22 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
       return false unless this._isTouched
 
       this._endEvent = e
-      this._endPos = this._movePos
+      this._endPos = this._movePos or this._startPos
       this._endTime = e.timeStamp
 
       if this._isSingleTouched and not this._tapMoved
         e.preventDefault()
         e.stopPropagation()
-        this._widget.emit "tap", [e]
+        # 等待一段时间，确定没有第二次点击时，再触发 tap 事件
+        delayFn = =>
+          this._widget.emit (if this._canBeDoubleTap then "doubletap" else "tap"), [e]
+          this._tapTimer = null
+          this._lastTapTime = null
+          this._lastTapPos = null
+        this._tapTimer = setTimeout(delayFn, this._options.tapInterval)
+        this._lastTapTime = this._endTime
+        this._lastTapPos = this._endPos
+        # console.log this._lastTapTime, this._lastTapPos
         return
 
       if this._endPos
@@ -191,6 +214,9 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
 
     ontap: (e, event) ->
       console.log "Tap", event
+
+    ondoubletap: (e, event) ->
+      console.log "DoubleTap", event
 
     ondragstart: (e, event) ->
       console.log "DragStart", event
