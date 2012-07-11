@@ -60,11 +60,15 @@ define "kopi/ui/gestures", (require, exports, module) ->
     ###
     calculate the angle between two points
 
-    @param   object  pos1 { x: int, y: int }
-    @param   object  pos2 { x: int, y: int }
+    @param   object  posStart { x: int, y: int }
+    @param   object  posMove { x: int, y: int }
     ###
-    _getAngle: (pos1, pos2) ->
-      math.atan2(pos2.y - pos1.y, pos2.x - pos1.x) * 180 / math.PI
+    _getAngle: (posStart, posMove) ->
+      distance = this._getDistance(posStart, posMove)
+      this._getAngleByDistance(distance)
+
+    _getAngleByDistance: (distance) ->
+      math.atan2(-distance.distY, -distance.distX) * 180 / math.PI
 
     ###
     calculate the scale size between two fingers
@@ -73,7 +77,7 @@ define "kopi/ui/gestures", (require, exports, module) ->
     @return  float   scale
     ###
     _getScale: (posStart, posMove) ->
-      if posStart.length == 2 and posMove.length == 2
+      if posStart.length >= 2 and posMove.length >= 2
 
         x = posStart[0].x - posStart[1].x
         y = posStart[0].y - posStart[1].y
@@ -127,14 +131,36 @@ define "kopi/ui/gestures", (require, exports, module) ->
         return cls.DIRECTION_RIGHT
 
     ###
+    Calculate average distance between to points
+
+    @param {Object}  pos1 { x: int, y: int }
+    @param {Object}  pos2 { x: int, y: int }
+    ###
+    _getDistance: (posStart, posMove) ->
+      sumX = 0
+      sumY = 0
+      sum = 0
+      len = math.min(posStart.length, posMove.length)
+      for i in [0...len]
+        posSi = posStart[i]
+        posMi = posMove[i]
+        x = posMi.x - posSi.x
+        y = posMi.y - posSi.y
+        sumX += x
+        sumY += y
+        sum += math.sqrt(x * x + y * y)
+
+      distX: sumX / len
+      distY: sumY / len
+      dist: sum / len
+
+    ###
     get the x and y positions from the event object
 
     @param {Event} event
     @return {Array}  [{ x: int, y: int }]
     ###
-    _getPosition: (e, multiTouch=false) ->
-      e or= win.event
-
+    _getPosition: (e) ->
       # no touches, use the event pageX and pageY
       if not support.touch
         pos = [{
@@ -144,10 +170,12 @@ define "kopi/ui/gestures", (require, exports, module) ->
 
       # multitouch, return array with positions
       else
+        e = if e then e.originalEvent else win.event
+
         touches = if e.touches.length > 0 then e.touches else e.changedTouches
         pos = ({x: touch.pageX, y: touch.pageY} for touch in touches)
 
-      if multiTouch then pos else pos[0]
+      pos
 
     ###
     Count the number of fingers in the event
@@ -157,6 +185,7 @@ define "kopi/ui/gestures", (require, exports, module) ->
     @return {Number}
     ###
     _getTouches: (e) ->
+      e = if e then e.originalEvent else win.event
       if e.touches then e.touches.length else 1
 
 
