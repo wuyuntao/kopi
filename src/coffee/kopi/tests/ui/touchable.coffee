@@ -7,6 +7,7 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
   bubbles = require "kopi/ui/notification/bubbles"
   events = require "kopi/utils/events"
   css = require "kopi/utils/css"
+  number = require "kopi/utils/number"
 
   math = Math
 
@@ -233,10 +234,11 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
 
     this.configure
       gestures: [CustomGesture]
-      dragBounce: true
-      dragMomentum: true
+      dragBounce: false
+      dragMomentum: false
       dragDamping: 0.5
       dragDeceleration: 0.006
+      dragInterval: 300
       startX: 0
       startY: 0
       originX: 0
@@ -266,7 +268,6 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
       this._originalHeight = this.element.height()
 
       console.log "original size: #{this._originalWidth}x#{this._originalHeight}"
-
       $("img", this.element).each (i, img) =>
         photo = new Photo(img)
           .skeletonTo(this.element)
@@ -287,7 +288,7 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
 
     ontouch: (e, event) ->
       this._pos = event.center
-      console.log "Start position: ", event.center
+      # console.log "Start position: ", event.center
       this._startTime = event.timeStamp
 
       if this._options.dragMomentum
@@ -307,8 +308,18 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
       pos = this._getDragPos(event)
       this._moveToPos(pos)
 
+      if event.timeStamp - this._startTime > this._options.dragInterval
+        this._startTime = event.timeStamp
+
     ondragend: (e, event) ->
       console.log "DragEnd", event
+      pos = this._getDragPos(event)
+      momentum =
+        distX: 0
+        distY: 0
+        duration: 0
+      # 移动阻力由最后一次的 drag 事件的速度决定
+      # TODO 移植 momentum 相关代码
 
     onswipe: (e, event) ->
       console.log "Swipe", event
@@ -328,15 +339,60 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
     onpinchend: (e, event) ->
       console.log "PinchEnd: " + event.scale
 
+    _resetPosition: (duration=0) ->
+      if this._minDragX? and this._maxDragX?
+        resetX = number.threshold(this._x, this._maxDragX, this._minDragX)
+      else
+        resetX = this._x
+      if this._minDragY? and this._maxDragY?
+        resetY = number.threshold(this._y, this._maxDragY, this._minDragY)
+      else
+        resetY = this._y
+
+      if resetX == this._x and resetY == this._y
+        if this._moved
+          this._moved = false
+        return
+
+      this.moveToPos
+        x: resetX
+        y: resetY
+
     ###
     计算拖动的位置
     ###
     _getDragPos: (event) ->
-      console.log "_getDragPos", event
+      # console.log "_getDragPos", event
       pos = event.center
-      delta =
-        x: pos.x - self._point.x
-        y: pos.y - self._point.y
+      deltaX = pos.x - this._pos.x
+      deltaY = pos.y - this._pos.y
+      newX = this._x + deltaX
+      newY = this._y + deltaY
+      this._pos = pos
+      this._directionX = if deltaX == 0 then 0 else -deltaX / math.abs(deltaX)
+      this._directionY = if deltaY == 0 then 0 else -deltaY / math.abs(deltaY)
+
+      # Slow down If outside of the boundaries
+      if this._minDragX? and this._maxDragX? and (this._minDragX < newX or newX < this._maxDragX)
+        newX = if options.dragBounce
+            this._x + deltaX * options.damping
+          else if newX >= this._minDragX or this._maxDragX >= this._minDragX
+            this._minDragX
+          else
+            this._maxDragX
+
+      if this._minDragY? and this._maxDragY? and (this._minDragY < newY or newY < this._maxDragY)
+        newY = if options.dragBounce
+            this._y + deltaY * options.damping
+          else if newY >= this._minDragY or this._maxDragY >= this._minDragY
+            this._minDragY
+          else
+            this._maxDragY
+
+      # console.log "Drag event #{newX}, #{newY}"
+
+      x: newX
+      y: newY
 
     ###
     移动容器
@@ -379,3 +435,5 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
     new PhotoGallery()
       .skeleton("#container")
       .render()
+
+  return
