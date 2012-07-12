@@ -72,7 +72,7 @@ define "kopi/ui/notification/bubbles", (require, exports, module) ->
 
   # A shortcut method to toggle bubble
   show = -> instance().show(arguments...)
-  hide = -> instance.hide()
+  hide = -> instance.hide(arguments...)
 
   instance: instance
   show: show

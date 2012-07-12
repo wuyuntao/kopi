@@ -109,4 +109,15 @@ define "kopi/ui/touchable", (require, exports, module) ->
           method.call(gesture, event) if method
       return
 
+    ###
+    Get point from event
+    ###
+    _points: (event) ->
+      event = event.originalEvent
+      if support.touch
+        touches = if event.type == events.TOUCH_END_EVENT then event.changedTouches else event.touches
+        if this._options.multiTouch then touches else touches[0]
+      else
+        if this._options.multiTouch then [event] else event
+
   Touchable: Touchable

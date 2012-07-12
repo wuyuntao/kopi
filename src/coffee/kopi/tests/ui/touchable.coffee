@@ -2,7 +2,11 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
 
   $ = require "jquery"
   Touchable = require("kopi/ui/touchable").Touchable
+  Widget = require("kopi/ui/widgets").Widget
   g = require "kopi/ui/gestures"
+  bubbles = require "kopi/ui/notification/bubbles"
+  events = require "kopi/utils/events"
+  css = require "kopi/utils/css"
 
   math = Math
 
@@ -19,9 +23,6 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
       # @type  {Number} ms
       swipeTime: 200
 
-    constructor: ->
-      super
-
     ontouchstart: (e) ->
       this._startEvent = e
       this._startPos = this._getPosition(e)
@@ -29,10 +30,6 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
       this._startTime = e.timeStamp
       this._isTouched = true
       this._isSingleTouched = this._startTouches == 1
-      # console.log "ontouchstart", e
-      # console.log this._startPos
-      # console.log this._startTime
-      # console.log this._startTouches
 
       # 只有在单指触摸的情况下，才考虑触发 tap 事件
       if this._isSingleTouched
@@ -49,27 +46,34 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
       else
         this._isFirstPinch = true
 
+        this._isPinched = false
+        this._isPinchEnd = false
+
+      # 处理拖曳事件
       this._isFirstDrag = true
 
       this._isDragged = false
       this._isDragEnd = false
 
-      this._isPinched = false
-      this._isPinchEnd = false
-
       if this._tapTimer
         clearTimeout this._tapTimer
         this._tapTimer = null
+
+      # 扩展事件
+      e.center = this._getCenter(this._startPos)
+
+      this._widget.emit "touch", [e]
 
     ontouchmove: (e) ->
       return false unless this._isTouched
 
       this._moveEvent = e
       this._movePos = this._getPosition(e)
-      this._moveTime = e.timeStamp
+      this._moveCenter = this._getCenter(this._movePos)
       this._isSingleTouched = this._startTouches == 1
 
-      moveDistance = this._getDistance(this._movePos, this._startPos)
+      # console.log this._movePos, this._startPos
+      moveDistance = this._getDistance(this._startPos, this._movePos)
       # 只有在单指触摸的情况下，才考虑触发 tap 事件
       if this._isSingleTouched
         if not this._tapMoved
@@ -85,11 +89,7 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
         # console.log "scale: " + scale
 
         # 缩放的中心点
-        this._scalePos =
-          x: (this._movePos[0].x + this._movePos[1].x) / 2
-          y: (this._movePos[0].y + this._movePos[1].y) / 2
-
-        e.position = this._scalePos
+        e.center = this._moveCenter
         e.scale = scale
 
         if this._isFirstPinch
@@ -113,6 +113,7 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
 
         # Extend event
         e.angle = angle
+        e.center or= this._moveCenter
         e.direction = this._getDirection(angle)
         e.distance = moveDistance.dist
         e.distanceX = moveDistance.distX
@@ -134,6 +135,7 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
 
       this._endEvent = e
       this._endPos = this._movePos or this._startPos
+      this._endCenter = this._getCenter(this._endPos)
       this._endTime = e.timeStamp
 
       if this._isSingleTouched and not this._tapMoved
@@ -152,17 +154,13 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
         return
 
       if this._endPos
-        endDistance = this._getDistance(this._endPos, this._startPos)
+        endDistance = this._getDistance(this._startPos, this._endPos)
 
       if this._isPinched and not this._isPinchEnd
         # TODO 考虑三个手指以上的缩放操作
         scale = this._getScale(this._startPos, this._endPos)
         # 缩放的中心点
-        this._scalePos =
-          x: (this._endPos[0].x + this._endPos[1].x) / 2
-          y: (this._endPos[0].y + this._endPos[1].y) / 2
-
-        e.position = this._scalePos
+        e.center = this._endCenter
         e.scale = scale
 
         this._isPinchEnd = true
@@ -172,6 +170,7 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
         angle = this._getAngleByDistance(endDistance)
         # Extend event
         e.angle = angle
+        e.center or= this._endCenter
         e.direction = this._getDirection(angle)
         e.distance = endDistance.dist
         e.distanceX = endDistance.distX
@@ -188,6 +187,45 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
 
     ontouchcancel: (e) -> this.ontouchend(e)
 
+  class Photo extends Widget
+
+    this.widgetName "Photo"
+
+    constructor: (image, options) ->
+      super(options)
+      this.image = $(image)
+      # 照片的初始位置 X
+      this.startX = 0
+      # 照片的初始位置 Y
+      this.startY = 0
+
+      # NOTE
+      # 考虑到移动设备高分辨率，图片的显示大小应为
+      # 原始大小的一半
+      #
+      # -- wuyuntao, 2012-07-12
+
+      # 照片的原始宽度
+      this.originalWidth = image.width / 2
+      # 照片的原始高度
+      this.originalHeight = image.height / 2
+      # 照片的当前宽度
+      this.width = image.width / 2
+      # 照片的当前高度
+      this.height = image.height / 2
+
+    onskeleton: ->
+      this.element.append(this.image)
+      super
+
+    ###
+    检查如果照片移动到某个位置，照片是否应该被显示出来
+    ###
+    shouldBeActive: (pos) ->
+      true
+
+    moveToPos: (pos) ->
+      console.log "Move photo to (#{pos.x}, #{pos.y})"
 
   class PhotoGallery extends Touchable
 
@@ -195,34 +233,79 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
 
     this.configure
       gestures: [CustomGesture]
+      dragBounce: true
+      dragMomentum: true
+      dragDamping: 0.5
+      dragDeceleration: 0.006
+      startX: 0
+      startY: 0
+      originX: 0
+      originY: 0
 
     constructor: ->
       super
-      this.images = []
+      # 相册的初始位置 X
+      this._x = this._options.startX
+      # 相册的初始位置 Y
+      this._y = this._options.startY
+      # 相册的原始宽度
+      this._originalWidth = 0
+      # 相册的原始高度
+      this._originalHeight = 0
+
+      # 以最适合的比例为1
+      this._scale = 1
+
+      this._photos = []
 
     onskeleton: ->
       super
 
     onrender: ->
-      $("img", this.element).each =>
-        img = $(this)
-        img
-          .data("width", this.width)
-          .data("height", this.height)
-        this.images.push(img)
+      this._originalWidth = this.element.width()
+      this._originalHeight = this.element.height()
+
+      console.log "original size: #{this._originalWidth}x#{this._originalHeight}"
+
+      $("img", this.element).each (i, img) =>
+        photo = new Photo(img)
+          .skeletonTo(this.element)
+          .render()
+        this._photos.push(photo)
       super
 
     ontap: (e, event) ->
       console.log "Tap", event
+      bubble = bubbles.instance()
+      if bubble.hidden
+        bubble.show("Tapped")
+      else
+        bubble.hide()
 
     ondoubletap: (e, event) ->
       console.log "DoubleTap", event
 
+    ontouch: (e, event) ->
+      this._pos = event.center
+      console.log "Start position: ", event.center
+      this._startTime = event.timeStamp
+
+      if this._options.dragMomentum
+        matrix = this.element.parseMatrix()
+        if matrix and (matrix.x != this._x or matrix.y != this._y)
+          this.element.unbind(events.WEBKIT_TRANSITION_END_EVENT)
+          this._steps = []
+          this._moveToPos(matrix)
+
     ondragstart: (e, event) ->
       console.log "DragStart", event
+      pos = this._getDragPos(event)
+      this._moveToPos(pos)
 
     ondragmove: (e, event) ->
       console.log "DragMove", event
+      pos = this._getDragPos(event)
+      this._moveToPos(pos)
 
     ondragend: (e, event) ->
       console.log "DragEnd", event
@@ -244,6 +327,53 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
 
     onpinchend: (e, event) ->
       console.log "PinchEnd: " + event.scale
+
+    ###
+    计算拖动的位置
+    ###
+    _getDragPos: (event) ->
+      console.log "_getDragPos", event
+      pos = event.center
+      delta =
+        x: pos.x - self._point.x
+        y: pos.y - self._point.y
+
+    ###
+    移动容器
+    ###
+    _moveToPos: (pos) ->
+      console.log "Move to #{pos.x}, #{pos.y}"
+      this._x = pos.x
+      this._y = pos.y
+      # TODO
+      # 具体实现：
+      # 找到当前显示的图片，修改他们的样式以实现拖动
+      # 对于不需要显示的图片仅更新他们的位置信息
+      # for photo in this._photos
+      #   photo.moveToPos(pos, photo.shouldBeActive(pos))
+
+    ###
+    计算拖动范围
+    ###
+    _getDragRange: ->
+      res = {}
+      res.minX = this._minDragX = 0
+      res.minY = this._minDragY = 0
+      res.maxX = this._maxDragX = this._originalWidth * this._photos.length
+      res.maxY = this._maxDragY = this._originalHeight * this._photos.length
+      res
+
+    ###
+    计算缩放范围
+    ###
+    _getScaleRange: ->
+      res = {}
+      # TODO
+      # 具体实现：
+      # 根据当前显示的图片大小
+      # 以图片的最佳缩放比例为 1
+      # 最小的缩放比例为 1/2
+      # 最大的缩放比例为 2 倍
 
   $ ->
     new PhotoGallery()

@@ -68,7 +68,7 @@ define "kopi/ui/gestures", (require, exports, module) ->
       this._getAngleByDistance(distance)
 
     _getAngleByDistance: (distance) ->
-      math.atan2(-distance.distY, -distance.distX) * 180 / math.PI
+      math.atan2(distance.distY, distance.distX) * 180 / math.PI
 
     ###
     calculate the scale size between two fingers
@@ -91,6 +91,17 @@ define "kopi/ui/gestures", (require, exports, module) ->
 
       return 0
 
+    ###
+    calculate mean center of multiple positions
+    ###
+    _getCenter: (positions) ->
+      sumX = 0
+      sumY = 0
+      for pos in positions
+        sumX += pos.x
+        sumY += pos.y
+      x: sumX / positions.length
+      y: sumY / positions.length
 
     ###
     calculate the rotation degrees between two fingers
