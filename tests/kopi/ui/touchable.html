@@ -12,18 +12,18 @@
 
       .kopi-photo-gallery {
         position: fixed;
-        top: 20px;
-        left: 20px;
-        right: 20px;
-        bottom: 20px;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
         background: #ccc;
       }
 
-      .kopi-photo-gallery img, #container img {
+      .kopi-photo-gallery .kopi-photo, #container img {
         display: none;
       }
 
-      .kopi-photo-gallery img.kopi-photo-gallery-active {
+      .kopi-photo-gallery .kopi-photo-active {
         display: block;
         position: absolute;
         top: 0;
@@ -35,7 +35,7 @@
     <script type="text/javascript">
       window.define.amd = { jQuery: true };
       seajs.config({
-        map: [[ /^(.*\/assets\/.*\.(?:css|js))(?:.*)$/i, '$1?' + (new Date()).getTime()]]
+        map: [[ /^(.*\/.*\.(?:css|js))(?:.*)$/i, '$1?' + (new Date()).getTime()]]
       });
       seajs.use(["kopi/tests/ui/touchable"]);
     </script>

@@ -25,6 +25,9 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
       swipeTime: 200
 
     ontouchstart: (e) ->
+      e.preventDefault()
+      e.stopPropagation()
+
       this._startEvent = e
       this._startPos = this._getPosition(e)
       this._startTouches = this._getTouches(e)
@@ -68,6 +71,9 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
     ontouchmove: (e) ->
       return false unless this._isTouched
 
+      e.preventDefault()
+      e.stopPropagation()
+
       this._moveEvent = e
       this._movePos = this._getPosition(e)
       this._moveCenter = this._getCenter(this._movePos)
@@ -101,9 +107,6 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
 
         this._isPinched = true
 
-        e.preventDefault()
-        e.stopPropagation()
-
 
       # 只有当手指移动到最小阈值智商时，开始处理 drag 事件
       if moveDistance.dist > this._options.dragMinDistance
@@ -134,14 +137,15 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
     ontouchend: (e) ->
       return false unless this._isTouched
 
+      e.preventDefault()
+      e.stopPropagation()
+
       this._endEvent = e
       this._endPos = this._movePos or this._startPos
       this._endCenter = this._getCenter(this._endPos)
       this._endTime = e.timeStamp
 
       if this._isSingleTouched and not this._tapMoved
-        e.preventDefault()
-        e.stopPropagation()
         # 等待一段时间，确定没有第二次点击时，再触发 tap 事件
         delayFn = =>
           this._widget.emit (if this._canBeDoubleTap then "doubletap" else "tap"), [e]
@@ -192,13 +196,22 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
 
     this.widgetName "Photo"
 
+    this.configure
+      startX: 0
+      startY: 0
+      width: 0
+      height: 0
+
     constructor: (image, options) ->
       super(options)
       this.image = $(image)
       # 照片的初始位置 X
-      this.startX = 0
+      this.startX = this._options.startX
       # 照片的初始位置 Y
-      this.startY = 0
+      this.startY = this._options.startY
+      # 当前位置的坐标
+      this.x = this._options.startX
+      this.y = this._options.startY
 
       # NOTE
       # 考虑到移动设备高分辨率，图片的显示大小应为
@@ -211,22 +224,56 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
       # 照片的原始高度
       this.originalHeight = image.height / 2
       # 照片的当前宽度
-      this.width = image.width / 2
+      this.width = this._options.width
       # 照片的当前高度
-      this.height = image.height / 2
+      this.height = this._options.height
 
     onskeleton: ->
       this.element.append(this.image)
       super
 
+    onrender: ->
+      console.log "Resize to #{this.width}x#{this.height}. Move to #{this.startX},#{this.startY}"
+      this.update(this.width, this.height, this.x, this.y)
+      this.setAsActive()
+      super
+
+    update: (width, height, x, y) ->
+      this.image
+        .width(this.width)
+        .height(this.height)
+        .translate(this.startX, this.startY)
+
     ###
     检查如果照片移动到某个位置，照片是否应该被显示出来
     ###
     shouldBeActive: (pos) ->
-      true
+      # console.log "shouldBeActive", (-this.originalWidth <= pos.x + this.startX < this.originalWidth >= 0), pos.x + this.startX, this.width
+      # 图片最右侧的x坐标应小于0
+      # 图片最左侧的x坐标大于宽度
+      -this.width <= pos.x + this.startX < this.width * 2
 
-    moveToPos: (pos) ->
-      console.log "Move photo to (#{pos.x}, #{pos.y})"
+    moveToPos: (pos, isActivePhoto=false) ->
+      if isActivePhoto
+        this.setAsActive()
+        this.element.translate(pos.x, pos.y)
+      else
+        this.setAsInactive()
+
+      # console.log "Move photo to (#{pos.x}, #{pos.y}) as active? #{isActivePhoto}"
+      this.x = pos.x
+      this.y = pos.y
+
+    setAsActive: ->
+      cls = this.constructor
+      this.element.addClass(cls.cssClass("active"))
+      this.isActive = true
+
+    setAsInactive: ->
+      cls = this.constructor
+      this.element.removeClass(cls.cssClass("active"))
+      this.isActive = false
+
 
   class PhotoGallery extends Touchable
 
@@ -269,10 +316,19 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
 
       console.log "original size: #{this._originalWidth}x#{this._originalHeight}"
       $("img", this.element).each (i, img) =>
-        photo = new Photo(img)
+        options =
+          startX: i * this._originalWidth
+          startY: 0
+          width: this._originalWidth
+          height: this._originalHeight
+
+        photo = new Photo(img, options)
           .skeletonTo(this.element)
           .render()
         this._photos.push(photo)
+
+      this._getDragRange()
+
       super
 
     ontap: (e, event) ->
@@ -296,17 +352,24 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
         if matrix and (matrix.x != this._x or matrix.y != this._y)
           this.element.unbind(events.WEBKIT_TRANSITION_END_EVENT)
           this._steps = []
-          this._moveToPos(matrix)
+          this.moveToPos(matrix)
 
     ondragstart: (e, event) ->
       console.log "DragStart", event
+      # 在拖曳开始时计算每张图片是否会被显示
       pos = this._getDragPos(event)
-      this._moveToPos(pos)
+      for photo in this._photos
+        if photo.shouldBeActive(pos)
+          photo.setAsActive()
+        else
+          photo.setAsInactive()
+
+      this.moveToPos(pos)
 
     ondragmove: (e, event) ->
       console.log "DragMove", event
       pos = this._getDragPos(event)
-      this._moveToPos(pos)
+      this.moveToPos(pos)
 
       if event.timeStamp - this._startTime > this._options.dragInterval
         this._startTime = event.timeStamp
@@ -318,11 +381,10 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
         distX: 0
         distY: 0
         duration: 0
+
       # 移动阻力由最后一次的 drag 事件的速度决定
       # TODO 移植 momentum 相关代码
-
-    onswipe: (e, event) ->
-      console.log "Swipe", event
+      this._resetPosition()
 
     onswipeleft: (e, event) ->
       console.log "SwipeLeft", event
@@ -349,20 +411,24 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
       else
         resetY = this._y
 
+      console.log "Drag range", this._minDragX, this._maxDragX, this._minDragY, this._maxDragY
+      console.log "Reset to position: #{resetX}, #{resetY}"
       if resetX == this._x and resetY == this._y
         if this._moved
           this._moved = false
         return
 
-      this.moveToPos
+      pos =
         x: resetX
         y: resetY
+      this.moveToPos pos, true
 
     ###
     计算拖动的位置
     ###
     _getDragPos: (event) ->
       # console.log "_getDragPos", event
+      options = this._options
       pos = event.center
       deltaX = pos.x - this._pos.x
       deltaY = pos.y - this._pos.y
@@ -397,7 +463,7 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
     ###
     移动容器
     ###
-    _moveToPos: (pos) ->
+    moveToPos: (pos, forceCheckActivity=false) ->
       console.log "Move to #{pos.x}, #{pos.y}"
       this._x = pos.x
       this._y = pos.y
@@ -405,8 +471,13 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
       # 具体实现：
       # 找到当前显示的图片，修改他们的样式以实现拖动
       # 对于不需要显示的图片仅更新他们的位置信息
-      # for photo in this._photos
-      #   photo.moveToPos(pos, photo.shouldBeActive(pos))
+      for photo, i in this._photos
+        photo.moveToPos(pos, (if forceCheckActivity then photo.shouldBeActive(pos) else photo.isActive))
+
+    ###
+    找到当前显示的图片
+    ###
+    findActiveImage: ->
 
     ###
     计算拖动范围
@@ -415,8 +486,8 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
       res = {}
       res.minX = this._minDragX = 0
       res.minY = this._minDragY = 0
-      res.maxX = this._maxDragX = this._originalWidth * this._photos.length
-      res.maxY = this._maxDragY = this._originalHeight * this._photos.length
+      res.maxX = this._maxDragX = -this._originalWidth * (this._photos.length - 1)
+      res.maxY = this._maxDragY = 0
       res
 
     ###
