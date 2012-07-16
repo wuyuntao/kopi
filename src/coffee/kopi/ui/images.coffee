@@ -90,7 +90,10 @@ define "kopi/ui/images", (require, exports, module) ->
         img = doc.createElement("img")
         img.onload = (e) ->
           element.removeClass(loadingClass)
+          # Save original width of image
           image
+            .data("original-width", img.width)
+            .data("original-height", img.height)
             .height(options.height)
             .width(options.width)
             .attr(SRC, self._src)
