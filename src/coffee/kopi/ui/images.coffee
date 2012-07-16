@@ -18,6 +18,9 @@ define "kopi/ui/images", (require, exports, module) ->
   ###
   class Image extends widgets.Widget
 
+    this.IMAGE_LOAD_EVENT = "imageload"
+    this.IMAGE_ERROR_EVENT = "imageerror"
+
     this.widgetName "Image"
 
     this.configure
@@ -91,6 +94,7 @@ define "kopi/ui/images", (require, exports, module) ->
             .height(options.height)
             .width(options.width)
             .attr(SRC, self._src)
+          self.emit(cls.IMAGE_LOAD_EVENT)
         img.onerror = (e) ->
           element.removeClass(loadingClass)
           if options.fallbackSrc
@@ -98,6 +102,7 @@ define "kopi/ui/images", (require, exports, module) ->
             image.attr(SRC, options.fallbackSrc)
           else
             image.attr(SRC, self._src)
+          self.emit(cls.IMAGE_ERROR_EVENT)
         img.src = self._src
       else
         self._image.attr SRC, self._src
