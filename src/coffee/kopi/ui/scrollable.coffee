@@ -420,7 +420,9 @@ define "kopi/ui/scrollable", (require, exports, module) ->
       distance = maxDistance
       [speed, distance]
 
-    # Set transition duration for container
+    ###
+    Set transition duration for container
+    ###
     _duration: (duration) ->
       this._container.duration(duration)
       this
