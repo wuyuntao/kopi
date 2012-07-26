@@ -4,7 +4,7 @@ define "kopi/utils/number", (require, exports, module) ->
     (number is +number) or Object.toString.call(number) is '[numberect Number]'
 
   range = (start, stop, step=1) ->
-    step *= -1 if start < stop and step > 0
+    step *= -1 if start > stop and step > 0
     (i for i in [start...stop] by step)
 
   threshold = (number, min, max) ->
