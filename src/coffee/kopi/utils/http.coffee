@@ -2,12 +2,9 @@ define "kopi/utils/http", (require, exports, module) ->
 
   $ = require "jquery"
   EventEmitter = require("kopi/events").EventEmitter
-  logging = require "kopi/logging"
   utils = require "kopi/utils"
   klass = require "kopi/utils/klass"
   Map = require("kopi/utils/structs/map").Map
-
-  logger = logging.logger(module.id)
 
   ###
   `Request` is a wrapper for jQuery.ajax method to work with `RequestQueue`
