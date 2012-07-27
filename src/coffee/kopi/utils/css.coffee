@@ -46,18 +46,16 @@ define "kopi/utils/css", (require, exports, module) ->
   ###
   Set translate
   ###
-  translate = "#{translateOpen}{x}px,{y}px#{translateClose}"
   transform = experimental("transform")
   $.fn.translate = (x=0, y=0) ->
     if support.cssTransform
-      this.css transform, text.format(translate, x: x, y: y)
+      this.css transform, "#{translateOpen}#{x}px,#{y}px#{translateClose}"
     else
       this.css left: x, top: y
 
-  scale = "#{scaleOpen}{x},{y}#{scaleClose}"
   $.fn.scale = (x=1, y=1) ->
     if support.cssTransform
-      this.css transform, text.format(scale, x: x, y: y)
+      this.css transform, "#{scaleOpen}#{x},#{y}#{scaleClose}"
     this
 
   ###
