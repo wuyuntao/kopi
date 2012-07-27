@@ -118,6 +118,19 @@ define "kopi/utils/http", (require, exports, module) ->
       request
 
     ###
+    Remove all requests from queue
+    ###
+    abortAll: ->
+      @_pending.forEach (request) =>
+        @pending.remove(request.guid)
+        @emit @constructor.ABORT_EVENT, [request]
+      @_active.forEach (request) =>
+        request.abort() if request.state == Request.STATE_PROCESSING
+        @_active.remove(request.guid)
+        @emit @constructor.ABORT_EVENT, [request]
+      return
+
+    ###
     To see if active pool is available for new request
     ###
     _checkActivePool: ->
