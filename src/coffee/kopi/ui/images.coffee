@@ -50,16 +50,16 @@ define "kopi/ui/images", (require, exports, module) ->
       options = self._options
       # Show loader or default image when resource is not ready
       if options.loaderSrc
-        self._image = $ IMG_TAG, src: options.loaderSrc
+        self.image = $ IMG_TAG, src: options.loaderSrc
         self.element.addClass cls.cssClass("loading")
       else
-        self._image = $(IMG_TAG, src: options.src)
-        self._image.height(options.height)
-        self._image.width(options.width)
+        self.image = $(IMG_TAG, src: options.src)
+        self.image.height(options.height)
+        self.image.width(options.width)
       self.element
         .width(options.width)
         .height(options.height)
-        .html(self._image)
+        .html(self.image)
       super
 
     onrender: ->
@@ -78,7 +78,7 @@ define "kopi/ui/images", (require, exports, module) ->
       cls = this.constructor
       options = this._options
       element = self.element
-      image = self._image
+      image = self.image
       if options.loaderSrc
         loadingClass = cls.cssClass("loading")
         fallbackClass = cls.cssClass("fallback")
@@ -108,6 +108,6 @@ define "kopi/ui/images", (require, exports, module) ->
           self.emit(cls.IMAGE_ERROR_EVENT)
         img.src = self._src
       else
-        self._image.attr SRC, self._src
+        self.image.attr SRC, self._src
 
   Image: Image

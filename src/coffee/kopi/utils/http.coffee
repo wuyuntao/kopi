@@ -147,8 +147,9 @@ define "kopi/utils/http", (require, exports, module) ->
       cls = this.constructor
       @_active.set(request.guid, request)
       request.perform (error, data, text) =>
-        @emit cls.COMPLETE_EVENT, arguments
-        @emit (if error then cls.ERROR_EVENT else cls.SUCCESS_EVENT), arguments
+        args = [request].concat(arguments)
+        @emit cls.COMPLETE_EVENT, args
+        @emit (if error then cls.ERROR_EVENT else cls.SUCCESS_EVENT), args
         @_active.remove(request.guid)
         @_checkActivePool()
 

@@ -122,7 +122,7 @@ define "kopi/utils/array", (require, exports, module) ->
 
   remove = (array, obj) ->
     i = indexOf(array, obj)
-    if i >= 0 then removeAt(array, obj) else false
+    if i >= 0 then removeAt(array, i) else false
 
   removeAt = (array, i) ->
     ArrayProto.splice.call(array, i, 1).length == 1
