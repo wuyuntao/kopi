@@ -6,18 +6,23 @@ define "kopi/ui/indicators", (require, exports, module) ->
 
   class Indicator extends Widget
 
-    this.widgetName "Indicator"
+    @widgetName "Indicator"
 
     klass.include this, Togglable
 
-    this.configure
+    @configure
+      # @type  {Boolean} Center aligning
       center: false
 
     constructor: ->
       super
-      if this._options.center
+      if @_options.center
         cls = this.constructor
-        this._options.extraClass += " #{cls.cssClass("center")}"
-      this.hidden = true
+        @_options.extraClass += " #{cls.cssClass("center")}"
+      @hidden = true
+
+    ondestroy: ->
+      # Reset hidden to true when destroying the widget
+      @hidden = true
 
   Indicator: Indicator

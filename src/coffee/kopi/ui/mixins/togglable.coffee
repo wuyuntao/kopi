@@ -6,15 +6,19 @@ define "kopi/ui/mixins/togglable", (require, exports, module) ->
   class Togglable
 
     show: ->
-      return this if not this.hidden
-      this.hidden = false
-      this.element.addClass(this.constructor.cssClass("show"))
+      return this if not @hidden
+      cls = this.constructor
+      cls.SHOW_CLASS or= cls.cssClass("show")
+      @element.addClass(cls.SHOW_CLASS)
+      @hidden = false
       this
 
     hide: ->
-      return this if this.hidden
-      this.hidden = true
-      this.element.removeClass(this.constructor.cssClass("show"))
+      return this if @hidden
+      cls = this.constructor
+      cls.SHOW_CLASS or= cls.cssClass("show")
+      @element.removeClass(cls.SHOW_CLASS)
+      @hidden = true
       this
 
   Togglable: Togglable
