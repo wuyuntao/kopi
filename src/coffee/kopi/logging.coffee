@@ -7,6 +7,14 @@ define "kopi/logging", (require, exports, module) ->
 
   class LoggerError extends exceptions.ValueError
 
+  LOG = 0
+  INFO = 1
+  WARN = 2
+  ERROR = 3
+
+  NOOP_FN = ->
+  NOOP_FN.isNoop = true
+
   # Store all loggers with their names
   loggers = {}
 
@@ -24,39 +32,30 @@ define "kopi/logging", (require, exports, module) ->
     timers = {}
     # @type {Hash}    Log accumulators
     accumulators = {}
-    # @type {Hash}    Log level
-    levels =
-      log:    0
-      debug:  1
-      info:   2
-      warn:   3
-      error:  4
-    # @type {Console} 日志对象
-    console = window.console
+    # @type {Console} Local reference of console object
+    console = null
 
     ###
-    send log to logging handler
+    Define logging method
 
-    @param  {String}  name
-    @param  {String}  level
-    @param  {String}  message
-    @param  {Hash}    options
+    @private
     ###
-    send = (name, level, message, options={}) ->
-      throw new LoggerError("Invalid logger level: #{level}") unless (level of levels)
-      options = object.extend {}, settings.kopi.logging, options
-      return false if levels[level] < options.level
+    defineMethod = (logger, name) ->
+      return if logger[name] and not logger[name].isNoop
+      logger[name] = ->
+        seconds = Math.round(new Date() - start) / 1000
+        if console
+          console[name] "[#{seconds}s] [#{@_name}]", arguments...
+        return
 
-      seconds = Math.round(new Date() - start) / 1000
+    ###
+    Define noop method for disallowed logging level
 
-      if options.console and console
-        # Provide an alternate method since level might not be supported in some browser
-        action = if level of console then level else "log"
-        if options.raw
-          console[action]("[#{seconds}s] [#{name}]")
-          console[action](message)
-        else
-          console[action]("[#{seconds}s] [#{name}] #{message}")
+    @private
+    ###
+    defineNoopMethod = (logger, name) ->
+      return if logger[name] and logger[name].isNoop
+      logger[name] = NOOP_FN
 
     ###
     Constructor for logger
@@ -64,29 +63,33 @@ define "kopi/logging", (require, exports, module) ->
     @constructor
     @param {String} name
     ###
-    constructor: (name) ->
+    constructor: (name, options={}) ->
       throw new LoggerError("Logger must have a name") unless name
-      this._name = name
-      this._disabled = false
+      @_level = settings.kopi.logging.level
+      @_name = name
+      # Initialize logging methods
+      @level @_level
+      # Cache the logger instance
       loggers[name] = this
+      # Lazy loading real console object
+      console or= window.console
 
     ###
     Return name of logger
     ###
-    name: -> this._name
+    name: -> @_name
 
     ###
-    Enable logger
+    Accessor of logging level
     ###
-    enable: ->
-      this._disabled = false
-      this
-
-    ###
-    Disable logger
-    ###
-    disable: ->
-      this._disabled = true
+    level: (level) ->
+      return @_level if arguments.length == 0
+      for name, value in ["log", "info", "warn", "error"]
+        if value >= level
+          defineMethod this, name
+        else
+          defineNoopMethod this, name
+      @_level = level
       this
 
     ###
@@ -97,11 +100,10 @@ define "kopi/logging", (require, exports, module) ->
 
     ###
     time: (name, options={}) ->
-      return this if this._disabled
-      key = "#{this._name}:#{name}"
+      key = "#{@_name}:#{name}"
       timer = timers[key]
       return if timer
-      send(this._name, "debug", "#{name} started.")
+      @log "#{name} started"
       timers[key] = new Date()
       accumulators[key] or= [] if options.accumulate
       this
@@ -114,7 +116,7 @@ define "kopi/logging", (require, exports, module) ->
 
     ###
     timeEnd: (name, options={}) ->
-      key = "#{this._name}:#{name}"
+      key = "#{@_name}:#{name}"
       timer = timers[key]
       return if not timer
       time = new Date() - timer
@@ -122,27 +124,24 @@ define "kopi/logging", (require, exports, module) ->
       if options.accumulate
         accumulators[key].push(time)
         message += " total #{array.sum(accumulators[key])}ms. average #{array.average(accumulators[key])}ms."
-      send(this._name, "debug", message)
+      @log message
       timers[key] = null
       this
-
-    # Define debug, info, warn & error methods
-    proto = this.prototype
-    defineMethod = (level) ->
-      proto[level] = (message, options) ->
-        return this if this._disabled
-        send(this._name, level, message, options)
-        this
-    defineMethod(level) for level of levels
 
   # Default logger
   logger = new Logger("kopi")
 
-  debug: -> logger.debug(arguments...)
+  # Expose logging levels
+  LOG: LOG
+  INFO: INFO
+  WARN: WARN
+  ERROR: ERROR
+
+  # Expose default logger methods
+  log: -> logger.log(arguments...)
   info: -> logger.info(arguments...)
   warn: -> logger.warn(arguments...)
   error: -> logger.error(arguments...)
-
   time: -> logger.time(arguments...)
   timeEnd: -> logger.timeEnd(arguments...)
 
