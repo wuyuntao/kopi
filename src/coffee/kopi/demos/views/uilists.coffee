@@ -6,8 +6,7 @@ define "kopi/demos/views/uilists", (require, exports, module) ->
   reverse = require("kopi/app/router").reverse
   Scrollable = require("kopi/ui/scrollable").Scrollable
   List = require("kopi/ui/lists").List
-  ArrayAdapter = require("kopi/ui/groups/adapters").ArrayAdapter
-  array = require("kopi/utils/array")
+  ListItem = require("kopi/ui/lists/items").ListItem
 
   class UIListView extends View
 
@@ -16,42 +15,41 @@ define "kopi/demos/views/uilists", (require, exports, module) ->
       backButton = new navigation.NavButton
         url: reverse("ui")
         titleText: "Back"
-      this.nav = new navigation.Nav
+      @nav = new navigation.Nav
         title: "List"
         leftButton: backButton
-      this.view = new viewswitchers.View()
+      @view = new viewswitchers.View()
 
-      this.scrollable = new Scrollable
+      @scrollable = new Scrollable
         scrollX: false
-      this.list = new List
+      @list = new List
         striped: true
 
     oncreate: ->
-      this.app.navBar.add(this.nav)
-      this.nav.skeleton()
-      this.app.viewSwitcher.add(this.view)
-      this.view.skeleton()
-      this.scrollable.skeletonTo(this.view.element)
-      items = array.map([1..30], ((i) -> "List Item #{i}"))
-      this.list
-        .adapter(new ArrayAdapter(items))
-        .skeletonTo(this.scrollable.container())
+      @app.navbar.add(@nav)
+      @nav.skeleton()
+      @app.viewSwitcher.add(@view)
+      @view.skeleton()
+      @scrollable.skeletonTo(@view.element)
+      for i in [1..30]
+        @list.add new ListItem(@list, "List Item #{i}")
+      @list.skeletonTo(@scrollable.container())
       super
 
     onstart: ->
-      this.app.navBar.show(this.nav)
-      this.app.viewSwitcher.show(this.view)
-      this.nav.render()
-      this.view.render()
-      this.list.render()
-      this.scrollable.render()
+      @app.navbar.show(@nav)
+      @app.viewSwitcher.show(@view)
+      @nav.render()
+      @view.render()
+      @list.render()
+      @scrollable.render()
       super
 
     ondestroy: ->
-      this.scrollable.destroy()
-      this.list.destroy()
-      this.nav.destroy()
-      this.view.destroy()
+      @scrollable.destroy()
+      @list.destroy()
+      @nav.destroy()
+      @view.destroy()
       super
 
   UIListView: UIListView

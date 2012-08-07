@@ -5,7 +5,7 @@ define "kopi/demos/views/ui", (require, exports, module) ->
   navigation = require("kopi/ui/navigation")
   viewswitchers = require "kopi/ui/viewswitchers"
   NavList = require("kopi/ui/lists").NavList
-  ArrayAdapter = require("kopi/ui/groups/adapters").ArrayAdapter
+  NavListItem = require("kopi/ui/lists/items").NavListItem
 
   class UIView extends View
 
@@ -14,40 +14,42 @@ define "kopi/demos/views/ui", (require, exports, module) ->
       backButton = new navigation.NavButton
         url: reverse("index")
         titleText: "Back"
-      this.nav = new navigation.Nav
+      @nav = new navigation.Nav
         title: "UI"
         leftButton: backButton
-      this.view = new viewswitchers.View()
-      this.list = new NavList()
+      @view = new viewswitchers.View()
+      @list = new NavList()
 
     oncreate: ->
-      this.app.navBar.add(this.nav)
-      this.nav.skeleton()
-      this.app.viewSwitcher.add(this.view)
-      this.view.skeleton()
-      this.list
-        .adapter(new ArrayAdapter([
-          ["Buttons", "/ui/buttons/"]
-          ["Controls", "/ui/controls/"]
-          ["Lists", "/ui/lists/"]
-          ["Notification", "/ui/notification/"]
-          ["Tabs", "/ui/tabs/"]
-          ["Carousels", "/ui/carousels/"]
-        ])).skeletonTo(this.view.element)
+      @app.navbar.add(@nav)
+      @nav.skeleton()
+      @app.viewSwitcher.add(@view)
+      @view.skeleton()
+      widgets = [
+        ["Buttons", "/ui/buttons/"]
+        ["Controls", "/ui/controls/"]
+        ["Lists", "/ui/lists/"]
+        ["Notification", "/ui/notification/"]
+        ["Tabs", "/ui/tabs/"]
+        ["Carousels", "/ui/carousels/"]
+      ]
+      for widget in widgets
+        @list.add new NavListItem(@list, widget)
+      @list.skeletonTo(@view.element)
       super
 
     onstart: ->
-      this.app.navBar.show(this.nav)
-      this.app.viewSwitcher.show(this.view)
-      this.nav.render()
-      this.view.render()
-      this.list.render()
+      @app.navbar.show(@nav)
+      @app.viewSwitcher.show(@view)
+      @nav.render()
+      @view.render()
+      @list.render()
       super
 
     ondestroy: ->
-      this.list.destroy()
-      this.nav.destroy()
-      this.view.destroy()
+      @list.destroy()
+      @nav.destroy()
+      @view.destroy()
       super
 
   UIView: UIView

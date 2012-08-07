@@ -22,7 +22,7 @@ define "kopi/demos/views/uicarousels", (require, exports, module) ->
       this.carousel = new carousels.Carousel()
 
     oncreate: ->
-      this.app.navBar.add(this.nav)
+      this.app.navbar.add(this.nav)
       this.nav.skeleton()
       this.app.viewSwitcher.add(this.view)
       this.view.skeleton()
@@ -33,7 +33,7 @@ define "kopi/demos/views/uicarousels", (require, exports, module) ->
       super
 
     onstart: ->
-      this.app.navBar.show(this.nav)
+      this.app.navbar.show(this.nav)
       this.app.viewSwitcher.show(this.view)
       this.nav.render()
       this.view.render()

@@ -6,7 +6,7 @@ define "kopi/demos/views/uibuttons", (require, exports, module) ->
   reverse = require("kopi/app/router").reverse
   templates = require("kopi/demos/templates/uibuttons")
   Button = require("kopi/ui/buttons").Button
-  ButtonGroup = require("kopi/ui/buttongroups").ButtonGroup
+  Group = require("kopi/ui/groups").Group
   capitalize = require("kopi/utils/text").capitalize
 
   class UIButtonView extends View
@@ -20,49 +20,49 @@ define "kopi/demos/views/uibuttons", (require, exports, module) ->
       backButton = new navigation.NavButton
         url: reverse("ui")
         titleText: "Back"
-      this.nav = new navigation.Nav
+      @nav = new navigation.Nav
         title: "Buttons"
         leftButton: backButton
-      this.view = new viewswitchers.View
+      @view = new viewswitchers.View
         template: templates.buttons
 
-      this.styleGroup = new ButtonGroup()
-      for style in this.styles
+      @styleGroup = new Group()
+      for style in @styles
         button = new Button
           titleText: capitalize(style)
           style: style
-        this.styleGroup.add(button)
+        @styleGroup.add(button)
 
-      this.sizeGroup = new ButtonGroup()
-      for size in this.sizes
+      @sizeGroup = new Group()
+      for size in @sizes
         button = new Button
           titleText: capitalize(size)
           size: size
-        this.sizeGroup.add(button)
+        @sizeGroup.add(button)
 
     oncreate: ->
-      this.app.navBar.add(this.nav)
-      this.nav.skeleton()
-      this.app.viewSwitcher.add(this.view)
-      this.view.skeleton()
-      this.styleGroup.skeletonTo($(".button-style-section", this.view.element))
-      this.sizeGroup.skeletonTo($(".button-size-section", this.view.element))
+      @app.navbar.add(@nav)
+      @nav.skeleton()
+      @app.viewSwitcher.add(@view)
+      @view.skeleton()
+      @styleGroup.skeletonTo($(".button-style-section", @view.element))
+      @sizeGroup.skeletonTo($(".button-size-section", @view.element))
       super
 
     onstart: ->
-      this.app.navBar.show(this.nav)
-      this.app.viewSwitcher.show(this.view)
-      this.nav.render()
-      this.view.render()
-      this.styleGroup.render()
-      this.sizeGroup.render()
+      @app.navbar.show(@nav)
+      @app.viewSwitcher.show(@view)
+      @nav.render()
+      @view.render()
+      @styleGroup.render()
+      @sizeGroup.render()
       super
 
     ondestroy: ->
-      this.styleSection.destroy()
-      this.sizeGroup.destroy()
-      this.nav.destroy()
-      this.view.destroy()
+      @styleSection.destroy()
+      @sizeGroup.destroy()
+      @nav.destroy()
+      @view.destroy()
       super
 
   UIButtonView: UIButtonView

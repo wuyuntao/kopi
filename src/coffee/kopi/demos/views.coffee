@@ -1,8 +1,8 @@
 define "kopi/demos/views", (require, exports, module) ->
 
   views = require "kopi/views"
-  lists = require "kopi/ui/lists"
-  adapters = require "kopi/ui/groups/adapters"
+  NavList = require("kopi/ui/lists").NavList
+  NavListItem = require("kopi/ui/lists/items").NavListItem
   navigation = require "kopi/ui/navigation"
   viewswitchers = require "kopi/ui/viewswitchers"
   settings = require "kopi/demos/settings"
@@ -12,40 +12,40 @@ define "kopi/demos/views", (require, exports, module) ->
 
     constructor: ->
       super
-      this.nav = new navigation.Nav(title: "Index")
-      this.view = new viewswitchers.View()
-      this.list = new lists.NavList()
+      @nav = new navigation.Nav(title: "Index")
+      @view = new viewswitchers.View()
+      @list = new NavList()
 
     oncreate: ->
-      self = this
-      self.app.navBar.add(self.nav)
-      self.nav.skeleton()
+      @app.navbar.add(@nav)
+      @nav.skeleton()
 
-      self.app.viewSwitcher.add(self.view)
-      self.view.skeleton()
+      @app.viewSwitcher.add(@view)
+      @view.skeleton()
 
-      self.list
-        .adapter(new adapters.ArrayAdapter([
-          ["App", "/app/"]
-          ["Model", "/model/"]
-          ["View", "/view/"]
-          ["UI", "/ui/"]
-        ])).skeletonTo(self.view.element)
+      categories = [
+        ["App", "/app/"]
+        ["Model", "/model/"]
+        ["View", "/view/"]
+        ["UI", "/ui/"]
+      ]
+      for category in categories
+        @list.add new NavListItem(@list, category)
+      @list.skeletonTo(@view.element)
       super
 
     onstart: ->
-      self = this
-      self.app.navBar.show(self.nav)
-      self.app.viewSwitcher.show(self.view)
-      self.nav.render()
-      self.view.render()
-      self.list.render()
+      @app.navbar.show(@nav)
+      @app.viewSwitcher.show(@view)
+      @nav.render()
+      @view.render()
+      @list.render()
       super
 
     ondestroy: ->
-      self.nav.destroy()
-      self.view.destroy()
-      self.list.destroy()
+      @nav.destroy()
+      @view.destroy()
+      @list.destroy()
       super
 
   IndexView: IndexView

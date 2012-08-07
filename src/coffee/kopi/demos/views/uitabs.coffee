@@ -43,7 +43,7 @@ define "kopi/demos/views/uitabs", (require, exports, module) ->
         .addPanel(panel5)
 
     oncreate: ->
-      this.app.navBar.add(this.nav)
+      this.app.navbar.add(this.nav)
       this.nav.skeleton()
       this.app.viewSwitcher.add(this.view)
       this.view.skeleton()
@@ -51,7 +51,7 @@ define "kopi/demos/views/uitabs", (require, exports, module) ->
       super
 
     onstart: ->
-      this.app.navBar.show(this.nav)
+      this.app.navbar.show(this.nav)
       this.app.viewSwitcher.show(this.view)
       this.nav.render()
       this.view.render()

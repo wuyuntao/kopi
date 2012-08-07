@@ -15,59 +15,59 @@ define "kopi/demos/views/uinotification", (require, exports, module) ->
       backButton = new navigation.NavButton
         url: reverse("ui")
         titleText: "Back"
-      this.nav = new navigation.Nav
+      @nav = new navigation.Nav
         title: "Notification"
         leftButton: backButton
-      this.view = new viewswitchers.View
+      @view = new viewswitchers.View
         template: templates.notification
 
-      this.indicatorButton = new Button
+      @indicatorButton = new Button
         titleText: "Show indicator"
-      this.indicatorButton.on Button.CLICK_EVENT, ->
+      @indicatorButton.on Button.CLICK_EVENT, ->
         notification.indicator().show()
         setTimeout (-> notification.indicator().hide()), 3000
 
-      this.bubbleButton = new Button
+      @bubbleButton = new Button
         titleText: "Show bubble"
-      this.bubbleButton.on Button.CLICK_EVENT, ->
+      @bubbleButton.on Button.CLICK_EVENT, ->
         notification.bubble().show "This is a bubble",
           lock: true,
           duration: 3000
 
-      this.dialogButton = new Button
+      @dialogButton = new Button
         titleText: "Show dialog"
-      this.dialogButton.on Button.CLICK_EVENT, ->
+      @dialogButton.on Button.CLICK_EVENT, ->
         notification.dialog()
           .title("This is a dialog")
           .content("Say something...")
           .show(lock: true)
 
     oncreate: ->
-      this.app.navBar.add(this.nav)
-      this.nav.skeleton()
-      this.app.viewSwitcher.add(this.view)
-      this.view.skeleton()
-      this.indicatorButton.skeletonTo($(".indicator-section", this.view.element))
-      this.bubbleButton.skeletonTo($(".bubble-section", this.view.element))
-      this.dialogButton.skeletonTo($(".dialog-section", this.view.element))
+      @app.navbar.add(@nav)
+      @nav.skeleton()
+      @app.viewSwitcher.add(@view)
+      @view.skeleton()
+      @indicatorButton.skeletonTo($(".indicator-section", @view.element))
+      @bubbleButton.skeletonTo($(".bubble-section", @view.element))
+      @dialogButton.skeletonTo($(".dialog-section", @view.element))
       super
 
     onstart: ->
-      this.app.navBar.show(this.nav)
-      this.app.viewSwitcher.show(this.view)
-      this.nav.render()
-      this.view.render()
-      this.indicatorButton.render()
-      this.bubbleButton.render()
-      this.dialogButton.render()
+      @app.navbar.show(@nav)
+      @app.viewSwitcher.show(@view)
+      @nav.render()
+      @view.render()
+      @indicatorButton.render()
+      @bubbleButton.render()
+      @dialogButton.render()
       super
 
     ondestroy: ->
-      this.indicatorButton.destroy()
-      this.bubbleButton.destroy()
-      this.dialogButton.destroy()
-      this.nav.destroy()
-      this.view.destroy()
+      @indicatorButton.destroy()
+      @bubbleButton.destroy()
+      @dialogButton.destroy()
+      @nav.destroy()
+      @view.destroy()
       super
 
   UINotificationView: UINotificationView

@@ -23,4 +23,4 @@ define "kopi/demos/main", (require, exports, module) ->
       this.navbar.destroy()
       this.viewSwitcher.destroy()
 
-  new DemoApp().start()
+  $ -> new DemoApp().start()
