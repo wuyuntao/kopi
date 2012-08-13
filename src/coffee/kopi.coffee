@@ -1,6 +1,6 @@
 ###!
+A lightweight CommonJS module manager for Kopi
 
-@fileoverview A lightweight CommonJS module manager for Kopi
 @author Wu Yuntao <wyt.brandon@gmail.com>
 @license MIT
 

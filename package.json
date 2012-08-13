@@ -1,5 +1,5 @@
 {
-  "name": "Kopi JavaScript Framework",
+  "name": "kopi",
   "description": "Kopi is a high-level webapp framework written in CoffeeScript",
   "version": "0.0.1",
   "author": "Wu Yuntao <wyt.brandon@gmail.com>",
