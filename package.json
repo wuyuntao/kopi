@@ -1,0 +1,36 @@
+{
+  "name": "Kopi JavaScript Framework",
+  "description": "Kopi is a high-level webapp framework written in CoffeeScript",
+  "version": "0.0.1",
+  "author": "Wu Yuntao <wyt.brandon@gmail.com>",
+  "contributors": [
+  ],
+  "bin": {
+  },
+  "scripts": {
+  },
+  "directories" : {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/wuyuntao/kopi.git"
+  },
+  "keywords": [
+    "kopi",
+    "javascript",
+    "framework"
+  ],
+  "dependencies" : {
+  },
+  "noAnalyze": true,
+  "devDependencies": {
+    "dox": ">=0.3.1"
+  },
+  "bundleDependencies": [
+  ],
+  "engine": {
+    "node": ">=0.8"
+  }
+}
+
+

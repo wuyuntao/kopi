@@ -4,8 +4,8 @@
 """
 A Script to build JavaScript dependency tree
 
-@author     Brandon Wu
-@version    0.2
+@author     Wu Yuntao
+@version    0.2.0
 
 """
 

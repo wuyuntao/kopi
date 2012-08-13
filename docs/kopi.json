@@ -1,0 +1,59 @@
+[
+  {
+    "tags": [
+      {
+        "type": "author",
+        "string": "Wu Yuntao <wyt.brandon@gmail.com>"
+      },
+      {
+        "type": "license",
+        "string": "MIT"
+      }
+    ],
+    "description": {
+      "full": "<p>@fileoverview A lightweight CommonJS module loader for Kopi</p>",
+      "summary": "<p>@fileoverview A lightweight CommonJS module loader for Kopi</p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": true,
+    "code": "(function() {\n  var Module, define, isArray, isObject, modules, require;\n\n  isArray = function(array) {\n    return !!(array && array.concat && array.unshift && !array.callee);\n  };\n\n  isObject = function(obj) {\n    return typeof obj === \"object\";\n  };\n\n  modules = {};\n\n  Module = (function() {\n\n    function Module(id, deps, exports) {\n      this.id = id;\n      this.deps = deps != null ? deps : [];\n      this.exports = exports != null ? exports : {};\n      modules[this.id] = this;\n    }\n\n    return Module;\n\n  })();"
+  },
+  {
+    "tags": [],
+    "description": {
+      "full": "<p>Imports a module.</p>\n\n<p>@param {string} id The module id.</p>\n\n<p>@return {Module}</p>",
+      "summary": "<p>Imports a module.</p>\n\n<p>@param {string} id The module id.</p>\n\n<p>@return {Module}</p>",
+      "body": ""
+    },
+    "ignore": false,
+    "code": "require = function(id) {\n    var module;\n    module = modules[id];\n    return module && module.exports;\n  };"
+  },
+  {
+    "tags": [],
+    "description": {
+      "full": "<p>Defines a module.</p>\n\n<p>@param {string} id The module id.<br />  @param {Array} deps The module dependencies.<br />  @param {Function|Object} factory The module factory function.</p>\n\n<p>@return {Module}</p>",
+      "summary": "<p>Defines a module.</p>\n\n<p>@param {string} id The module id.<br />  @param {Array} deps The module dependencies.<br />  @param {Function|Object} factory The module factory function.</p>\n\n<p>@return {Module}</p>",
+      "body": ""
+    },
+    "ignore": false,
+    "code": "define = function(id, deps, factory) {\n    var argsLen, exports, module;\n    argsLen = arguments.length;\n    if (argsLen === 1) {\n      factory = id;\n      id = void 0;\n    } else if (argsLen === 2) {\n      factory = deps;\n      deps = void 0;\n      if (isArray(id)) {\n        deps = id;\n        id = void 0;\n      }\n    }\n    if (!id) {\n      throw new Error(\"id must be specifed\");\n    }\n    if (id in modules) {\n      throw new Error(\"module \" + id + \" is already defined\");\n    }\n    module = new Module(id, deps);\n    if (isObject(factory)) {\n      module.exports = factory;\n    } else if (factory) {\n      exports = factory.call(module, require, module.exports, module);\n      module.exports = exports || {};\n    } else {\n      module.exports = {};\n    }\n    return module;\n  };"
+  },
+  {
+    "tags": [],
+    "description": {
+      "full": "<p>Exports</p>",
+      "summary": "<p>Exports</p>",
+      "body": ""
+    },
+    "ignore": true,
+    "code": "define.amd = {\n    jQuery: true\n  };\n\n  this.define = define;\n\n  this.require = require;\n\n}).call(this);",
+    "ctx": {
+      "type": "property",
+      "receiver": "define",
+      "name": "amd",
+      "value": "{",
+      "string": "define.amd"
+    }
+  }
+]

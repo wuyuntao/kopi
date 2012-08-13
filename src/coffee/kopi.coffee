@@ -1,25 +1,35 @@
+###!
+
+@fileoverview A lightweight CommonJS module manager for Kopi
+@author Wu Yuntao <wyt.brandon@gmail.com>
+@license MIT
+
 ###
-Helper methods
-###
+
+# An helper method to check if object is an Array
 isArray = (array) -> !!(array and array.concat and array.unshift and not array.callee)
 
+# An helper method to check if object is an Object
 isObject = (obj) -> typeof obj is "object"
 
-###
-Module class.
-
-@constructor
-@param {String} id The module id.
-@param {Array.<String>|String} deps The module dependencies.
-@param {Function|Object} factory The module factory function.
-###
-class Module
-
-  constructor: (@id, @deps=[], @factory, @exports={}) ->
-
-# @type  {Object} Cache contains all modules
+# A cache object contains all modules with their ids
 modules = {}
 
+# Internal module class holding module id, dependencies and exports
+class Module
+
+  constructor: (@id, @deps=[], @exports={}) ->
+    # Append module to cache
+    modules[@id] = this
+
+###
+Imports a module.
+
+@param {string} id The module id.
+
+@return {Module}
+
+###
 require = (id) ->
   module = modules[id]
   module and module.exports
@@ -27,9 +37,12 @@ require = (id) ->
 ###
 Defines a module.
 
-@param {string=} id The module id.
-@param {Array.<string>|string=} deps The module dependencies.
-@param {function()|Object} factory The module factory function.
+@param {string} id The module id.
+@param {Array} deps The module dependencies.
+@param {Function|Object} factory The module factory function.
+
+@return {Module}
+
 ###
 define = (id, deps, factory) ->
   argsLen = arguments.length
@@ -49,22 +62,29 @@ define = (id, deps, factory) ->
       deps = id
       id = undefined
 
-  module = new Module(id, deps, factory)
-  if id of modules
-    throw new Error("module is double defined!")
+  throw new Error("id must be specifed") unless id
+  throw new Error("module #{id} is already defined") if id of modules
 
-  modules[id] = module if id
+  module = new Module(id, deps)
+  # Initialize exports
   if isObject(factory)
     module.exports = factory
   else if factory
     exports = factory.call(module, require, module.exports, module)
-    module.exports = exports if exports
+    module.exports = exports or {}
+  else
+    module.exports = {}
 
   module
 
+###!
+Exports
+###
+
+# Enable AMD for jQuery
 define.amd =
   jQuery: true
 
-# Export define method
+# Export define() and require() methods
 this.define = define
 this.require = require
