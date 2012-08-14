@@ -6,10 +6,10 @@ define "kopi/tests/logging", (require, exports, module) ->
   q.module "kopi.logging"
 
   q.test "default logger", ->
-    logging.log "log message"
-    logging.info "info message"
-    logging.warn "warn message"
-    logging.error "error message"
+    logging.log "log message", [1, 2, 3]
+    logging.info "info message", key: 'value'
+    logging.warn "warn message", "Help!"
+    logging.error "error message", new Error("Something is Wrong")
     q.ok true
 
   q.test "time metrics", ->
