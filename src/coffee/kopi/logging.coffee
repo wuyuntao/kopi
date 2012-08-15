@@ -1,5 +1,5 @@
 ###!
-A simple logging library that improve the original console
+# A simple logging library that improve the original console
 with timeline and custom tag support.
 
 @author Wu Yuntao <wyt.brandon@gmail.com>
@@ -112,6 +112,7 @@ define "kopi/logging", (require, exports, module) ->
     # output: [INFO] [0.031s] [kopi] info message
     logger.info "info message"
 
+  @class
   ###
   class Logger
 
