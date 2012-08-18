@@ -3,7 +3,7 @@ define "kopi/tests/logging", (require, exports, module) ->
   q = require "qunit"
   logging = require "kopi/logging"
 
-  q.module "kopi.logging"
+  q.module "kopi/logging"
 
   q.test "default logger", ->
     logging.log "log message", [1, 2, 3]

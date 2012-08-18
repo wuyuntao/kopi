@@ -51,32 +51,32 @@ define "kopi/tests/app", (require, exports, module) ->
         useInterval: false
         alwaysUseHash: false
 
-      stop()
+      q.stop()
       app.once DeltaApp.REQUEST_EVENT, (e, url) ->
-        q.equals url.path, "/alpha"
-        start()
+        q.equal url.path, "/alpha"
+        q.start()
       app.load "/alpha"
       app.currentURL = "/alpha"
-      q.equals loc.pathname, "/alpha"
+      q.equal loc.pathname, "/alpha"
 
-      stop()
+      q.stop()
       app.once DeltaApp.REQUEST_EVENT, (e, url) ->
-        q.equals url.path, "/alpha/1"
-        start()
+        q.equal url.path, "/alpha/1"
+        q.start()
       app.load "/alpha/1"
       app.currentURL = "/alpha/1"
-      q.equals loc.pathname, "/alpha/1"
+      q.equal loc.pathname, "/alpha/1"
 
-      stop()
+      q.stop()
       app.once DeltaApp.REQUEST_EVENT, (e, url) ->
-        q.equals url.path, "/alpha"
-        start()
+        q.equal url.path, "/alpha"
+        q.start()
       hist.back()
-      stop()
+      q.stop()
       waitFn = ->
         app.currentURL = "/alpha"
-        q.equals loc.pathname, "/alpha"
-        start()
+        q.equal loc.pathname, "/alpha"
+        q.start()
 
         # Revert original URL
         hist.pushState(null, null, base)
@@ -91,32 +91,32 @@ define "kopi/tests/app", (require, exports, module) ->
         useInterval: false
         alwaysUseHash: true
 
-      stop()
+      q.stop()
       app.once DeltaApp.REQUEST_EVENT, (e, url) ->
-        q.equals url.path, "/alpha"
-        start()
+        q.equal url.path, "/alpha"
+        q.start()
       app.load "/alpha"
       app.currentURL = "/alpha"
-      q.equals loc.hash, "#../alpha"
+      q.equal loc.hash, "#../alpha"
 
-      stop()
+      q.stop()
       app.once DeltaApp.REQUEST_EVENT, (e, url) ->
-        q.equals url.path, "/alpha/1"
-        start()
+        q.equal url.path, "/alpha/1"
+        q.start()
       app.load "/alpha/1"
       app.currentURL = "/alpha/1"
-      q.equals loc.hash, "#../alpha/1"
+      q.equal loc.hash, "#../alpha/1"
 
-      stop()
+      q.stop()
       app.once DeltaApp.REQUEST_EVENT, (e, url) ->
-        q.equals url.path, "/alpha"
-        start()
+        q.equal url.path, "/alpha"
+        q.start()
       hist.back()
-      stop()
+      q.stop()
       waitFn = ->
         app.currentURL = "/alpha"
-        q.equals loc.hash, "#../alpha"
-        start()
+        q.equal loc.hash, "#../alpha"
+        q.start()
 
         # Revert original URL
         hist.pushState(null, null, base)
@@ -133,18 +133,18 @@ define "kopi/tests/app", (require, exports, module) ->
 
       app.load "/alpha"
       app.currentURL = "/alpha"
-      q.equals loc.hash, "#../alpha"
+      q.equal loc.hash, "#../alpha"
 
       app.load "/alpha/1"
       app.currentURL = "/alpha/1"
-      q.equals loc.hash, "#../alpha/1"
+      q.equal loc.hash, "#../alpha/1"
 
       hist.back()
-      stop()
+      q.stop()
       waitFn = ->
         app.currentURL = "/alpha"
-        q.equals loc.hash, "#../alpha"
-        start()
+        q.equal loc.hash, "#../alpha"
+        q.start()
 
         # Revert original URL
         hist.pushState(null, null, base)

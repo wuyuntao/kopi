@@ -13,7 +13,7 @@ define "kopi/events", (require, exports, module) ->
   # A help method to make a proxy function for `EventEmitter`
   proxy = (method) ->
     ->
-      (@__emitter__ or= $(this))[method].apply(this, arguments)
+      (@__emitter__ or= $(this))[method] arguments...
       this
 
   ###
@@ -36,6 +36,44 @@ define "kopi/events", (require, exports, module) ->
     EventEmitter = require("kopi/events").EventEmitter
 
     class View extends EventEmitter
+
+    view = new View()
+
+  ## Add event listeners
+
+  Add a listener for the event.
+
+    view.on "update", (e) ->
+      console.log "view is updated."
+
+  Add a one-time listener for the event. This listener is invoked at most once per object.
+
+    view.once "create", (e) ->
+      console.log "view is created"
+
+  ## Remove event listeners
+
+  Remove a listener from the listener array for the specified event
+
+    callback = (e) ->
+      console.log "view is updated"
+    view.on "update", callback
+    # ...
+    view.off "update", callback
+
+  Remove all listeners of specified event
+
+    view.off "create"
+
+  Remove all listeners attached on object
+
+    view.off()
+
+  ## Get listeners
+
+  Get attached listeners of specified event
+
+    view.listeners "update"
 
   @class
   ###
@@ -63,7 +101,7 @@ define "kopi/events", (require, exports, module) ->
     @param {Function} eventHandler
     @return {EventEmitter}
     ###
-    on:   proxy "on"
+    on:   proxy "bind"
 
     ###
     A proxy function for `jQuery.one()`.
@@ -90,10 +128,22 @@ define "kopi/events", (require, exports, module) ->
     @return {EventEmitter}
     ###
     off: ->
-      (@__emitter__ or= $(this)).off.apply(this, arguments)
+      (@__emitter__ or= $(this)).unbind arguments...
       # Release `this.__emitter__` if all event listeners are removed
       delete @__emitter__ if arguments.length == 0
       this
+
+    ###
+    Returns an array of listeners for given event.
+
+    @public
+    @param {String} eventType
+    @return {Array}
+    ###
+    listeners: (event)->
+      return [] unless @__emitter__
+      events = @__emitter__.data("events")
+      unless events then [] else (events[event] or [])
 
   ###!
   Exports `EventEmitter`
