@@ -1,15 +1,21 @@
+###!
+Enable to use new elements in HTML5 for legacy IE.
+
+@author Wu Yuntao <wyt.brandon@gmail.com>
+@license MIT
+
+###
 define "kopi/ie", ->
 
-  doc = document
-  doc.createElement('header')
-  doc.createElement('hgroup')
-  doc.createElement('nav')
-  doc.createElement('menu')
-  doc.createElement('section')
-  doc.createElement('article')
-  doc.createElement('aside')
-  doc.createElement('footer')
-  doc.createElement('figure')
-  doc.createElement('figurecaption')
+  # TODO
+  # Shall we just use html5shiv instead?
+  #
+  # -- wuyuntao, 2012-08-18
+  createElement = ->
+    doc = document
+    doc.createElement(tag) for tag in arguments
+    return
+  createElement 'header', 'hgroup', 'nav', 'menu', 'section',
+    'article', 'aside', 'footer', 'figure', 'figurecaption'
 
   return

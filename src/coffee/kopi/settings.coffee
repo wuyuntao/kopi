@@ -33,14 +33,6 @@ define "kopi/settings", (require, exports, module) ->
     logging:
       # @type  {Integer}        Default log level
       level:    0
-      # @type  {Boolean}        Write logs to console
-      console:  true
-      # @type  {Boolean}        Write logs to HTML element (not supported yet)
-      # html:     false
-      # @type  {Boolean}        Write logs to database (not supported yet)
-      # database: false
-      # @type  {Boolean}        Send logs to server (not supported yet)
-      # remote:   false
 
     ui:
       # @type  {String}         CSS class prefix added to widgets
