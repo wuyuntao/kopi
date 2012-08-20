@@ -22,7 +22,7 @@ EXCLUDE_PATHS = (
 )
 DOC_FORMAT = 'markdown'
 RE_COMMENT_BLOCK = re.compile(r'###(.*?)###', re.M|re.S)
-RE_INDENT = re.compile(r'^(\ +)', re.M)
+RE_INDENT = re.compile(r'^(\ *)', re.M)
 
 def find_coffee(coffee_path=COFFEE_PATH):
     ''' Find javascript files in directory '''

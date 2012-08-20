@@ -79,7 +79,7 @@ define "alpha",
   say: -> console.log "say"
   hello: -> console.log "hello"
 
-``
+```
 
 ###
 define = (id, deps, factory) ->

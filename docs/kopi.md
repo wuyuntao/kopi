@@ -39,11 +39,11 @@ Either AMD-style or CommonJS-style dependencies are supported.
 ```coffeescript
 define "alpha", ["beta"], (require, exports, module, beta) ->
 
-gamma = require "gamma"
+  gamma = require "gamma"
 
-exports.hello = ->
-  beta.hello()
-  gamma.hello()
+  exports.hello = ->
+    beta.hello()
+    gamma.hello()
 
 ```
 
@@ -52,8 +52,8 @@ An module can return an object as its exports
 ```coffeescript
 define "alpha", (require, exports, module) ->
 
-say: -> console.log "say"
-hello: -> console.log "hello"
+  say: -> console.log "say"
+  hello: -> console.log "hello"
 
 ```
 
@@ -61,10 +61,10 @@ Or define module with an object directly
 
 ```coffeescript
 define "alpha",
-say: -> console.log "say"
-hello: -> console.log "hello"
+  say: -> console.log "say"
+  hello: -> console.log "hello"
 
-``
+```
 
 
 ## Imports a module.
