@@ -96,6 +96,79 @@ define "kopi/logging", (require, exports, module) ->
       console or= window.console
 
     ###
+    ## Logging
+
+    `Logger` has a similar interface to `console` object. But only following
+    methods are supported: `log`, `info`, `warn`, `error`, `time`, `timeEnd`
+
+    ```coffeescript
+    # output: [LOG] [0.027s] [kopi] log message [1, 2, 3]
+    logger.log "log message", [1, 2, 3]
+
+    # output: [INFO] [0.031s] [kopi] info message > Object
+    logger.info "info message", key: 'value'
+
+    # output: [WARN] [0.031s] [kopi] warn message Help!
+    logger.warn "warn message", "Help!"
+
+    # output: [ERROR] [0.031s] [kopi] error message > Error
+    logger.error "error message", new Error("Something is Wrong")
+
+    # output: [LOG] [0.034s] [kopi] time started
+    logger.time "prof"
+
+    # output [LOG] [1.035s] [kopi] time stoped. spent 1001ms.
+    logger.timeEnd "prof"
+    ```
+
+    ###
+
+    ###
+    ## logger.log()
+    ###
+    log: NOOP_FN
+    ###
+    ## logger.info()
+    ###
+    info: NOOP_FN
+    ###
+    ## logger.warn()
+    ###
+    warn: NOOP_FN
+    ###
+    ## logger.error()
+    ###
+    error: NOOP_FN
+
+    ###
+    ## logger.time()
+    ###
+    time: (name, options={}) ->
+      key = "#{@_name}:#{name}"
+      timer = timers[key]
+      return if timer
+      @log "#{name} started"
+      timers[key] = new Date()
+      accumulators[key] or= [] if options.accumulate
+      this
+
+    ###
+    ## logger.timeEnd()
+    ###
+    timeEnd: (name, options={}) ->
+      key = "#{@_name}:#{name}"
+      timer = timers[key]
+      return if not timer
+      time = new Date() - timer
+      message = "#{name} stoped. spent #{time}ms."
+      if options.accumulate
+        accumulators[key].push(time)
+        message += " total #{array.sum(accumulators[key])}ms. average #{array.average(accumulators[key])}ms."
+      @log message
+      timers[key] = null
+      this
+
+    ###
     ## logger.name()
 
     Return name of logger
@@ -136,55 +209,6 @@ define "kopi/logging", (require, exports, module) ->
         else
           defineNoopMethod this, name
       @_level = level
-      this
-
-    ###
-    ## Logging
-
-    `Logger` has a similar interface to `console` object. But only following
-    methods are supported: `log`, `info`, `warn`, `error`, `time`, `timeEnd`
-
-    ```coffeescript
-    # output: [LOG] [0.027s] [kopi] log message [1, 2, 3]
-    logger.log "log message", [1, 2, 3]
-
-    # output: [INFO] [0.031s] [kopi] info message > Object
-    logger.info "info message", key: 'value'
-
-    # output: [WARN] [0.031s] [kopi] warn message Help!
-    logger.warn "warn message", "Help!"
-
-    # output: [ERROR] [0.031s] [kopi] error message > Error
-    logger.error "error message", new Error("Something is Wrong")
-
-    # output: [LOG] [0.034s] [kopi] time started
-    logger.time "prof"
-
-    # output [LOG] [1.035s] [kopi] time stoped. spent 1001ms.
-    logger.timeEnd "prof"
-    ```
-
-    ###
-    time: (name, options={}) ->
-      key = "#{@_name}:#{name}"
-      timer = timers[key]
-      return if timer
-      @log "#{name} started"
-      timers[key] = new Date()
-      accumulators[key] or= [] if options.accumulate
-      this
-
-    timeEnd: (name, options={}) ->
-      key = "#{@_name}:#{name}"
-      timer = timers[key]
-      return if not timer
-      time = new Date() - timer
-      message = "#{name} stoped. spent #{time}ms."
-      if options.accumulate
-        accumulators[key].push(time)
-        message += " total #{array.sum(accumulators[key])}ms. average #{array.average(accumulators[key])}ms."
-      @log message
-      timers[key] = null
       this
 
   # Default logger

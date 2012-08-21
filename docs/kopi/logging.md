@@ -38,6 +38,44 @@ logger = logging.logger 'name_of_logger',
 ```
 
 
+## Logging
+
+`Logger` has a similar interface to `console` object. But only following
+methods are supported: `log`, `info`, `warn`, `error`, `time`, `timeEnd`
+
+```coffeescript
+# output: [LOG] [0.027s] [kopi] log message [1, 2, 3]
+logger.log "log message", [1, 2, 3]
+
+# output: [INFO] [0.031s] [kopi] info message > Object
+logger.info "info message", key: 'value'
+
+# output: [WARN] [0.031s] [kopi] warn message Help!
+logger.warn "warn message", "Help!"
+
+# output: [ERROR] [0.031s] [kopi] error message > Error
+logger.error "error message", new Error("Something is Wrong")
+
+# output: [LOG] [0.034s] [kopi] time started
+logger.time "prof"
+
+# output [LOG] [1.035s] [kopi] time stoped. spent 1001ms.
+logger.timeEnd "prof"
+```
+
+
+## logger.log()
+
+## logger.info()
+
+## logger.warn()
+
+## logger.error()
+
+## logger.time()
+
+## logger.timeEnd()
+
 ## logger.name()
 
 Return name of logger
@@ -64,32 +102,6 @@ logger.level logging.LOG
 
 # output: [INFO] [0.031s] [kopi] info message
 logger.info "info message"
-```
-
-
-## Logging
-
-`Logger` has a similar interface to `console` object. But only following
-methods are supported: `log`, `info`, `warn`, `error`, `time`, `timeEnd`
-
-```coffeescript
-# output: [LOG] [0.027s] [kopi] log message [1, 2, 3]
-logger.log "log message", [1, 2, 3]
-
-# output: [INFO] [0.031s] [kopi] info message > Object
-logger.info "info message", key: 'value'
-
-# output: [WARN] [0.031s] [kopi] warn message Help!
-logger.warn "warn message", "Help!"
-
-# output: [ERROR] [0.031s] [kopi] error message > Error
-logger.error "error message", new Error("Something is Wrong")
-
-# output: [LOG] [0.034s] [kopi] time started
-logger.time "prof"
-
-# output [LOG] [1.035s] [kopi] time stoped. spent 1001ms.
-logger.timeEnd "prof"
 ```
 
 
