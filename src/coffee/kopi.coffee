@@ -62,17 +62,16 @@ define "alpha", ["beta"], (require, exports, module, beta) ->
 
 ```
 
-An module can return an object as its exports
+An module can return an object as its exports.
 
 ```coffeescript
 define "alpha", (require, exports, module) ->
-
   say: -> console.log "say"
   hello: -> console.log "hello"
 
 ```
 
-Or define module with an object directly
+Or define module with an object directly.
 
 ```coffeescript
 define "alpha",

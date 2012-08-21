@@ -22,7 +22,7 @@ EXCLUDE_PATHS = (
 )
 DOC_FORMAT = 'markdown'
 RE_COMMENT_BLOCK = re.compile(r'###(.*?)###', re.M|re.S)
-RE_INDENT = re.compile(r'^(\ *)', re.M)
+RE_INDENT = re.compile(r'^(\ *)([^\s])', re.M)
 
 def find_coffee(coffee_path=COFFEE_PATH):
     ''' Find javascript files in directory '''
@@ -69,7 +69,7 @@ def parse_doc(coffee=""):
         if block.startswith("!") or not block.strip():
             continue
         # Remove indent
-        indents = [len(ws) for ws in RE_INDENT.findall(block)]
+        indents = [len(ws[0]) for ws in RE_INDENT.findall(block)]
         if len(indents) == 0:
             doc += block.lstrip() + '\n'
         else:
