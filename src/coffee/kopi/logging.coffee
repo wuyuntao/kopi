@@ -31,9 +31,8 @@ define "kopi/logging", (require, exports, module) ->
   A simple logging library that improve the original console
   with timeline and custom tag support.
 
-  ## Logging levels
-
-  Just like `console`, a logger has 4 logging levels in a specific order
+  Just like `console`, a logger has four logging levels in a
+  specific order.
 
   ```
   LOG < INFO < WARN < ERROR
@@ -96,52 +95,48 @@ define "kopi/logging", (require, exports, module) ->
       console or= window.console
 
     ###
-    ## Logging
+    ## logger.log()
 
-    `Logger` has a similar interface to `console` object. But only following
-    methods are supported: `log`, `info`, `warn`, `error`, `time`, `timeEnd`
+    `Logger` has a similar interface to `console` object. But only
+    following methods are supported: `log`, `info`, `warn`, `error`,
+    `time`, `timeEnd`.
 
     ```coffeescript
     # output: [LOG] [0.027s] [kopi] log message [1, 2, 3]
     logger.log "log message", [1, 2, 3]
-
-    # output: [INFO] [0.031s] [kopi] info message > Object
-    logger.info "info message", key: 'value'
-
-    # output: [WARN] [0.031s] [kopi] warn message Help!
-    logger.warn "warn message", "Help!"
-
-    # output: [ERROR] [0.031s] [kopi] error message > Error
-    logger.error "error message", new Error("Something is Wrong")
-
-    # output: [LOG] [0.034s] [kopi] time started
-    logger.time "prof"
-
-    # output [LOG] [1.035s] [kopi] time stoped. spent 1001ms.
-    logger.timeEnd "prof"
     ```
 
-    ###
-
-    ###
-    ## logger.log()
     ###
     log: NOOP_FN
     ###
     ## logger.info()
+
+    Same as `logger.log()`.
     ###
     info: NOOP_FN
     ###
     ## logger.warn()
+
+    Same as `logger.log()`.
     ###
     warn: NOOP_FN
     ###
     ## logger.error()
+
+    Same as `logger.log()`.
     ###
     error: NOOP_FN
 
     ###
-    ## logger.time()
+    ## logger.time(label)
+
+    Start a timer
+
+    ```coffeescript
+    # output: [LOG] [0.034s] [kopi] time started
+    logger.time "prof"
+    ```
+
     ###
     time: (name, options={}) ->
       key = "#{@_name}:#{name}"
@@ -153,7 +148,15 @@ define "kopi/logging", (require, exports, module) ->
       this
 
     ###
-    ## logger.timeEnd()
+    ## logger.timeEnd(label)
+
+    Finish timer and record the time spent.
+
+    ```coffeescript
+    # output [LOG] [1.035s] [kopi] time stoped. spent 1001ms.
+    logger.timeEnd "prof"
+    ```
+
     ###
     timeEnd: (name, options={}) ->
       key = "#{@_name}:#{name}"

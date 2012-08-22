@@ -3,9 +3,8 @@
 A simple logging library that improve the original console
 with timeline and custom tag support.
 
-## Logging levels
-
-Just like `console`, a logger has 4 logging levels in a specific order
+Just like `console`, a logger has four logging levels in a
+specific order.
 
 ```
 LOG < INFO < WARN < ERROR
@@ -38,43 +37,49 @@ logger = logging.logger 'name_of_logger',
 ```
 
 
-## Logging
+## logger.log()
 
-`Logger` has a similar interface to `console` object. But only following
-methods are supported: `log`, `info`, `warn`, `error`, `time`, `timeEnd`
+`Logger` has a similar interface to `console` object. But only
+following methods are supported: `log`, `info`, `warn`, `error`,
+`time`, `timeEnd`.
 
 ```coffeescript
 # output: [LOG] [0.027s] [kopi] log message [1, 2, 3]
 logger.log "log message", [1, 2, 3]
+```
 
-# output: [INFO] [0.031s] [kopi] info message > Object
-logger.info "info message", key: 'value'
 
-# output: [WARN] [0.031s] [kopi] warn message Help!
-logger.warn "warn message", "Help!"
+## logger.info()
 
-# output: [ERROR] [0.031s] [kopi] error message > Error
-logger.error "error message", new Error("Something is Wrong")
+Same as `logger.log()`.
 
+## logger.warn()
+
+Same as `logger.log()`.
+
+## logger.error()
+
+Same as `logger.log()`.
+
+## logger.time(label)
+
+Start a timer
+
+```coffeescript
 # output: [LOG] [0.034s] [kopi] time started
 logger.time "prof"
+```
 
+
+## logger.timeEnd(label)
+
+Finish timer and record the time spent.
+
+```coffeescript
 # output [LOG] [1.035s] [kopi] time stoped. spent 1001ms.
 logger.timeEnd "prof"
 ```
 
-
-## logger.log()
-
-## logger.info()
-
-## logger.warn()
-
-## logger.error()
-
-## logger.time()
-
-## logger.timeEnd()
 
 ## logger.name()
 
