@@ -1,58 +1,37 @@
-###!
-# Common utilities
-
-@author Wu Yuntao <wyt.brandon@gmail.com>
-@license MIT
-
-###
-
 define "kopi/utils", (require, exports, module) ->
 
   $ = require "jquery"
 
   ###
-  Generate unique ID
+  # Common utilities
 
-  @param  {String}  prefix
-  @return {String}
+  ## guid([prefix])
+
+  Generate unique ID.
+
+  `prefix` is a string to make guid more readable. If not specified,
+  "kopi" will be used as default.
+
+  ```coffeescript
+  class View
+    constructor: ->
+      cls = this.constructor
+      # Generate guid by class name: "view-1"
+      this.guid = utils.guid(text.dasherize(cls.name))
+
+  ```
+
   ###
   counter = 0
   guid = (prefix='kopi') -> prefix + '-' + counter++
 
   ###
-  Is the given value a promise object?
+  ## isRegExp(regexp)
 
-  @param  {Object}  obj
-  @return {Boolean}
-  ###
-  isPromise = (obj) ->
-    !!(obj.then and obj.done and obj.fail and obj.pipe and
-      not obj.reject and not obj.resolve)
+  Check if the given value is a regular expression.
 
   ###
-  A helper method to convert a sync method response to promise
+  isRegExp = (obj) -> !!(obj and obj.exec and (obj.ignoreCase or obj.ignoreCase is false))
 
-  @param  {Object}  obj
-  @return {Promise}
-  ###
-  forcePromise = (obj) ->
-    return obj if isPromise(obj)
-
-    deferred = new $.Deferred()
-    if obj is false then deferred.reject() else deferred.resolve()
-    deferred.promise()
-
-  ###
-  Is the given value a regular expression?
-
-  @param {RegExp} obj
-  @return {Boolean}
-  ###
-  isRegExp    = (obj) -> !!(obj and obj.exec and (obj.ignoreCase or obj.ignoreCase is false))
-
-  ###!
-  Exports
-  ###
   guid: guid
-  isPromise: isPromise
   isRegExp: isRegExp
