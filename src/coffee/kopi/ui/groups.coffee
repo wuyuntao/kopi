@@ -52,8 +52,8 @@ define "kopi/ui/groups", (require, exports, module) ->
         # TODO Add custom exception
         throw new exceptions.ValueError("Already added!!!")
       child.end(self)
-      array.insertAt(self._keys, index, self._key(child))
-      array.insertAt(self._children, index, child)
+      array.insertAt(self._keys, self._key(child), index)
+      array.insertAt(self._children, child, index)
       self._appendChild(child)
       child
 

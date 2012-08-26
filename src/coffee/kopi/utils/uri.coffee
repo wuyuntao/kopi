@@ -170,7 +170,7 @@ define "kopi/utils/uri", (require, exports, module) ->
         count = i
         break
 
-    relative = array.fill(par, basePath.length - count).concat(path[count...path.length])
+    relative = array.fill([], par, basePath.length - count).concat(path[count...path.length])
     # Restore last slash if filename is empty
     relative.push(filename)
 

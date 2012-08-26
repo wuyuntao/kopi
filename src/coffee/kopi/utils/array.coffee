@@ -1,36 +1,107 @@
 define "kopi/utils/array", (require, exports, module) ->
 
-  exceptions = require "kopi/exceptions"
-  utils = require "kopi/utils"
+  ###
+  # Array utilities
 
-  math = Math
+  This module provides useful functional helpers for `Array`. It delegates
+  to built-in functions, if present, using the native implementations of
+  `forEach`, `map`, `indexOf`.
+
+  You can access the module by doing:
+
+  ```coffeescript
+  array = require "kopi/utils/array"
+  ```
+
+  ###
 
   # Establish the object that gets thrown to break out of a loop iteration.
   # `StopIteration` is SOP on Mozilla.
-  breaker = if typeof(StopIteration) is 'undefined' then '__break__' else StopIteration
+  breaker = if typeof StopIteration is 'undefined' then '__break__' else StopIteration
+
+  # Local reference for speed access to global methods
+  math = Math
 
   ArrayProto = Array.prototype
 
+  # Native methods of array
+  nativeSlice = ArrayProto.slice
+  nativeSplice = ArrayProto.nativeSplice
+  nativeIndexOf = ArrayProto.indexOf
+  nativeMap = ArrayProto.nativeMap
+
   ###
-  Select a random item from array
+  ## clone(array)
+
+  Create a shallow-copied clone of the `array`. Any nested objects
+  or arrays will be copied by reference, not duplicated.
+
+  ```coffeescript
+  # return: [1, 2, 3]
+  array.clone [1, 2, 3]
+  ```
   ###
-  choice = (array) ->
-    array[math.round(math.random() * (array.length - 1))]
+  clone = (array) -> nativeSlice.call array, 0
 
-  clone = (array) -> array.slice(0)
+  ###
+  ## empty(array)
 
-  count = (array, iterator, context) ->
-    n = 0
-    for v, i in array
-      n += 1 if iterator.call context, v, i
-    n
+  Remove all objects from the `array`.
 
-  empty = (array) -> array.length = 0
+  ```coffeescript
+  # return: []
+  array.empty [1, 2, 3]
+  ```
 
-  fill = (value, count) ->
-    if count == 0 then [] else (value for i in [0...count])
+  ###
+  empty = (array) ->
+    array.length = 0
+    array
 
-  forEach = (array, iterator, context) ->
+  ###
+  ## fill(array, value[, count])
+
+  Fill the `array` with the specific `value`. if `count` (defaults
+  to `array.length`) is not given it will fill the entire array.
+
+  ```coffeescript
+  # return: [1, 1, 1]
+  array.fill [], 1, 3
+
+  # return: [1, 1, 1]
+  array.fill [0, 0, 0], 2
+  ```
+
+  ###
+  fill = (array, value, count) ->
+    count or= array.length
+    if count > 0
+      for i in [0...count]
+        array[i] = value
+    value
+
+  ###
+  ## forEach(array, iterator[, context])
+
+  Iterate over the `array`, yielding each in turn to an `iterator`
+  function. The iterator is bound to the `context` object, if one
+  is specified.
+
+  `iterator` function is called with three arguments:
+  `(value, index, array)`.
+
+  Delegates to Javascript's native `forEach` function if available.
+
+  ```coffeescript
+  # output:
+  # 0: a
+  # 1: b
+  # 2: c
+  array.forEach ["a", "b", "c"], (n, i) -> console.log "#{i}: #{n}"
+  ```
+
+  ###
+  forEach = ArrayProto.forEach or= (array, iterator, context) ->
     try
       iterator.call(context, v, i, array) for v, i in array
     catch e
@@ -38,14 +109,34 @@ define "kopi/utils/array", (require, exports, module) ->
     array
 
   ###
-  Asynchronous sequential version of Array.prototype.forEach
+  ## asyncForEach(array, iterator[, fn][, context])
 
-  @param  {Array}     array     the array to iterate over
-  @param  {Function}  iterator  the function to apply to each item in the array,
-                                function has three argument, the first is the item
-                                value, the second is the item index, the third is
-                                a callback function
-  @param  {Function}  fn        the function to call when the forEach has ended
+  Asynchronous sequential version of `forEach` function.
+
+  Iterate over the `array`, yielding each in turn to an `iterator`
+  function. The iterator is bound to the `context` object, if one
+  is specified.
+
+  `iterator` function is called with four arguments:
+  `(value, index, callback, array)`. `callback` is a function that
+  should be called when your asynchronous code is finished.
+
+  `fn` is the function to call when the iteration has ended.
+
+  ```coffeescript
+  # Send request to following URLs sequentially.
+  urls = ["/api/1", "/api/2", "/api/3"]
+  iterator = (url, i, callback) ->
+    options =
+      url: url
+      success: (text) ->
+        console.log "Received response from #{url}: #{text}"
+    $.ajax(options).then(callback)
+  done = ->
+    console.log "All requests are handled."
+  array.asyncForEach urls, iterator, done
+  ```
+
   ###
   asyncForEach = (array, iterator, fn, context) ->
     len = array.length
@@ -53,133 +144,217 @@ define "kopi/utils/array", (require, exports, module) ->
       v = array.pop()
       i = len - array.length - 1
       iterator.call(context, v, i, doneFn, array)
-    doneFn = (error, result) ->
-      if array.length > 0 then loopFn() else (fn(error, result) if fn)
+    doneFn = ->
+      if array.length > 0
+        loopFn()
+      else if fn
+        fn.apply context, arguments
     doneFn()
     array
 
   ###
-  Asynchronous parallel version of Array.prototype.forEach
+  ## asyncParForEach(array, iterator[, fn][, context])
 
-  @param  {Array}     array     the array to iterate over
-  @param  {Function}  iterator  the function to apply to each item in the array,
-                                function has three argument, the first is the item
-                                value, the second is the item index, the third is
-                                a callback function
-  @param  {Function}  fn        the function to call when the forEach has ended
+  Same as `asyncForEach()` except for processing the entire array
+  in parallel.
+
+  ```coffeescript
+  # Send request to following URLs parallelly
+  urls = ["/api/1", "/api/2", "/api/3"]
+  iterator = (url, i, callback) ->
+    options =
+      url: url
+      success: (text) ->
+        console.log "Received response from #{url}: #{text}"
+    $.ajax(options).then(callback)
+  done = ->
+    console.log "All requests are handled."
+  array.asyncParForEach urls, iterator, done
+  ```
+
   ###
   asyncParForEach = (array, iterator, fn, context) ->
     done = 0
     len = array.length
     fn() if array.length == 0
-    doneFn = (error, result) ->
+    doneFn = ->
       done++
-      fn(error, result) if done == len and fn
+      fn.apply context, arguments if done == len and fn
     try
       iterator.call(context, v, i, doneFn, array) for v, i in array
     catch e
       throw e if e isnt breaker
     array
 
-  if ArrayProto.indexOf
-    indexOf = (array, obj) ->
-      ArrayProto.indexOf.call(array, obj)
+  ###
+  ## indexOf(array, item)
+
+  Returns the index at which `item` can be found in the array,
+  or `-1` if `item` is not found. Uses the native `indexOf` function
+  if available.
+
+  ```coffeescript
+  # return: 1
+  array.indexOf [1, 2, 3], 2
+  ```
+
+  ###
+  if nativeIndexOf
+    indexOf = (array, item) ->
+      nativeIndexOf.call array, item
   else
-    indexOf = (array, obj) ->
+    indexOf = (array, item) ->
       for v, i in array
-        return i if v == obj
+        return i if v == item
       -1
 
-  has = (array, obj) ->
-    indexOf(array, obj) != -1
+  ###
+  ## has(array, item)
 
-  insertAt = (array, index, obj) ->
-    array.splice(index, 0, obj)
+  Does the `array` contain the given `item`?
 
+  ```coffeescript
+  # return: true
+  array.has [1, 2, 3], 2
+  ```
+
+  ###
+  has = (array, item) ->
+    indexOf(array, item) != -1
+
+  ###
+  ## insertAt(array, item[, index])
+
+  Insert an `item` into the `array` at a given `index` (defaults to 0).
+
+  ```coffeescript
+  # return [1, 2, 4, 3]
+  array.insertAt [1, 2, 3], 4, 2
+  ```
+
+  ###
+  insertAt = (array, item, index=0) ->
+    nativeSplice.call array, index, 0, item
+
+  ###
+  ## isArray(array)
+
+  Returns true if `array` is an `Array`. Uses native `Array.isArray`
+  function if available.
+
+  ###
   isArray = Array.isArray or= (array) ->
     !!(array and array.concat and array.unshift and not array.callee)
 
+  ###
+  ## isEmpty(array)
+
+  Returns true if `array` does not contain any item.
+  ###
   isEmpty = (array) -> array.length == 0
 
-  last = (array) -> if array.length > 0 then array[array.length - 1] else undefined
+  ###
+  ## map(array, iterator, context)
 
-  map = (array, iterator, context) ->
-    results = []
-    forEach array, (v, i) ->
-      results[i] = iterator.call(context, v, i, array)
-    results
+  Return the results of applying the iterator to each element.
+
+  Delegates to **ECMAScript 5**'s native `map` if available.
+
+  ```coffeescript
+  # return: [2, 4, 6]
+  array.map [1, 2, 3], (n) -> 2 * n
+  ```
 
   ###
-  Pick a random item from array
+  if nativeMap
+    map = (array, iterator, context) ->
+      nativeMap.call array, iterator, context
+  else
+    map = (array, iterator, context) ->
+      results = []
+      forEach array, (v, i) ->
+        results[i] = iterator.call(context, v, i, array)
+      results
 
-  TODO Pick more than one item from array?
+  ###
+  ## random(array)
 
-  @param  {Array}     array
-  @return {Object}    A random item in array
+  Return a random item from `array`.
+
+  ```coffeescript
+  # return: 1 or 2 or 3
+  array.choice [1,2,3]
+  ```
+
   ###
   random = (array) ->
-    if array.length > 1 then array[math.floor(math.random() * array.length)] else array[0]
+    if array.length > 1
+      array[math.round(math.random() * (array.length - 1))]
+    else
+      array[0]
 
-  remove = (array, obj) ->
-    i = indexOf(array, obj)
+  ###
+  ## remove(array, item)
+
+  Remove the given `item` from `array`. Returns `true` if
+  `item` is removed.
+
+  ```coffeescript
+  # return: true
+  # array: [1, 3]
+  array.remove [1, 2, 3], 2
+  ```
+
+  ###
+  remove = (array, item) ->
+    i = indexOf(array, item)
     if i >= 0 then removeAt(array, i) else false
 
+  ###
+  ## removeAt(array, index)
+
+  Remove the item at the given `index` from `array`. Returns `true`
+  if item is removed.
+
+  ```coffeescript
+  # return: true
+  # array: ["a", "b"]
+  array.removeAt ["a", "b", "c"], 2
+  ```
+
+  ###
   removeAt = (array, i) ->
-    ArrayProto.splice.call(array, i, 1).length == 1
-
-  rotate = (array, reverse=false) ->
-    if reverse
-      obj = array.shift()
-      array.push(obj)
-    else
-      obj = array.pop()
-      array.unshift(obj)
-    obj
+    nativeSplice.call(array, i, 1).length == 1
 
   ###
-  求和
+  ## unique(array[, comparer])
 
-  @param  {Array}     array     数组
-  @param  {Function}  iterator    求和函数
-  @return {Object}              求和结果
-  ###
-  sum = (array, iterator, conext) ->
-    s = 0
-    for item, i in array
-      s += if iterator? then iterator.call(context, item, i) else item
-    s
+  Removes duplicates from an array.
 
-  ###
-  求平均
+  `comparer` is a function to generate keys for items in the `array`
+  and test item equality. By default, it compares items by
+  their types and string presentation, or guid if available.
 
-  @param  {Array}     array     数组
-  @param  {Function}  iterator    求平均函数
-  @return {Object}              求平均结果
-  ###
-  average = (array, iterator, context) ->
-    sum(array, iterator, context) / array.length
+  ```coffeescript
+  # return: [1, 2, "a", 3]
+  array.unique [1, 2, "a", 2, "a", 3]
+
+  ```
 
   ###
-  Removes duplicates from an array
-
-  @param  {Array}     array
-  @param  {Function}  comparer decides how items are considered duplicate
-  ###
-  simpleKeyFn = (item) -> (typeof item).charAt(0) + (item.guid or item)
-  unique = (array, keyFn=simpleKeyFn) ->
+  simpleKeyFn = (item) ->
+    (typeof item).charAt(0) + (item.guid or item.toString())
+  unique = (array, comparer=simpleKeyFn) ->
     set = []
-    hash = {}
+    keys = {}
     for item, i in array
-      key = keyFn(item)
-      unless key of hash
-        hash[key] = true
+      key = comparer(item)
+      unless key of keys
+        keys[key] = true
         set.push(item)
     set
 
-  ArrayProto: ArrayProto
-  choice: choice
   clone: clone
-  count: count
   forEach: forEach
   asyncForEach: asyncForEach
   asyncParForEach: asyncParForEach
@@ -195,7 +370,4 @@ define "kopi/utils/array", (require, exports, module) ->
   random: random
   remove: remove
   removeAt: removeAt
-  rotate: rotate
-  sum: sum
-  average: average
   unique: unique

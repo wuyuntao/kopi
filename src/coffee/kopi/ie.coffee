@@ -1,10 +1,3 @@
-###!
-Enable to use new elements in HTML5 for legacy IE.
-
-@author Wu Yuntao <wyt.brandon@gmail.com>
-@license MIT
-
-###
 define "kopi/ie", ->
 
   # TODO
@@ -15,6 +8,7 @@ define "kopi/ie", ->
     doc = document
     doc.createElement(tag) for tag in arguments
     return
+  # Enable to use new elements in HTML5 for legacy IE.
   createElement 'header', 'hgroup', 'nav', 'menu', 'section',
     'article', 'aside', 'footer', 'figure', 'figurecaption'
 
