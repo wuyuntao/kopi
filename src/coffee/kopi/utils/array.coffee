@@ -141,7 +141,7 @@ define "kopi/utils/array", (require, exports, module) ->
   asyncForEach = (array, iterator, fn, context) ->
     len = array.length
     loopFn = ->
-      v = array.pop()
+      v = array.shift()
       i = len - array.length - 1
       iterator.call(context, v, i, doneFn, array)
     doneFn = ->

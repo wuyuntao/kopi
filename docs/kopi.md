@@ -19,7 +19,7 @@ necessary. And it is only *475 bytes* after minified and gzipped.
 ## Limitations
 
 Since module manager is optimized for single-file javascript, there are
-two limitations of module id format.
+several limitations of module id format.
 
 1. Anomynous module is not supported.
 2. Relative ids are not supported either in `define()` or `require()`.
