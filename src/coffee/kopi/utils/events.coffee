@@ -63,9 +63,7 @@ define "kopi/utils/events", (require, exports, module) ->
     teardown: ->
       $(this).unbind(exports.RESIZE_EVENT, onResize)
 
-  ###
-  Add new event shortcuts
-  ###
+  ## Add new event shortcuts
   defineMethod = (name) ->
     $.fn[name] = (fn) ->
       if fn then this.bind(name, fn) else this.trigger(name)

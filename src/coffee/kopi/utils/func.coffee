@@ -1,14 +1,24 @@
 define "kopi/utils/func", (require, exports, module) ->
 
+  ###
+  # Function utilities
+  #
+  ###
+
   text = require "kopi/utils/text"
 
-  # Is the given value a function?
+  ###
+  ## isFunction(fn)
+
+  Is the given value a function?
+
+  ```coffeescript
+  # return: true
+  func = require "kopi/utils/func"
+  func.isFunction(-> console.log("This is a function."))
+  ###
   isFunction = (fn) ->
     !!(fn and fn.constructor and fn.call and fn.apply)
 
-  send = (fn, context, args...) ->
-    return fn unless isFunction(fn)
-    fn.apply(context, args)
-
+  ## Exports
   isFunction: isFunction
-  send: send

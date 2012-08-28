@@ -49,7 +49,7 @@ define "kopi/utils/html", (require, exports, module) ->
     return
 
   ###
-  A fast method to remove CSS class from elemtn
+  A fast method to remove CSS class from element
   ###
   removeClass = (element, regexp) ->
     replaceClass(element, regexp, "")
