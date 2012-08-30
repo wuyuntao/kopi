@@ -149,7 +149,7 @@ define "kopi/utils/array", (require, exports, module) ->
         loopFn()
       else if fn
         fn.apply context, arguments
-    doneFn()
+    loopFn()
     array
 
   ###
