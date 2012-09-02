@@ -57,7 +57,7 @@ define "kopi/utils/uri", (require, exports, module) ->
 
   ###
   build = (path, options={}) ->
-    unless Array.isArray(path) and path.length >= 1
+    unless array.isArray(path) and path.length >= 1
       throw new exceptions.ValueError("Path must be an non-empty array")
 
     path = path.concat [cur, options.format] if options.format?
