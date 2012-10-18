@@ -365,7 +365,6 @@ define "kopi/utils/array", (require, exports, module) ->
   insertAt: insertAt
   isArray: isArray
   isEmpty: isEmpty
-  last: last
   map: map
   random: random
   remove: remove

@@ -22,4 +22,4 @@ define "kopi/ui/notification", (require, exports, module) ->
   unlock: -> overlays.instance().hide()
   loading: (transparent=false) -> indicators.instance().show(lock: true, transparent: transparent)
   loaded: -> indicators.instance().hide()
-  message: (text) -> bubbles.instance().content(text).show()
+  message: -> bubbles.instance().show arguments...

@@ -33,13 +33,13 @@ define "kopi/ui/notification/bubbles", (require, exports, module) ->
     @option {Boolean} transparent if overlay is transparent
     @option {Integer) duration bubble should disapper automatically
     ###
-    show: (message="", options={}) ->
+    show: (message, options={}) ->
       cls = this.constructor
       self = this
       self.hide() if not self.hidden
       self.hidden = false
       self._overlay.show(options.transparent) if options.lock
-      self._content.text(message, true)
+      self._content.text(message, true) if message?
       self.element.addClass(cls.showClass())
       if options.duration
         hideFn = ->
@@ -72,7 +72,7 @@ define "kopi/ui/notification/bubbles", (require, exports, module) ->
 
   # A shortcut method to toggle bubble
   show = -> instance().show(arguments...)
-  hide = -> instance.hide(arguments...)
+  hide = -> instance().hide(arguments...)
 
   instance: instance
   show: show
