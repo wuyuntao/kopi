@@ -10,7 +10,6 @@ define "kopi/app", (require, exports, module) ->
   text = require "kopi/utils/text"
   array = require "kopi/utils/array"
   klass = require "kopi/utils/klass"
-  router = require "kopi/app/router"
   viewport = require "kopi/ui/viewport"
   overlays = require "kopi/ui/notification/overlays"
 
@@ -50,16 +49,22 @@ define "kopi/app", (require, exports, module) ->
   ###
   class App extends events.EventEmitter
 
-    kls = this
-    kls.START_EVENT = "start"
-    kls.REQUEST_EVENT = "request"
-    kls.VIEW_LOAD_EVENT = "viewload"
-    kls.LOCK_EVENT = "lock"
-    kls.UNLOCK_EVENT = "unlock"
+    @START_EVENT = "start"
+    @REQUEST_EVENT = "request"
+    @VIEW_LOAD_EVENT = "viewload"
+    @LOCK_EVENT = "lock"
+    @UNLOCK_EVENT = "unlock"
 
-    klass.configure kls
+    klass.configure this
+
+    klass.accessor @prototype, "router"
 
     constructor: (options={}) ->
+      # Make sure only one app is launched in current page
+      throw new Error("Only one app can be initialized in current page") if appInstance
+      # Set singleton of application
+      appInstance = this
+
       self = this
       self.guid = utils.guid("app")
       self.started = false
@@ -70,6 +75,7 @@ define "kopi/app", (require, exports, module) ->
 
       self._views = {}
       self._interval = null
+      self._router = null
 
       self.configure settings.kopi.app, options
 
@@ -97,37 +103,30 @@ define "kopi/app", (require, exports, module) ->
     Launch the application
 
     ###
-    start: (fn) ->
+    start: ->
       cls = this.constructor
       self = this
       if self.started
         logger.warn("App has already been launched.")
         return self
-      # Make sure only one app is launched in current page
-      if appInstance and appInstance.guid != self.guid
-        logger.error("Only one app can be launched in current page")
-        return self
-      # Set singleton of application
-      appInstance = self
       # Ensure layout elements
       self.container = $("body")
       self.viewport = viewport.instance()
       self.viewport.skeleton().render()
-      self.emit(cls.START_EVENT)
       self._listenToURLChange()
+      self.emit(cls.START_EVENT)
+      logger.info "Start app: #{self.guid}"
+      self.started = true
       # Load current URL
       unless support.history and self._options.usePushState
         self.load(self._options.startURL or self.getCurrentURL())
-      self.started = true
-      fn() if fn
       self
 
-    stop: (fn) ->
+    stop: ->
       self = this
       self._stopListenToURLChange()
       self.started = false
       appInstance = null
-      fn() if fn
       self
 
     getCurrentURL: ->
@@ -162,13 +161,6 @@ define "kopi/app", (require, exports, module) ->
           loc.hash = uri.relative(url.urlNoQuery, baseURL)
       self.emit(cls.REQUEST_EVENT, [url, options])
       self
-
-    ###
-    callback when app starts
-
-    ###
-    onstart: (e) ->
-      logger.info "Start app: #{this.guid}"
 
     ###
     callback when app receives new request
@@ -214,16 +206,8 @@ define "kopi/app", (require, exports, module) ->
         return
 
       # If view is not created, create view then start
-      if not view.created
-        view.create (error, view) ->
-          if error
-            delete self._views[view.guid]
-            logger.error "Failed to create view #{view.toString()}. Error: #{error}"
-            return
-          view.start(request.url, request.params, options, loadFn)
-
-      else
-        view.start(request.url, request.params, options, loadFn)
+      view.create() unless view.created
+      view.start(request.url, request.params, options, loadFn)
 
     ###
     Listen to URL change events.
@@ -290,14 +274,14 @@ define "kopi/app", (require, exports, module) ->
     @return {kopi.views.View}
     ###
     _match: (url) ->
+      return logger.warn "Router is not provided" unless @_router
+
       self = this
       path = uri.parse(url).path
-      request = router.match(path)
+      request = @_router.match(path)
 
       # If no proper router is found
-      if not request
-        logger.warn("Can not find proper route for path: #{path}")
-        return
+      return logger.warn("Can not find proper route for path: #{path}") unless request
 
       route = request.route
       for guid, view of self._views
@@ -328,4 +312,4 @@ define "kopi/app", (require, exports, module) ->
       [view, request]
 
   App: App
-  instance: -> appInstance or= new App()
+  instance: -> appInstance

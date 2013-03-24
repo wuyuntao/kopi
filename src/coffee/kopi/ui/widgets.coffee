@@ -175,8 +175,14 @@ define "kopi/ui/widgets", (require, exports, module) ->
       if self._options.extraClass
         self.element.addClass(self._options.extraClass)
       self.emit(cls.SKELETON_EVENT)
+      if self._widgets
+        self._widgets.forEach (name, widget) ->
+          widget.skeletonTo(self.element) if widget.options().autoSkeleton isnt false
+      self.initialized = true
+      self
 
     skeletonTo: (element) ->
+      cls = this.constructor
       this.skeleton().appendTo(element)
 
     ###
@@ -186,7 +192,14 @@ define "kopi/ui/widgets", (require, exports, module) ->
       self = this
       return self if self.rendered or self.locked
       cls = this.constructor
-      self.emit(cls.RENDER_EVENT)
+      self.emit cls.RENDER_EVENT
+      # Emit resize event for first time
+      self.emit cls.RESIZE_EVENT
+      if self._widgets
+        self._widgets.forEach (name, widget) ->
+          widget.render() if widget.options().autoRender isnt false
+      self.rendered = true
+      self
 
     update: ->
       self = this
@@ -204,6 +217,12 @@ define "kopi/ui/widgets", (require, exports, module) ->
       self.element.remove()
       self.off()
       self.emit(cls.DESTROY_EVENT)
+      if self._widgets
+        self._widgets.forEach (name, widget) ->
+          widget.destroy() if widget.options().autoDestroy isnt false
+      self.initialized = false
+      self.rendered = false
+      self
 
     ###
     Disable events
@@ -215,6 +234,8 @@ define "kopi/ui/widgets", (require, exports, module) ->
       # TODO Disable events too?
       self.element.addClass(self.constructor.cssClass("lock"))
       self.emit(cls.LOCK_EVENT)
+      self.locked = true
+      self
 
     ###
     Enable events
@@ -225,40 +246,18 @@ define "kopi/ui/widgets", (require, exports, module) ->
       cls = this.constructor
       self.element.removeClass(self.constructor.cssClass("lock"))
       self.emit(cls.UNLOCK_EVENT)
+      self.locked = false
+      self
     # }}}
 
     # {{{ Event template methods
     onskeleton: ->
-      self = this
-      if self._widgets
-        self._widgets.forEach (name, widget) ->
-          widget.skeletonTo(self.element) if widget.options().autoSkeleton isnt false
-      self.initialized = true
-
     onrender: ->
-      cls = this.constructor
-      this.emit cls.RESIZE_EVENT
-      if this._widgets
-        this._widgets.forEach (name, widget) ->
-          widget.render() if widget.options().autoRender isnt false
-      this.rendered = true
-
     onupdate: ->
-
     ondestroy: ->
-      if this._widgets
-        this._widgets.forEach (name, widget) ->
-          widget.destroy() if widget.options().autoDestroy isnt false
-      this.initialized = false
-      this.rendered = false
-
     onresize: ->
-
     onlock: ->
-      this.locked = true
-
     onunlock: ->
-      this.locked = false
     # }}}
 
     # {{{ Helper methods

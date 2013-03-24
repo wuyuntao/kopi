@@ -26,9 +26,9 @@ define "kopi/utils/array", (require, exports, module) ->
 
   # Native methods of array
   nativeSlice = ArrayProto.slice
-  nativeSplice = ArrayProto.nativeSplice
+  nativeSplice = ArrayProto.splice
   nativeIndexOf = ArrayProto.indexOf
-  nativeMap = ArrayProto.nativeMap
+  nativeMap = ArrayProto.map
 
   ###
   ## clone(array)

@@ -53,15 +53,10 @@ define "kopi/views", (require, exports, module) ->
 
     kls = this
     kls.CREATE_EVENT = "create"
-    kls.CREATED_EVENT = "created"
     kls.START_EVENT = "start"
-    kls.STARTED_EVENT = "started"
     kls.UPDATE_EVENT = "update"
-    kls.UPDATED_EVENT = "updated"
     kls.STOP_EVENT = "stop"
-    kls.STOPPED_EVENT = "stopped"
     kls.DESTROY_EVENT = "destroy"
-    kls.DESTROYED_EVENT = "destroyed"
     kls.LOCK_EVENT = "lock"
     kls.UNLOCK_EVENT = "unlock"
 
@@ -90,161 +85,108 @@ define "kopi/views", (require, exports, module) ->
     ###
     Initialize UI components skeleton and append them to DOM Tree
     ###
-    create: (options, fn) ->
+    create: (options) ->
       cls = this.constructor
       self = this
       if self.created or self.locked
         logger.warn "View is already created or locked."
-        fn("View is already created or locked.", self) if fn
         return self
-      if not fn and func.isFunction(options)
-        fn = options
-        options = {}
       logger.info("Create view. #{self.guid}")
       self.lock()
-      self.on(cls.CREATED_EVENT, (e, error) -> fn(error, self)) if fn
       self.emit(cls.CREATE_EVENT, [options])
+      self.created = true
+      self.unlock()
 
     ###
     Display UI components and then render them with data
     ###
-    start: (url, params, options, fn) ->
+    start: (url, params, options) ->
       cls = this.constructor
       self = this
       throw new exceptions.ValueError("Must create view first.") if not self.created
       if self.started or self.locked
         logger.warn "View is already started or locked."
-        fn("View is already started or locked.", self) if fn
         return self
-      if not fn and func.isFunction(options)
-        fn = options
-        options = {}
       logger.info("Start view. #{self.guid}")
       self.lock()
-      self.on(cls.STARTED_EVENT, (e, error) -> fn(error, self)) if fn
       self.emit(cls.START_EVENT, [url, params, options])
+      self.started = true
+      self.unlock()
 
     ###
     Update UI components when URL changes
     ###
-    update: (url, params, options, fn) ->
+    update: (url, params, options) ->
       cls = this.constructor
       self = this
       if not self.started
-        throw new exceptions.ValueError("Must start view first.")
-        fn("Must start view first.", self) if fn
+        logger.error "Must start view first."
+        return self
       if self.locked
         logger.warn "View is locked."
-        fn("View is locked.", self) if fn
         return self
-      if not fn and func.isFunction(options)
-        fn = options
-        options = {}
       logger.info("Update view. #{self.guid}")
-      self.on(cls.UPDATED_EVENT, (e, error) -> fn(error, this)) if fn
       self.emit(cls.UPDATE_EVENT, [url, params, options])
 
     ###
     Hide UI components
     ###
-    stop: (options, fn) ->
+    stop: (options) ->
       cls = this.constructor
       self = this
       throw new exceptions.ValueError("Must create view first.") if not self.created
       if not self.started or self.locked
         logger.warn "View is already stopped or locked."
-        fn("View is already stopped or locked.", self) if fn
         return self
-      if not fn and func.isFunction(options)
-        fn = options
-        options = {}
       logger.info("Stop view. #{self.guid}")
       self.lock()
-      self.on(cls.STOPPED_EVENT, (e, error) -> fn(error, self)) if fn
       self.emit(cls.STOP_EVENT, [options])
+      self.started = false
+      self.unlock()
 
     ###
     Remove UI components from DOM Tree
     ###
-    destroy: (options, fn) ->
+    destroy: (options) ->
       cls = this.constructor
       self = this
       throw new exceptions.ValueError("Must stop view first.") if self.started
       if not self.created or self.locked
         logger.warn "View is already destroyed or locked."
-        fn("View is already destroyed or locked.", self) if fn
         return self
-      if not fn and func.isFunction(options)
-        fn = options
-        options = {}
       logger.info("Destroy view. #{self.guid}")
       self.lock()
-      self.on(cls.DESTROYED_EVENT, (e, error) -> fn(error, self)) if fn
       self.emit(cls.DESTROY_EVENT, [options])
+      self.created = false
+      self.unlock()
 
-    lock: (fn) ->
+    lock: ->
       cls = this.constructor
       self = this
       return self if self.locked
       logger.info("Lock view. #{self.guid}")
       self.locked = true
       self.emit cls.LOCK_EVENT
-      fn(null, self) if fn
       self
 
-    unlock: (fn) ->
+    unlock: ->
       cls = this.constructor
       self = this
       return self unless self.locked
       logger.info("Unlock view. #{self.guid}")
       self.locked = false
       self.emit cls.UNLOCK_EVENT
-      fn(null, self) if fn
       self
 
     ###
     Template methods of view events
     ###
     oncreate: (e) ->
-      cls = this.constructor
-      self = this
-      self.created = true
-      self.unlock()
-      logger.info("View created. #{self.guid}")
-      self.emit cls.CREATED_EVENT
-
     onstart: (e) ->
-      cls = this.constructor
-      self = this
-      self.started = true
-      self.unlock()
-      logger.info("View started. #{self.guid}")
-      self.emit cls.STARTED_EVENT
-
     onupdate: (e) ->
-      cls = this.constructor
-      self = this
-      logger.info("View updated. #{self.guid}")
-      self.emit cls.UPDATED_EVENT
-
     onstop: (e) ->
-      cls = this.constructor
-      self = this
-      self.started = false
-      self.unlock()
-      logger.info("View stopped. #{self.guid}")
-      self.emit cls.STOPPED_EVENT
-
     ondestroy: (e) ->
-      cls = this.constructor
-      self = this
-      self.created = false
-      self.unlock()
-      logger.info("View destroyed. #{self.guid}")
-      self.emit cls.DESTROYED_EVENT
-
     onlock: (e) ->
-
     onunlock: (e) ->
 
     ###
