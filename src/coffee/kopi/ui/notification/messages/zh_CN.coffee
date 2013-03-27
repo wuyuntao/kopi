@@ -1,7 +1,7 @@
 define "kopi/ui/notification/messages/zh_CN", (require, exports, module) ->
 
   i18n = require "kopi/utils/i18n"
-  i18n.define "zh_CN"
+  i18n.define "zh_CN",
     kopi:
       notification:
         messages:

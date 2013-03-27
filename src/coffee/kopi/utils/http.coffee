@@ -1,10 +1,13 @@
 define "kopi/utils/http", (require, exports, module) ->
 
   $ = require "jquery"
-  EventEmitter = require("kopi/events").EventEmitter
+  {EventEmitter} = require "kopi/events"
   utils = require "kopi/utils"
   klass = require "kopi/utils/klass"
-  Map = require("kopi/utils/structs/map").Map
+  {Map} = require "kopi/utils/structs/map"
+  logging = require "kopi/logging"
+
+  logger = logging.logger(module.id)
 
   ###
   `Request` is a wrapper for jQuery.ajax method to work with `RequestQueue`
@@ -40,6 +43,7 @@ define "kopi/utils/http", (require, exports, module) ->
         fn(error, null, text) if fn
 
       ajaxFn = =>
+        logger.log "[http:request] #{@options.type or "GET"} #{@options.url}"
         @_request = $.ajax(@options)
         @_timer = null
       if @options.delay
@@ -166,6 +170,7 @@ define "kopi/utils/http", (require, exports, module) ->
     else if options.queue instanceof RequestQueue
       options.queue.enqueue(options)
     else
+      logger.log "[http:request] #{options.type or "GET"} #{options.url}"
       $.ajax(options)
 
   queue: queue

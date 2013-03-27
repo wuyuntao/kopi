@@ -35,11 +35,11 @@ define "kopi/tests/db/fixtures", (require, exports, module) ->
       type: models.INTEGER
       primary: true
     this.field "title"
-    this.field "body"
+    this.field "body",
       type: models.TEXT
-    this.field "publishedAt"
+    this.field "publishedAt",
       type: models.DATETIME
-    this.field "updatedAt"
+    this.field "updatedAt",
       type: models.DATETIME
 
     this.belongsTo "Blog", module: "kopi/tests/db/fixtures"
