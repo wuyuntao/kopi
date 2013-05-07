@@ -3,7 +3,7 @@
 
 // {{{ Tab bar
 .kopi-tab-bar {
-  @extend .kopi-button-group;
+  @extend .kopi-button-group !optional;
 
   border-color: #d5d5d5;
   color: $kopi-link-color;

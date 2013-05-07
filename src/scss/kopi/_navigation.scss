@@ -121,7 +121,7 @@ div.kopi-navbar-top-fixed {
 }
 
 .kopi-nav-button {
-  @extend .kopi-button;
+  @extend .kopi-button !optional;
   @include inline-block;
   color: $kopi-navbar-button-color;
   text-decoration: none;
@@ -159,7 +159,7 @@ div.kopi-navbar-top-fixed {
   // FIXME
   // .kopi-nav-button-text does not exist
   // -- Wu Yuntao, 2013-04-24
-  @extend .kopi-nav-button-text;
+  // @extend .kopi-nav-button-text;
 }
 // }}}
 
