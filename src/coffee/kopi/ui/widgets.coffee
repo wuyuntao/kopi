@@ -212,7 +212,7 @@ define "kopi/ui/widgets", (require, exports, module) ->
     ###
     destroy: ->
       self = this
-      return self if self.locked
+      return self if self.locked or (not self.initialized and not self.rendered)
       cls = this.constructor
       self.element.remove()
       self.off()
