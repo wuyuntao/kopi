@@ -370,7 +370,9 @@ define "kopi/ui/widgets", (require, exports, module) ->
       cssClass = cls.cssClass(name)
       wrapper = $("." + cssClass, parent)
       if not wrapper.length
-        wrapper = $("<#{tag}></#{tag}>", class: cssClass).appendTo(parent)
+        wrapper = document.createElement tag
+        wrapper.className = cssClass
+        wrapper = $(wrapper).appendTo(parent)
       wrapper
 
     ###
