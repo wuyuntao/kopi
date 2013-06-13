@@ -68,7 +68,7 @@ define "kopi/utils/klass", (require, exports, module) ->
     name = property.name or "_#{method}"
     # Set default getter and setter for property
     property.get or= ->
-      this[name] or= property.value
+      if this[name]? then this[name] else property.value
     property.set or= (value) ->
       this[name] = value
     klass.accessor or= (method, property) ->
