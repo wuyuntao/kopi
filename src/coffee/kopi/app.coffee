@@ -185,29 +185,24 @@ define "kopi/app", (require, exports, module) ->
       [view, request] = match
 
       isUpdate = false
-      loadFn = (error, view) ->
-        if error
-          logger.error "Failed to load view #{view.toString}. Error: #{error}"
-          delete self._views[view.guid]
-          return
-
-        # If views are different, stop current view and start target view
-        if not isUpdate and self.currentView and self.currentView.started
-            self.currentView.stop(options)
-
-        self.currentView = view
-        self.currentURL = url
-        self.emit(cls.VIEW_LOAD_EVENT)
 
       # If views are same, update the current view
       if self.currentView and self.currentView.equals(view)
         isUpdate = true
-        self.currentView.update(request.url, request.params, options, loadFn)
+        self.currentView.update(request.url, request.params, options)
         return
 
       # If view is not created, create view then start
       view.create() unless view.created
-      view.start(request.url, request.params, options, loadFn)
+      view.start(request.url, request.params, options)
+
+      # If views are different, stop current view and start target view
+      if not isUpdate and self.currentView and self.currentView.started
+          self.currentView.stop(options)
+
+      self.currentView = view
+      self.currentURL = url
+      self.emit(cls.VIEW_LOAD_EVENT)
 
     ###
     Listen to URL change events.

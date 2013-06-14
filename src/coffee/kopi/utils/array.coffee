@@ -74,11 +74,11 @@ define "kopi/utils/array", (require, exports, module) ->
 
   ###
   fill = (array, value, count) ->
-    count or= array.length
+    count = array.length unless count?
     if count > 0
       for i in [0...count]
         array[i] = value
-    value
+    array
 
   ###
   ## forEach(array, iterator[, context])
