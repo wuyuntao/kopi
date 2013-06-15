@@ -1,6 +1,7 @@
 define "kopi/utils/klass", (require, exports, module) ->
 
   object = require "kopi/utils/object"
+  {SingletonError} = require "kopi/exceptions"
 
   ###
   Define CoffeeScript style class which could be useful for
@@ -102,8 +103,21 @@ define "kopi/utils/klass", (require, exports, module) ->
       property.get.apply(this, arguments)
     return
 
+  ###
+  Provide singleton interface for class
+
+  @param  {Object}  klass     singleton class
+  ###
+  singleton = (klass) ->
+    instance = null
+    klass.instance = -> instance
+    klass.prototype._isSingleton = ->
+      throw new SingletonError(klass) if instance
+      instance = this
+
   create: create
   include: include
   configure: configure
   accessor: accessor
   reader: reader
+  singleton: singleton
