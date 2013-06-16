@@ -110,6 +110,7 @@ div.kopi-navbar-top-fixed {
 }
 
 .kopi-nav-title {
+  @extend .ellipsis !optional;
   color: $kopi-navbar-title-color;
   font-size: $kopi-navbar-title-font-size;
   font-weight: bold;
