@@ -48,12 +48,12 @@ div.kopi-view-switcher-top-fixed {
 // {{{ View
 .kopi-view {
   @extend .fill-parent;
-  display: none;
+  visibility: hidden;
   @include box-sizing(border-box);
 }
 
 .kopi-view-show {
-  display: block;
+  visibility: visible;
 }
 // }}}
 
@@ -72,7 +72,7 @@ div.kopi-view-switcher-top-fixed {
     @include opacity(1);
     @include translateX(0);
     @include translate3d(0, 0, 0);
-    display: block;
+    visibility: visible;
   }
 
   .kopi-view-from-stop {
@@ -80,14 +80,14 @@ div.kopi-view-switcher-top-fixed {
     @include opacity(0.7);
     @include translateX(-100%);
     @include translate3d(-100%, 0, 0);
-    display: block;
+    visibility: visible;
   }
 
   .kopi-view-to-start {
     @include opacity(0.7);
     @include translateX(100%);
     @include translate3d(100%, 0, 0);
-    display: block;
+    visibility: visible;
   }
 
   .kopi-view-to-stop {
@@ -95,7 +95,7 @@ div.kopi-view-switcher-top-fixed {
     @include opacity(1);
     @include translateX(0);
     @include translate3d(0, 0, 0);
-    display: block;
+    visibility: visible;
   }
 }
 
@@ -105,7 +105,7 @@ div.kopi-view-switcher-top-fixed {
     @include opacity(1);
     @include translateX(0);
     @include translate3d(0, 0, 0);
-    display: block;
+    visibility: visible;
   }
 
   .kopi-view-from-stop {
@@ -113,14 +113,14 @@ div.kopi-view-switcher-top-fixed {
     @include opacity(0.7);
     @include translateX(100%);
     @include translate3d(100%, 0, 0);
-    display: block;
+    visibility: visible;
   }
 
   .kopi-view-to-start {
     @include opacity(0.7);
     @include translateX(-100%);
     @include translate3d(-100%, 0, 0);
-    display: block;
+    visibility: visible;
   }
 
   .kopi-view-to-stop {
@@ -128,7 +128,7 @@ div.kopi-view-switcher-top-fixed {
     @include opacity(1);
     @include translateX(0);
     @include translate3d(0, 0, 0);
-    display: block;
+    visibility: visible;
   }
 }
 // }}}
