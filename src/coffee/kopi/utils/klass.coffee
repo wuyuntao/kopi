@@ -35,7 +35,9 @@ define "kopi/utils/klass", (require, exports, module) ->
   include = (klass, mixin) ->
     # extend class properties
     for own name, method of mixin
-      klass[name] = method
+      # Some version of Safari Mobile considers `prototype`
+      # as own property of `mixin`
+      klass[name] = method unless name == "prototype"
     # extend instance properties
     for own name, method of mixin.prototype
       klass.prototype[name] = method
