@@ -10,16 +10,16 @@ define "kopi/ui/clickable", (require, exports, module) ->
   ###
   class Clickable extends touchable.Touchable
 
-    kls = this
-    kls.HOVER_EVENT = "hover"
-    kls.HOVER_OUT_EVENT = "hoverout"
-    kls.CLICK_EVENT = "click"
-    kls.TOUCH_HOLD_EVENT = "touchhold"
-    kls.EVENT_NAMESPACE = "clickable"
+    @HOVER_EVENT = "hover"
+    @HOVER_OUT_EVENT = "hoverout"
+    @CLICK_EVENT = "click"
+    @DOUBALE_CLICK_EVENT = "click"
+    @TOUCH_HOLD_EVENT = "touchhold"
+    @EVENT_NAMESPACE = "clickable"
 
-    this.widgetName "Clickable"
+    @widgetName "Clickable"
 
-    kls.configure
+    @configure
       # @type   {Integer}   holdTime      time for touch and hold event
       holdTime: 2000
       # @type   {Integer}   moveThreshold moving distance should be ignored
@@ -34,7 +34,6 @@ define "kopi/ui/clickable", (require, exports, module) ->
     delegate: ->
       super
 
-      cls = this.constructor
       self = this
       preventDefault = self._options.preventDefault
       stopPropagation = self._options.stopPropagation
@@ -42,19 +41,19 @@ define "kopi/ui/clickable", (require, exports, module) ->
       mouseOverFn = (e) ->
         e.preventDefault() if preventDefault
         e.stopPropagation() if stopPropagation
-        self.emit(cls.HOVER_EVENT, [e])
+        self.emit(Clickable.HOVER_EVENT, [e])
         self.element
-          .bind(kls.eventName(events.MOUSE_OUT_EVENT), mouseOutFn)
+          .bind(Clickable.eventName(events.MOUSE_OUT_EVENT), mouseOutFn)
 
       mouseOutFn = (e) ->
         e.preventDefault() if preventDefault
         e.stopPropagation() if stopPropagation
-        self.emit(cls.HOVER_OUT_EVENT, [e])
+        self.emit(Clickable.HOVER_OUT_EVENT, [e])
         self.element
-          .unbind(kls.eventName(events.MOUSE_OUT_EVENT))
+          .unbind(Clickable.eventName(events.MOUSE_OUT_EVENT))
 
       self.element
-        .bind(kls.eventName(events.MOUSE_OVER_EVENT), mouseOverFn)
+        .bind(Clickable.eventName(events.MOUSE_OVER_EVENT), mouseOverFn)
 
     ontouchstart: (e, event) ->
       cls = this.constructor

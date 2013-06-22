@@ -101,21 +101,28 @@ define "kopi/ui/groups", (require, exports, module) ->
     _key: (child) -> child.guid
 
     onskeleton: ->
-      this._skeletonChildren()
       super
+      this._skeletonChildren()
 
     onrender: ->
-      this._renderChildren()
       super
+      this._renderChildren()
 
     _skeletonChildren: ->
-      wrapper = this._wrapper()
-      for child in this._children
+      wrapper = @_wrapper()
+      for child in @_children
         child.skeleton().element.appendTo(wrapper)
+      return
 
     _renderChildren: ->
-      for child in this._children
+      for child in @_children
         child.render()
+      return
+
+    _destroyChildren: ->
+      for child in @_children
+        child.destroy()
+      return
 
     ###
     Return the element which child elements should be appended to

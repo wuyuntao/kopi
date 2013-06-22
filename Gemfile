@@ -11,3 +11,5 @@ gem 'guard-compass'
 gem 'uglifier'
 
 gem 'rb-fsevent'
+
+# gem 'json', '~> 1.7.7'
