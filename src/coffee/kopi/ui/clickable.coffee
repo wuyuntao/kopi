@@ -13,7 +13,7 @@ define "kopi/ui/clickable", (require, exports, module) ->
     @HOVER_EVENT = "hover"
     @HOVER_OUT_EVENT = "hoverout"
     @CLICK_EVENT = "click"
-    @DOUBALE_CLICK_EVENT = "click"
+    @DOUBALE_CLICK_EVENT = "doubleclick"
     @TOUCH_HOLD_EVENT = "touchhold"
     @EVENT_NAMESPACE = "clickable"
 
@@ -24,6 +24,8 @@ define "kopi/ui/clickable", (require, exports, module) ->
       holdTime: 2000
       # @type   {Integer}   moveThreshold moving distance should be ignored
       moveThreshold: 10
+      # @type   {Boolean}   ignoreClick   original click event should be ignored
+      ignoreClick: false
 
     constructor: ->
       super
@@ -54,6 +56,20 @@ define "kopi/ui/clickable", (require, exports, module) ->
 
       self.element
         .bind(Clickable.eventName(events.MOUSE_OVER_EVENT), mouseOverFn)
+
+      if self._options.ignoreClick
+        clickFn = (e) ->
+          e.preventDefault()
+          e.stopPropagation()
+        self.element
+          .bind(Clickable.eventName(events.CLICK_EVENT), clickFn)
+          .bind(Clickable.eventName(events.DOUBALE_CLICK_EVENT), clickFn)
+
+    undelegate: ->
+      super
+      @element
+        .unbind(events.MOUSE_OVER_EVENT)
+        .unbind(events.CLICK_EVENT)
 
     ontouchstart: (e, event) ->
       cls = this.constructor
