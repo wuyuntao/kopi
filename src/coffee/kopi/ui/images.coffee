@@ -38,7 +38,7 @@ define "kopi/ui/images", (require, exports, module) ->
         this._options.extraClasses += " #{this.constructor.cssClass("bordered")}"
       this._src = this._options.src
 
-    image: (src) ->
+    updateImageURL: (src) ->
       self = this
       self._src = src
       self.update() if self.rendered

@@ -3,10 +3,15 @@
 
 .kopi-image {
   @include inline-block;
+  @include unselectable;
   text-align: center;
   vertical-align: middle;
   margin: 0 auto;
   padding: 0;
+
+  img {
+    @include unselectable;
+  }
 }
 
 .kopi-image-bordered {
