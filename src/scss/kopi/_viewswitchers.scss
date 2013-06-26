@@ -77,14 +77,14 @@ div.kopi-view-switcher-top-fixed {
 
   .kopi-view-from-stop {
     @extend .kopi-view-transition;
-    @include opacity(0.7);
+    @include opacity(0);
     @include translateX(-100%);
     @include translate3d(-100%, 0, 0);
     visibility: visible;
   }
 
   .kopi-view-to-start {
-    @include opacity(0.7);
+    @include opacity(0);
     @include translateX(100%);
     @include translate3d(100%, 0, 0);
     visibility: visible;
@@ -110,14 +110,14 @@ div.kopi-view-switcher-top-fixed {
 
   .kopi-view-from-stop {
     @extend .kopi-view-transition;
-    @include opacity(0.7);
+    @include opacity(0);
     @include translateX(100%);
     @include translate3d(100%, 0, 0);
     visibility: visible;
   }
 
   .kopi-view-to-start {
-    @include opacity(0.7);
+    @include opacity(0);
     @include translateX(-100%);
     @include translate3d(-100%, 0, 0);
     visibility: visible;
