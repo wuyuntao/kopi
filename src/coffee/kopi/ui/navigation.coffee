@@ -12,6 +12,9 @@ define "kopi/ui/navigation", (require, exports, module) ->
   Animator = require("kopi/ui/animators").Animator
   Animation = require("kopi/ui/animators/animations").Animation
   Button = require("kopi/ui/buttons").Button
+  logging = require "kopi/logging"
+
+  logger = logging.logger(module.id)
 
   class NavButton extends Button
 
@@ -25,7 +28,11 @@ define "kopi/ui/navigation", (require, exports, module) ->
       size: false
 
     onclick: ->
-      app.instance().load(this._options.url, this._options)
+      if @_options.url?
+        logger.info "[navigation:onclick] URL: #{@_options.url}"
+        app.instance().load(@_options.url, @_options)
+      else
+        logger.warn "[navigation:onclick] URL is not provided"
       super
 
   ###
