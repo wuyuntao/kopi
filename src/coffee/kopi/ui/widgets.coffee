@@ -194,7 +194,10 @@ define "kopi/ui/widgets", (require, exports, module) ->
       cls = this.constructor
       self.emit cls.RENDER_EVENT
       # Emit resize event for first time
-      self.emit cls.RESIZE_EVENT
+      # TODO
+      # 1. Shoule we emit resize event when rendering widget?
+      # -- Wu Yuntao, 2013-07-01
+      # self.emit cls.RESIZE_EVENT
       if self._widgets
         self._widgets.forEach (name, widget) ->
           widget.render() if widget.options().autoRender isnt false
