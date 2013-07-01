@@ -10,7 +10,7 @@ define "kopi/app", (require, exports, module) ->
   text = require "kopi/utils/text"
   array = require "kopi/utils/array"
   klass = require "kopi/utils/klass"
-  viewport = require "kopi/ui/viewport"
+  {Viewport} = require "kopi/ui/viewport"
   overlays = require "kopi/ui/notification/overlays"
 
   win = $(window)
@@ -75,6 +75,7 @@ define "kopi/app", (require, exports, module) ->
       self._interval = null
       self._router = null
 
+      self.viewport = new Viewport()
       self.configure settings.kopi.app, options
 
     lock: ->
@@ -109,7 +110,6 @@ define "kopi/app", (require, exports, module) ->
         return self
       # Ensure layout elements
       self.container = $("body")
-      self.viewport = viewport.instance()
       self.viewport.skeleton().render()
       self._listenToURLChange()
       self.emit(cls.START_EVENT)
@@ -124,6 +124,7 @@ define "kopi/app", (require, exports, module) ->
       self = this
       self._stopListenToURLChange()
       self.started = false
+      self.viewport.destroy()
       self
 
     getCurrentURL: ->

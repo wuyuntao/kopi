@@ -45,10 +45,12 @@ define "kopi/logging", (require, exports, module) ->
     defineMethod = (logger, name) ->
       return if logger[name] and not logger[name].isNoop
       upper = name.toUpperCase()
+      # Use `debug` for `log` when possible
+      methodName = if name is "log" and console and console.debug? then "debug" else name
       logger[name] = ->
         seconds = Math.round(new Date() - startTime) / 1000
         if console
-          console[name]("[#{upper}] [#{seconds}s] [#{@_name}]", arguments...)
+          console[methodName]("[#{upper}] [#{seconds}s] [#{@_name}]", arguments...)
         return
 
     # Define noop method for disallowed logging level

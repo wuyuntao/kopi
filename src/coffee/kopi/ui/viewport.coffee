@@ -6,10 +6,11 @@ define "kopi/ui/viewport", (require, exports, module) ->
   browser = require "kopi/utils/browser"
   widgets = require "kopi/ui/widgets"
   notification = require "kopi/ui/notification"
+  klass = require "kopi/utils/klass"
+  {THROTTLED_RESIZE_EVENT} = require "kopi/utils/events"
 
   win = $(window)
   logger = logging.logger(module.id)
-  viewportInstance = null
 
   ###
   Viewport is reponsive to size changes of window
@@ -24,12 +25,11 @@ define "kopi/ui/viewport", (require, exports, module) ->
     this.configure
       lockWhenResizing: true
 
-    constructor: ->
-      if viewportInstance
-        throw new exceptions.SingletonError(this.constructor)
-        return self
+    klass.singleton this
 
-      viewportInstance = this
+    constructor: ->
+      @_isSingleton()
+
       super()
       this._options.element or= "body"
       this.width = null
@@ -42,12 +42,12 @@ define "kopi/ui/viewport", (require, exports, module) ->
     @param {Boolean}        emit   Trigger resize event right after widget is registered
     ###
     register: (widget) ->
-      logger.info "#{widget.toString()} is registered."
+      logger.info "[viewport:register] #{widget.toString()} is registered."
       this._listeners[widget.guid] = widget
       this
 
     unregister: (widget) ->
-      logger.info "#{widget.toString()} is unregistered."
+      logger.info "[viewport:unregister] #{widget.toString()} is unregistered."
       delete this._listeners[widget.guid]
       this
 
@@ -57,7 +57,7 @@ define "kopi/ui/viewport", (require, exports, module) ->
       self._browser()
       self._resize(false)
       # TODO Use thottle resize event of window
-      win.bind cls.RESIZE_EVENT, -> self.emit(cls.RESIZE_EVENT)
+      win.bind THROTTLED_RESIZE_EVENT, -> self.emit(cls.RESIZE_EVENT)
       super
 
     onresize: ->
@@ -77,7 +77,7 @@ define "kopi/ui/viewport", (require, exports, module) ->
       [width, height] = [win.width(), win.height()]
       return unless width > 0 and height > 0 and self.isSizeChanged(width, height)
 
-      logger.info("Resize viewport to #{width}x#{height}")
+      logger.info("[viewport:_resize] Resize viewport to #{width}x#{height}")
       notification.loading() if lock
       self.lock()
       self.element.width(width).height(height)
@@ -104,4 +104,7 @@ define "kopi/ui/viewport", (require, exports, module) ->
       this.element.addClass(classes)
 
   Viewport: Viewport
-  instance: -> viewportInstance or new Viewport()
+  # DEPRECATED
+  # Use Viewport.instance() instead
+  # -- Wu Yuntao, 2013-07-01
+  instance: -> Viewport.instance() or new Viewport()

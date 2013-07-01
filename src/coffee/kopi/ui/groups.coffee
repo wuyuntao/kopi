@@ -71,6 +71,7 @@ define "kopi/ui/groups", (require, exports, module) ->
       unless 0 <= index < this._keys.length
         # TODO Add custom exception
         throw new exceptions.ValueError("Child view does not exist")
+      child = @_children[index]
       child.destroy()
       array.removeAt(this._keys, index)
       array.removeAt(this._children, index)
