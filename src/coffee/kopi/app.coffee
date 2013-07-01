@@ -18,7 +18,6 @@ define "kopi/app", (require, exports, module) ->
   loc = location
   baseURL = uri.current()
   logger = logging.logger(module.id)
-  appInstance = null
 
   ###
   Application class
@@ -55,15 +54,14 @@ define "kopi/app", (require, exports, module) ->
     @LOCK_EVENT = "lock"
     @UNLOCK_EVENT = "unlock"
 
+    klass.singleton this
+
     klass.configure this
 
     klass.accessor @prototype, "router"
 
     constructor: (options={}) ->
-      # Make sure only one app is launched in current page
-      throw new Error("Only one app can be initialized in current page") if appInstance
-      # Set singleton of application
-      appInstance = this
+      @_isSingleton()
 
       self = this
       self.guid = utils.guid("app")
@@ -107,7 +105,7 @@ define "kopi/app", (require, exports, module) ->
       cls = this.constructor
       self = this
       if self.started
-        logger.warn("App has already been launched.")
+        logger.warn("[app:start] App has already been launched.")
         return self
       # Ensure layout elements
       self.container = $("body")
@@ -115,7 +113,7 @@ define "kopi/app", (require, exports, module) ->
       self.viewport.skeleton().render()
       self._listenToURLChange()
       self.emit(cls.START_EVENT)
-      logger.info "Start app: #{self.guid}"
+      logger.info "[app:start] Start app: #{self.guid}"
       self.started = true
       # Load current URL
       unless support.history and self._options.usePushState
@@ -126,7 +124,6 @@ define "kopi/app", (require, exports, module) ->
       self = this
       self._stopListenToURLChange()
       self.started = false
-      appInstance = null
       self
 
     getCurrentURL: ->
@@ -140,7 +137,7 @@ define "kopi/app", (require, exports, module) ->
     @param {Hash} options
     ###
     load: (url, options) ->
-      logger.info "Load URL: #{url}"
+      logger.info "[app:load] Load URL: #{url}"
       cls = this.constructor
       self = this
       url = uri.parse uri.absolute(url)
@@ -169,16 +166,16 @@ define "kopi/app", (require, exports, module) ->
     @param {kopi.utils.uri.URI} url
     ###
     onrequest: (e, url, options) ->
-      logger.info "Receive request: #{url.path}"
+      logger.info "[app:onrequest] Receive request: #{url.path}"
       self = this
       cls = this.constructor
       match = self._match(url)
 
       if not match
-        logger.info "No matching view found."
+        logger.info "[app:onrequest] No matching view found."
         if self._options.redirectWhenNoRouteFound
           url = uri.unparse url
-          logger.info("Redirect to URL: #{url}")
+          logger.info("[app:onrequest] Redirect to URL: #{url}")
           uri.goto url
         return
 
@@ -224,7 +221,7 @@ define "kopi/app", (require, exports, module) ->
         self._useHash = true
         self._interval = setInterval checkFn, self._options.interval
       else
-        logger.warn("App will not repond to url change")
+        logger.warn("[app:_listenToURLChange] App will not repond to url change")
       return
 
     ###
@@ -269,20 +266,21 @@ define "kopi/app", (require, exports, module) ->
     @return {kopi.views.View}
     ###
     _match: (url) ->
-      return logger.warn "Router is not provided" unless @_router
+      return logger.warn "[app:_match] Router is not provided" unless @_router
 
       self = this
       path = uri.parse(url).path
       request = @_router.match(path)
 
       # If no proper router is found
-      return logger.warn("Can not find proper route for path: #{path}") unless request
+      return logger.warn("[app:_match] Can not find proper route for path: #{path}") unless request
 
       route = request.route
       for guid, view of self._views
         # If `group` is `true`, use same view for every URL matches route
-        if route.group is true and view.name == route.view.name
-            return [view, request]
+        if route.group is true and view.constructor.viewName() == route.view.viewName()
+          logger.log "[app:_match] group: true"
+          return [view, request]
         # If `group` is `string`, use same view for every URL matches route
         else if text.isString(route.group)
           if view.params[route.group] == route.params[route.group]
@@ -307,4 +305,7 @@ define "kopi/app", (require, exports, module) ->
       [view, request]
 
   App: App
-  instance: -> appInstance
+  # DEPRECATED
+  # Use App.instance() instead
+  # -- Wu Yuntao, 2013-07-01
+  instance: -> App.instance()

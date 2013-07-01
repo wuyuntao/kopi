@@ -112,8 +112,12 @@ define "kopi/utils/klass", (require, exports, module) ->
   ###
   singleton = (klass) ->
     instance = null
+    # Class method to get singleton
     klass.instance = -> instance
+    # Class method to remove singleton
     klass.removeInstance = -> instance = null
+    # A private instance method to check if instance
+    # can be initialized as a singleton
     klass.prototype._isSingleton = ->
       throw new SingletonError(klass) if instance
       instance = this
