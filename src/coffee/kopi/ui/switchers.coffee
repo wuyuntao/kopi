@@ -41,19 +41,19 @@ define "kopi/ui/switchers", (require, exports, module) ->
     ###
     Manually show the next child.
     ###
-    showNext: ->
+    showNext: (options) ->
       index = this.currentAt()
       if index? and index + 1 < this._keys.length
-        this.showAt(index + 1)
+        this.showAt(index + 1, options)
       this
 
     ###
     Manually show the previous child.
     ###
-    showPrevious: ->
+    showPrevious: (options) ->
       index = this.currentAt()
       if index? and index >= 1
-        this.showAt(index - 1)
+        this.showAt(index - 1, options)
       this
 
     ###

@@ -3,6 +3,7 @@ define "kopi/ui/animators/animations", (require, exports, module) ->
   EventEmitter = require("kopi/events").EventEmitter
   klass = require "kopi/utils/klass"
   exceptions = require "kopi/exceptions"
+  {WEBKIT_TRANSITION_END_EVENT} = require "kopi/utils/events"
 
   ###
   Interface of animation
@@ -52,16 +53,21 @@ define "kopi/ui/animators/animations", (require, exports, module) ->
       fromElement.addClass(fromStartClass)
       toElement.addClass(toStartClass)
       self.emit(cls.ANIMATION_READY_EVENT, [from, to, options])
+      isEnded = false
 
       startTransitionFn = ->
         # Start CSS3 transition
         fromElement.addClass(fromStopClass)
         toElement.addClass(toStopClass)
         self.emit(cls.ANIMATION_START_EVENT, [from, to, options])
-        # TODO Use transitionEnd event when possible?
-        setTimeout(endTransitionFn, self._options.duration + 50)
+        setTimeout(endTransitionFn, self._options.duration + 200)
+        toElement.one WEBKIT_TRANSITION_END_EVENT, (e) ->
+          e.preventDefault()
+          e.stopPropagation()
+          endTransitionFn()
 
       endTransitionFn = ->
+        return if isEnded
         self.emit(cls.ANIMATION_END_EVENT, [from, to, options])
         # Make sure transition is complete
         toElement.addClass(toClass.cssClass("show"))
@@ -70,7 +76,9 @@ define "kopi/ui/animators/animations", (require, exports, module) ->
         animatorElement.removeClass("#{animationClass} #{animationReverseClass}")
         toElement.removeClass("#{toStartClass} #{toStopClass}")
         fromElement.removeClass("#{fromStartClass} #{fromStopClass}")
+        toElement.unbind WEBKIT_TRANSITION_END_EVENT
         fn(null) if fn
+        isEnded = true
 
       setTimeout(startTransitionFn, 100)
       self
