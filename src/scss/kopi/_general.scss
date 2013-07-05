@@ -5,6 +5,7 @@
 body {
   @include reset-html5;
 
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   background: $kopi-white;
   color: $kopi-gray-dark;
   font-family: $kopi-base-font-family;

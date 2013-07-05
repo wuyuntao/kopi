@@ -132,6 +132,7 @@
  */
 /* line 5, ../../src/scss/kopi/_general.scss */
 body {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   background: white;
   color: #333333;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -142,50 +143,50 @@ body article, body aside, body details, body figcaption, body figure, body foote
   display: block;
 }
 
-/* line 16, ../../src/scss/kopi/_general.scss */
+/* line 17, ../../src/scss/kopi/_general.scss */
 a {
   color: #0088cc;
   cursor: pointer;
   text-decoration: none;
 }
 
-/* line 22, ../../src/scss/kopi/_general.scss */
+/* line 23, ../../src/scss/kopi/_general.scss */
 a:active, a.active {
   color: #002233;
 }
 
-/* line 26, ../../src/scss/kopi/_general.scss */
+/* line 27, ../../src/scss/kopi/_general.scss */
 a:hover, a.hover {
   color: #005580;
 }
 
-/* line 30, ../../src/scss/kopi/_general.scss */
+/* line 31, ../../src/scss/kopi/_general.scss */
 a:visited, a.visited {
   color: #0088cc;
 }
 
-/* line 34, ../../src/scss/kopi/_general.scss */
+/* line 35, ../../src/scss/kopi/_general.scss */
 figure {
   padding: 0;
   margin: 0;
 }
 
-/* line 39, ../../src/scss/kopi/_general.scss */
+/* line 40, ../../src/scss/kopi/_general.scss */
 img {
   border: none;
 }
 
-/* line 43, ../../src/scss/kopi/_general.scss */
+/* line 44, ../../src/scss/kopi/_general.scss */
 .kopi-inner {
   padding: 18px;
 }
 
-/* line 47, ../../src/scss/kopi/_general.scss */
+/* line 48, ../../src/scss/kopi/_general.scss */
 .kopi-outer {
   margin: 18px;
 }
 
-/* line 53, ../../src/scss/kopi/_general.scss */
+/* line 54, ../../src/scss/kopi/_general.scss */
 code, pre {
   padding: 0 3px 2px;
   font-family: Menlo, Monaco, "Courier New", monospace;
@@ -198,7 +199,7 @@ code, pre {
   border-radius: 3px;
 }
 
-/* line 62, ../../src/scss/kopi/_general.scss */
+/* line 63, ../../src/scss/kopi/_general.scss */
 code {
   padding: 2px 4px;
   color: #d14;
@@ -206,7 +207,7 @@ code {
   border: 1px solid #e1e1e8;
 }
 
-/* line 70, ../../src/scss/kopi/_general.scss */
+/* line 71, ../../src/scss/kopi/_general.scss */
 pre {
   display: block;
   padding: 8.5px;
@@ -226,11 +227,11 @@ pre {
   word-break: break-all;
   word-wrap: break-word;
 }
-/* line 86, ../../src/scss/kopi/_general.scss */
+/* line 87, ../../src/scss/kopi/_general.scss */
 pre.prettyprint {
   margin-bottom: 18px;
 }
-/* line 91, ../../src/scss/kopi/_general.scss */
+/* line 92, ../../src/scss/kopi/_general.scss */
 pre code {
   padding: 0;
   color: inherit;
@@ -238,7 +239,7 @@ pre code {
   border: 0;
 }
 
-/* line 100, ../../src/scss/kopi/_general.scss */
+/* line 101, ../../src/scss/kopi/_general.scss */
 .pre-scrollable {
   max-height: 340px;
   overflow-y: scroll;
