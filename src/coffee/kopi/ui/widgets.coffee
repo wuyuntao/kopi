@@ -10,7 +10,9 @@ define "kopi/ui/widgets", (require, exports, module) ->
   exceptions = require "kopi/exceptions"
   settings = require "kopi/settings"
   map = require "kopi/utils/structs/map"
+  logging = require "kopi/logging"
 
+  logger = logging.logger(module.id)
   ON = "on"
 
   ###
@@ -165,7 +167,9 @@ define "kopi/ui/widgets", (require, exports, module) ->
     skeleton: (element) ->
       cls = this.constructor
       self = this
-      return self if self.initialized or self.locked
+      if self.initialized or self.locked
+        logger.warn "[widgets:skeleton] #{this} is initialized or locked"
+        return self
       self.element or= self._ensureElement(element)
       self.element.attr('id', self.guid)
       cssClass = cls.cssClass()
@@ -190,7 +194,9 @@ define "kopi/ui/widgets", (require, exports, module) ->
     ###
     render: ->
       self = this
-      return self if self.rendered or self.locked
+      if self.rendered or self.locked
+        logger.warn "[widgets:rendered] #{this} is rendered or locked"
+        return self
       cls = this.constructor
       self.emit cls.RENDER_EVENT
       # Emit resize event for first time
@@ -206,7 +212,9 @@ define "kopi/ui/widgets", (require, exports, module) ->
 
     update: ->
       self = this
-      return self if self.locked
+      if self.locked
+        logger.warn "[widgets:update] #{this} is locked"
+        return self
       cls = this.constructor
       self.emit(cls.UPDATE_EVENT)
 
@@ -215,7 +223,9 @@ define "kopi/ui/widgets", (require, exports, module) ->
     ###
     destroy: ->
       self = this
-      return self if self.locked or (not self.initialized and not self.rendered)
+      if self.locked or (not self.initialized and not self.rendered)
+        logger.warn "[widgets:destroy] #{this} is destroyed or locked"
+        return self
       cls = this.constructor
       self.element.remove()
       self.off()

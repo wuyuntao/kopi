@@ -4,6 +4,9 @@ define "kopi/ui/groups", (require, exports, module) ->
   exceptions = require "kopi/exceptions"
   array = require "kopi/utils/array"
   widgets = require "kopi/ui/widgets"
+  logging = require "kopi/logging"
+
+  logger = logging.logger(module.id)
 
   class Group extends widgets.Widget
 
@@ -103,11 +106,15 @@ define "kopi/ui/groups", (require, exports, module) ->
 
     onskeleton: ->
       super
-      this._skeletonChildren()
+      @_skeletonChildren()
 
     onrender: ->
       super
-      this._renderChildren()
+      @_renderChildren()
+
+    ondestroy: ->
+      super
+      @_destroyChildren()
 
     _skeletonChildren: ->
       wrapper = @_wrapper()

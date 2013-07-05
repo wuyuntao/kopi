@@ -2,7 +2,9 @@ define "kopi/ui/clickable", (require, exports, module) ->
 
   events = require "kopi/utils/events"
   touchable = require "kopi/ui/touchable"
+  logging = require "kopi/logging"
 
+  logger = logging.logger(module.id)
   math = Math
 
   ###
@@ -64,12 +66,14 @@ define "kopi/ui/clickable", (require, exports, module) ->
         self.element
           .bind(Clickable.eventName(events.CLICK_EVENT), clickFn)
           .bind(Clickable.eventName(events.DOUBALE_CLICK_EVENT), clickFn)
+      # logger.log "[clickable:delegate] #{this}:"
 
     undelegate: ->
       super
       @element
         .unbind(events.MOUSE_OVER_EVENT)
         .unbind(events.CLICK_EVENT)
+      # logger.log "[clickable:undelegate] #{this}:"
 
     ontouchstart: (e, event) ->
       cls = this.constructor

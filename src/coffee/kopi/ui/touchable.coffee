@@ -5,7 +5,9 @@ define "kopi/ui/touchable", (require, exports, module) ->
   support = require "kopi/utils/support"
   widgets = require "kopi/ui/widgets"
   Map = require("kopi/utils/structs/map").Map
+  logging = require "kopi/logging"
 
+  logger = logging.logger(module.id)
   doc = $(document)
   math = Math
 
@@ -202,10 +204,12 @@ define "kopi/ui/touchable", (require, exports, module) ->
       return
 
     onrender: ->
+      # logger.log "[touchable:onrender] #{this}"
       this.delegate()
       super
 
     ondestroy: ->
+      # logger.log "[touchable:ondestroy] #{this}"
       this.undelegate()
       super
 
@@ -243,9 +247,11 @@ define "kopi/ui/touchable", (require, exports, module) ->
 
       this.element
         .bind(events.TOUCH_START_EVENT, touchStartFn)
+      logger.log "[touchable:delegate] #{this}"
 
     undelegate: ->
       this.element.unbind(events.TOUCH_START_EVENT)
+      logger.log "[touchable:undelegate] #{this}"
 
     addGesture: (gesture) ->
       this._gestures.set(gesture.guid, gesture)
