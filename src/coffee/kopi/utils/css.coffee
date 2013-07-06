@@ -11,6 +11,10 @@ define "kopi/utils/css", (require, exports, module) ->
   support = require "kopi/utils/support"
   text = require "kopi/utils/text"
   settings = require "kopi/settings"
+  logging = require "kopi/logging"
+
+  logger = logging.logger(module.id)
+  math = Math
 
   VENDOR_PREFIX = if browser.webkit
     "-webkit-"
@@ -57,8 +61,14 @@ define "kopi/utils/css", (require, exports, module) ->
   Set duration for CSS3 transition
   ###
   transitionDuration = experimental("transition-duration")
-  $.fn.duration = (duration=0) ->
-    this.css(transitionDuration, duration + "ms")
+  transitionTimingFunction = experimental("transition-timing-function")
+  $.fn.duration = (duration=0, timingFunction="ease-out") ->
+    return this unless this.length
+    for el in this
+      styles = el.style
+      styles[transitionDuration] = "#{duration}ms"
+      styles[transitionTimingFunction] = timingFunction
+    this
 
   ###
   ## $.fn.translate(x, y)
@@ -69,10 +79,18 @@ define "kopi/utils/css", (require, exports, module) ->
   ###
   transform = experimental("transform")
   $.fn.translate = (x=0, y=0) ->
+    return this unless this.length
     if support.cssTransform
-      this.css transform, "#{TRANSLATE_OPEN}#{x}px,#{y}px#{TRANSLATE_CLOSE}"
+      transformValue = "#{TRANSLATE_OPEN}#{x}px,#{y}px#{TRANSLATE_CLOSE}"
+      for el in this
+        el.style[transform] = transformValue
     else
-      this.css left: x, top: y
+      x = "#{x}px"
+      y = "#{y}px"
+      for el in this
+        el.style.left = x
+        el.style.top = y
+    this
 
   ###
   ## $.fn.scale(x, y)
@@ -82,8 +100,26 @@ define "kopi/utils/css", (require, exports, module) ->
 
   ###
   $.fn.scale = (x=1, y=1) ->
+    return this unless this.length
     if support.cssTransform
-      this.css transform, "#{SCALE_OPEN}#{x},#{y}#{SCALE_CLOSE}"
+      transformValue = "#{SCALE_OPEN}#{x},#{y}#{SCALE_CLOSE}"
+      for el in this
+        el.style[transform] = transformValue
+    this
+
+  ###
+  ## $.fn.transform(scaleX, scaleY, offsetX, offsetY)
+
+  Move and scale an element along the `x` and `y` axis. Use 3D transform to
+  enable hardware acceleration if available.
+
+  ###
+  $.fn.transform = (scaleX=1, scaleY=1, offsetX=0, offsetY=0) ->
+    return this unless this.length and support.cssTransform
+    transformValue = "#{SCALE_OPEN}#{scaleX},#{scaleY}#{SCALE_CLOSE} "
+    transformValue += "#{TRANSLATE_OPEN}#{math.round(offsetX)}px,#{math.round(offsetY)}px#{TRANSLATE_CLOSE}"
+    for el in this
+      el.style[transform] = transformValue
     this
 
   ###

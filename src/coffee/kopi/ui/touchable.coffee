@@ -153,12 +153,14 @@ define "kopi/ui/touchable", (require, exports, module) ->
     @param {Event} event
     @return {Array}  [{ x: int, y: int }]
     ###
-    @position = (e) ->
+    @position = (e, target) ->
+      target = $(e.currentTarget) unless target?
+      {left: posX, top: posY} = target.offset()
       # no touches, use the event pageX and pageY
       if not support.touch
         pos = [{
-          x: e.pageX
-          y: e.pageY
+          x: e.pageX - posX
+          y: e.pageY - posY
         }]
 
       # multitouch, return array with positions
@@ -166,7 +168,7 @@ define "kopi/ui/touchable", (require, exports, module) ->
         e = if e then e.originalEvent else win.event
 
         touches = if e.touches.length > 0 then e.touches else e.changedTouches
-        pos = ({x: touch.pageX, y: touch.pageY} for touch in touches)
+        pos = ({x: touch.pageX - posX, y: touch.pageY - posY} for touch in touches)
 
       pos
 
