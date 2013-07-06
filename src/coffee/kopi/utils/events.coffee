@@ -1,6 +1,7 @@
 define "kopi/utils/events", (require, exports, module) ->
 
   $ = require "jquery"
+  browser = require "kopi/utils/browser"
   settings = require "kopi/settings"
   support = require "kopi/utils/support"
 
@@ -39,7 +40,19 @@ define "kopi/utils/events", (require, exports, module) ->
     exports.isRightClick = (event) -> event.which == exports.RIGHT_BUTTON
 
 
+  # Transition end event
+  # DEPRECATED
+  # Use TRANSITION_END_EVENT instead.
+  # -- Wu Yuntao, 2013-07-06
+
   exports.WEBKIT_TRANSITION_END_EVENT = "webkitTransitionEnd"
+
+  if browser.webkit
+    exports.TRANSITION_END_EVENT = "webkitTransitionEnd"
+  else if browser.opera
+    exports.TRANSITION_END_EVENT = "oTransitionEnd"
+  else
+    exports.TRANSITION_END_EVENT = "transitionend"
 
   ###
   Throttled resize event
