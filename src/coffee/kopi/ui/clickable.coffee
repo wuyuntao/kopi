@@ -28,6 +28,8 @@ define "kopi/ui/clickable", (require, exports, module) ->
       moveThreshold: 10
       # @type   {Boolean}   ignoreClick   original click event should be ignored
       ignoreClick: false
+      # @type   {Integer}   lockTime      min time between trigger click event
+      lockTime: 0
 
     constructor: ->
       super
@@ -108,7 +110,8 @@ define "kopi/ui/clickable", (require, exports, module) ->
       if not self._holded and not self._moved
         event.preventDefault()
         event.stopPropagation()
-        self.emit(cls.CLICK_EVENT, [event])
+        if self._canEmitClickEvent()
+          self.emit(cls.CLICK_EVENT, [event])
 
     ontouchcancel: (e, event) ->
       this.emit(this.constructor.TOUCH_END_EVENT, [event])
@@ -143,7 +146,8 @@ define "kopi/ui/clickable", (require, exports, module) ->
       cls = this.constructor
       self = this
       clearTimeout(self._holdTimer) if self._holdTimer
-      holdFn = -> self.emit(cls.TOUCH_HOLD_EVENT)
+      holdFn = ->
+        self.emit(cls.TOUCH_HOLD_EVENT) if self._canEmitTouchHoldEvent()
       self._holdTimer = setTimeout holdFn, self._options.holdTime
 
     _clearHoldTimeout: ->
@@ -151,5 +155,20 @@ define "kopi/ui/clickable", (require, exports, module) ->
       if self._holdTimer
         clearTimeout(self._holdTimer)
         self._holdTimer = null
+
+    _canEmitClickEvent: ->
+      return true unless @_options.lockTime > 0
+      now = new Date().getTime()
+      canEmit = !(@_clickLock + @_options.lockTime > now)
+      # Update lock
+      if canEmit
+        @_clickLock = now
+      else
+        logger.warn "[clickable:_canEmitClickEvent] #{this}: is locked"
+      canEmit
+
+    _canEmitTouchHoldEvent: ->
+      # Share the same lock with click event
+      @_canEmitClickEvent()
 
   Clickable: Clickable
