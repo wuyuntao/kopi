@@ -121,7 +121,7 @@ define "kopi/ui/scrollable", (require, exports, module) ->
       if self._options.momentum
         matrix = self._container.parseMatrix()
         if matrix and (matrix.x != self._x or matrix.y != self._y)
-          self._container.unbind(events.WEBKIT_TRANSITION_END_EVENT)
+          self._container.unbind(events.TRANSITION_END_EVENT)
           self._steps = []
           self._position(matrix.x, matrix.y)
 
@@ -231,7 +231,7 @@ define "kopi/ui/scrollable", (require, exports, module) ->
     ontransitionend: (e, event) ->
       cls = this.constructor
       self = this
-      self._container.unbind(events.WEBKIT_TRANSITION_END_EVENT)
+      self._container.unbind(events.TRANSITION_END_EVENT)
       self._animate()
 
     ###
@@ -346,7 +346,7 @@ define "kopi/ui/scrollable", (require, exports, module) ->
           e.preventDefault()
           e.stopPropagation()
           self.emit cls.TRANSITION_END_EVENT
-        self._container.bind events.WEBKIT_TRANSITION_END_EVENT, transitionEndFn
+        self._container.bind events.TRANSITION_END_EVENT, transitionEndFn
       else
         self._resetPosition(0)
       self

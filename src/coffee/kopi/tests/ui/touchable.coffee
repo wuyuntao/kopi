@@ -350,7 +350,7 @@ define "kopi/tests/ui/touchable", (require, exports, module) ->
       if this._options.dragMomentum
         matrix = this.element.parseMatrix()
         if matrix and (matrix.x != this._x or matrix.y != this._y)
-          this.element.unbind(events.WEBKIT_TRANSITION_END_EVENT)
+          this.element.unbind(events.TRANSITION_END_EVENT)
           this._steps = []
           this.moveToPos(matrix)
 

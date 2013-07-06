@@ -15,7 +15,7 @@ define "kopi/exceptions", (require, exports, module) ->
   class Exception extends Error
 
     constructor: (message="") ->
-      this.name = this.constructor.name
+      this.name = this.constructor.name or "Error"
       this.message = message
 
   ###
