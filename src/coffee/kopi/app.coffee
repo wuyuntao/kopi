@@ -177,7 +177,7 @@ define "kopi/app", (require, exports, module) ->
         if self._options.redirectWhenNoRouteFound
           url = uri.unparse url
           logger.info("[app:onrequest] Redirect to URL: #{url}")
-          uri.goto url
+          uri.redirect url
         return
 
       [view, request] = match

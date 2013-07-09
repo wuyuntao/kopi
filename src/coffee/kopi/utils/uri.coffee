@@ -76,7 +76,7 @@ define "kopi/utils/uri", (require, exports, module) ->
 
     path.join emp
 
-  goto = (url) -> loc.href = url
+  redirect = (url) -> loc.href = url
 
   ###
   Resolves a relative URL string to base URI
@@ -260,3 +260,4 @@ define "kopi/utils/uri", (require, exports, module) ->
   unjoin: unjoin
   parse: parse
   unparse: unparse
+  redirect: redirect
